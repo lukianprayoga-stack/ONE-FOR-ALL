@@ -122,7 +122,7 @@ async function render(){
  $('#grid').innerHTML=cards.join('')+`<article class="card add" data-add="1"><div class="media">+</div><div class="meta"><span>Tambah tool baru</span></div></article>`;
 }
 
-function open(title,html){$('#pt').textContent=title;$('#pb').innerHTML=html;$('#ov').classList.add('open')}
+function openModal(title,html){$('#pt').textContent=title;$('#pb').innerHTML=html;$('#ov').classList.add('open')}
 function close(){$('#ov').classList.remove('open');if(cleanup){cleanup();cleanup=null}$('#pb').innerHTML=''}
 $('#px').onclick=close;$('#ov').onclick=e=>{if(e.target.id==='ov')close()};
 addEventListener('keydown',e=>{if(e.key==='Escape')close()});
@@ -136,13 +136,13 @@ $('#grid').onclick=e=>{
  const t=view(all().find(x=>x.id===card.dataset.id));
  opens[t.id]=(opens[t.id]||0)+1;ls.set('ofa_open',opens);
  if(t.custom){window.open(t.url,'_blank','noopener');render();return}
- open(t.t,'<div id="app"></div>');APPS[t.id]($('#app'));render();
+ openModal(t.t,'<div id="app"></div>');APPS[t.id]($('#app'));render();
 };
 
 /* ====== EDITOR KARTU ====== */
 function editor(id){
  const base=id?all().find(x=>x.id===id):null,t=base?view(base):{t:'',c:'Link Saya',url:'',mediaUrl:''};
- open(id?'Ubah kartu':'Tambah tool',`
+ openModal(id?'Ubah kartu':'Tambah tool',`
  <label>Judul</label><input class="in" id="f_t" value="${(t.t||'').replace(/"/g,'&quot;')}">
  ${!id||t.custom?`<label>Kategori</label><input class="in" id="f_c" value="${t.c||''}"><label>Link tool (https://…)</label><input class="in" id="f_u" value="${t.url||''}" placeholder="https://">`:''}
  <label>Gambar atau video pendek dari perangkat</label><input class="in" id="f_f" type="file" accept="image/*,video/*">
