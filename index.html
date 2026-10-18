@@ -82,8 +82,20 @@ h2{font-size:clamp(38px,6.4vw,92px);letter-spacing:-.045em;line-height:.95;font-
 footer{background:var(--ink);color:var(--inkfg);padding:70px clamp(16px,4vw,48px) 30px;margin-top:90px}
 footer .big{font-size:clamp(44px,11vw,180px);font-weight:900;letter-spacing:-.06em;line-height:.88}
 footer p{margin-top:20px;opacity:.7;font-size:14px}
-footer p:first-of-type{margin-top:28px;opacity:1;font-size:18px;font-weight:700}
 @media(max-width:800px){.hero,.wc{grid-template-columns:1fr}nav{display:none}.cluster{height:360px}}
+.tc{cursor:pointer;position:relative}
+.tc .media{aspect-ratio:4/5}
+.tc.head{grid-column:span 2}
+.tc.head .media{aspect-ratio:8/5}
+.tc.head .meta h3{font-size:clamp(30px,4vw,44px)}
+.tc:hover .media>:not(.edit){transform:scale(1.05)}
+.ini{position:absolute;inset:0;display:grid;place-items:center;font-size:84px;font-weight:900;letter-spacing:-3px;color:#fff;background:linear-gradient(135deg,hsl(var(--h) 80% 50%),hsl(calc(var(--h) + 60) 80% 36%));transition:transform .6s}
+.tc:hover .edit{opacity:1}
+.remark{position:fixed;right:18px;bottom:18px;z-index:15;pointer-events:none;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--inkfg);padding:10px 18px;border-radius:999px;font-weight:700;box-shadow:0 12px 30px #0004;animation:rm 4s ease-in-out infinite alternate}
+.remark i{width:9px;height:9px;border-radius:50%;background:var(--acc)}
+@keyframes rm{to{transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.remark{animation:none}}
+@media(max-width:800px){.tc.head{grid-column:auto}.tc.head .media{aspect-ratio:4/5}}
 .ov{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:20}
 .ov.open{display:grid}
 .panel{background:var(--bg);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;animation:pop .18s}
@@ -111,7 +123,7 @@ textarea.in{min-height:240px;resize:vertical}
 <div class="bar">ONE FOR ALL - STORE MANAGER. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#">ONE FOR ALL <small>STORE MANAGER</small></a>
-  <nav><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
+  <nav><a href="#tim">Tim</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
   <button class="btn" id="addTop">+ Tambah tool</button>
 </header>
 <div class="hero">
@@ -122,6 +134,11 @@ textarea.in{min-height:240px;resize:vertical}
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
   </div>
   <div class="cluster" id="cl"></div>
+</div>
+<div class="sec" id="tim">
+  <h2>STORE HEAD &amp; Tim Toko</h2>
+  <p class="lead">Klik kartu untuk mengisi foto, nama, NIK, dan jabatan.</p>
+  <div class="grid" id="team"></div>
 </div>
 <div class="mq" aria-hidden="true"><div id="mq"></div></div>
 <div class="sec" id="tools">
@@ -140,9 +157,9 @@ textarea.in{min-height:240px;resize:vertical}
 </div>
 <footer>
   <div class="big">ONE FOR ALL<br>STORE MANAGER</div>
-  <p>CC Lukian Prayoga</p>
   <p>© 2026 ONE FOR ALL - STORE MANAGER. Semua tool, satu dashboard.</p>
 </footer>
+<div class="remark" aria-label="Remark"><i></i>Lukian Prayoga</div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
@@ -282,6 +299,43 @@ const APPS={
  }
 };
 render();
+/* ====== STORE HEAD & TIM TOKO ====== */
+let team=ls.get('ofa_team',[{id:'h1',n:'Nama Store Head',nik:'',j:'Store Head',head:1},{id:'m1',n:'Nama Anggota',nik:'',j:'Jabatan'},{id:'m2',n:'Nama Anggota',nik:'',j:'Jabatan'},{id:'m3',n:'Nama Anggota',nik:'',j:'Jabatan'}]);
+const esc=v=>String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function renderTeam(){
+ const sorted=[...team.filter(m=>m.head),...team.filter(m=>!m.head)];
+ const cards=await Promise.all(sorted.map(async m=>{
+  const b=await idb.op('get','tm_'+m.id),h=[...m.id].reduce((a,c)=>a+c.charCodeAt(0)*37,0)%360,
+   ini=(m.n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  const ph=b?`<img src="${URL.createObjectURL(b)}" alt="${esc(m.n)}">`:`<div class="ini" style="--h:${h}">${esc(ini)}</div>`;
+  return `<article class="tc ${m.head?'head':''}" data-t="${m.id}"><div class="media">${ph}<button class="edit" aria-label="Ubah ${esc(m.n)}">✎</button></div>
+  <div class="meta"><div><h3>${esc(m.n)}</h3><span class="tag">${esc(m.j)}</span>${m.nik?`<span class="tag">NIK ${esc(m.nik)}</span>`:''}</div></div></article>`}));
+ $('#team').innerHTML=cards.join('')+`<article class="tc add" data-tadd="1"><div class="media">+</div><div class="meta"><div><h3>Tambah anggota</h3></div></div></article>`;
+}
+function editTeam(id){
+ const m=team.find(x=>x.id===id)||{n:'',nik:'',j:'',head:0};
+ openModal(id?'Ubah anggota':'Tambah anggota',`
+ <label>Foto</label><input class="in" id="t_f" type="file" accept="image/*">
+ <label>Nama</label><input class="in" id="t_n" value="${esc(m.n)}">
+ <label>NIK (Nomor Induk Karyawan)</label><input class="in" id="t_k" value="${esc(m.nik)}" inputmode="numeric">
+ <label>Jabatan</label><input class="in" id="t_j" value="${esc(m.j)}">
+ <label><input type="checkbox" id="t_h" ${m.head?'checked':''}> Tampilkan sebagai Store Head</label>
+ <p class="hint">Foto tersimpan di browser ini saja.</p>
+ <div class="row"><button class="btn" id="t_s">Simpan</button>${id?'<button class="btn ghost" id="t_r">Hapus foto</button><button class="btn danger" id="t_d">Hapus anggota</button>':''}</div>`);
+ $('#t_s').onclick=async()=>{
+  const nid=id||'t'+Date.now(),o={id:nid,n:$('#t_n').value.trim()||'Tanpa nama',nik:$('#t_k').value.trim(),j:$('#t_j').value.trim(),head:$('#t_h').checked?1:0},f=$('#t_f').files[0];
+  if(o.head)team.forEach(x=>x.head=0);
+  const i=team.findIndex(x=>x.id===nid);i>=0?team[i]=o:team.push(o);
+  if(f)await idb.op('put',f,'tm_'+nid);
+  ls.set('ofa_team',team);close();renderTeam();
+ };
+ if(id){
+  $('#t_r').onclick=async()=>{await idb.op('delete','tm_'+id);close();renderTeam()};
+  $('#t_d').onclick=async()=>{team=team.filter(x=>x.id!==id);ls.set('ofa_team',team);await idb.op('delete','tm_'+id);close();renderTeam()};
+ }
+}
+$('#team').onclick=e=>{if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
+renderTeam();
 </script>
 </body>
 </html>
