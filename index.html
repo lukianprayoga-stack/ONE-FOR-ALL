@@ -5,48 +5,83 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>One For All</title>
 <style>
-:root{--bg:#fff;--fg:#111;--mut:#6b6b76;--card:#f2f2f5;--line:#e4e4ea;--acc:#0057ff;--chip:#111;--chipfg:#fff}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0e12;--fg:#f4f4f6;--mut:#9a9aa6;--card:#1b1b22;--line:#2b2b35;--acc:#4d8dff;--chip:#24242e}}
+:root{--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d}}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--fg);font:15px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:16px/1.45 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;overflow-x:hidden}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-header{display:flex;align-items:center;gap:20px;padding:14px 28px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
-.logo{font-weight:800;font-size:22px;letter-spacing:-.5px}
-.search{flex:1;max-width:560px;display:flex;align-items:center;gap:8px;background:var(--card);border-radius:24px;padding:10px 16px}
-.search input{border:0;background:none;outline:0;flex:1;min-width:0}
-.btn{border:0;border-radius:20px;padding:9px 18px;background:var(--acc);color:#fff;font-weight:600}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.btn{display:inline-block;border:0;border-radius:999px;padding:11px 22px;background:var(--ink);color:var(--inkfg);font-weight:600;text-decoration:none}
 .btn.ghost{background:var(--card);color:var(--fg)}
-.btn.danger{background:#e5484d}
-main{padding:22px 28px 60px;max-width:1400px;margin:auto}
-h1{font-size:clamp(34px,6vw,64px);letter-spacing:-2px;line-height:1;font-weight:800}
-.sub{color:var(--mut);margin:10px 0 22px;max-width:60ch}
-.chips{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px}
-.chip{border:0;border-radius:10px;padding:14px 22px;background:var(--chip);color:var(--chipfg);font-weight:600;white-space:nowrap;opacity:.65;transition:opacity .2s,transform .2s}
-.chip.on{opacity:1;box-shadow:0 0 0 2px var(--acc)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.btn.danger{background:#e5484d;color:#fff}
+.bar{background:var(--acc);color:#fff;text-align:center;font-weight:600;font-size:14px;padding:8px 12px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);z-index:5}
+.logo{font-weight:900;font-size:24px;letter-spacing:-1px;text-decoration:none;color:inherit}
+nav{display:flex;gap:4px;background:var(--card);border-radius:999px;padding:5px}
+nav a{padding:8px 18px;border-radius:999px;text-decoration:none;color:inherit;font-weight:600;font-size:14px}
+nav a:hover{background:var(--bg)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:clamp(28px,6vw,80px) clamp(16px,4vw,48px) 50px;max-width:1500px;margin:auto}
+h1{font-size:clamp(46px,8.4vw,128px);line-height:.92;letter-spacing:-.05em;font-weight:900}
+.lead{margin:24px 0;max-width:46ch;font-size:19px;color:var(--mut)}
+.stats{display:flex;gap:36px;flex-wrap:wrap;margin-top:30px}
+.stats b{display:block;font-size:36px;letter-spacing:-1.5px}
+.stats span{color:var(--mut);font-size:14px}
+.cluster{position:relative;height:clamp(320px,42vw,560px)}
+.fc{position:absolute;width:46%;aspect-ratio:3/4;border-radius:22px;overflow:hidden;box-shadow:0 22px 50px #0003;animation:flt 6s ease-in-out infinite alternate}
+.fc:nth-child(1){left:2%;top:6%;rotate:-7deg}
+.fc:nth-child(2){right:0;top:0;rotate:6deg;animation-delay:-2s}
+.fc:nth-child(3){left:24%;bottom:0;rotate:-2deg;animation-delay:-4s;z-index:2}
+.fc>img,.fc>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@keyframes flt{to{transform:translateY(-16px)}}
+.mq{overflow:hidden;background:var(--ink);color:var(--inkfg);padding:18px 0;white-space:nowrap}
+.mq div{display:inline-block;animation:mq 32s linear infinite;font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-1.5px}
+.mq span{margin:0 26px}
+@keyframes mq{to{transform:translateX(-50%)}}
+.sec{padding:80px clamp(16px,4vw,48px) 20px;max-width:1500px;margin:auto}
+h2{font-size:clamp(38px,6.4vw,92px);letter-spacing:-.045em;line-height:.95;font-weight:900}
+.ph h2{font-size:20px;letter-spacing:0;line-height:1.2;font-weight:700}
+.tb{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:30px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:none;border-radius:999px;padding:9px 18px;font-weight:600}
+.chip.on{background:var(--ink);color:var(--inkfg);border-color:var(--ink)}
+.search{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;min-width:min(100%,280px)}
+.search input{border:0;background:none;outline:0;flex:1;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:36px 26px}
 .card{cursor:pointer;position:relative}
-.media{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--card)}
-.media>img,.media>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.card:hover .media>*{transform:scale(1.05)}
-.art{position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,hsl(var(--h) 90% 55%),hsl(calc(var(--h) + 70) 85% 42%));transition:transform .5s}
+.media{position:relative;aspect-ratio:1/1;border-radius:24px;overflow:hidden;background:var(--card)}
+.media>img,.media>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.card:hover .media>:not(.edit){transform:scale(1.06)}
+.art{position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,hsl(var(--h) 90% 55%),hsl(calc(var(--h) + 70) 85% 42%));transition:transform .6s}
 .art i{position:absolute;border-radius:50%;filter:blur(22px);background:hsl(calc(var(--h) + 140) 100% 70%/.75);animation:fl 6s ease-in-out infinite alternate}
 .art i:nth-child(1){width:55%;height:55%;left:-8%;top:-10%}
 .art i:nth-child(2){width:45%;height:45%;right:-6%;bottom:-8%;animation-delay:-2s;background:hsl(calc(var(--h) + 40) 100% 65%/.8)}
 .art i:nth-child(3){width:30%;height:30%;left:40%;top:30%;animation-delay:-4s;background:hsl(var(--h) 100% 85%/.6)}
-.art b{position:absolute;inset:0;display:grid;place-items:center;font-size:72px;animation:bob 3.2s ease-in-out infinite}
+.art b{position:absolute;inset:0;display:grid;place-items:center;font-size:84px;animation:bob 3.2s ease-in-out infinite}
 @keyframes fl{to{transform:translate(40%,30%) scale(1.3)}}
 @keyframes bob{50%{transform:translateY(-10px) rotate(-6deg) scale(1.08)}}
-@media(prefers-reduced-motion:reduce){.art i,.art b{animation:none}}
-.edit{position:absolute;top:10px;right:10px;border:0;border-radius:50%;width:34px;height:34px;background:#000a;color:#fff;opacity:0;transition:opacity .2s;z-index:2}
+@media(prefers-reduced-motion:reduce){.art i,.art b,.fc,.mq div{animation:none}html{scroll-behavior:auto}}
+.edit{position:absolute;top:14px;right:14px;border:0;border-radius:50%;width:38px;height:38px;background:#000a;color:#fff;opacity:0;transition:opacity .2s;z-index:3}
 .card:hover .edit,.edit:focus-visible{opacity:1}
 @media(hover:none){.edit{opacity:1}}
-.meta{display:flex;justify-content:space-between;gap:8px;margin-top:9px;font-weight:600}
-.meta small{color:var(--mut);font-weight:400}
-.cat{color:var(--mut);font-size:13px}
-.add .media{display:grid;place-items:center;background:none;border:2px dashed var(--line);font-size:42px;color:var(--mut)}
+.meta{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:14px}
+.meta h3{font-size:26px;letter-spacing:-.03em;line-height:1.05}
+.tag{display:inline-block;margin:8px 6px 0 0;border:1.5px solid var(--line);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--mut)}
+.go{flex:none;width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--inkfg);display:grid;place-items:center;font-size:20px;transition:transform .25s,background .25s}
+.card:hover .go{background:var(--acc);color:#fff;transform:rotate(-45deg)}
+.add .media{display:grid;place-items:center;border:2px dashed var(--line);background:none;font-size:70px;color:var(--mut)}
 .empty{color:var(--mut);padding:40px 0}
+.wc{position:sticky;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;border-radius:30px;padding:clamp(24px,4vw,52px);margin-top:26px;min-height:300px}
+.wc:nth-of-type(1){background:var(--acc);color:#fff;top:90px}
+.wc:nth-of-type(2){background:var(--ink);color:var(--inkfg);top:112px}
+.wc:nth-of-type(3){background:var(--card);top:134px}
+.wc h3{font-size:clamp(32px,5vw,68px);letter-spacing:-.045em;line-height:1}
+.wc p{font-size:19px;max-width:40ch}
+footer{background:var(--ink);color:var(--inkfg);padding:70px clamp(16px,4vw,48px) 30px;margin-top:90px}
+footer .big{font-size:clamp(54px,15vw,230px);font-weight:900;letter-spacing:-.06em;line-height:.88}
+footer p{margin-top:28px;opacity:.6;font-size:14px}
+@media(max-width:800px){.hero,.wc{grid-template-columns:1fr}nav{display:none}.cluster{height:360px}}
 .ov{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:20}
 .ov.open{display:grid}
 .panel{background:var(--bg);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;animation:pop .18s}
@@ -68,21 +103,43 @@ textarea.in{min-height:240px;resize:vertical}
 .sw{display:flex;gap:8px;margin-top:12px}
 .sw button{flex:1;height:70px;border:0;border-radius:10px;font-size:12px;color:#fff;text-shadow:0 0 4px #000}
 .hint{color:var(--mut);font-size:13px;margin-top:10px}
-@media(max-width:600px){header{padding:12px 16px;gap:10px}.logo{font-size:18px}main{padding:18px 16px 50px}#addTop{display:none}}
 </style>
 </head>
 <body>
+<div class="bar">Semua tool kamu, satu tempat. Live sekarang.</div>
 <header>
-  <div class="logo">One For All</div>
-  <div class="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Cari tool…" aria-label="Cari tool"></div>
+  <a class="logo" href="#">One For All</a>
+  <nav><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
   <button class="btn" id="addTop">+ Tambah tool</button>
 </header>
-<main>
-  <h1>One For All</h1>
-  <p class="sub">Semua tool favoritmu dalam satu dashboard. Ganti tampilan tiap kartu dengan foto atau video pendek lewat tombol ✎.</p>
-  <div class="chips" id="chips"></div>
+<div class="hero">
+  <div>
+    <h1>Satu tempat untuk semua tool-mu.</h1>
+    <p class="lead">Catat, fokus, hitung, dan berkreasi tanpa pindah tab. Ganti tampilan tiap kartu dengan foto atau video pendekmu sendiri.</p>
+    <a class="btn" href="#tools">Jelajahi tools</a>
+    <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
+  </div>
+  <div class="cluster" id="cl"></div>
+</div>
+<div class="mq" aria-hidden="true"><div id="mq"></div></div>
+<div class="sec" id="tools">
+  <h2>Semua tools</h2>
+  <div class="tb">
+    <div class="chips" id="chips"></div>
+    <label class="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Cari tool…" aria-label="Cari tool"></label>
+  </div>
   <div class="grid" id="grid"></div>
-</main>
+</div>
+<div class="sec" id="why">
+  <h2>Kenapa One For All</h2>
+  <div class="wc"><h3>Satu tempat</h3><p>Tool bawaan dan link ke aplikasimu, termasuk Apps Script, terkumpul dalam satu halaman.</p></div>
+  <div class="wc"><h3>Gayamu sendiri</h3><p>Setiap kartu bisa memakai gambar atau video pendek pilihanmu lewat tombol ubah.</p></div>
+  <div class="wc"><h3>Ringan dan cepat</h3><p>Hanya satu file HTML tanpa instalasi, langsung jalan di GitHub Pages.</p></div>
+</div>
+<footer>
+  <div class="big">One For All</div>
+  <p>© 2026 One For All. Semua tool, satu dashboard.</p>
+</footer>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
@@ -112,14 +169,20 @@ async function render(){
  const list=all().map(view),cats=['Semua',...new Set(list.map(t=>t.c))],q=$('#q').value.toLowerCase();
  $('#chips').innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${c}">${c}</button>`).join('');
  const shown=list.filter(t=>(cat==='Semua'||t.c===cat)&&t.t.toLowerCase().includes(q));
- const cards=await Promise.all(shown.map(async t=>{
+ const mediaOf=async t=>{
   const blob=await idb.op('get',t.id);let src=t.mediaUrl||t.media,type='';
   if(blob){src=URL.createObjectURL(blob);type=blob.type}
-  const m=src?(isVid(src,type)?`<video src="${src}" autoplay loop muted playsinline></video>`:`<img src="${src}" alt="${t.t}">`)
-   :`<div class="art" style="--h:${t.h}"><i></i><i></i><i></i><b>${t.e}</b></div>`;
+  return src?(isVid(src,type)?`<video src="${src}" autoplay loop muted playsinline></video>`:`<img src="${src}" alt="${t.t}">`)
+   :`<div class="art" style="--h:${t.h}"><i></i><i></i><i></i><b>${t.e}</b></div>`};
+ const cards=await Promise.all(shown.map(async t=>{
+  const m=await mediaOf(t);
   return `<article class="card" data-id="${t.id}"><div class="media">${m}<button class="edit" data-edit="${t.id}" aria-label="Ubah ${t.t}">✎</button></div>
-  <div class="meta"><span>${t.t}<br><span class="cat">${t.c}</span></span><small>▶ ${opens[t.id]||0}</small></div></article>`}));
- $('#grid').innerHTML=cards.join('')+`<article class="card add" data-add="1"><div class="media">+</div><div class="meta"><span>Tambah tool baru</span></div></article>`;
+  <div class="meta"><div><h3>${t.t}</h3><span class="tag">${t.c}</span><span class="tag">▶ ${opens[t.id]||0}</span></div><span class="go" aria-hidden="true">→</span></div></article>`}));
+ $('#grid').innerHTML=cards.join('')+`<article class="card add" data-add="1"><div class="media">+</div><div class="meta"><div><h3>Tambah tool baru</h3></div></div></article>`;
+ const hero=await Promise.all(list.slice(0,3).map(mediaOf));
+ $('#cl').innerHTML=hero.map(m=>`<div class="fc">${m}</div>`).join('');
+ const mq=list.map(t=>`<span>${t.t}</span>✦`).join('');$('#mq').innerHTML=mq+mq;
+ $('#st1').textContent=list.length;$('#st2').textContent=cats.length-1;$('#st3').textContent=Object.values(opens).reduce((a,b)=>a+b,0);
 }
 
 function openModal(title,html){$('#pt').textContent=title;$('#pb').innerHTML=html;$('#ov').classList.add('open')}
