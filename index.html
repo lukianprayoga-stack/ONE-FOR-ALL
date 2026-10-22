@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ONE FOR ALL Hub</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff6600">
@@ -138,21 +138,112 @@ textarea.in{min-height:240px;resize:vertical}
 @media(max-width:560px){header{flex-wrap:wrap}.hdr-actions{width:100%;justify-content:flex-end}.logo small{display:none}}
 .steps{margin:10px 0 0;padding-left:20px;line-height:1.9}
 @media(display-mode:standalone){.bar{padding-top:calc(8px + env(safe-area-inset-top))}}
+/* ====== TAMPILAN HP (aplikasi) ====== */
+.logo-ic{width:30px;height:30px;border-radius:8px;vertical-align:-7px;margin-right:8px}
+.hello{display:none}
+.bnav{display:none}
+.icon-btn{display:none}
+.icon-btn[hidden]{display:none!important}
+@media(max-width:760px){
+ body{display:flex;flex-direction:column;padding-bottom:calc(76px + env(safe-area-inset-bottom));font-size:15px;-webkit-tap-highlight-color:transparent}
+ .bar{display:none}
+ header{order:1;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;gap:10px;border-bottom:1px solid var(--line);flex-wrap:nowrap}
+ .logo{font-size:18px;letter-spacing:-.5px}
+ .logo small{display:none}
+ .hdr-actions{width:auto;gap:6px}
+ #addTop,#installBtn{display:none}
+ .icon-btn{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:var(--card);font-size:18px}
+ .sync{padding:7px 11px;font-size:11px}
+
+ .hero{order:2;display:block;padding:16px 16px 4px}
+ .hero h1,.hero .lead,.hero>div>.btn,.cluster{display:none}
+ .hello{display:block}
+ .hello small{display:block;color:var(--mut);font-size:13px;font-weight:600}
+ .hello b{display:block;font-size:26px;letter-spacing:-.6px;line-height:1.15;margin-top:2px}
+ .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+ .stats>div{background:var(--card);border-radius:16px;padding:12px}
+ .stats b{font-size:24px;letter-spacing:-1px}
+ .stats span{font-size:11px;line-height:1.2;display:block}
+
+ #tools{order:3}
+ #tim{order:4}
+ .mq,#why{display:none}
+ footer{order:6}
+
+ body>*{min-width:0}
+ .hero,.sec,header,footer{width:100%;margin-left:0;margin-right:0;align-self:stretch}
+ .sec{padding:20px 16px 4px;max-width:none;scroll-margin-top:70px}
+ .sec h2{font-size:22px;letter-spacing:-.3px;word-spacing:0}
+ #tim .lead{display:none}
+ .tb{position:sticky;top:calc(58px + env(safe-area-inset-top));z-index:4;background:var(--bg);margin:10px -16px 12px;padding:8px 16px;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:10px}
+ .search{order:-1;min-width:0;padding:10px 14px;background:var(--card);border-color:transparent}
+ .search input{font-size:16px}
+ .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+ .chips::-webkit-scrollbar{display:none}
+ .chip{flex:none;padding:7px 14px;font-size:13px}
+
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}
+ .media{border-radius:18px}
+ .card:active .media{transform:scale(.97)}
+ .media{transition:transform .15s}
+ .art b{font-size:46px}
+ .meta{margin-top:8px}
+ .meta h3{font-size:15px;letter-spacing:-.2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+ .tag{font-size:11px;padding:1px 8px;margin-top:5px}
+ .card .meta .tag+.tag,.go{display:none}
+ .edit{width:30px;height:30px;top:8px;right:8px;font-size:13px}
+ .add .media{font-size:44px;border-radius:18px}
+
+ #team{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;margin:12px -16px 0;padding:0 16px 6px;scrollbar-width:none}
+ #team::-webkit-scrollbar{display:none}
+ .tc,.tc.head{flex:0 0 92px;grid-column:auto;scroll-snap-align:start;text-align:center}
+ .tc .media,.tc.head .media{aspect-ratio:1/1;border-radius:50%}
+ .tc.head .media{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--acc)}
+ .tc .ini{font-size:34px;letter-spacing:-1px}
+ .tc .meta{justify-content:center;margin-top:8px}
+ .tc .meta h3,.tc.head .meta h3{font-size:13px;-webkit-line-clamp:2}
+ .tc .tag{font-size:10px;padding:1px 7px;margin:4px 2px 0}
+ .tc .tag+.tag{display:none}
+ .tc .edit{display:none}
+ .tc.add .media{font-size:34px}
+
+ footer{display:none}
+ .remark{position:static;order:5;align-self:center;margin:22px 0 4px;padding:7px 14px;font-size:12px;box-shadow:none;animation:none}
+
+ .bnav{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-radius:0;position:fixed;left:0;right:0;bottom:0;z-index:12;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+ .bnav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:52px;padding:0 0 4px;font-size:11px;font-weight:600;color:var(--mut);border-radius:12px}
+ .bnav button span{font-size:20px;line-height:1}
+ .bnav button.on{color:var(--fg)}
+ .bnav button.on span{transform:translateY(-1px)}
+ .bnav .bn-add span{display:grid;place-items:center;width:30px;height:26px;border-radius:9px;background:var(--acc);color:#fff;font-size:20px}
+
+ .ov{place-items:end center;padding:0}
+ .panel{width:100%;max-height:88vh;border-radius:22px 22px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));animation:up .22s ease-out}
+ .panel::before{content:"";display:block;width:40px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 10px}
+ @keyframes up{from{transform:translateY(40px);opacity:0}}
+ .in{font-size:16px;padding:12px 14px}
+ .row .btn{flex:1;text-align:center;padding:13px 16px}
+ .big{font-size:52px}
+ .keys button{padding:16px 0}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){.panel{animation:none}}
 </style>
 </head>
 <body>
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
-  <a class="logo" href="#">ONE FOR ALL <small>STORE MANAGER</small></a>
+  <a class="logo" href="#"><img class="logo-ic" src="icons/icon-192.png" alt="">ONE FOR ALL <small>STORE MANAGER</small></a>
   <nav><a href="#tim">Team</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
   <div class="hdr-actions">
     <button class="sync" id="syncPill" type="button" aria-live="polite"></button>
     <button class="btn ghost" id="installBtn" hidden>Pasang aplikasi</button>
     <button class="btn" id="addTop">+ Tambah tool</button>
+    <button class="icon-btn" id="installIcon" hidden aria-label="Pasang aplikasi">⤓</button>
   </div>
 </header>
 <div class="hero">
   <div>
+    <p class="hello" id="hello"><small id="helloDate"></small><b id="helloName">Halo!</b></p>
     <h1>ONE FOR ALL<br>STORE MANAGER</h1>
     <p class="lead">Kelola toko dari satu dashboard: catat, hitung, atur tugas, dan buka semua tool tanpa pindah tab. Ganti tampilan tiap kartu dengan foto atau video pendekmu sendiri.</p>
     <a class="btn" href="#tools">Jelajahi tools</a>
@@ -185,6 +276,12 @@ textarea.in{min-height:240px;resize:vertical}
   <p>© 2026 ONE FOR ALL - STORE MANAGER. Semua tool, satu dashboard.</p>
 </footer>
 <div class="remark" aria-label="Remark"><i></i>Lukian Prayoga</div>
+<nav class="bnav" aria-label="Navigasi utama">
+  <button data-go="top" class="on"><span>⌂</span>Beranda</button>
+  <button data-go="tools"><span>▦</span>Tools</button>
+  <button data-go="tim"><span>☺</span>Tim</button>
+  <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
+</nav>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
@@ -380,6 +477,40 @@ renderTeam();
    ?'<ol class="steps"><li>Buka halaman ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>, lalu <b>Tambah</b>.</li></ol>'
    :'<ol class="steps"><li>Buka halaman ini di <b>Chrome</b>.</li><li>Ketuk menu <b>⋮</b> di kanan atas.</li><li>Pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</li></ol>');
  };
+})();
+/* ====== TAMPILAN HP: sapaan, navigasi bawah ====== */
+(function(){
+ const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],mons=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ function hello(){
+  const d=new Date(),h=d.getHours(),salam=h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';
+  const head=(Array.isArray(team)&&team.find(m=>m.head))||null;
+  const name=head&&head.n&&!/^Nama /.test(head.n)?head.n.trim().split(/\s+/)[0]:'';
+  $('#helloDate').textContent=days[d.getDay()]+', '+d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();
+  $('#helloName').textContent=salam+(name?', '+name:'')+' 👋';
+ }
+ const base=renderTeam;
+ renderTeam=async function(){await base();hello()};
+ hello();
+
+ const nav=document.querySelector('.bnav'),btns=[...nav.querySelectorAll('button')];
+ const mark=k=>btns.forEach(b=>b.classList.toggle('on',b.dataset.go===k));
+ nav.onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;const k=b.dataset.go;
+  if(k==='add')return editor(null);
+  if(k==='top')scrollTo({top:0,behavior:'smooth'});else document.getElementById(k).scrollIntoView({behavior:'smooth'});
+  mark(k);
+ };
+ function spy(){
+  const tools=document.getElementById('tools').getBoundingClientRect().top,tim=document.getElementById('tim').getBoundingClientRect().top,h=innerHeight;
+  const atEnd=scrollY+h>=document.documentElement.scrollHeight-8;
+  mark(scrollY<120?'top':(atEnd||tim<h*.55)?'tim':tools<h*.6?'tools':'top');
+ }
+ let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;spy()})},{passive:true});
+ spy();
+
+ const ib=document.getElementById('installIcon'),main=document.getElementById('installBtn');
+ new MutationObserver(()=>{ib.hidden=main.hidden}).observe(main,{attributes:true,attributeFilter:['hidden']});
+ ib.hidden=main.hidden;ib.onclick=()=>main.click();
 })();
 /* ====== SINKRONISASI DATA KE GOOGLE SHEETS & DRIVE ======
    Ganti dengan Web app URL dari Apps Script (berakhiran /exec).
