@@ -324,6 +324,44 @@ textarea.in{min-height:240px;resize:vertical}
 .brief-ta{min-height:320px;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
 .wa{background:#25d366!important;color:#fff!important}
 @media(max-width:760px){.sales{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.sl-main b{font-size:27px}}
+/* ====== JADWAL SHIFT ====== */
+.shift{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.sh-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sh-head h3{font-size:19px;letter-spacing:-.3px}
+.sh-head p{color:var(--mut);font-size:13px;margin-top:2px}
+.sh-head .btn{padding:9px 14px;font-size:13px;flex:none}
+.sh-groups{display:grid;gap:10px;margin-top:14px}
+.sh-g{display:flex;gap:10px;align-items:flex-start}
+.sh-g>b{flex:none;width:92px;font-size:12px;line-height:1.3;padding-top:5px}
+.sh-g>b small{display:block;color:var(--mut);font-weight:600;font-size:11px}
+.sh-people{display:flex;flex-wrap:wrap;gap:6px}
+.sh-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px 5px 5px;background:var(--bg);font-size:13px;font-weight:600}
+.sh-chip i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:800;color:#fff}
+.sh-none{color:var(--mut);font-size:13px;padding-top:4px}
+.sh-alert{margin-top:12px;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:600;line-height:1.4}
+.sh-alert.ok{background:rgba(34,165,89,.12);color:#1a8a49}
+.sh-alert.warn{background:rgba(245,158,11,.15);color:#b26b00}
+.sh-k{display:inline-grid;place-items:center;min-width:30px;height:30px;border-radius:9px;font-size:12px;font-weight:800;color:#fff;padding:0 4px}
+.sh-k.L,.sh-k.C{color:var(--fg);background:var(--line)}
+.sh-k.none{background:none;border:1.5px dashed var(--line);color:var(--mut)}
+.plan-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.plan-nav b{font-size:14px;text-align:center}
+.plan-nav .x{flex:none}
+.plan-wrap{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.plan{border-collapse:separate;border-spacing:3px;width:100%}
+.plan th{font-size:11px;font-weight:700;color:var(--mut);text-align:center;padding:2px 0;white-space:nowrap}
+.plan th.today{color:var(--acc)}
+.plan td.nm{font-size:12px;font-weight:700;max-width:84px;min-width:58px;line-height:1.2;padding-right:2px;overflow:hidden;text-overflow:ellipsis}
+.plan td.nm small{display:block;color:var(--mut);font-weight:500;font-size:10px}
+.plan td{text-align:center}
+.plan button.sh-k{border:0;cursor:pointer;width:100%;min-width:30px;height:34px}
+.plan button.sh-k.none{border:1.5px dashed var(--line)}
+.plan-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:12px;color:var(--mut);align-items:center}
+.plan-legend span{display:inline-flex;align-items:center;gap:5px}
+.plan-legend .sh-k{min-width:24px;height:22px;font-size:11px;border-radius:7px;font-style:normal}
+.plan-times{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px 8px;align-items:center;margin-top:10px;font-size:13px}
+.plan-times input{padding:8px 10px}
+@media(max-width:760px){.shift{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.sh-g>b{width:84px}}
 </style>
 </head>
 <body>
@@ -371,6 +409,11 @@ textarea.in{min-height:240px;resize:vertical}
         <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
       </div>
       <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
+    </section>
+    <section class="shift" id="shift" aria-label="Jadwal hari ini">
+      <div class="sh-head"><div><h3>Jadwal Hari Ini</h3><p id="shDate"></p></div><button class="btn ghost" type="button" id="shPlan">Atur Jadwal</button></div>
+      <div class="sh-groups" id="shGroups"></div>
+      <div id="shAlert"></div>
     </section>
     <section class="daily" id="daily" aria-label="Tugas hari ini">
       <div class="dl-head">
@@ -1012,6 +1055,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   }
   const f=focusLines(d);if(f.length){L.push('');L.push('🎯 *Fokus hari ini*');f.forEach(x=>L.push('• '+x))}
   let tasks=[];try{const all=(meta.__daily||{}),k=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());tasks=(all[k]||[]).filter(x=>x&&x.t&&!x.done)}catch(e){}
+  if(window.ofaShiftBrief){const sb=window.ofaShiftBrief();if(sb.length){L.push('');L.push('🕒 *Jadwal hari ini*');sb.forEach(x=>L.push(x))}}
   if(tasks.length){L.push('');L.push('✅ *Tugas hari ini*');tasks.forEach(x=>L.push('• '+x.t))}
   L.push('');L.push('Semangat tim, kita kejar target hari ini! 💪');
   return L.join('\n');
@@ -1027,6 +1071,106 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  try{const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(c&&c.store)show(c)}catch(e){}
  setTimeout(()=>load(false),2800);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&data&&Date.now()-data.at>10*60000)load(false)});
+})();
+/* ====== JADWAL SHIFT TIM ====== */
+(function(){
+ const box=document.getElementById('shift');if(!box)return;
+ const $id=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0');
+ const dk=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+ const HARI=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],HARIP=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const DEF={P:{n:'Pagi',s:'09:30',e:'17:30',c:'#2f80ed'},M:{n:'Middle',s:'11:30',e:'19:30',c:'#8b5cf6'},S:{n:'Sore',s:'14:00',e:'22:00',c:'#ff4f1f'},L:{n:'Libur'},C:{n:'Cuti'}};
+ const ORDER=['','P','M','S','L','C'];
+ let weekStart=monday(new Date()),showTimes=false;
+
+ function monday(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());const g=(x.getDay()+6)%7;x.setDate(x.getDate()-g);return x}
+ function types(){const t=meta.__shiftTypes&&typeof meta.__shiftTypes==='object'?meta.__shiftTypes:{};const o={};Object.keys(DEF).forEach(k=>o[k]=Object.assign({},DEF[k],t[k]||{}));return o}
+ function plan(){const v=meta.__shift;return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}
+ function save(p){
+  const keep=dk(new Date(Date.now()-60*864e5));Object.keys(p).forEach(k=>{if(k<keep)delete p[k]});
+  meta.__shift=p;ls.set('ofa_meta',meta);
+ }
+ function people(){return [...team.filter(m=>m.head),...team.filter(m=>!m.head)].filter(m=>m&&m.id)}
+ const first=n=>String(n||'?').trim().split(/\s+/)[0];
+ const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+ const hrs=t=>{const p=String(t||'').split(':').map(Number);return p.length===2&&!isNaN(p[0])?p[0]+(p[1]||0)/60:null};
+ function peakWindow(){
+  try{const c=JSON.parse(localStorage.getItem('ofa_sales_cache')||'null');const m=c&&c.peak&&String(c.peak.label).match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
+   if(m)return {a:+m[1]+m[2]/60,b:+m[3]+m[4]/60,label:c.peak.label,share:c.peak.contribution}}catch(e){}
+  return {a:18,b:22,label:'18.00 - 22.00',share:null};
+ }
+ function covers(code,pk,ty){const t=ty[code];if(!t||!t.s)return false;const a=hrs(t.s),b=hrs(t.e);if(a===null||b===null)return false;return Math.min(b,pk.b)-Math.max(a,pk.a)>=2}
+ function dayInfo(date){
+  const ty=types(),day=plan()[dk(date)]||{},ppl=people(),groups={},unset=[];
+  ppl.forEach(m=>{const c=day[m.id];if(c&&ty[c]){(groups[c]=groups[c]||[]).push(m)}else unset.push(m)});
+  return {ty,groups,unset,ppl};
+ }
+ window.renderShift=function(){
+  const now=new Date(),{ty,groups,unset,ppl}=dayInfo(now);
+  $id('shDate').textContent=HARIP[now.getDay()]+', '+now.getDate()+' '+BLN[now.getMonth()];
+  const chip=m=>`<span class="sh-chip"><i style="background:hsl(${[...m.id].reduce((a,c)=>a+c.charCodeAt(0)*37,0)%360} 65% 45%)">${esc(ini(m.n))}</i>${esc(first(m.n))}</span>`;
+  const rows=[];
+  ['P','M','S'].forEach(k=>{if(groups[k])rows.push(`<div class="sh-g"><b><span class="sh-k" style="background:${ty[k].c};min-width:0;height:auto;padding:0 6px;border-radius:6px">${esc(ty[k].n)}</span><small>${esc(ty[k].s)}–${esc(ty[k].e)}</small></b><div class="sh-people">${groups[k].map(chip).join('')}</div></div>`)});
+  const off=[...(groups.L||[]),...(groups.C||[]).map(m=>Object.assign({},m,{n:m.n+' (cuti)'}))];
+  if(off.length)rows.push(`<div class="sh-g"><b>Libur/Cuti</b><div class="sh-people">${off.map(chip).join('')}</div></div>`);
+  if(unset.length&&unset.length<ppl.length)rows.push(`<div class="sh-g"><b>Belum dijadwalkan</b><div class="sh-people">${unset.map(chip).join('')}</div></div>`);
+  $id('shGroups').innerHTML=rows.length?rows.join(''):'<div class="sh-none">Jadwal hari ini belum diatur. Ketuk <b>Atur Jadwal</b> untuk mengisi shift tim minggu ini.</div>';
+  const pk=peakWindow(),onPeak=ppl.filter(m=>covers((plan()[dk(now)]||{})[m.id],pk,ty)),al=$id('shAlert');
+  if(!rows.length||unset.length===ppl.length){al.innerHTML='';return}
+  const share=pk.share?' · '+(pk.share*100).toFixed(0)+'% sales':'';
+  al.innerHTML=onPeak.length>=2?`<div class="sh-alert ok">✓ Jam ramai ${esc(pk.label)}${share}: ${onPeak.length} orang bertugas (${onPeak.map(m=>esc(first(m.n))).join(', ')})</div>`:
+   `<div class="sh-alert warn">⚠ Jam ramai ${esc(pk.label)}${share}: hanya ${onPeak.length} orang bertugas. Pertimbangkan menggeser 1 orang ke shift Sore.</div>`;
+ };
+ window.ofaShiftBrief=function(){
+  const {ty,groups}=dayInfo(new Date()),out=[];
+  ['P','M','S'].forEach(k=>{if(groups[k])out.push(ty[k].n+' ('+ty[k].s+'–'+ty[k].e+'): '+groups[k].map(m=>first(m.n)).join(', '))});
+  const off=[...(groups.L||[]),...(groups.C||[])];if(off.length)out.push('Libur/Cuti: '+off.map(m=>first(m.n)).join(', '));
+  return out;
+ };
+
+ function drawPlan(){
+  const ty=types(),p=plan(),ppl=people(),days=[...Array(7)].map((_,i)=>{const d=new Date(weekStart);d.setDate(d.getDate()+i);return d}),tk=dk(new Date());
+  const end=days[6],lbl=days[0].getDate()+' '+BLN[days[0].getMonth()]+' – '+end.getDate()+' '+BLN[end.getMonth()]+' '+end.getFullYear();
+  const cell=(m,d)=>{const c=(p[dk(d)]||{})[m.id]||'';const t=ty[c];
+   return `<td><button type="button" class="sh-k ${c?c:'none'}" data-m="${esc(m.id)}" data-d="${dk(d)}" style="${t&&t.c?'background:'+t.c:''}" aria-label="${esc(m.n)} ${dk(d)} ${t?t.n:'kosong'}">${c||'+'}</button></td>`};
+  $id('pb').innerHTML=`
+   <div class="plan-nav"><button class="x" type="button" data-w="-1" aria-label="Minggu sebelumnya">‹</button><b>${lbl}</b><button class="x" type="button" data-w="1" aria-label="Minggu berikutnya">›</button></div>
+   <div class="plan-wrap"><table class="plan"><thead><tr><th></th>${days.map(d=>`<th class="${dk(d)===tk?'today':''}">${HARI[d.getDay()]}<br>${d.getDate()}</th>`).join('')}</tr></thead>
+   <tbody>${ppl.map(m=>`<tr><td class="nm">${esc(first(m.n))}<small>${esc(m.j||'')}</small></td>${days.map(d=>cell(m,d)).join('')}</tr>`).join('')}</tbody></table></div>
+   <div class="plan-legend">${['P','M','S','L','C'].map(k=>`<span><i class="sh-k ${k}" style="${ty[k].c?'background:'+ty[k].c:''}">${k}</i>${esc(ty[k].n)}${ty[k].s?' '+esc(ty[k].s)+'–'+esc(ty[k].e):''}</span>`).join('')}</div>
+   <p class="hint">Ketuk kotak untuk mengganti shift: kosong → P → M → S → L → C.</p>
+   <div class="row"><button class="btn ghost" type="button" id="plCopy">Salin minggu lalu</button><button class="btn ghost" type="button" id="plTimes">${showTimes?'Tutup jam shift':'Atur jam shift'}</button></div>
+   ${showTimes?`<div class="plan-times">${['P','M','S'].map(k=>`<b>${esc(ty[k].n)}</b><input class="in" type="time" data-t="${k}" data-f="s" value="${esc(ty[k].s)}" aria-label="Mulai ${esc(ty[k].n)}"><input class="in" type="time" data-t="${k}" data-f="e" value="${esc(ty[k].e)}" aria-label="Selesai ${esc(ty[k].n)}">`).join('')}</div>`:''}
+   <div class="row"><button class="btn" type="button" id="plDone">Selesai</button></div>`;
+ }
+ function openPlan(){openModal('Jadwal Shift Mingguan','');drawPlan();renderShift()}
+ $id('shPlan').onclick=openPlan;
+ document.getElementById('pb').addEventListener('click',e=>{
+  if(!document.querySelector('.plan-nav'))return;
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.w){weekStart.setDate(weekStart.getDate()+7*Number(b.dataset.w));return drawPlan()}
+  if(b.dataset.m){
+   const p=plan(),d=b.dataset.d,day=Object.assign({},p[d]||{}),cur=day[b.dataset.m]||'',nx=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
+   if(nx)day[b.dataset.m]=nx;else delete day[b.dataset.m];p[d]=day;save(p);drawPlan();renderShift();return;
+  }
+  if(b.id==='plCopy'){
+   const p=plan();let n=0;
+   for(let i=0;i<7;i++){const d=new Date(weekStart);d.setDate(d.getDate()+i);const prev=new Date(d);prev.setDate(prev.getDate()-7);
+    const src=p[dk(prev)];if(src&&Object.keys(src).length){p[dk(d)]=Object.assign({},src);n++}}
+   if(!n){alert('Minggu lalu belum ada jadwal yang bisa disalin.');return}
+   save(p);drawPlan();renderShift();return;
+  }
+  if(b.id==='plTimes'){showTimes=!showTimes;return drawPlan()}
+  if(b.id==='plDone'){close();renderShift()}
+ });
+ document.getElementById('pb').addEventListener('change',e=>{
+  const i=e.target.closest('input[data-t]');if(!i||!i.value)return;
+  const t=Object.assign({},meta.__shiftTypes||{});t[i.dataset.t]=Object.assign({},t[i.dataset.t]||{},{[i.dataset.f]:i.value});
+  meta.__shiftTypes=t;ls.set('ofa_meta',meta);drawPlan();renderShift();
+ });
+ const baseRender=render;render=async function(){await baseRender();renderShift()};
+ const baseTeam=renderTeam;renderTeam=async function(){await baseTeam();renderShift()};
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderShift()});
+ renderShift();
 })();
 </script>
 </body>
