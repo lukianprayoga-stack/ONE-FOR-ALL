@@ -392,6 +392,42 @@ textarea.in{min-height:240px;resize:vertical}
 .rt-i.on{background:var(--card);border-radius:10px}
 .rt-t{flex:1;text-align:left;border:0;background:none;padding:10px 4px;font-size:14px;color:var(--fg)}
 .rt-t small{display:block;color:var(--mut);font-size:11px;margin-top:2px}
+/* ====== DISPLAY PERFORMANCE ====== */
+.disp{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.dp-list{display:grid;gap:8px;margin-top:12px}
+.dp-row{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--bg);border-radius:16px;padding:8px;text-align:left;color:var(--fg)}
+.dp-th{flex:none;width:58px;height:58px;border-radius:12px;overflow:hidden;background:var(--line);display:grid;place-items:center;font-size:24px}
+.dp-th img{width:100%;height:100%;object-fit:cover}
+.dp-info{flex:1;min-width:0}
+.dp-info b{display:block;font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dp-info small{display:block;color:var(--mut);font-size:12px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dp-info em{display:block;font-style:normal;font-size:12px;font-weight:700;margin-top:3px}
+.dp-badge{flex:none;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;background:var(--line);color:var(--fg)}
+.dp-badge.ok,.dp-info em.ok{color:#1a8a49}.dp-badge.ok{background:rgba(34,165,89,.14)}
+.dp-badge.bad,.dp-info em.bad{color:#d33a40}.dp-badge.bad{background:rgba(229,72,77,.13)}
+.dp-badge.wait{color:var(--mut)}
+.dp-more{border:0;background:none;color:var(--mut);font-size:13px;font-weight:700;padding:8px 2px 0}
+.dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.dp-photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dp-photos figure{margin:0}
+.dp-photos .ph{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--card);display:grid;place-items:center;color:var(--mut);font-size:12px;text-align:center}
+.dp-photos img{width:100%;height:100%;object-fit:cover}
+.dp-photos figcaption{font-size:12px;font-weight:700;color:var(--mut);margin-top:4px;text-align:center}
+.dp-verdict{margin-top:12px;border-radius:14px;padding:12px;font-size:14px;line-height:1.45;background:var(--card)}
+.dp-verdict b{display:block;font-size:16px;margin-bottom:2px}
+.dp-verdict.ok{background:rgba(34,165,89,.12)}.dp-verdict.ok b{color:#1a8a49}
+.dp-verdict.bad{background:rgba(229,72,77,.11)}.dp-verdict.bad b{color:#d33a40}
+.dp-tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.dp-tbl th,.dp-tbl td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.dp-tbl th:first-child,.dp-tbl td:first-child{text-align:left;white-space:normal}
+.dp-tbl th{color:var(--mut);font-size:11px;font-weight:700}
+.dp-up{color:#1a8a49;font-weight:800}.dp-down{color:#d33a40;font-weight:800}
+.dp-top{margin:12px 0 0;padding-left:18px;font-size:13px;line-height:1.6}
+.dp-sec{font-size:12px;font-weight:800;color:var(--mut);margin-top:14px;letter-spacing:.02em}
+.dp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;max-height:150px;overflow:auto}
+.dp-chips button{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--fg)}
+.dp-chips button.on{background:var(--ink);border-color:var(--ink);color:var(--inkfg)}
+@media(max-width:760px){.disp{margin-top:12px;max-width:none;border-radius:20px;padding:16px}}
 </style>
 </head>
 <body>
@@ -458,6 +494,10 @@ textarea.in{min-height:240px;resize:vertical}
       <button class="dl-toggle" id="dlToggle" type="button" hidden></button>
       <ul class="dl-list done" id="dlDone" hidden></ul>
       <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
+    </section>
+    <section class="disp" id="disp" aria-label="Display performance">
+      <div class="sh-head"><div><h3>Display Performance</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
+      <div class="dp-list" id="dpList"></div>
     </section>
   </div>
   <div class="cluster" id="cl"></div>
@@ -1326,6 +1366,187 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderShift()});
  const baseShift=window.renderShift;window.renderShift=function(){baseShift();if(window.renderDaily)window.renderDaily()};
  renderShift();
+})();
+/* ====== DISPLAY PERFORMANCE ====== */
+(function(){
+ const box=document.getElementById('disp');if(!box)return;
+ const $id=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0');
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const AREAS=['Window display','Gondola depan','Meja promo','Dinding tas','Rak sandal & sepatu','Rak apparel','Area kasir'];
+ const CACHE='ofa_disp_cache',OPT='ofa_disp_cats';
+ const toD=k=>{const p=String(k).split('-').map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2]))};
+ const fromD=d=>d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate());
+ const add=(k,n)=>{const d=toD(k);d.setUTCDate(d.getUTCDate()+n);return fromD(d)};
+ const diff=(a,b)=>Math.round((toD(b)-toD(a))/864e5);
+ const tgl=k=>{const p=String(k).split('-').map(Number);return p.length===3?p[2]+' '+BLN[p[1]-1]:k};
+ const todayK=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+ const jt=v=>{v=Number(v)||0;const a=Math.abs(v);return (v<0?'-':'')+(a>=1e9?'Rp'+(a/1e9).toFixed(2).replace('.',',')+' M':a>=1e6?'Rp'+(a/1e6).toFixed(1).replace('.',',')+' jt':'Rp'+Math.round(a).toLocaleString('id-ID'))};
+ const pctS=v=>v==null?'–':(v>=0?'▲':'▼')+Math.abs(v*100).toFixed(0)+'%';
+ const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+ const lsPut=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+ const uid=()=>'dp'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ let showAll=false,queue=Promise.resolve(),running={},form=null;
+
+ const list=()=>(Array.isArray(meta.__display)?meta.__display:[]).filter(e=>e&&e.id&&e.d).sort((a,b)=>b.d.localeCompare(a.d)||(b.at||0)-(a.at||0));
+ function saveList(l){meta.__display=l.slice(0,80);ls.set('ofa_meta',meta)}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const catsTxt=e=>[...(e.c3||[]),...(e.c4||[])].join(', ')+(e.kw?(e.c3&&e.c3.length||e.c4&&e.c4.length?' · ':'')+'“'+e.kw+'”':'')||'Semua produk';
+ const sig=e=>[e.d,(e.c3||[]).join('|'),(e.c4||[]).join('|'),e.kw||''].join('#');
+ function match(e,pr){
+  const c3=e.c3||[],c4=e.c4||[],kw=String(e.kw||'').trim().toLowerCase();
+  const cat=(!c3.length&&!c4.length)||c3.includes(pr.categoryLevel3)||c4.includes(pr.categoryLevel4);
+  return cat&&(!kw||String(pr.name||'').toLowerCase().includes(kw));
+ }
+ function sum(prods,e){
+  const o={net:0,qty:0,snet:0,sqty:0};
+  (prods||[]).forEach(pr=>{const n=Number(pr.netSales)||0,q=Number(pr.qty)||0;o.snet+=n;o.sqty+=q;if(match(e,pr)){o.net+=n;o.qty+=q}});
+  return o;
+ }
+ const ch=(a,b)=>b>0?a/b-1:null;
+ function verdict(r){
+  if(!r||r.wait)return {k:'wait',t:'Menunggu data'};
+  const c=ch(r.a.net,r.b.net),st=ch(r.a.snet,r.b.snet);
+  if(c==null)return r.a.net>0?{k:'ok',t:'Baru terjual'}:{k:'wait',t:'Belum ada penjualan'};
+  const rel=c-(st||0);
+  return rel>=.05?{k:'ok',t:'Efektif'}:rel<=-.05?{k:'bad',t:'Kurang efektif'}:{k:'',t:'Netral'};
+ }
+ async function salesEnd(){const c=lsGet('ofa_sales_cache',null);return c&&c.period&&c.period.end?c.period.end:''}
+ async function analyze(e,force){
+  const cache=lsGet(CACHE,{}),old=cache[e.id],sg=sig(e),known=await salesEnd();
+  if(!force&&old&&old.sig===sg&&(old.final||Date.now()-old.at<10*60e3))return old;
+  let aEnd=add(e.d,6),after;
+  if(!known||known<aEnd){
+   after=await api('getProductAnalysis',{startDate:e.d,endDate:''});
+   if(after.message){const r={sig:sg,wait:true,at:Date.now()};cache[e.id]=r;lsPut(CACHE,cache);return r}
+   const mx=after.period&&after.period.end||aEnd;
+   if(mx>aEnd)after=await api('getProductAnalysis',{startDate:e.d,endDate:aEnd});else aEnd=mx;
+  }else after=await api('getProductAnalysis',{startDate:e.d,endDate:aEnd});
+  const n=diff(e.d,aEnd)+1,bStart=add(e.d,-n),bEnd=add(e.d,-1);
+  const before=await api('getProductAnalysis',{startDate:bStart,endDate:bEnd});
+  const A=sum(after.message?[]:after.products,e),B=sum(before.message?[]:before.products,e);
+  const top=(after.message?[]:after.products).filter(pr=>match(e,pr)).sort((x,y)=>(y.netSales||0)-(x.netSales||0)).slice(0,5).map(pr=>({n:pr.name,q:pr.qty,v:pr.netSales}));
+  const r={sig:sg,n,bStart,bEnd,aEnd,a:A,b:B,top,final:n>=7,at:Date.now()};
+  cache[e.id]=r;lsPut(CACHE,cache);return r;
+ }
+ function enqueue(e,force){
+  if(running[e.id])return running[e.id];
+  const job=queue.then(()=>analyze(e,force)).catch(err=>({error:err&&err.message||String(err)}));
+  running[e.id]=job;queue=job.then(()=>{});
+  job.then(()=>{delete running[e.id]});
+  return job;
+ }
+ async function thumb(key){try{const b=await idb.op('get',key);return b?URL.createObjectURL(b):''}catch(e){return ''}}
+
+ window.renderDisplay=async function(){
+  const l=list(),cache=lsGet(CACHE,{}),shown=showAll?l:l.slice(0,4);
+  $id('dpSub').textContent=l.length?l.length+' perubahan display tercatat':'Dampak perubahan display ke penjualan';
+  if(!l.length){$id('dpList').innerHTML='<p class="dp-empty">Catat setiap kali display diganti: area, tanggal, kategori produk, dan foto. Aplikasi akan membandingkan penjualan kategori itu 7 hari sebelum dan sesudahnya.</p>';return}
+  const rows=await Promise.all(shown.map(async e=>{
+   const r=cache[e.id]&&cache[e.id].sig===sig(e)?cache[e.id]:null,v=verdict(r),src=await thumb('dp_'+e.id);
+   const line=!r?'Menghitung…':r.wait?'Menunggu data penjualan setelah '+tgl(e.d):'Kategori '+pctS(ch(r.a.net,r.b.net))+' vs toko '+pctS(ch(r.a.snet,r.b.snet))+(r.n<7?' · data '+r.n+'/7 hari':'');
+   return `<button type="button" class="dp-row" data-id="${esc(e.id)}"><span class="dp-th">${src?`<img src="${src}" alt="">`:'🖼️'}</span><span class="dp-info"><b>${esc(e.area||'Display')}</b><small>${esc(tgl(e.d))} · ${esc(catsTxt(e))}</small><em class="${v.k}">${esc(line)}</em></span><span class="dp-badge ${v.k}">${esc(v.t)}</span></button>`;
+  }));
+  $id('dpList').innerHTML=rows.join('')+(l.length>4?`<button type="button" class="dp-more" id="dpMore">${showAll?'Tampilkan lebih sedikit':'Lihat semua ('+l.length+')'}</button>`:'');
+  if(!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  shown.forEach(e=>{const r=cache[e.id];if(!r||r.sig!==sig(e)||(!r.final&&Date.now()-r.at>10*60e3))enqueue(e).then(x=>{if(x&&!x.error&&(!r||JSON.stringify(x.a)!==JSON.stringify(r.a)||x.wait!==r.wait))renderDisplay()})});
+ };
+
+ async function detail(id){
+  const e=list().find(x=>x.id===id);if(!e)return;
+  const [after,before]=await Promise.all([thumb('dp_'+e.id),thumb('dpb_'+e.id)]);
+  const r=lsGet(CACHE,{})[e.id],v=verdict(r&&r.sig===sig(e)?r:null);
+  let body='';
+  if(r&&!r.wait&&r.sig===sig(e)){
+   const c=ch(r.a.net,r.b.net),st=ch(r.a.snet,r.b.snet),sb=r.b.snet?r.b.net/r.b.snet:0,sa=r.a.snet?r.a.net/r.a.snet:0;
+   const cls=x=>x==null?'':x>=0?'dp-up':'dp-down';
+   body=`<div class="dp-verdict ${v.k}"><b>${esc(v.t)}</b>Penjualan ${esc(catsTxt(e))} ${c==null?'baru tercatat setelah display diganti':(c>=0?'naik ':'turun ')+Math.abs(c*100).toFixed(0)+'%'}, sementara total toko ${st==null?'tidak dapat dibandingkan':(st>=0?'naik ':'turun ')+Math.abs(st*100).toFixed(0)+'%'} pada periode yang sama.</div>
+    <table class="dp-tbl"><thead><tr><th>${r.n} hari</th><th>Sebelum<br>${esc(tgl(r.bStart))}–${esc(tgl(r.bEnd))}</th><th>Sesudah<br>${esc(tgl(e.d))}–${esc(tgl(r.aEnd))}</th><th>Ubah</th></tr></thead><tbody>
+     <tr><td>Net sales kategori</td><td>${jt(r.b.net)}</td><td>${jt(r.a.net)}</td><td class="${cls(c)}">${pctS(c)}</td></tr>
+     <tr><td>QTY kategori</td><td>${Math.round(r.b.qty)}</td><td>${Math.round(r.a.qty)}</td><td class="${cls(ch(r.a.qty,r.b.qty))}">${pctS(ch(r.a.qty,r.b.qty))}</td></tr>
+     <tr><td>Kontribusi ke toko</td><td>${(sb*100).toFixed(1).replace('.',',')}%</td><td>${(sa*100).toFixed(1).replace('.',',')}%</td><td></td></tr>
+     <tr><td>Net sales toko</td><td>${jt(r.b.snet)}</td><td>${jt(r.a.snet)}</td><td class="${cls(st)}">${pctS(st)}</td></tr>
+    </tbody></table>
+    ${r.n<7?`<p class="hint">Baru ${r.n} hari data setelah display diganti; angka diperbarui otomatis sampai 7 hari.</p>`:''}
+    ${r.top&&r.top.length?`<div class="dp-sec">PRODUK TERLARIS SETELAH DISPLAY</div><ol class="dp-top">${r.top.map(t=>`<li>${esc(t.n)} · ${Math.round(t.q)} pcs · ${jt(t.v)}</li>`).join('')}</ol>`:''}`;
+  }else if(r&&r.wait)body='<div class="dp-verdict">Belum ada data penjualan setelah '+esc(tgl(e.d))+'. Upload DSR terbaru lalu buka lagi.</div>';
+  else body='<div class="dp-verdict">Sedang menghitung dampak display…</div>';
+  openModal(e.area||'Display',`
+   <p class="hint" style="margin:0 0 10px">Dipasang ${esc(tgl(e.d))} · ${esc(catsTxt(e))}</p>
+   <div class="dp-photos"><figure><div class="ph">${before?`<img src="${before}" alt="Sebelum">`:'Belum ada foto'}</div><figcaption>Sebelum</figcaption></figure><figure><div class="ph">${after?`<img src="${after}" alt="Sesudah">`:'Belum ada foto'}</div><figcaption>Sesudah</figcaption></figure></div>
+   ${body}${e.note?`<div class="dp-sec">CATATAN</div><p style="margin:4px 0 0;font-size:14px">${esc(e.note)}</p>`:''}
+   <div class="row"><button class="btn ghost" type="button" data-dp="edit" data-id="${esc(e.id)}">Ubah</button><button class="btn ghost" type="button" data-dp="re" data-id="${esc(e.id)}">↻ Hitung ulang</button><button class="btn danger" type="button" data-dp="del" data-id="${esc(e.id)}">Hapus</button></div>`);
+  if(!r||r.sig!==sig(e))enqueue(e).then(()=>{if(document.querySelector('#pb [data-dp][data-id="'+id+'"]'))detail(id);renderDisplay()});
+ }
+
+ async function catOptions(){
+  const c=lsGet(OPT,null);if(c&&c.day===todayK()&&c.l3&&c.l3.length)return c;
+  try{
+   const end=todayK(),r=await api('getProductAnalysis',{startDate:add(end,-90),endDate:''});
+   if(r.message)return c||{l3:[],l4:[]};
+   const o={day:todayK(),l3:(r.productCategories.level3||[]).map(x=>x.name).filter(n=>n&&n!=='-'),l4:(r.productCategories.level4||[]).map(x=>x.name).filter(n=>n&&n!=='-')};
+   lsPut(OPT,o);return o;
+  }catch(e){return c||{l3:[],l4:[]}}
+ }
+ async function editForm(id){
+  const e=id?list().find(x=>x.id===id):null;
+  form={id:e?e.id:null,c3:e?(e.c3||[]).slice():[],c4:e?(e.c4||[]).slice():[]};
+  const areas=[...new Set([...list().map(x=>x.area).filter(Boolean),...AREAS])];
+  const draw=o=>{
+   const chips=(arr,lv)=>arr.map(n=>`<button type="button" data-lv="${lv}" data-n="${esc(n)}" class="${form['c'+lv].includes(n)?'on':''}">${esc(n)}</button>`).join('')||'<span class="hint">Memuat kategori…</span>';
+   openModal(e?'Ubah catatan display':'Catat perubahan display',`
+    <label>Area display</label><input class="in" id="dpArea" list="dpAreas" maxlength="60" placeholder="Contoh: Window display" value="${e?esc(e.area||''):''}"><datalist id="dpAreas">${areas.map(a=>`<option value="${esc(a)}">`).join('')}</datalist>
+    <label>Tanggal display dipasang</label><input class="in" id="dpDate" type="date" value="${e?esc(e.d):todayK()}" max="${todayK()}">
+    <div class="dp-sec">KATEGORI PRODUK DI DISPLAY</div><p class="hint" style="margin:2px 0 0">Pilih kategori yang dipajang. Bisa lebih dari satu.</p>
+    <div class="dp-chips" id="dpC3">${chips(o.l3,3)}</div>
+    <div class="dp-sec">DETAIL KATEGORI (LEVEL 4)</div>
+    <div class="dp-chips" id="dpC4">${chips(o.l4,4)}</div>
+    <label>Kata kunci produk (opsional)</label><input class="in" id="dpKw" maxlength="40" placeholder="Contoh: MOZAMBIQUE" value="${e?esc(e.kw||''):''}">
+    <label>Foto display sesudah diganti</label><input class="in" id="dpFa" type="file" accept="image/*">
+    <label>Foto sebelum diganti (opsional)</label><input class="in" id="dpFb" type="file" accept="image/*">
+    <label>Catatan (opsional)</label><input class="in" id="dpNote" maxlength="140" placeholder="Contoh: Tema promo payday, fokus sandal" value="${e?esc(e.note||''):''}">
+    <p class="hint" id="dpErr" style="color:#e5484d;min-height:1em"></p>
+    <div class="row"><button class="btn" type="button" id="dpSave">Simpan</button></div>`);
+  };
+  const cached=lsGet(OPT,null);draw(cached||{l3:[],l4:[]});
+  if(!cached||cached.day!==todayK()){const o=await catOptions();if($('#dpSave'))draw(o)}
+ }
+ $('#pb').addEventListener('click',async ev=>{
+  const b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.lv&&form){const k='c'+b.dataset.lv,n=b.dataset.n,i=form[k].indexOf(n);i<0?form[k].push(n):form[k].splice(i,1);b.classList.toggle('on',i<0);return}
+  if(b.id==='dpSave'&&form){
+   const area=$('#dpArea').value.trim(),d=$('#dpDate').value;
+   if(!area){$('#dpErr').textContent='Isi nama area display.';return}
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){$('#dpErr').textContent='Pilih tanggal display dipasang.';return}
+   b.disabled=true;b.textContent='Menyimpan…';
+   const l=list().slice(),now=Date.now(),id=form.id||uid(),i=l.findIndex(x=>x.id===id);
+   const rec=Object.assign(i>=0?l[i]:{at:now},{id,area,d,c3:form.c3,c4:form.c4,kw:$('#dpKw').value.trim(),note:$('#dpNote').value.trim(),u:now});
+   if(i>=0)l[i]=rec;else l.push(rec);
+   const fa=$('#dpFa').files[0],fb=$('#dpFb').files[0];
+   if(fa)await idb.op('put',fa,'dp_'+id);
+   if(fb)await idb.op('put',fb,'dpb_'+id);
+   saveList(l);form=null;close();renderDisplay();return;
+  }
+  const act=b.dataset.dp;if(!act)return;const id=b.dataset.id;
+  if(act==='edit')return editForm(id);
+  if(act==='re'){const e=list().find(x=>x.id===id);if(!e)return;b.disabled=true;b.textContent='Menghitung…';const r=await enqueue(e,true);if(r&&r.error){b.textContent='Gagal: '+r.error;return}detail(id);renderDisplay();return}
+  if(act==='del'){
+   if(!confirm('Hapus catatan display ini?'))return;
+   saveList(list().filter(x=>x.id!==id));idb.op('delete','dp_'+id);idb.op('delete','dpb_'+id);
+   const c=lsGet(CACHE,{});delete c[id];lsPut(CACHE,c);close();renderDisplay();
+  }
+ });
+ $id('dpAdd').onclick=()=>editForm(null);
+ $id('dpList').addEventListener('click',ev=>{
+  if(ev.target.closest('#dpMore')){showAll=!showAll;return renderDisplay()}
+  const r=ev.target.closest('.dp-row');if(r)detail(r.dataset.id);
+ });
+ const baseRender=render;render=async function(){await baseRender();renderDisplay()};
+ setTimeout(renderDisplay,3200);
 })();
 </script>
 </body>
