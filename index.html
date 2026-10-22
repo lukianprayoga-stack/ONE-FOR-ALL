@@ -3,7 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ONE FOR ALL - STORE MANAGER</title>
+<title>ONE FOR ALL Hub</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6600">
+<meta name="application-name" content="OFA Hub">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OFA Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <style>
 :root{--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff}
 @media(prefers-color-scheme:dark){:root{--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d}}
@@ -117,14 +126,21 @@ textarea.in{min-height:240px;resize:vertical}
 .sw{display:flex;gap:8px;margin-top:12px}
 .sw button{flex:1;height:70px;border:0;border-radius:10px;font-size:12px;color:#fff;text-shadow:0 0 4px #000}
 .hint{color:var(--mut);font-size:13px;margin-top:10px}
+.hdr-actions{display:flex;gap:8px;align-items:center}
+#installBtn[hidden]{display:none}
+.steps{margin:10px 0 0;padding-left:20px;line-height:1.9}
+@media(display-mode:standalone){.bar{padding-top:calc(8px + env(safe-area-inset-top))}}
 </style>
 </head>
 <body>
-<div class="bar">ONE FOR ALL - STORE MANAGER. Semua tool toko dalam satu tempat.</div>
+<div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#">ONE FOR ALL <small>STORE MANAGER</small></a>
   <nav><a href="#tim">Team</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
-  <button class="btn" id="addTop">+ Tambah tool</button>
+  <div class="hdr-actions">
+    <button class="btn ghost" id="installBtn" hidden>Pasang aplikasi</button>
+    <button class="btn" id="addTop">+ Tambah tool</button>
+  </div>
 </header>
 <div class="hero">
   <div>
@@ -336,6 +352,26 @@ function editTeam(id){
 }
 $('#team').onclick=e=>{if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
 renderTeam();
+/* ====== APLIKASI HP (PWA) ====== */
+(function(){
+ const btn=document.getElementById('installBtn');
+ const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ let deferred=null;
+ if('serviceWorker' in navigator&&location.protocol!=='file:'){
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+ }
+ if(standalone)return;
+ addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;btn.hidden=false});
+ addEventListener('appinstalled',()=>{btn.hidden=true;deferred=null});
+ if(ios)btn.hidden=false;
+ btn.onclick=async()=>{
+  if(deferred){deferred.prompt();await deferred.userChoice.catch(()=>null);deferred=null;btn.hidden=true;return}
+  openModal('Pasang di layar utama',ios
+   ?'<ol class="steps"><li>Buka halaman ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>, lalu <b>Tambah</b>.</li></ol>'
+   :'<ol class="steps"><li>Buka halaman ini di <b>Chrome</b>.</li><li>Ketuk menu <b>⋮</b> di kanan atas.</li><li>Pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</li></ol>');
+ };
+})();
 </script>
 </body>
 </html>
