@@ -448,6 +448,8 @@ textarea.in{min-height:240px;resize:vertical}
 .iv-todo span small{display:block;color:var(--mut);font-size:12px}
 .iv-status{font-size:12px;color:var(--mut);margin-top:8px;min-height:1em}
 .iv-status.err{color:#d33a40}
+.iv-sku{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4}
+.iv-sku:empty{display:none}
 .pf-stack{display:flex;height:12px;border-radius:99px;overflow:hidden;margin-top:12px;background:var(--line)}
 .pf-stack i{display:block;min-width:2px}
 .pf-rows{display:grid;gap:4px;margin-top:10px}
@@ -545,9 +547,10 @@ textarea.in{min-height:240px;resize:vertical}
     </section>
     <section class="inv" id="inv" aria-label="Kepatuhan display">
       <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
-      <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" hidden>
+      <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
       <div id="ivBody"></div>
       <div class="iv-status" id="ivStatus"></div>
+      <div class="iv-sku" id="ivSku"></div>
     </section>
     <section class="perf" id="perf" aria-label="Performa produk">
       <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
@@ -1623,7 +1626,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const pc=v=>((Number(v)||0)*100).toFixed(1).replace('.',',')+'%';
  const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]+/g,'');
  const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
- let data=null,R=[],busy=false,list=null;
+ let data=null,R=[],busy=false,list=null,skuMeta=null;
+ try{skuMeta=JSON.parse(localStorage.getItem('ofa_inv_sku')||'null')}catch(e){}
+ function setSku(k){if(!k)return;skuMeta=k;try{localStorage.setItem('ofa_inv_sku',JSON.stringify(k))}catch(e){}drawSku()}
 
  async function api(fn,arg){
   const pin=localStorage.getItem('salesTrackingPin')||'';
@@ -1649,9 +1654,14 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const restock=()=>R.filter(o=>o.stock<=0&&o.q30>0).sort((a,b)=>b.q30-a.q30);
  function status(t,err){const n=$id('ivStatus');n.textContent=t||'';n.className='iv-status'+(err?' err':'')}
 
+ function drawSku(){
+  const k=skuMeta,n=$id('ivSku');if(!n)return;
+  n.textContent=k&&k.rows?'Stok katalog website: '+nf(k.rows)+' SKU, '+nf(k.inStock)+' ada stok · data '+tgl(String(k.date).slice(0,10))+' '+String(k.date).slice(11,16):'';
+ }
  window.renderInv=function(){
+  drawSku();
   if(!data){
-   const msg='<p class="dp-empty">Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b> dari sistem. Aplikasi menghitung kepatuhan display (target 95%) dan performa setiap produk.</p>';
+   const msg='<p class="dp-empty">Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b> dari sistem. Aplikasi menghitung kepatuhan display (target 95%) dan performa setiap produk. File <b>export inventory by SKU</b> bisa dipilih bersamaan untuk memperbarui stok katalog website.</p>';
    $id('ivBody').innerHTML=msg;$id('pfBody').innerHTML='<p class="dp-empty">Performa produk muncul setelah inventory diupload.</p>';return;
   }
   const s=data.summary||{},m=data.meta||{},gp=s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp=s.colorTotal?s.colorDisplayed/s.colorTotal:0;
@@ -1756,25 +1766,54 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!configured()){alert('Aplikasi belum terhubung ke Apps Script.');return}
   if(busy)return;$id('ivFile').click();
  };
+ async function upBin(rows,hi,f){
+  const H=rows[hi].map(norm),idx=NEED.map(n=>H.indexOf(norm(n)));
+  const miss=NEED.filter((n,i)=>idx[i]<0&&['SKU Name','SKU Code','Generic Code','Bin Code','Zone Code','Total Qty'].includes(n));
+  if(miss.length)throw new Error('kolom belum ada: '+miss.join(', '));
+  const body=rows.slice(hi+1).filter(r=>r.some(v=>String(v).trim())).map(r=>idx.map(i=>i<0?'':r[i]));
+  status('Mengunggah inventory by bin ('+nf(body.length)+' baris) dan menghitung… ±30 detik');
+  const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
+  if(res.message)throw new Error(res.message);
+  setData(res,true);if(res.meta&&res.meta.sku)setSku(res.meta.sku);
+  return 'Inventory by bin '+tgl(res.meta.date)+' ✓ ('+nf(res.meta.rows)+' baris)';
+ }
+ async function upSku(rows,hi,f){
+  let w=rows[hi].length;while(w&&!String(rows[hi][w-1]).trim())w--;
+  const body=rows.slice(hi+1).filter(r=>r.some(v=>String(v).trim())).map(r=>r.slice(0,w));
+  status('Mengunggah inventory by SKU ('+nf(body.length)+' SKU) ke Stock Database katalog…');
+  const arg={rows:[rows[hi].slice(0,w),...body],fileName:f.name};
+  let res=await api('uploadInventoryBySku',arg);
+  if(res.needConfirm){
+   if(!confirm(res.message+'\n\nTetap ganti Stock Database? Isi lama tetap tersimpan di sheet cadangan.'))return 'Inventory by SKU dibatalkan';
+   res=await api('uploadInventoryBySku',Object.assign(arg,{force:true}));
+  }
+  setSku(res);
+  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok)';
+ }
  $id('ivFile').onchange=async e=>{
-  const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
-  busy=true;$id('ivUp').disabled=true;status('Membaca '+f.name+'…');
-  try{
-   await loadXlsx();
-   const wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];
-   const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
-   const hi=rows.findIndex(r=>r.some(v=>norm(v)==='bincode'));
-   if(hi<0)throw new Error('Kolom "Bin Code" tidak ditemukan. Pilih file export inventory by bin.');
-   const H=rows[hi].map(norm),idx=NEED.map(n=>H.indexOf(norm(n)));
-   const miss=NEED.filter((n,i)=>idx[i]<0&&['SKU Name','SKU Code','Generic Code','Bin Code','Zone Code','Total Qty'].includes(n));
-   if(miss.length)throw new Error('Kolom belum ada: '+miss.join(', '));
-   const body=rows.slice(hi+1).filter(r=>r.some(v=>String(v).trim())).map(r=>idx.map(i=>i<0?'':r[i]));
-   status('Mengunggah '+nf(body.length)+' baris dan menghitung… (±30 detik)');
-   const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
-   if(res.message)throw new Error(res.message);
-   setData(res,true);{const cs=String(res.meta.catalogStock||''),ok=/^ok:/.test(cs);status('Inventory '+tgl(res.meta.date)+' diperbarui ✓ ('+nf(res.meta.rows)+' baris)'+(ok?' · stok '+nf(cs.slice(3))+' SKU tersalin ke katalog':cs?' · '+cs:''),!!cs&&!ok)}
-  }catch(err){status('Upload gagal: '+(err&&err.message||err),true)}
-  finally{busy=false;$id('ivUp').disabled=false}
+  const files=[...(e.target.files||[])];e.target.value='';if(!files.length)return;
+  busy=true;$id('ivUp').disabled=true;const done=[];let bad=false;
+  try{await loadXlsx()}catch(err){status('Upload gagal: '+err.message,true);busy=false;$id('ivUp').disabled=false;return}
+  // by SKU dulu agar ringkasan katalog ikut tampil saat analisis by bin selesai
+  const parsed=[];
+  for(const f of files){
+   try{
+    status('Membaca '+f.name+'…');
+    const wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=(ws&&XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''}))||[];
+    const hb=rows.findIndex(r=>r.some(v=>norm(v)==='bincode'));
+    const hs=rows.findIndex(r=>{const h=r.map(norm);return h.includes('skucode')&&h.includes('totalqty')});
+    if(hb>=0)parsed.push({f,rows,hi:hb,kind:'bin'});
+    else if(hs>=0)parsed.push({f,rows,hi:hs,kind:'sku'});
+    else{done.push(f.name+': bukan file inventory by bin / by SKU');bad=true}
+   }catch(err){done.push(f.name+': '+(err&&err.message||err));bad=true}
+  }
+  parsed.sort((a,b)=>(a.kind==='sku'?0:1)-(b.kind==='sku'?0:1));
+  for(const p of parsed){
+   try{done.push(await (p.kind==='bin'?upBin:upSku)(p.rows,p.hi,p.f))}
+   catch(err){const m=err&&err.message||String(err);done.push((p.kind==='bin'?'Inventory by bin':'Inventory by SKU')+' gagal: '+(/tidak dikenal/i.test(m)?'perbarui Inventory.gs di Apps Script':m));bad=true}
+  }
+  status(done.join(' · '),bad);busy=false;$id('ivUp').disabled=false;
  };
 
  async function refresh(force){
@@ -1782,7 +1821,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   let c=null;try{c=JSON.parse(localStorage.getItem(CACHE)||'null')}catch(e){}
   if(!force&&c&&Date.now()-(c.at||0)<30*60e3)return;
   busy=true;if(!data)status('Memuat data inventory…');
-  try{const r=await api('getInventoryAnalysis',{});if(r.message){if(!data)status('Belum ada inventory. Ketuk ⇪ Upload.');}else{setData(r,true);status('')}}
+  try{const r=await api('getInventoryAnalysis',{});const k=r.skuMeta||(r.meta&&r.meta.sku);if(k)setSku(k);if(r.message){if(!data)status('Belum ada inventory. Ketuk ⇪ Upload.');}else{setData(r,true);status('')}}
   catch(err){const m=err&&err.message||String(err);status(/tidak dikenal/i.test(m)?'Pasang Inventory.gs di Apps Script terlebih dahulu.':'Tidak dapat memuat inventory: '+m,true)}
   finally{busy=false}
  }
