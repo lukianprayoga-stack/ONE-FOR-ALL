@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ONE FOR ALL Hub</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff6600">
+<meta name="theme-color" content="#071a5c">
 <meta name="application-name" content="OFA Hub">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -227,9 +227,79 @@ textarea.in{min-height:240px;resize:vertical}
  .keys button{padding:16px 0}
 }
 @media(max-width:760px) and (prefers-reduced-motion:reduce){.panel{animation:none}}
+/* ====== LAYAR PEMBUKA ====== */
+#splash{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:16px;overflow:hidden;color:#fff;
+ background:radial-gradient(120% 80% at 50% 38%,#0e46e6 0%,#0a2a8f 28%,#06133f 58%,#02060f 100%);
+ transition:opacity .55s ease,visibility .55s ease,transform .55s ease;animation:spAuto .01s 7s forwards}
+#splash.hide{opacity:0;visibility:hidden;transform:scale(1.04)}
+#splash .sp-stage{position:relative;width:132px;height:132px;display:grid;place-items:center;margin-bottom:6px}
+#splash .sp-ring{position:absolute;inset:-26px;border-radius:50%;border:2px solid rgba(80,160,255,.55);animation:spRing 1.8s ease-out infinite}
+#splash .sp-ring+.sp-ring{animation-delay:.9s}
+#splash .sp-logo{width:132px;height:132px;filter:drop-shadow(0 0 28px rgba(60,140,255,.85));animation:spPop .9s cubic-bezier(.2,1.5,.4,1) both}
+#splash .sp-title{font:900 clamp(30px,8vw,46px)/1 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.06em;white-space:nowrap;color:#fff;text-shadow:0 0 26px rgba(80,150,255,.65)}
+#splash .sp-title span{display:inline-block;opacity:0;transform:translateY(18px) scale(.9);animation:spIn .55s cubic-bezier(.2,1.2,.4,1) forwards;animation-delay:calc(.35s + var(--i)*.055s)}
+#splash .sp-title span.sp{width:.35em}
+#splash .sp-sub{font-weight:700;font-size:13px;letter-spacing:.55em;margin-right:-.55em;color:#9cc4ff;opacity:0;animation:spFade .6s 1s forwards}
+#splash .sp-bar{width:170px;height:3px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:14px;opacity:0;animation:spFade .4s .8s forwards}
+#splash .sp-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#2f8bff,#bfe0ff);box-shadow:0 0 12px #4da3ff;animation:spLoad 1.6s .7s cubic-bezier(.6,.05,.3,1) forwards}
+#splash .sp-by{position:absolute;bottom:calc(26px + env(safe-area-inset-bottom));font-size:11px;letter-spacing:.2em;color:rgba(255,255,255,.45);opacity:0;animation:spFade .6s 1.3s forwards}
+@keyframes spPop{from{opacity:0;transform:scale(.4) rotate(-12deg)}to{opacity:1;transform:none}}
+@keyframes spRing{from{opacity:.9;transform:scale(.7)}to{opacity:0;transform:scale(1.5)}}
+@keyframes spIn{to{opacity:1;transform:none}}
+@keyframes spFade{to{opacity:1}}
+@keyframes spLoad{to{width:100%}}
+@keyframes spAuto{to{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){#splash *{animation:none!important;opacity:1!important;transform:none!important}#splash .sp-bar i{width:100%}}
+
+/* ====== TUGAS HARI INI ====== */
+.daily{margin-top:30px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.dl-head{display:flex;align-items:center;gap:14px}
+.dl-ring{position:relative;flex:none;width:68px;height:68px}
+.dl-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dl-ring circle{fill:none;stroke-width:5}
+.dl-ring .trk{stroke:var(--line)}
+.dl-ring .val{stroke:var(--acc);stroke-linecap:round;stroke-dasharray:119.38;stroke-dashoffset:119.38;transition:stroke-dashoffset .6s cubic-bezier(.3,1,.4,1),stroke .3s}
+.dl-ring.full .val{stroke:#22a559}
+.dl-ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:17px;letter-spacing:-.5px}
+.dl-txt h3{font-size:19px;letter-spacing:-.3px}
+.dl-txt p{color:var(--mut);font-size:13px;margin-top:2px}
+.dl-add{display:flex;gap:8px;margin-top:14px}
+.dl-add .in{flex:1;min-width:0;background:var(--bg)}
+.dl-add .btn{padding:10px 18px}
+.dl-carry{margin-top:10px;border:1.5px dashed var(--line);background:none;border-radius:12px;padding:9px 12px;width:100%;text-align:left;font-size:13px;font-weight:600;color:var(--fg)}
+.dl-list{list-style:none;padding:0;margin:10px 0 0}
+.dl-item{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line);transition:opacity .35s,transform .35s,max-height .35s,padding .35s;max-height:120px;overflow:hidden}
+.dl-item:last-child{border-bottom:0}
+.dl-item span{flex:1;word-break:break-word;line-height:1.35}
+.dl-chk{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--mut);background:none;display:grid;place-items:center;padding:0;color:transparent;font-size:14px;font-weight:800;transition:all .2s}
+.dl-chk:hover{border-color:var(--acc)}
+.dl-item.leaving .dl-chk{background:#22a559;border-color:#22a559;color:#fff}
+.dl-item.leaving span{text-decoration:line-through;color:var(--mut)}
+.dl-item.gone{opacity:0;transform:translateX(30px);max-height:0;padding-top:0;padding-bottom:0}
+.dl-del{flex:none;border:0;background:none;color:var(--mut);font-size:15px;width:30px;height:30px;border-radius:50%}
+.dl-del:hover{background:var(--bg)}
+.dl-empty{color:var(--mut);font-size:14px;padding:12px 4px}
+.dl-toggle{border:0;background:none;color:var(--mut);font-size:13px;font-weight:600;padding:10px 4px 0}
+.dl-list.done .dl-item span{text-decoration:line-through;color:var(--mut)}
+.dl-list.done .dl-chk{background:#22a559;border-color:#22a559;color:#fff}
+.toast{position:fixed;left:50%;bottom:24px;z-index:30;transform:translate(-50%,20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--inkfg);border-radius:14px;padding:11px 14px 11px 18px;font-size:14px;font-weight:600;box-shadow:0 12px 30px #0004;transition:all .25s}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{border:0;background:none;color:var(--acc);font-weight:800;padding:4px 6px}
+@media(max-width:760px){
+ .daily{margin-top:12px;max-width:none;border-radius:20px;padding:16px}
+ .dl-ring{width:60px;height:60px}
+ .toast{bottom:calc(86px + env(safe-area-inset-bottom));width:calc(100% - 32px);justify-content:space-between}
+}
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true">
+  <div class="sp-stage"><i class="sp-ring"></i><i class="sp-ring"></i><img class="sp-logo" src="icons/icon-512.png" alt=""></div>
+  <div class="sp-title"><span style="--i:0">O</span><span style="--i:1">N</span><span style="--i:2">E</span><span class="sp" style="--i:3"></span><span style="--i:4">F</span><span style="--i:5">O</span><span style="--i:6">R</span><span class="sp" style="--i:7"></span><span style="--i:8">A</span><span style="--i:9">L</span><span style="--i:10">L</span></div>
+  <div class="sp-sub">STORE MANAGER</div>
+  <div class="sp-bar"><i></i></div>
+  <div class="sp-by">BY LUKIAN PRAYOGA</div>
+</div>
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#"><img class="logo-ic" src="icons/icon-192.png" alt="">ONE FOR ALL <small>STORE MANAGER</small></a>
@@ -248,6 +318,17 @@ textarea.in{min-height:240px;resize:vertical}
     <p class="lead">Kelola toko dari satu dashboard: catat, hitung, atur tugas, dan buka semua tool tanpa pindah tab. Ganti tampilan tiap kartu dengan foto atau video pendekmu sendiri.</p>
     <a class="btn" href="#tools">Jelajahi tools</a>
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
+    <section class="daily" id="daily" aria-label="Tugas hari ini">
+      <div class="dl-head">
+        <div class="dl-ring" id="dlRing"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="19"/><circle class="val" id="dlArc" cx="22" cy="22" r="19"/></svg><b id="dlPct">0%</b></div>
+        <div class="dl-txt"><h3>Tugas Hari Ini</h3><p id="dlSum">Belum ada tugas</p></div>
+      </div>
+      <form class="dl-add" id="dlForm" autocomplete="off"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
+      <div id="dlCarry"></div>
+      <ul class="dl-list" id="dlList"></ul>
+      <button class="dl-toggle" id="dlToggle" type="button" hidden></button>
+      <ul class="dl-list done" id="dlDone" hidden></ul>
+    </section>
   </div>
   <div class="cluster" id="cl"></div>
 </div>
@@ -282,6 +363,7 @@ textarea.in{min-height:240px;resize:vertical}
   <button data-go="tim"><span>☺</span>Tim</button>
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
+<div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
@@ -477,6 +559,92 @@ renderTeam();
    ?'<ol class="steps"><li>Buka halaman ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>, lalu <b>Tambah</b>.</li></ol>'
    :'<ol class="steps"><li>Buka halaman ini di <b>Chrome</b>.</li><li>Ketuk menu <b>⋮</b> di kanan atas.</li><li>Pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</li></ol>');
  };
+})();
+/* ====== LAYAR PEMBUKA ====== */
+(function(){
+ const sp=document.getElementById('splash');if(!sp)return;
+ const t0=performance.now(),min=2600,max=4500;let done=false;
+ function hide(){if(done)return;done=true;sp.classList.add('hide');setTimeout(()=>sp.remove(),700)}
+ function ready(){setTimeout(hide,Math.max(0,min-(performance.now()-t0)))}
+ if(document.readyState==='complete')ready();else addEventListener('load',ready);
+ setTimeout(hide,max);
+})();
+
+/* ====== TUGAS HARI INI ====== */
+(function(){
+ const KEY='__daily',C=119.38;
+ const pad=n=>String(n).padStart(2,'0'),dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+ let shownDay=dkey(new Date()),showDone=false,toastTimer=null,undo=null;
+ const all=()=>{const v=meta[KEY];return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+ const today=()=>dkey(new Date());
+ const items=()=>(all()[today()]||[]).filter(x=>x&&x.t);
+ function saveDay(list){
+  const a=all();a[today()]=list;
+  Object.keys(a).sort().slice(0,-31).forEach(k=>delete a[k]);
+  meta[KEY]=a;ls.set('ofa_meta',meta);
+ }
+ function yesterdayLeft(){
+  const d=new Date();d.setDate(d.getDate()-1);
+  const have=new Set(items().map(x=>x.t.toLowerCase()));
+  return (all()[dkey(d)]||[]).filter(x=>x&&x.t&&!x.done&&!have.has(x.t.toLowerCase()));
+ }
+ function row(x,done){
+  return `<li class="dl-item" data-id="${esc(x.id)}"><button class="dl-chk" type="button" data-act="${done?'undo':'check'}" aria-label="${done?'Batalkan selesai':'Tandai selesai'}">✓</button><span>${esc(x.t)}</span><button class="dl-del" type="button" data-act="del" aria-label="Hapus tugas">✕</button></li>`;
+ }
+ window.renderDaily=function(){
+  shownDay=today();
+  const list=items(),open=list.filter(x=>!x.done),fin=list.filter(x=>x.done),total=list.length;
+  const pct=total?Math.round(fin.length/total*100):0;
+  document.getElementById('dlPct').textContent=pct+'%';
+  document.getElementById('dlArc').style.strokeDashoffset=String(C-C*pct/100);
+  document.getElementById('dlRing').classList.toggle('full',total>0&&pct===100);
+  document.getElementById('dlSum').textContent=!total?'Belum ada tugas · tambahkan di bawah':
+   pct===100?'Semua '+total+' tugas selesai 🎉':fin.length+' dari '+total+' tugas selesai';
+  document.getElementById('dlList').innerHTML=open.length?open.map(x=>row(x,0)).join(''):
+   `<li class="dl-empty">${total?'Tidak ada tugas tersisa. Kerja bagus!':'Tulis tugas pertama hari ini, misalnya “Briefing pagi jam 09.30”.'}</li>`;
+  const left=yesterdayLeft(),carry=document.getElementById('dlCarry');
+  carry.innerHTML=left.length?`<button class="dl-carry" type="button" id="dlCarryBtn">↻ Bawa ${left.length} tugas kemarin yang belum selesai</button>`:'';
+  const tg=document.getElementById('dlToggle'),dl=document.getElementById('dlDone');
+  tg.hidden=!fin.length;tg.textContent=(showDone?'Sembunyikan':'Lihat')+' tugas selesai ('+fin.length+')';
+  dl.hidden=!showDone||!fin.length;dl.innerHTML=showDone?fin.map(x=>row(x,1)).join(''):'';
+ };
+ function toast(text,onUndo){
+  const t=document.getElementById('toast');document.getElementById('toastTxt').textContent=text;undo=onUndo;
+  t.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.classList.remove('on');undo=null},4500);
+ }
+ document.getElementById('toastBtn').onclick=()=>{if(undo)undo();undo=null;document.getElementById('toast').classList.remove('on')};
+ function setDone(id,val){
+  const list=items(),x=list.find(i=>i.id===id);if(!x)return;
+  x.done=val?1:0;if(val)x.doneAt=Date.now();else delete x.doneAt;saveDay(list);renderDaily();
+ }
+ document.getElementById('dlForm').onsubmit=e=>{
+  e.preventDefault();const inp=document.getElementById('dlIn'),t=inp.value.trim();if(!t)return;
+  const list=items();list.push({id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),t,done:0,at:Date.now()});
+  saveDay(list);inp.value='';renderDaily();inp.focus();
+ };
+ document.getElementById('daily').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='dlToggle'){showDone=!showDone;return renderDaily()}
+  if(b.id==='dlCarryBtn'){
+   const add=yesterdayLeft().map(x=>({id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:x.t,done:0,at:Date.now()}));
+   saveDay(items().concat(add));return renderDaily();
+  }
+  const li=b.closest('.dl-item');if(!li)return;const id=li.dataset.id,act=b.dataset.act;
+  if(act==='check'){
+   li.classList.add('leaving');
+   setTimeout(()=>li.classList.add('gone'),260);
+   setTimeout(()=>{setDone(id,1);toast('Tugas selesai ✓',()=>setDone(id,0))},620);
+  }else if(act==='undo')setDone(id,0);
+  else if(act==='del'){
+   const list=items(),i=list.findIndex(x=>x.id===id);if(i<0)return;const [gone]=list.splice(i,1);
+   saveDay(list);renderDaily();toast('Tugas dihapus',()=>{const l=items();l.splice(i,0,gone);saveDay(l);renderDaily()});
+  }
+ };
+ const baseRender=render;
+ render=async function(){await baseRender();renderDaily()};
+ setInterval(()=>{if(today()!==shownDay)renderDaily()},60000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&today()!==shownDay)renderDaily()});
+ renderDaily();
 })();
 /* ====== TAMPILAN HP: sapaan, navigasi bawah ====== */
 (function(){
