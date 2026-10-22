@@ -1772,7 +1772,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    status('Mengunggah '+nf(body.length)+' baris dan menghitung… (±30 detik)');
    const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
    if(res.message)throw new Error(res.message);
-   setData(res,true);status('Inventory '+tgl(res.meta.date)+' diperbarui ✓ ('+nf(res.meta.rows)+' baris)');
+   setData(res,true);{const cs=String(res.meta.catalogStock||''),ok=/^ok:/.test(cs);status('Inventory '+tgl(res.meta.date)+' diperbarui ✓ ('+nf(res.meta.rows)+' baris)'+(ok?' · stok '+nf(cs.slice(3))+' SKU tersalin ke katalog':cs?' · '+cs:''),!!cs&&!ok)}
   }catch(err){status('Upload gagal: '+(err&&err.message||err),true)}
   finally{busy=false;$id('ivUp').disabled=false}
  };
