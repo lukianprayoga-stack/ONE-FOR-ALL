@@ -428,6 +428,54 @@ textarea.in{min-height:240px;resize:vertical}
 .dp-chips button{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--fg)}
 .dp-chips button.on{background:var(--ink);border-color:var(--ink);color:var(--inkfg)}
 @media(max-width:760px){.disp{margin-top:12px;max-width:none;border-radius:20px;padding:16px}}
+/* ====== KEPATUHAN DISPLAY & PERFORMA PRODUK ====== */
+.inv,.perf{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.iv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.iv-tile{background:var(--bg);border-radius:16px;padding:12px}
+.iv-tile small{display:block;font-size:12px;font-weight:700;color:var(--mut)}
+.iv-tile b{display:block;font-size:26px;letter-spacing:-1px;margin-top:2px}
+.iv-tile.ok b{color:#1a8a49}.iv-tile.bad b{color:#d33a40}
+.iv-bar{position:relative;height:8px;border-radius:99px;background:var(--line);margin-top:8px}
+.iv-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:currentColor}
+.iv-tile.ok .iv-bar{color:#22a559}.iv-tile.bad .iv-bar{color:#ef4444}
+.iv-bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--fg);text-decoration:none;opacity:.6}
+.iv-tile em{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:6px;line-height:1.35}
+.iv-trend{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.45}
+.iv-todo{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;border:0;border-radius:14px;padding:12px;background:rgba(239,68,68,.1);color:var(--fg);text-align:left}
+.iv-todo.ok{background:rgba(34,165,89,.12)}
+.iv-todo b{font-size:20px;letter-spacing:-.5px}
+.iv-todo span{flex:1;font-size:13px;line-height:1.35}
+.iv-todo span small{display:block;color:var(--mut);font-size:12px}
+.iv-status{font-size:12px;color:var(--mut);margin-top:8px;min-height:1em}
+.iv-status.err{color:#d33a40}
+.pf-stack{display:flex;height:12px;border-radius:99px;overflow:hidden;margin-top:12px;background:var(--line)}
+.pf-stack i{display:block;min-width:2px}
+.pf-rows{display:grid;gap:4px;margin-top:10px}
+.pf-row{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--bg);border-radius:12px;padding:9px 12px;font-size:14px;color:var(--fg);text-align:left}
+.pf-row i{flex:none;width:10px;height:10px;border-radius:50%}
+.pf-row span{flex:1;font-weight:600}
+.pf-row b{font-size:15px}
+.pf-row small{width:78px;text-align:right;color:var(--mut);font-size:12px}
+.pf-row.restock{margin-top:6px;background:rgba(47,128,237,.1)}
+.iv-list .iv-tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.iv-list .iv-tools .in{flex:1;min-width:150px}
+.iv-it{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.iv-it.done{opacity:.5}
+.iv-img{flex:none;width:64px;height:64px;border-radius:12px;overflow:hidden;background:var(--card);display:grid;place-items:center;font-size:24px}
+.iv-img img{width:100%;height:100%;object-fit:cover}
+.iv-tx{flex:1;min-width:0;font-size:13px;line-height:1.35}
+.iv-tx b{display:block;font-size:14px}
+.iv-tx small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+.iv-tx .iv-bin{color:var(--fg);font-weight:700}
+.iv-tx s{opacity:.7}
+.iv-tag{display:inline-block;border-radius:99px;padding:1px 7px;font-size:11px;font-weight:800;color:#fff;margin-top:4px}
+.iv-chk{flex:none;width:34px;height:34px;border-radius:10px;border:2px solid var(--line);background:none;font-weight:800;color:#fff;margin-top:14px}
+.iv-it.done .iv-chk{background:#22a559;border-color:#22a559}
+.iv-more{width:100%;margin-top:10px}
+.pf-cfg{display:grid;grid-template-columns:1fr 110px;gap:8px 10px;align-items:center;font-size:14px}
+.pf-cfg span{display:flex;align-items:center;gap:8px;font-weight:600}
+.pf-cfg span i{width:10px;height:10px;border-radius:50%}
+@media(max-width:760px){.inv,.perf{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.iv-tile b{font-size:23px}}
 </style>
 </head>
 <body>
@@ -495,8 +543,18 @@ textarea.in{min-height:240px;resize:vertical}
       <ul class="dl-list done" id="dlDone" hidden></ul>
       <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
     </section>
-    <section class="disp" id="disp" aria-label="Display performance">
-      <div class="sh-head"><div><h3>Display Performance</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
+    <section class="inv" id="inv" aria-label="Kepatuhan display">
+      <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
+      <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" hidden>
+      <div id="ivBody"></div>
+      <div class="iv-status" id="ivStatus"></div>
+    </section>
+    <section class="perf" id="perf" aria-label="Performa produk">
+      <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
+      <div id="pfBody"></div>
+    </section>
+    <section class="disp" id="disp" aria-label="Riwayat ganti display">
+      <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
       <div class="dp-list" id="dpList"></div>
     </section>
   </div>
@@ -868,6 +926,7 @@ renderTeam();
   $('#hpOk').onclick=go;a.onkeydown=e=>{if(e.key==='Enter')go()};
  }
  function headGate(then){if(isHead())return then();pinForm(!meta.__headPin,then)}
+ window.ofaHeadGate=headGate;
 
  /* --- editor tugas rutin --- */
  const dayTxt=d=>!Array.isArray(d)||!d.length||d.length===7?'Setiap hari':d.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(i=>HARI[i]).join(', ');
@@ -1247,6 +1306,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    ras.forEach((r,i)=>L.push((i+1)+'. '+nama(r.name)+': '+rp(r.grossSales)+(r.target?' / '+rp(r.target)+' ('+pct(r.achievement)+')':'')+' · UPT '+(r.upt||0).toFixed(2).replace('.',',')+' · EAC '+pct(r.eacRate)));
   }
   const f=focusLines(d);if(f.length){L.push('');L.push('🎯 *Fokus hari ini*');f.forEach(x=>L.push('• '+x))}
+  if(window.ofaInvBrief){const ib=window.ofaInvBrief();if(ib.length){L.push('');L.push('🧺 *Display & stok*');ib.forEach(x=>L.push('• '+x))}}
   let tg=[];try{tg=window.ofaTodayTasks?window.ofaTodayTasks():[]}catch(e){}
   if(window.ofaShiftBrief){const sb=window.ofaShiftBrief();if(sb.length){L.push('');L.push('🕒 *Jadwal hari ini*');sb.forEach(x=>L.push(x))}}
   if(tg.length){L.push('');L.push('✅ *Tugas hari ini*');tg.forEach(g=>{L.push('_'+g.label+(g.names.length?' ('+g.names.join(', ')+')':'')+'_');g.items.forEach(t=>L.push('• '+t))})}
@@ -1547,6 +1607,190 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  const baseRender=render;render=async function(){await baseRender();renderDisplay()};
  setTimeout(renderDisplay,3200);
+})();
+/* ====== STOK: KEPATUHAN DISPLAY & PERFORMA PRODUK ====== */
+(function(){
+ const box=document.getElementById('inv');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CACHE='ofa_inv',TARGET=.95,PAGE=40;
+ const TIERS=[['sl','Sangat laku','#15803d'],['l','Laku','#22c55e'],['cl','Cukup laku','#84cc16'],['st','Stagnan','#eab308'],['kl','Kurang laku','#f97316'],['tl','Tidak laku','#ef4444'],['ds','Deadstock','#57534e']];
+ const DEF={sl:50,l:30,cl:15,st:8,kl:3};
+ const NEED=['SKU Name','SKU Code','Generic Code','Bin Code','Zone Code','MC LV 2','MC LV 3','MC LV 4','Brand','Bin Category','Total Qty'];
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:'-'};
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>'Rp'+nf(v);
+ const pc=v=>((Number(v)||0)*100).toFixed(1).replace('.',',')+'%';
+ const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]+/g,'');
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ let data=null,R=[],busy=false,list=null;
+
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const cfg=()=>Object.assign({},DEF,meta.__perfCfg||{});
+ function tier(o,c){if(o.stock<=0)return '';if(o.q90<=0)return 'ds';const p=o.st*100;return p>=c.sl?'sl':p>=c.l?'l':p>=c.cl?'cl':p>=c.st?'st':p>=c.kl?'kl':'tl'}
+ function setData(d,save){
+  if(!d||!Array.isArray(d.items))return;
+  data=d;const F=d.fields||[];
+  R=d.items.map(a=>{const o={};F.forEach((f,i)=>o[f]=a[i]);o.k=o.g+'|'+o.c;o.stock=(o.s||0)+(o.w||0);o.st=(o.q30+o.stock)>0?o.q30/(o.q30+o.stock):0;return o});
+  if(save){try{localStorage.setItem(CACHE,JSON.stringify(Object.assign({},d,{at:Date.now()})))}catch(e){}}
+  renderInv();
+ }
+ function moved(){const m=meta.__invMoved;return m&&data&&m.d===data.meta.date&&Array.isArray(m.k)?m.k:[]}
+ function setMoved(k,on){
+  const d=data.meta.date,m=moved().slice(),i=m.indexOf(k);
+  if(on&&i<0)m.push(k);if(!on&&i>=0)m.splice(i,1);
+  meta.__invMoved={d,k:m};ls.set('ofa_meta',meta);
+ }
+ const todo=()=>R.filter(o=>o.stock>0&&!(o.s>0)).sort((a,b)=>(b.q90-a.q90)||(b.w-a.w));
+ const restock=()=>R.filter(o=>o.stock<=0&&o.q30>0).sort((a,b)=>b.q30-a.q30);
+ function status(t,err){const n=$id('ivStatus');n.textContent=t||'';n.className='iv-status'+(err?' err':'')}
+
+ window.renderInv=function(){
+  if(!data){
+   const msg='<p class="dp-empty">Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b> dari sistem. Aplikasi menghitung kepatuhan display (target 95%) dan performa setiap produk.</p>';
+   $id('ivBody').innerHTML=msg;$id('pfBody').innerHTML='<p class="dp-empty">Performa produk muncul setelah inventory diupload.</p>';return;
+  }
+  const s=data.summary||{},m=data.meta||{},gp=s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp=s.colorTotal?s.colorDisplayed/s.colorTotal:0;
+  const tile=(lbl,p,d,t)=>{const need=Math.max(0,Math.ceil(TARGET*t)-d);return `<div class="iv-tile ${p>=TARGET?'ok':'bad'}"><small>${lbl}</small><b>${pc(p)}</b><div class="iv-bar"><i style="width:${Math.min(100,p*100)}%"></i><u style="left:95%"></u></div><em>${nf(d)} dari ${nf(t)} dipajang · ${need?'kurang '+nf(need)+' lagi':'✓ capai target'}</em></div>`};
+  const h=(data.history||[]).filter(x=>x.d!==m.date).slice(-1)[0];
+  const trend=h?`Upload sebelumnya (${tgl(h.d)}): generic ${pc(h.gt?h.gd/h.gt:0)} · color ${pc(h.ct?h.cd/h.ct:0)}`:'';
+  const T=todo(),mv=moved(),done=T.filter(o=>mv.includes(o.k)).length;
+  $id('ivSub').textContent='Inventory '+tgl(m.date)+(m.salesEnd?' · sales s/d '+tgl(m.salesEnd):'');
+  $id('ivBody').innerHTML=`<div class="iv-grid">${tile('By generic',gp,s.genericDisplayed,s.genericTotal)}${tile('By color',cp,s.colorDisplayed,s.colorTotal)}</div>
+   ${trend?`<p class="iv-trend">${trend}</p>`:''}
+   <button type="button" class="iv-todo ${T.length?'':'ok'}" data-list="todo"><b>${nf(T.length)}</b><span>${T.length?'warna masih di gudang, belum dipajang':'Semua warna yang ada stoknya sudah dipajang'}<small>${T.length?(done?done+' sudah ditandai dipindah · ':'')+'Lihat daftar & lokasi bin →':''}</small></span></button>`;
+  const c=cfg(),cnt={},pcs={};TIERS.forEach(t=>{cnt[t[0]]=0;pcs[t[0]]=0});
+  R.forEach(o=>{const t=tier(o,c);if(t){cnt[t]++;pcs[t]+=o.stock}});
+  const tot=TIERS.reduce((a,t)=>a+cnt[t[0]],0),rs=restock();
+  $id('pfSub').textContent=nf(tot)+' generic-warna · sell-through 30 hari';
+  $id('pfBody').innerHTML=`<div class="pf-stack">${TIERS.map(t=>cnt[t[0]]?`<i style="flex:${cnt[t[0]]};background:${t[2]}" title="${t[1]}"></i>`:'').join('')}</div>
+   <div class="pf-rows">${TIERS.map(t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`).join('')}
+   <button type="button" class="pf-row restock" data-list="rs"><i style="background:#2f80ed"></i><span>Laku tapi stok habis</span><b>${nf(rs.length)}</b><small>perlu restock</small></button></div>
+   <p class="hint">Sell-through = terjual 30 hari ÷ (terjual + stok). Deadstock = ada stok tapi tidak terjual 90 hari.</p>`;
+ };
+ window.ofaInvBrief=function(){
+  if(!data)return [];const s=data.summary||{},gp=s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp=s.colorTotal?s.colorDisplayed/s.colorTotal:0,T=todo().length,rs=restock().length;
+  const out=['Kepatuhan display: generic '+pc(gp)+' · color '+pc(cp)+' (target 95%)'];
+  if(T)out.push(T+' warna masih di gudang, pajang ke selling area hari ini');
+  if(rs)out.push(rs+' produk laku tapi stoknya habis, cek pengiriman/restock');
+  return out;
+ };
+
+ /* --- daftar produk --- */
+ function item(o,kind,c){
+  const t=TIERS.find(x=>x[0]===tier(o,c)),on=kind==='todo'&&moved().includes(o.k),price=o.promo>0?o.promo:o.price;
+  return `<div class="iv-it${on?' done':''}" data-k="${esc(o.k)}"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.img)}" alt="">`:'🏷️'}</span>
+   <span class="iv-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.l4||o.l3||'-')} · ${esc(o.g)}</small>
+   <small>Stok S ${nf(o.s)} · W ${nf(o.w)} · terjual 30h ${nf(o.q30)}${o.stock>0?' · ST '+pc(o.st):''}${o.last?' · terakhir '+tgl(o.last):''}</small>
+   ${kind==='todo'&&o.bw?`<small class="iv-bin">📍 ${esc(o.bw)}</small>`:''}${kind!=='todo'&&o.bs?`<small>Selling area: ${esc(o.bs)}</small>`:''}
+   ${price?`<small>${rp(price)}${o.promo>0&&o.price>o.promo?` <s>${rp(o.price)}</s>`:''}</small>`:''}
+   ${kind!=='todo'&&t?`<span class="iv-tag" style="background:${t[2]}">${t[1]}</span>`:''}</span>
+   ${kind==='todo'?`<button type="button" class="iv-chk" data-mv="${esc(o.k)}" aria-label="Tandai sudah dipajang">✓</button>`:''}</div>`;
+ }
+ function source(kind){
+  const c=cfg();
+  if(kind==='todo')return todo();
+  if(kind==='rs')return restock();
+  const L=R.filter(o=>tier(o,c)===kind);
+  return kind==='sl'||kind==='l'?L.sort((a,b)=>b.st-a.st||b.q30-a.q30):L.sort((a,b)=>b.stock-a.stock);
+ }
+ function drawList(){
+  const c=cfg(),all=source(list.kind),q=list.q.toLowerCase();
+  const L=all.filter(o=>(!list.cat||o.l3===list.cat)&&(!q||(o.n+' '+o.c+' '+o.g+' '+o.l4+' '+o.bw+' '+o.bs).toLowerCase().includes(q)));
+  const cats=[...new Set(all.map(o=>o.l3).filter(Boolean))].sort();
+  const body=$id('ivItems');
+  body.innerHTML=(L.length?L.slice(0,list.n).map(o=>item(o,list.kind,c)).join(''):'<p class="dp-empty">Tidak ada produk.</p>')+(L.length>list.n?`<button type="button" class="btn ghost iv-more" data-more="1">Tampilkan lebih banyak (${nf(L.length-list.n)} lagi)</button>`:'');
+  $id('ivCnt').textContent=nf(L.length)+' produk'+(list.kind==='todo'?' · '+moved().length+' ditandai dipindah':'');
+  const ch=$id('ivCats');if(ch&&!ch.dataset.done){ch.dataset.done='1';ch.innerHTML=['',...cats].map(x=>`<button type="button" data-cat="${esc(x)}" class="${x===list.cat?'on':''}">${esc(x||'Semua')}</button>`).join('')}
+ }
+ function openList(kind){
+  const titles={todo:'Belum dipajang',rs:'Laku tapi stok habis'},t=TIERS.find(x=>x[0]===kind);
+  list={kind,q:'',cat:'',n:PAGE};
+  openModal(titles[kind]||(t?t[1]:'Produk'),`<div class="iv-list">
+   ${kind==='todo'?'<p class="hint" style="margin:0 0 8px">Produk ini punya stok di gudang (W) tapi tidak ada di selling area (S). Ambil dari bin yang tertera, pajang, lalu centang. Persentase resmi diperbarui saat inventory diupload ulang.</p>':''}
+   <div class="iv-tools"><input class="in" id="ivQ" type="search" placeholder="Cari nama, warna, kode, bin…"></div>
+   <div class="dp-chips" id="ivCats"></div>
+   <p class="hint" id="ivCnt" style="margin:8px 0 0"></p><div id="ivItems"></div></div>`);
+  $id('ivQ').addEventListener('input',e=>{list.q=e.target.value.trim();list.n=PAGE;drawList()});
+  drawList();
+ }
+ $('#pb').addEventListener('click',e=>{
+  if(!list||!document.getElementById('ivItems'))return;
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.cat!==undefined){list.cat=b.dataset.cat;list.n=PAGE;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));return drawList()}
+  if(b.dataset.more){list.n+=PAGE;return drawList()}
+  if(b.dataset.mv){const k=b.dataset.mv,on=!moved().includes(k);setMoved(k,on);b.closest('.iv-it').classList.toggle('done',on);$id('ivCnt').textContent=$id('ivCnt').textContent.replace(/\d+ ditandai/,moved().length+' ditandai');renderInv()}
+ });
+ [box,$id('perf')].forEach(el=>el.addEventListener('click',e=>{const b=e.target.closest('[data-list]');if(b&&data)openList(b.dataset.list)}));
+
+ /* --- batas performa (Store Head) --- */
+ $id('pfCfg').onclick=()=>{
+  const open=()=>{
+   const c=cfg();
+   openModal('Batas Performa Produk',`<p class="hint" style="margin:0 0 12px">Status ditentukan dari sell-through 30 hari (terjual ÷ terjual + stok). Isi batas minimal setiap status, dalam persen.</p>
+    <div class="pf-cfg">${TIERS.slice(0,5).map(t=>`<span><i style="background:${t[2]}"></i>${t[1]} ≥</span><input class="in" type="number" min="0" max="100" step="1" data-cfg="${t[0]}" value="${c[t[0]]}">`).join('')}</div>
+    <p class="hint">Di bawah batas Kurang laku = <b>Tidak laku</b>. Ada stok tapi 0 terjual dalam 90 hari = <b>Deadstock</b>.</p>
+    <p class="hint" id="pfErr" style="color:#e5484d;min-height:1em"></p>
+    <div class="row"><button class="btn" type="button" id="pfSave">Simpan</button><button class="btn ghost" type="button" id="pfReset">Pakai batas awal</button></div>`);
+   $id('pfSave').onclick=()=>{
+    const v={};document.querySelectorAll('[data-cfg]').forEach(i=>v[i.dataset.cfg]=Number(i.value));
+    const seq=['sl','l','cl','st','kl'].map(k=>v[k]);
+    if(seq.some(x=>!isFinite(x)||x<0||x>100)||seq.some((x,i)=>i&&x>=seq[i-1])){$id('pfErr').textContent='Batas harus 0–100 dan makin kecil dari atas ke bawah.';return}
+    meta.__perfCfg=v;ls.set('ofa_meta',meta);close();renderInv();
+   };
+   $id('pfReset').onclick=()=>{delete meta.__perfCfg;ls.set('ofa_meta',meta);close();renderInv()};
+  };
+  window.ofaHeadGate?window.ofaHeadGate(open):open();
+ };
+
+ /* --- upload inventory --- */
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ $id('ivUp').onclick=()=>{
+  if(!configured()){alert('Aplikasi belum terhubung ke Apps Script.');return}
+  if(busy)return;$id('ivFile').click();
+ };
+ $id('ivFile').onchange=async e=>{
+  const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  busy=true;$id('ivUp').disabled=true;status('Membaca '+f.name+'…');
+  try{
+   await loadXlsx();
+   const wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];
+   const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+   const hi=rows.findIndex(r=>r.some(v=>norm(v)==='bincode'));
+   if(hi<0)throw new Error('Kolom "Bin Code" tidak ditemukan. Pilih file export inventory by bin.');
+   const H=rows[hi].map(norm),idx=NEED.map(n=>H.indexOf(norm(n)));
+   const miss=NEED.filter((n,i)=>idx[i]<0&&['SKU Name','SKU Code','Generic Code','Bin Code','Zone Code','Total Qty'].includes(n));
+   if(miss.length)throw new Error('Kolom belum ada: '+miss.join(', '));
+   const body=rows.slice(hi+1).filter(r=>r.some(v=>String(v).trim())).map(r=>idx.map(i=>i<0?'':r[i]));
+   status('Mengunggah '+nf(body.length)+' baris dan menghitung… (±30 detik)');
+   const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
+   if(res.message)throw new Error(res.message);
+   setData(res,true);status('Inventory '+tgl(res.meta.date)+' diperbarui ✓ ('+nf(res.meta.rows)+' baris)');
+  }catch(err){status('Upload gagal: '+(err&&err.message||err),true)}
+  finally{busy=false;$id('ivUp').disabled=false}
+ };
+
+ async function refresh(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  let c=null;try{c=JSON.parse(localStorage.getItem(CACHE)||'null')}catch(e){}
+  if(!force&&c&&Date.now()-(c.at||0)<30*60e3)return;
+  busy=true;if(!data)status('Memuat data inventory…');
+  try{const r=await api('getInventoryAnalysis',{});if(r.message){if(!data)status('Belum ada inventory. Ketuk ⇪ Upload.');}else{setData(r,true);status('')}}
+  catch(err){const m=err&&err.message||String(err);status(/tidak dikenal/i.test(m)?'Pasang Inventory.gs di Apps Script terlebih dahulu.':'Tidak dapat memuat inventory: '+m,true)}
+  finally{busy=false}
+ }
+ try{const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(c&&c.items)setData(c,false)}catch(e){}
+ renderInv();
+ const baseRender=render;render=async function(){await baseRender();renderInv()};
+ setTimeout(()=>refresh(false),3600);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(false)});
 })();
 </script>
 </body>
