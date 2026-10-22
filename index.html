@@ -290,6 +290,40 @@ textarea.in{min-height:240px;resize:vertical}
  .dl-ring{width:60px;height:60px}
  .toast{bottom:calc(86px + env(safe-area-inset-bottom));width:calc(100% - 32px);justify-content:space-between}
 }
+/* ====== KARTU SALES BULAN INI ====== */
+.sales{margin-top:30px;max-width:560px;border-radius:24px;padding:18px;color:#fff;position:relative;overflow:hidden;
+ background:radial-gradient(120% 140% at 100% 0%,#1d63ff 0%,#0b2f9e 45%,#071a5c 100%);box-shadow:0 14px 34px rgba(7,26,92,.28)}
+.sales::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)}
+.sl-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sl-top h3{font-size:16px;letter-spacing:-.2px}
+.sl-top small{display:block;font-size:12px;opacity:.75;margin-top:2px;font-weight:500}
+.sl-badge{flex:none;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:800;background:rgba(255,255,255,.18)}
+.sl-badge.ON_TRACK{background:#22c55e}.sl-badge.WARNING{background:#f59e0b}.sl-badge.CRITICAL{background:#ef4444}
+.sl-main{margin-top:14px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sl-main b{font-size:30px;letter-spacing:-1px}
+.sl-main span{opacity:.8;font-size:14px}
+.sl-bar{position:relative;height:10px;border-radius:99px;background:rgba(255,255,255,.18);margin-top:10px}
+.sl-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#7cc4ff,#fff);width:0;transition:width .8s cubic-bezier(.3,1,.4,1)}
+.sl-bar u{position:absolute;top:-4px;bottom:-4px;width:3px;border-radius:3px;background:#ffd166;text-decoration:none}
+.sl-legend{display:flex;justify-content:space-between;font-size:12px;opacity:.85;margin-top:6px}
+.sl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.sl-grid div{background:rgba(255,255,255,.1);border-radius:14px;padding:10px}
+.sl-grid small{display:block;font-size:11px;opacity:.75}
+.sl-grid b{display:block;font-size:15px;margin-top:3px;letter-spacing:-.3px}
+.sl-grid em{display:block;font-style:normal;font-size:11px;opacity:.8;margin-top:1px}
+.sl-top-ra{margin-top:12px;font-size:13px;opacity:.95}
+.sl-actions{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1}
+.sl-actions .btn{flex:1;text-align:center;padding:11px 14px;font-size:14px}
+.sl-actions .btn.light{background:#fff;color:#071a5c}
+.sl-actions .btn.glass{background:rgba(255,255,255,.16);color:#fff}
+.sl-msg{margin-top:12px;font-size:14px;opacity:.9;line-height:1.5}
+.sl-foot{margin-top:10px;font-size:11px;opacity:.65;display:flex;justify-content:space-between;gap:8px}
+.sl-foot button{border:0;background:none;color:#fff;opacity:.9;font-size:11px;font-weight:700;padding:0}
+.sales.loading .sl-main b,.sales.loading .sl-grid b{color:transparent;background:rgba(255,255,255,.18);border-radius:8px;animation:skel 1.2s ease-in-out infinite alternate}
+@keyframes skel{to{opacity:.45}}
+.brief-ta{min-height:320px;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+.wa{background:#25d366!important;color:#fff!important}
+@media(max-width:760px){.sales{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.sl-main b{font-size:27px}}
 </style>
 </head>
 <body>
@@ -318,6 +352,26 @@ textarea.in{min-height:240px;resize:vertical}
     <p class="lead">Kelola toko dari satu dashboard: catat, hitung, atur tugas, dan buka semua tool tanpa pindah tab. Ganti tampilan tiap kartu dengan foto atau video pendekmu sendiri.</p>
     <a class="btn" href="#tools">Jelajahi tools</a>
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
+    <section class="sales loading" id="sales" aria-label="Sales bulan ini">
+      <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
+      <div id="slBody">
+        <div class="sl-main"><b id="slGross">Rp000 jt</b><span id="slTarget">dari target</span></div>
+        <div class="sl-bar"><i id="slFill"></i><u id="slPace" hidden></u></div>
+        <div class="sl-legend"><span id="slAch">&nbsp;</span><span id="slPaceTxt"></span></div>
+        <div class="sl-grid">
+          <div><small id="slYdayL">Kemarin</small><b id="slYday">Rp0 jt</b><em id="slYdayT">&nbsp;</em></div>
+          <div><small>Butuh/hari</small><b id="slNeed">Rp0 jt</b><em id="slNeedT">&nbsp;</em></div>
+          <div><small>Proyeksi</small><b id="slProj">0%</b><em id="slProjT">&nbsp;</em></div>
+        </div>
+        <div class="sl-top-ra" id="slTopRa"></div>
+      </div>
+      <div class="sl-msg" id="slMsg" hidden></div>
+      <div class="sl-actions">
+        <button class="btn light" type="button" id="slBrief">📝 Buat Briefing</button>
+        <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
+      </div>
+      <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
+    </section>
     <section class="daily" id="daily" aria-label="Tugas hari ini">
       <div class="dl-head">
         <div class="dl-ring" id="dlRing"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="19"/><circle class="val" id="dlArc" cx="22" cy="22" r="19"/></svg><b id="dlPct">0%</b></div>
@@ -838,6 +892,141 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull(false)});
  setInterval(()=>{if(!document.hidden)pull(false)},60000);
  pull(true);
+})();
+/* ====== RINGKASAN SALES & BRIEFING PAGI ====== */
+(function(){
+ const box=document.getElementById('sales');if(!box)return;
+ const CACHE='ofa_sales_cache',BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+  HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const $id=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0');
+ const rp=v=>'Rp'+Math.round(Number(v)||0).toLocaleString('id-ID');
+ const jt=v=>{v=Number(v)||0;const a=Math.abs(v);return (v<0?'-':'')+(a>=1e9?'Rp'+(a/1e9).toFixed(2).replace('.',',')+' M':a>=1e6?'Rp'+(a/1e6).toFixed(1).replace('.',',')+' jt':rp(a))};
+ const pct=v=>((Number(v)||0)*100).toFixed(1).replace('.',',')+'%';
+ const tgl=k=>{const p=String(k).split('-').map(Number);return p.length===3?p[2]+' '+BLN[p[1]-1]:k};
+ const nama=n=>String(n||'').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()).replace(/\s+/g,' ').trim();
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ let data=null,busy=false;
+
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ function slim(d){
+  const s=d.store||{};
+  return {period:d.period,settings:d.settings,generatedAt:d.generatedAt,
+   store:{target:s.target,grossSales:s.grossSales,netSales:s.netSales,achievement:s.achievement,status:s.status,statusLabel:s.statusLabel,paceTarget:s.paceTarget,paceAchievement:s.paceAchievement,paceGap:s.paceGap,
+    requiredDaily:s.requiredDaily,remainingDays:s.remainingDays,remainingTarget:s.remainingTarget,projectedSales:s.projectedSales,projectedAchievement:s.projectedAchievement,
+    upt:s.upt,eacRate:s.eacRate,transactions:s.transactions,basketSize:s.basketSize},
+   lastDay:((d.trends&&d.trends.daily)||[]).filter(x=>x.grossSales||x.netSales).slice(-1)[0]||null,
+   peak:(d.hourlySales&&d.hourlySales.peak)||null,
+   endless:d.endless?{target:d.endless.target,grossSales:d.endless.grossSales,achievement:d.endless.achievement}:null,
+   voucher:d.voucher?{target:d.voucher.target,netSales:d.voucher.netSales,achievement:d.voucher.achievement}:null,
+   ras:(d.ras||[]).map(r=>({name:r.name,grossSales:r.grossSales,netSales:r.netSales,target:r.target,achievement:r.achievement,gap:r.gap,upt:r.upt,eacRate:r.eacRate,transactions:r.transactions})),
+   at:Date.now()};
+ }
+ function show(d){
+  data=d;box.classList.remove('loading');$id('slMsg').hidden=true;$id('slBody').hidden=false;
+  const s=d.store,m=String(d.period.end||'').split('-').map(Number);
+  $id('slTitle').textContent='Sales '+(m[1]?BULAN[m[1]-1]+' '+m[0]:'Bulan Ini');
+  $id('slPeriod').textContent='Data s/d '+tgl(d.period.end)+' · '+(s.remainingDays||0)+' hari tersisa';
+  const b=$id('slBadge');b.className='sl-badge '+(s.status||'');b.textContent=s.target?(s.statusLabel||'-'):'Target belum diisi';
+  $id('slGross').textContent=jt(s.grossSales);
+  $id('slTarget').textContent=s.target?'dari target '+jt(s.target):'gross sales';
+  const ach=Math.min(1,Number(s.achievement)||0),pace=s.target?Math.min(1,(Number(s.paceTarget)||0)/s.target):0;
+  requestAnimationFrame(()=>{$id('slFill').style.width=(ach*100)+'%'});
+  const pm=$id('slPace');pm.hidden=!s.target;pm.style.left='calc('+(pace*100)+'% - 1px)';
+  $id('slAch').textContent=s.target?pct(s.achievement)+' tercapai':'';
+  $id('slPaceTxt').textContent=s.target?'▮ pace ideal '+pct(pace)+' · '+(s.paceGap>=0?'+':'')+jt(s.paceGap):'';
+  const ld=d.lastDay;
+  const y=new Date();y.setDate(y.getDate()-1);const yk=y.getFullYear()+'-'+pad(y.getMonth()+1)+'-'+pad(y.getDate());
+  $id('slYdayL').textContent=ld&&ld.date===yk?'Kemarin':ld?'Data '+tgl(ld.date):'Hari terakhir';
+  $id('slYday').textContent=ld?jt(ld.grossSales):'-';
+  $id('slYdayT').textContent=ld?(ld.target?pct(ld.grossSales/ld.target)+' dari target':'gross'):' ';
+  $id('slNeed').textContent=s.target?jt(s.requiredDaily):'-';
+  $id('slNeedT').textContent=s.target?'sisa '+jt(s.remainingTarget):' ';
+  $id('slProj').textContent=s.target?pct(s.projectedAchievement):jt(s.projectedSales);
+  $id('slProjT').textContent=jt(s.projectedSales);
+  const top=(d.ras||[]).slice().sort((a,b)=>(b.grossSales||0)-(a.grossSales||0))[0];
+  $id('slTopRa').textContent=top?'🥇 RA teratas: '+nama(top.name)+' · '+jt(top.grossSales)+(top.target?' ('+pct(top.achievement)+')':''):'';
+  const ago=Math.round((Date.now()-d.at)/60000);
+  $id('slAt').textContent='Diperbarui '+(ago<1?'baru saja':ago<60?ago+' menit lalu':new Date(d.at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}));
+ }
+ function message(text,showBody){
+  box.classList.remove('loading');$id('slMsg').hidden=false;$id('slMsg').textContent=text;$id('slBody').hidden=!showBody;
+  if(!showBody){$id('slBadge').className='sl-badge';$id('slBadge').textContent='—'}
+ }
+ async function load(force){
+  if(busy)return;
+  if(!configured()){message('Hubungkan aplikasi ke Apps Script (HUB_API_URL) untuk menampilkan sales.',false);return}
+  if(!localStorage.getItem('salesTrackingPin')){message('Masukkan PIN untuk menampilkan data sales. Ketuk ↻ Perbarui.',!!data);return}
+  busy=true;if(!data)box.classList.add('loading');$id('slAt').textContent='Memuat…';
+  try{
+   const d=new Date(),start=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-01';
+   let r=await api('getDashboardData',{startDate:start,endDate:''});
+   if(r.message){const p=new Date(d.getFullYear(),d.getMonth()-1,1),e=new Date(d.getFullYear(),d.getMonth(),0);
+    r=await api('getDashboardData',{startDate:p.getFullYear()+'-'+pad(p.getMonth()+1)+'-01',endDate:e.getFullYear()+'-'+pad(e.getMonth()+1)+'-'+pad(e.getDate())})}
+   if(r.message){message(r.message,false);return}
+   const sd=slim(r);try{localStorage.setItem(CACHE,JSON.stringify(sd))}catch(e){}show(sd);
+  }catch(e){
+   const msg=e&&e.message||String(e);
+   if(/PIN/.test(msg)){message('PIN belum benar. Ketuk ↻ Perbarui untuk memasukkan PIN.',!!data);localStorage.removeItem('salesTrackingPin')}
+   else{if(data){show(data);$id('slAt').textContent='Offline · data terakhir '+new Date(data.at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}else message('Tidak dapat memuat data sales. Periksa koneksi lalu ketuk ↻ Perbarui.',false)}
+  }finally{busy=false}
+ }
+ $id('slRefresh').onclick=()=>{
+  if(configured()&&!localStorage.getItem('salesTrackingPin')){const p=prompt('Masukkan PIN ONE FOR ALL Hub:');if(p&&p.trim())localStorage.setItem('salesTrackingPin',p.trim());else return}
+  load(true);
+ };
+ $id('slOpen').onclick=()=>{if(configured())window.open(HUB_API_URL,'_blank','noopener');else alert('Alamat dashboard sales belum diatur.')};
+
+ /* ---- briefing ---- */
+ function focusLines(d){
+  const s=d.store,st=d.settings||{},out=[];
+  if(s.target&&s.status!=='ON_TRACK')out.push('Kejar gap '+rp(Math.abs(s.paceGap))+' dari pace ideal; target harian '+rp(s.requiredDaily)+'.');
+  if(st.uptTarget&&s.upt<st.uptTarget)out.push('UPT toko '+(s.upt||0).toFixed(2).replace('.',',')+' (target '+String(st.uptTarget).replace('.',',')+'): tawarkan produk pelengkap di setiap transaksi.');
+  if(st.eacTarget&&s.eacRate<st.eacTarget)out.push('EAC '+pct(s.eacRate)+' (target '+pct(st.eacTarget)+'): minta nomor HP/email customer di setiap transaksi.');
+  if(d.peak&&d.peak.label&&d.peak.label!=='-')out.push('Jam ramai '+d.peak.label+' ('+pct(d.peak.contribution)+' sales): pastikan semua RA standby dan display rapi sebelum jam ini.');
+  if(d.endless&&d.endless.target&&d.endless.achievement<1)out.push('Endless Aisle baru '+pct(d.endless.achievement)+' dari target: tawarkan ukuran/warna yang tidak tersedia di toko.');
+  if(d.voucher&&d.voucher.target&&d.voucher.achievement<1)out.push('Eigerindo Voucher '+pct(d.voucher.achievement)+' dari target: tawarkan voucher di kasir.');
+  return out;
+ }
+ function briefText(d){
+  const now=new Date(),s=d.store,m=String(d.period.end).split('-').map(Number),L=[];
+  L.push('*BRIEFING PAGI · EIGER SOLO BARU 7014*');
+  L.push(HARI[now.getDay()]+', '+now.getDate()+' '+BULAN[now.getMonth()]+' '+now.getFullYear());
+  L.push('');
+  L.push('📊 *Pencapaian '+BULAN[m[1]-1]+' (s/d '+tgl(d.period.end)+')*');
+  L.push('Gross: '+rp(s.grossSales)+(s.target?' / '+rp(s.target)+' ('+pct(s.achievement)+')':''));
+  if(s.target){
+   L.push('Status: '+s.statusLabel+' · '+pct(s.paceAchievement)+' dari pace ideal');
+   L.push((s.paceGap>=0?'Di atas pace: +':'Kurang dari pace: ')+rp(Math.abs(s.paceGap)));
+   L.push('Kebutuhan per hari: '+rp(s.requiredDaily)+' ('+s.remainingDays+' hari tersisa)');
+   L.push('Proyeksi akhir bulan: '+rp(s.projectedSales)+' ('+pct(s.projectedAchievement)+')');
+  }
+  if(d.lastDay){L.push('');L.push('📅 *'+tgl(d.lastDay.date)+'*');L.push('Gross '+rp(d.lastDay.grossSales)+(d.lastDay.target?' · target '+rp(d.lastDay.target)+' ('+pct(d.lastDay.grossSales/d.lastDay.target)+')':''))}
+  const ras=(d.ras||[]).slice().sort((a,b)=>(b.grossSales||0)-(a.grossSales||0));
+  if(ras.length){
+   L.push('');L.push('👥 *Performa RA (bulan berjalan)*');
+   ras.forEach((r,i)=>L.push((i+1)+'. '+nama(r.name)+': '+rp(r.grossSales)+(r.target?' / '+rp(r.target)+' ('+pct(r.achievement)+')':'')+' · UPT '+(r.upt||0).toFixed(2).replace('.',',')+' · EAC '+pct(r.eacRate)));
+  }
+  const f=focusLines(d);if(f.length){L.push('');L.push('🎯 *Fokus hari ini*');f.forEach(x=>L.push('• '+x))}
+  let tasks=[];try{const all=(meta.__daily||{}),k=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());tasks=(all[k]||[]).filter(x=>x&&x.t&&!x.done)}catch(e){}
+  if(tasks.length){L.push('');L.push('✅ *Tugas hari ini*');tasks.forEach(x=>L.push('• '+x.t))}
+  L.push('');L.push('Semangat tim, kita kejar target hari ini! 💪');
+  return L.join('\n');
+ }
+ $id('slBrief').onclick=()=>{
+  if(!data){alert('Data sales belum tersedia. Ketuk ↻ Perbarui terlebih dahulu.');return}
+  openModal('Briefing Pagi','<p class="hint" style="margin:0 0 8px">Teks bisa diedit sebelum dikirim.</p><textarea class="in brief-ta" id="brTxt"></textarea><div class="row"><button class="btn wa" id="brWa" type="button">Kirim ke WhatsApp</button><button class="btn ghost" id="brCopy" type="button">Salin</button></div>');
+  const ta=$id('brTxt');ta.value=briefText(data);
+  $id('brCopy').onclick=async()=>{try{await navigator.clipboard.writeText(ta.value);$id('brCopy').textContent='Tersalin ✓'}catch(e){ta.select();document.execCommand('copy');$id('brCopy').textContent='Tersalin ✓'}};
+  $id('brWa').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(ta.value),'_blank','noopener');
+ };
+
+ try{const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(c&&c.store)show(c)}catch(e){}
+ setTimeout(()=>load(false),2800);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&data&&Date.now()-data.at>10*60000)load(false)});
 })();
 </script>
 </body>
