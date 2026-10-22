@@ -362,6 +362,36 @@ textarea.in{min-height:240px;resize:vertical}
 .plan-times{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px 8px;align-items:center;margin-top:10px;font-size:13px}
 .plan-times input{padding:8px 10px}
 @media(max-width:760px){.shift{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.sh-g>b{width:84px}}
+/* ====== TUGAS PER SHIFT & RUTIN STORE HEAD ====== */
+.dl-mini{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.dl-mini span{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.dl-mini span i{width:8px;height:8px;border-radius:50%}
+.dl-mini span.ok{color:#1a8a49}
+.dl-seg{margin-top:14px}
+.dl-seg+.dl-add{margin-top:8px}
+.dl-grp{margin-top:14px}
+.dl-gh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}
+.dl-sk{display:inline-block;color:#fff;font-weight:800;border-radius:6px;padding:2px 8px;font-size:12px}
+.dl-gh small{color:var(--mut);font-weight:600}
+.dl-gh em{font-style:normal;color:var(--mut);font-weight:600;margin-left:auto;text-align:right}
+.dl-grp .dl-list{margin-top:2px}
+.dl-rt{font-style:normal;color:var(--mut);font-size:11px;font-weight:700;margin-left:6px;white-space:nowrap}
+.dl-tag{font-style:normal;color:var(--mut);font-size:11px;font-weight:700;border:1px solid var(--line);border-radius:99px;padding:0 6px;margin-left:4px}
+.dl-admin{display:block;width:100%;margin-top:14px;border:1.5px solid var(--line);background:none;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:700;color:var(--fg);text-align:center}
+.dl-admin.on{border-color:var(--acc);color:var(--acc)}
+.rt-form{background:var(--card);border-radius:16px;padding:12px}
+.rt-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.rt-row>span{flex:none;width:40px;font-size:12px;font-weight:700;color:var(--mut)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 11px;font-size:12px;font-weight:700;color:var(--fg)}
+.seg button.on{background:var(--ink);border-color:var(--ink);color:var(--inkfg)}
+.seg.days button{min-width:38px;padding:6px 8px}
+.rt-list{margin-top:14px}
+.rt-g{margin-top:12px}
+.rt-i{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+.rt-i.on{background:var(--card);border-radius:10px}
+.rt-t{flex:1;text-align:left;border:0;background:none;padding:10px 4px;font-size:14px;color:var(--fg)}
+.rt-t small{display:block;color:var(--mut);font-size:11px;margin-top:2px}
 </style>
 </head>
 <body>
@@ -420,11 +450,14 @@ textarea.in{min-height:240px;resize:vertical}
         <div class="dl-ring" id="dlRing"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="19"/><circle class="val" id="dlArc" cx="22" cy="22" r="19"/></svg><b id="dlPct">0%</b></div>
         <div class="dl-txt"><h3>Tugas Hari Ini</h3><p id="dlSum">Belum ada tugas</p></div>
       </div>
-      <form class="dl-add" id="dlForm" autocomplete="off"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
+      <div class="dl-mini" id="dlMini"></div>
+      <div class="seg dl-seg" id="dlSeg" role="group" aria-label="Shift untuk tugas baru"><button type="button" data-ds="U" class="on">Umum</button><button type="button" data-ds="P">Pagi</button><button type="button" data-ds="M">Middle</button><button type="button" data-ds="S">Sore</button></div>
+      <form class="dl-add" id="dlForm" autocomplete="off"><input type="hidden" id="dlShift" value="U"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
       <div id="dlCarry"></div>
-      <ul class="dl-list" id="dlList"></ul>
+      <div id="dlList"></div>
       <button class="dl-toggle" id="dlToggle" type="button" hidden></button>
       <ul class="dl-list done" id="dlDone" hidden></ul>
+      <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
     </section>
   </div>
   <div class="cluster" id="cl"></div>
@@ -667,76 +700,192 @@ renderTeam();
  setTimeout(hide,max);
 })();
 
-/* ====== TUGAS HARI INI ====== */
+/* ====== TUGAS HARI INI: per shift + tugas rutin Store Head ====== */
 (function(){
- const KEY='__daily',C=119.38;
+ const KEY='__daily',C=119.38,SH=['U','P','M','S'],NM={U:'Umum',P:'Pagi',M:'Middle',S:'Sore'},CL={U:'#6b6b76',P:'#2f80ed',M:'#8b5cf6',S:'#ff4f1f'};
+ const HARI=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+ const STD=[['P','Upload DSR kemarin ke dashboard'],['P','Cek kebersihan & kerapian area toko'],['P','Nyalakan lampu, AC, musik, dan sistem POS'],['P','Hitung & cek uang modal kasir'],['P','Briefing pagi tim'],['P','Cek display, price tag, dan materi promo'],
+  ['M','Refill stok display dari gudang'],['M','Rapikan fitting room & area display'],['M','Follow up customer Endless Aisle'],
+  ['S','Rapikan display, gudang, dan fitting room'],['S','Cek barang tertinggal di fitting room'],['S','Rekap transaksi & setoran kasir'],['S','Matikan lampu, AC, musik, POS, lalu kunci toko']];
  const pad=n=>String(n).padStart(2,'0'),dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
- let shownDay=dkey(new Date()),showDone=false,toastTimer=null,undo=null;
+ const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ const first=n=>String(n||'').trim().split(/\s+/)[0];
+ let shownDay=dkey(new Date()),showDone=false,toastTimer=null,undo=null,headMem='',editRid=null,formShift='P',formDays=[];
  const all=()=>{const v=meta[KEY];return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+ const routines=()=>Array.isArray(meta.__routine)?meta.__routine.filter(r=>r&&r.id&&r.t):[];
  const today=()=>dkey(new Date());
- const items=()=>(all()[today()]||[]).filter(x=>x&&x.t);
- function saveDay(list){
-  const a=all();a[today()]=list;
-  Object.keys(a).sort().slice(0,-31).forEach(k=>delete a[k]);
-  meta[KEY]=a;ls.set('ofa_meta',meta);
+ const raw=()=>(all()[today()]||[]).filter(x=>x&&x.id);
+ function shiftInfo(){try{if(window.ofaShiftInfo)return window.ofaShiftInfo(new Date())}catch(e){}return {ty:{},groups:{}}}
+ const label=(s,ty)=>s==='U'?'Umum':((ty[s]&&ty[s].n)||NM[s]);
+ const color=(s,ty)=>s==='U'?CL.U:((ty[s]&&ty[s].c)||CL[s]);
+ const isHead=()=>{const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
+
+ function items(){
+  const day=raw(),st={};day.forEach(x=>{if(x.rid)st[x.rid]=x});
+  const wd=new Date().getDay();
+  const rt=routines().filter(r=>!Array.isArray(r.d)||!r.d.length||r.d.includes(wd)).filter(r=>!(st[r.id]&&st[r.id].skip))
+   .map(r=>({id:'r_'+r.id,rid:r.id,t:r.t,s:SH.includes(r.s)?r.s:'U',r:1,done:st[r.id]&&st[r.id].done?1:0}));
+  const ad=day.filter(x=>!x.rid&&x.t&&!x.del).map(x=>Object.assign({},x,{s:SH.includes(x.s)?x.s:'U'}));
+  return rt.concat(ad);
+ }
+ function saveDay(list){const a=all();a[today()]=list;Object.keys(a).sort().slice(0,-31).forEach(k=>delete a[k]);meta[KEY]=a;ls.set('ofa_meta',meta)}
+ function upsert(id,patch){
+  const list=raw().slice(),i=list.findIndex(x=>x.id===id),now=Date.now();
+  if(i>=0)list[i]=Object.assign({},list[i],patch,{u:now});else list.push(Object.assign({id},patch,{u:now}));
+  saveDay(list);
+ }
+ function setDone(id,val){
+  const patch={done:val?1:0,doneAt:val?Date.now():0};if(id.indexOf('r_')===0)patch.rid=id.slice(2);
+  upsert(id,patch);renderDaily();
  }
  function yesterdayLeft(){
   const d=new Date();d.setDate(d.getDate()-1);
-  const have=new Set(items().map(x=>x.t.toLowerCase()));
-  return (all()[dkey(d)]||[]).filter(x=>x&&x.t&&!x.done&&!have.has(x.t.toLowerCase()));
+  const have=new Set(items().map(x=>x.s+'|'+x.t.toLowerCase()));
+  return (all()[dkey(d)]||[]).filter(x=>x&&x.t&&!x.rid&&!x.del&&!x.done&&!have.has((x.s||'U')+'|'+x.t.toLowerCase()));
  }
- function row(x,done){
-  return `<li class="dl-item" data-id="${esc(x.id)}"><button class="dl-chk" type="button" data-act="${done?'undo':'check'}" aria-label="${done?'Batalkan selesai':'Tandai selesai'}">✓</button><span>${esc(x.t)}</span><button class="dl-del" type="button" data-act="del" aria-label="Hapus tugas">✕</button></li>`;
+ function row(x,done,ty){
+  const can=!x.r||isHead();
+  return `<li class="dl-item" data-id="${esc(x.id)}"><button class="dl-chk" type="button" data-act="${done?'undo':'check'}" aria-label="${done?'Batalkan selesai':'Tandai selesai'}">✓</button><span>${esc(x.t)}${x.r?'<i class="dl-rt" title="Tugas rutin">↻ rutin</i>':''}${done?`<i class="dl-tag">${esc(label(x.s,ty))}</i>`:''}</span>${can?`<button class="dl-del" type="button" data-act="${x.r?'skip':'del'}" aria-label="${x.r?'Lewati hari ini':'Hapus tugas'}" title="${x.r?'Lewati hari ini':'Hapus tugas'}">✕</button>`:''}</li>`;
  }
  window.renderDaily=function(){
   shownDay=today();
-  const list=items(),open=list.filter(x=>!x.done),fin=list.filter(x=>x.done),total=list.length;
+  const {ty,groups}=shiftInfo(),list=items(),fin=list.filter(x=>x.done),open=list.filter(x=>!x.done),total=list.length;
   const pct=total?Math.round(fin.length/total*100):0;
-  document.getElementById('dlPct').textContent=pct+'%';
-  document.getElementById('dlArc').style.strokeDashoffset=String(C-C*pct/100);
-  document.getElementById('dlRing').classList.toggle('full',total>0&&pct===100);
-  document.getElementById('dlSum').textContent=!total?'Belum ada tugas · tambahkan di bawah':
-   pct===100?'Semua '+total+' tugas selesai 🎉':fin.length+' dari '+total+' tugas selesai';
-  document.getElementById('dlList').innerHTML=open.length?open.map(x=>row(x,0)).join(''):
-   `<li class="dl-empty">${total?'Tidak ada tugas tersisa. Kerja bagus!':'Tulis tugas pertama hari ini, misalnya “Briefing pagi jam 09.30”.'}</li>`;
-  const left=yesterdayLeft(),carry=document.getElementById('dlCarry');
-  carry.innerHTML=left.length?`<button class="dl-carry" type="button" id="dlCarryBtn">↻ Bawa ${left.length} tugas kemarin yang belum selesai</button>`:'';
-  const tg=document.getElementById('dlToggle'),dl=document.getElementById('dlDone');
+  $('#dlPct').textContent=pct+'%';
+  $('#dlArc').style.strokeDashoffset=String(C-C*pct/100);
+  $('#dlRing').classList.toggle('full',total>0&&pct===100);
+  $('#dlSum').textContent=!total?'Belum ada tugas hari ini':pct===100?'Semua '+total+' tugas selesai 🎉':fin.length+' dari '+total+' tugas selesai';
+  $('#dlMini').innerHTML=SH.map(s=>{const g=list.filter(x=>x.s===s);if(!g.length)return'';const d=g.filter(x=>x.done).length;
+   return `<span class="${d===g.length?'ok':''}"><i style="background:${color(s,ty)}"></i>${esc(label(s,ty))} ${d}/${g.length}</span>`}).join('');
+  let html='';
+  SH.forEach(s=>{const g=open.filter(x=>x.s===s);if(!g.length)return;
+   const t=ty[s]||{},names=(groups[s]||[]).map(m=>first(m.n));
+   html+=`<div class="dl-grp"><div class="dl-gh"><span class="dl-sk" style="background:${color(s,ty)}">${esc(label(s,ty))}</span>${s!=='U'&&t.s?`<small>${esc(t.s)}–${esc(t.e)}</small>`:''}<em>${s==='U'?'siapa saja':names.length?'👤 '+esc(names.join(', ')):'belum ada jadwal'}</em></div><ul class="dl-list">${g.map(x=>row(x,0,ty)).join('')}</ul></div>`});
+  $('#dlList').innerHTML=html||`<p class="dl-empty">${total?'Tidak ada tugas tersisa. Kerja bagus!':'Tambahkan tugas harian di atas'+(routines().length?'.':', atau minta Store Head mengatur tugas rutin.')}</p>`;
+  const left=yesterdayLeft();
+  $('#dlCarry').innerHTML=left.length?`<button class="dl-carry" type="button" id="dlCarryBtn">↻ Bawa ${left.length} tugas kemarin yang belum selesai</button>`:'';
+  const tg=$('#dlToggle'),dl=$('#dlDone');
   tg.hidden=!fin.length;tg.textContent=(showDone?'Sembunyikan':'Lihat')+' tugas selesai ('+fin.length+')';
-  dl.hidden=!showDone||!fin.length;dl.innerHTML=showDone?fin.map(x=>row(x,1)).join(''):'';
+  dl.hidden=!showDone||!fin.length;dl.innerHTML=showDone?fin.map(x=>row(x,1,ty)).join(''):'';
+  const ad=$('#dlAdmin');ad.classList.toggle('on',isHead());ad.textContent=isHead()?'⚙ Atur tugas rutin · mode Store Head aktif':'⚙ Atur tugas rutin (Store Head)';
+ };
+ window.ofaTodayTasks=function(){
+  const {ty,groups}=shiftInfo(),open=items().filter(x=>!x.done);
+  return SH.map(s=>({s,label:label(s,ty),names:s==='U'?[]:(groups[s]||[]).map(m=>first(m.n)),items:open.filter(x=>x.s===s).map(x=>x.t)})).filter(g=>g.items.length);
  };
  function toast(text,onUndo){
-  const t=document.getElementById('toast');document.getElementById('toastTxt').textContent=text;undo=onUndo;
+  const t=$('#toast');$('#toastTxt').textContent=text;undo=onUndo;
   t.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.classList.remove('on');undo=null},4500);
  }
- document.getElementById('toastBtn').onclick=()=>{if(undo)undo();undo=null;document.getElementById('toast').classList.remove('on')};
- function setDone(id,val){
-  const list=items(),x=list.find(i=>i.id===id);if(!x)return;
-  x.done=val?1:0;if(val)x.doneAt=Date.now();else delete x.doneAt;saveDay(list);renderDaily();
- }
- document.getElementById('dlForm').onsubmit=e=>{
-  e.preventDefault();const inp=document.getElementById('dlIn'),t=inp.value.trim();if(!t)return;
-  const list=items();list.push({id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),t,done:0,at:Date.now()});
+ $('#toastBtn').onclick=()=>{if(undo)undo();undo=null;$('#toast').classList.remove('on')};
+
+ $('#dlForm').onsubmit=e=>{
+  e.preventDefault();const inp=$('#dlIn'),t=inp.value.trim();if(!t)return;
+  const list=raw().slice(),now=Date.now();list.push({id:uid('d'),t,s:$('#dlShift').value||'U',done:0,at:now,u:now});
   saveDay(list);inp.value='';renderDaily();inp.focus();
  };
- document.getElementById('daily').onclick=e=>{
+ $('#daily').onclick=e=>{
   const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.ds){$('#dlShift').value=b.dataset.ds;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#dlIn').focus();return}
   if(b.id==='dlToggle'){showDone=!showDone;return renderDaily()}
+  if(b.id==='dlAdmin'){editRid=null;formShift='P';formDays=[];return headGate(routineEditor)}
   if(b.id==='dlCarryBtn'){
-   const add=yesterdayLeft().map(x=>({id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:x.t,done:0,at:Date.now()}));
-   saveDay(items().concat(add));return renderDaily();
+   const now=Date.now(),add=yesterdayLeft().map(x=>({id:uid('d'),t:x.t,s:x.s||'U',done:0,at:now,u:now}));
+   saveDay(raw().concat(add));return renderDaily();
   }
   const li=b.closest('.dl-item');if(!li)return;const id=li.dataset.id,act=b.dataset.act;
   if(act==='check'){
-   li.classList.add('leaving');
-   setTimeout(()=>li.classList.add('gone'),260);
+   li.classList.add('leaving');setTimeout(()=>li.classList.add('gone'),260);
    setTimeout(()=>{setDone(id,1);toast('Tugas selesai ✓',()=>setDone(id,0))},620);
   }else if(act==='undo')setDone(id,0);
-  else if(act==='del'){
-   const list=items(),i=list.findIndex(x=>x.id===id);if(i<0)return;const [gone]=list.splice(i,1);
-   saveDay(list);renderDaily();toast('Tugas dihapus',()=>{const l=items();l.splice(i,0,gone);saveDay(l);renderDaily()});
-  }
+  else if(act==='del'){upsert(id,{del:1});renderDaily();toast('Tugas dihapus',()=>{upsert(id,{del:0});renderDaily()})}
+  else if(act==='skip'){const rid=id.slice(2);upsert(id,{rid,skip:1});renderDaily();toast('Dilewati untuk hari ini',()=>{upsert(id,{rid,skip:0});renderDaily()})}
  };
+
+ /* --- PIN & mode Store Head --- */
+ async function hash(v){
+  const str='ofa-head:'+v;
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){let h=0;for(const c of str)h=(h*31+c.charCodeAt(0))|0;return 'x'+(h>>>0).toString(16)}
+ }
+ function unlock(){headMem=meta.__headPin||'';try{sessionStorage.setItem('ofa_head_ok',headMem)}catch(e){}renderDaily()}
+ function lock(){headMem='';try{sessionStorage.removeItem('ofa_head_ok')}catch(e){}renderDaily()}
+ function pinForm(isNew,then,title){
+  openModal(title||(isNew?'Buat PIN Store Head':'Masuk mode Store Head'),`
+   <p class="hint" style="margin:0 0 8px">${isNew?'PIN ini hanya untuk Store Head: mengatur tugas rutin dan melewati tugas rutin hari ini. Tim tetap bisa menambah dan mencentang tugas harian.':'Masukkan PIN Store Head untuk mengatur tugas rutin.'}</p>
+   <input class="in" id="hpA" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN Store Head (min. 4 digit)">
+   ${isNew?'<input class="in" id="hpB" type="password" inputmode="numeric" autocomplete="off" placeholder="Ulangi PIN" style="margin-top:8px">':''}
+   <p class="hint" id="hpErr" style="color:#e5484d;min-height:1em"></p>
+   <div class="row"><button class="btn" id="hpOk" type="button">${isNew?'Simpan PIN':'Masuk'}</button></div>`);
+  const a=$('#hpA');setTimeout(()=>a.focus(),50);
+  const go=async()=>{
+   const v=a.value.trim();if(v.length<4){$('#hpErr').textContent='PIN minimal 4 digit.';return}
+   if(isNew){if(v!==$('#hpB').value.trim()){$('#hpErr').textContent='Kedua PIN tidak sama.';return}
+    meta.__headPin=await hash(v);ls.set('ofa_meta',meta);unlock();then();return}
+   if(await hash(v)!==meta.__headPin){$('#hpErr').textContent='PIN Store Head salah.';a.value='';return}
+   unlock();then();
+  };
+  $('#hpOk').onclick=go;a.onkeydown=e=>{if(e.key==='Enter')go()};
+ }
+ function headGate(then){if(isHead())return then();pinForm(!meta.__headPin,then)}
+
+ /* --- editor tugas rutin --- */
+ const dayTxt=d=>!Array.isArray(d)||!d.length||d.length===7?'Setiap hari':d.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(i=>HARI[i]).join(', ');
+ function saveRoutines(list){meta.__routine=list;ls.set('ofa_meta',meta);renderDaily()}
+ function routineEditor(){
+  const ty=shiftInfo().ty,rs=routines(),cur=editRid?rs.find(r=>r.id===editRid):null;
+  const groupsHtml=SH.map(s=>{const g=rs.filter(r=>(SH.includes(r.s)?r.s:'U')===s);if(!g.length)return'';
+   return `<div class="rt-g"><div class="dl-gh"><span class="dl-sk" style="background:${color(s,ty)}">${esc(label(s,ty))}</span><small>${g.length} tugas</small></div>${g.map(r=>`<div class="rt-i${editRid===r.id?' on':''}" data-rid="${esc(r.id)}"><button type="button" class="rt-t" data-ract="edit">${esc(r.t)}<small>${esc(dayTxt(r.d))}</small></button><button type="button" class="dl-del" data-ract="del" aria-label="Hapus tugas rutin">✕</button></div>`).join('')}</div>`}).join('');
+  openModal('Tugas Rutin Harian',`
+   <p class="hint" style="margin:0 0 10px">Tugas rutin muncul otomatis setiap hari di kelompok shift-nya. Tim hanya bisa mencentang; hanya Store Head yang bisa mengubah atau melewatinya.</p>
+   <div class="rt-form">
+    <input class="in" id="rtT" maxlength="140" placeholder="Contoh: Hitung & cek uang modal kasir" value="${cur?esc(cur.t):''}">
+    <div class="rt-row"><span>Shift</span><div class="seg" id="rtS">${SH.map(k=>`<button type="button" data-s="${k}" class="${formShift===k?'on':''}">${esc(label(k,ty))}</button>`).join('')}</div></div>
+    <div class="rt-row"><span>Hari</span><div class="seg days" id="rtD">${[1,2,3,4,5,6,0].map(i=>`<button type="button" data-d="${i}" class="${formDays.includes(i)?'on':''}">${HARI[i]}</button>`).join('')}</div></div>
+    <p class="hint" style="margin:6px 0 0">Tidak memilih hari = setiap hari.</p>
+    <div class="row"><button class="btn" id="rtSave" type="button">${cur?'Simpan perubahan':'+ Tambah tugas rutin'}</button>${cur?'<button class="btn ghost" id="rtCancel" type="button">Batal</button>':''}</div>
+   </div>
+   <div class="rt-list">${groupsHtml||`<p class="dl-empty">Belum ada tugas rutin.</p><button class="btn ghost" id="rtStd" type="button" style="width:100%">Pakai checklist standar toko (${STD.length} tugas)</button>`}</div>
+   <div class="row" style="margin-top:16px"><button class="btn ghost" id="rtPin" type="button">Ganti PIN</button><button class="btn ghost" id="rtLock" type="button">Kunci mode Store Head</button><button class="btn" id="rtDone" type="button">Selesai</button></div>`);
+ }
+ $('#pb').addEventListener('click',e=>{
+  if(!document.querySelector('#pb .rt-form'))return;
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.s){formShift=b.dataset.s;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));return}
+  if(b.dataset.d!==undefined){const d=+b.dataset.d,i=formDays.indexOf(d);i<0?formDays.push(d):formDays.splice(i,1);b.classList.toggle('on',i<0);return}
+  const rs=routines().slice();
+  if(b.id==='rtSave'){
+   const t=$('#rtT').value.trim();if(!t){$('#rtT').focus();return}
+   const d=formDays.length===7?[]:formDays.slice().sort();
+   if(editRid){const i=rs.findIndex(r=>r.id===editRid);if(i>=0)rs[i]=Object.assign({},rs[i],{t,s:formShift,d})}
+   else rs.push({id:uid('rt'),t,s:formShift,d});
+   editRid=null;formDays=[];saveRoutines(rs);routineEditor();return;
+  }
+  if(b.id==='rtCancel'){editRid=null;formDays=[];return routineEditor()}
+  if(b.id==='rtStd'){saveRoutines(STD.map(([k,t],i)=>({id:'rt'+Date.now().toString(36)+i,t,s:k,d:[]})));return routineEditor()}
+  if(b.id==='rtPin')return pinForm(true,routineEditor,'Ganti PIN Store Head');
+  if(b.id==='rtLock'){lock();return close()}
+  if(b.id==='rtDone'){editRid=null;return close()}
+  const it=b.closest('.rt-i');if(!it)return;const rid=it.dataset.rid,r=rs.find(x=>x.id===rid);if(!r)return;
+  if(b.dataset.ract==='edit'){editRid=rid;formShift=SH.includes(r.s)?r.s:'U';formDays=Array.isArray(r.d)?r.d.slice():[];routineEditor();setTimeout(()=>$('#rtT').focus(),50);return}
+  if(b.dataset.ract==='del'){const i=rs.indexOf(r);rs.splice(i,1);if(editRid===rid)editRid=null;saveRoutines(rs);routineEditor();
+   toast('Tugas rutin dihapus',()=>{const l=routines().slice();l.splice(i,0,r);saveRoutines(l);if(document.querySelector('#pb .rt-form'))routineEditor()})}
+ });
+
+ /* --- gabung data dari perangkat lain (dipakai sinkronisasi) --- */
+ const stamp=x=>Number(x&&(x.u||x.doneAt||x.at))||0;
+ window.ofaMergeMeta=function(local,server){
+  const out=Object.assign({},server||{},local||{}),L=(local&&local[KEY])||{},S=(server&&server[KEY])||{},D={};
+  new Set([...Object.keys(L),...Object.keys(S)]).forEach(day=>{
+   const map={};
+   (S[day]||[]).forEach(x=>{if(x&&x.id)map[x.id]=x});
+   (L[day]||[]).forEach(x=>{if(!x||!x.id)return;const o=map[x.id];if(!o||stamp(x)>=stamp(o))map[x.id]=x});
+   D[day]=Object.values(map);
+  });
+  Object.keys(D).sort().slice(0,-31).forEach(k=>delete D[k]);
+  out[KEY]=D;return out;
+ };
+
  const baseRender=render;
  render=async function(){await baseRender();renderDaily()};
  setInterval(()=>{if(today()!==shownDay)renderDaily()},60000);
@@ -827,6 +976,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!ready||!pending[k])return;
   const mark=pending[k];busy++;
   try{
+   if(k==='ofa_meta'&&window.ofaMergeMeta){
+    const cur=((await call('hubLoad',{})).data||{}).ofa_meta;
+    if(cur&&cur.ts>(ts[k]||0)){const merged=window.ofaMergeMeta(ls.get(k,{}),cur.value||{});rawSet(k,merged);meta=merged;try{renderDaily()}catch(e){}}
+   }
    const r=await call('hubSave',{key:k,value:ls.get(k,null)});
    setTs(k,r.ts);
    if(pending[k]===mark){delete pending[k];savePending()}
@@ -1054,9 +1207,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    ras.forEach((r,i)=>L.push((i+1)+'. '+nama(r.name)+': '+rp(r.grossSales)+(r.target?' / '+rp(r.target)+' ('+pct(r.achievement)+')':'')+' · UPT '+(r.upt||0).toFixed(2).replace('.',',')+' · EAC '+pct(r.eacRate)));
   }
   const f=focusLines(d);if(f.length){L.push('');L.push('🎯 *Fokus hari ini*');f.forEach(x=>L.push('• '+x))}
-  let tasks=[];try{const all=(meta.__daily||{}),k=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());tasks=(all[k]||[]).filter(x=>x&&x.t&&!x.done)}catch(e){}
+  let tg=[];try{tg=window.ofaTodayTasks?window.ofaTodayTasks():[]}catch(e){}
   if(window.ofaShiftBrief){const sb=window.ofaShiftBrief();if(sb.length){L.push('');L.push('🕒 *Jadwal hari ini*');sb.forEach(x=>L.push(x))}}
-  if(tasks.length){L.push('');L.push('✅ *Tugas hari ini*');tasks.forEach(x=>L.push('• '+x.t))}
+  if(tg.length){L.push('');L.push('✅ *Tugas hari ini*');tg.forEach(g=>{L.push('_'+g.label+(g.names.length?' ('+g.names.join(', ')+')':'')+'_');g.items.forEach(t=>L.push('• '+t))})}
   L.push('');L.push('Semangat tim, kita kejar target hari ini! 💪');
   return L.join('\n');
  }
@@ -1120,6 +1273,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   al.innerHTML=onPeak.length>=2?`<div class="sh-alert ok">✓ Jam ramai ${esc(pk.label)}${share}: ${onPeak.length} orang bertugas (${onPeak.map(m=>esc(first(m.n))).join(', ')})</div>`:
    `<div class="sh-alert warn">⚠ Jam ramai ${esc(pk.label)}${share}: hanya ${onPeak.length} orang bertugas. Pertimbangkan menggeser 1 orang ke shift Sore.</div>`;
  };
+ window.ofaShiftInfo=function(date){const {ty,groups}=dayInfo(date||new Date());return {ty,groups}};
  window.ofaShiftBrief=function(){
   const {ty,groups}=dayInfo(new Date()),out=[];
   ['P','M','S'].forEach(k=>{if(groups[k])out.push(ty[k].n+' ('+ty[k].s+'–'+ty[k].e+'): '+groups[k].map(m=>first(m.n)).join(', '))});
@@ -1170,6 +1324,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const baseRender=render;render=async function(){await baseRender();renderShift()};
  const baseTeam=renderTeam;renderTeam=async function(){await baseTeam();renderShift()};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderShift()});
+ const baseShift=window.renderShift;window.renderShift=function(){baseShift();if(window.renderDaily)window.renderDaily()};
  renderShift();
 })();
 </script>
