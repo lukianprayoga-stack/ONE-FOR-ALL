@@ -1,6 +1,6 @@
 /* Service worker ONE FOR ALL.
    Naikkan angka versi setiap kali isi aplikasi diubah agar HP mengambil versi baru. */
-const CACHE = 'ofa-v1';
+const CACHE = 'ofa-v2';
 const SHELL = [
   './',
   './index.html',
@@ -13,7 +13,12 @@ const SHELL = [
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
+  // File yang belum ada (mis. ikon belum diupload) dilewati agar aplikasi tetap terpasang.
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(cache => Promise.all(SHELL.map(url => cache.add(url).catch(() => null))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', event => {
