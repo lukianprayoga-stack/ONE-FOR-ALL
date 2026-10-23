@@ -408,6 +408,10 @@ textarea.in{min-height:240px;resize:vertical}
 .dp-badge.wait{color:var(--mut)}
 .dp-more{border:0;background:none;color:var(--mut);font-size:13px;font-weight:700;padding:8px 2px 0}
 .dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.dsr-warn{background:#fff4e5;color:#7a3e00;border:1px solid #f5c58a;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0 0 10px}
+.dsr-warn b{color:inherit}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .dsr-warn{background:#3a2608;color:#ffd9a8;border-color:#7a4a12}}
+:root[data-theme=dark] .dsr-warn{background:#3a2608;color:#ffd9a8;border-color:#7a4a12}
 .dp-photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .dp-photos figure{margin:0}
 .dp-photos .ph{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--card);display:grid;place-items:center;color:var(--mut);font-size:12px;text-align:center}
@@ -964,6 +968,11 @@ renderTeam();
  }
  $('#toastBtn').onclick=()=>{if(undo)undo();undo=null;$('#toast').classList.remove('on')};
  window.ofaToast=toast;
+ window.ofaDsrWarn=function(b){
+  if(!b||!b.rows)return '';
+  const M=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],d=k=>{const p=String(k||'').split('-');return p.length===3?(+p[2])+' '+M[+p[1]-1]:''};
+  return '<div class="dsr-warn" role="alert">⚠ <b>Kode SKU di Database DSR rusak</b> pada '+Number(b.rows).toLocaleString('id-ID')+' baris penjualan ('+d(b.from)+'–'+d(b.to)+'), terbaca sebagai angka ilmiah sehingga angka per produk di bawah belum akurat. Perbaikan: upload ulang file DSR periode itu lewat Sales Tracking versi terbaru.</div>';
+ };
 
  $('#dlForm').onsubmit=e=>{
   e.preventDefault();const inp=$('#dlIn'),t=inp.value.trim();if(!t)return;
@@ -1844,7 +1853,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const trend=h?`Upload sebelumnya (${tgl(h.d)}): generic ${pc(h.gt?h.gd/h.gt:0)} · color ${pc(h.ct?h.cd/h.ct:0)}`:'';
   const T=todo(),mv=moved(),done=T.filter(o=>mv.includes(o.k)).length;
   $id('ivSub').textContent='Inventory '+tgl(m.date)+(m.salesEnd?' · sales s/d '+tgl(m.salesEnd):'');
-  $id('ivBody').innerHTML=`<div class="iv-grid">${tile('By generic',gp,s.genericDisplayed,s.genericTotal)}${tile('By color',cp,s.colorDisplayed,s.colorTotal)}</div>
+  $id('ivBody').innerHTML=`${window.ofaDsrWarn(m.dsrBroken)}<div class="iv-grid">${tile('By generic',gp,s.genericDisplayed,s.genericTotal)}${tile('By color',cp,s.colorDisplayed,s.colorTotal)}</div>
    ${trend?`<p class="iv-trend">${trend}</p>`:''}
    <button type="button" class="iv-todo ${T.length?'':'ok'}" data-list="todo"><b>${nf(T.length)}</b><span>${T.length?'warna masih di gudang, belum dipajang':'Semua warna yang ada stoknya sudah dipajang'}<small>${T.length?(done?done+' sudah ditandai dipindah · ':'')+'Lihat daftar & lokasi bin →':''}</small></span></button>`;
   const c=cfg(),cnt={},pcs={};TIERS.forEach(t=>{cnt[t[0]]=0;pcs[t[0]]=0});
@@ -2164,7 +2173,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const S=suggest(),pcs=S.list.reduce((t,r)=>t+r.need,0),c=cfg();
   $id('rsSub').textContent='Stok cukup untuk '+c.cover+' hari · sales s/d '+tgl(data.salesEnd)+(data.stockDate?' · stok '+tgl(data.stockDate):'');
   const R=reqs().slice(0,6);
-  body.innerHTML=`<button type="button" class="iv-todo ${S.list.length?'':'ok'}" data-rs="new"><b>${nf(S.list.length)}</b><span>${S.list.length?'SKU perlu restock · '+nf(pcs)+' pcs':'Tidak ada SKU yang perlu restock'}<small>${S.list.length?'Pilih & buat permintaan →':''}${S.skipped?(S.list.length?' · ':'')+S.skipped+' SKU sudah ada di permintaan berjalan':''}</small></span></button>
+  body.innerHTML=`${window.ofaDsrWarn(data.dsrBroken)}<button type="button" class="iv-todo ${S.list.length?'':'ok'}" data-rs="new"><b>${nf(S.list.length)}</b><span>${S.list.length?'SKU perlu restock · '+nf(pcs)+' pcs':'Tidak ada SKU yang perlu restock'}<small>${S.list.length?'Pilih & buat permintaan →':''}${S.skipped?(S.list.length?' · ':'')+S.skipped+' SKU sudah ada di permintaan berjalan':''}</small></span></button>
    ${R.length?'<p class="hint" style="margin:12px 0 2px">Permintaan terakhir</p>'+R.map(reqRow).join(''):''}`;
  };
  function arrived(r){let n=0;r.items.forEach(i=>{const a=availOf(i.k);if(a!=null&&a>i.a0)n++});return n}
@@ -2330,7 +2339,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!data||!data.ea){body.innerHTML='<p class="dp-empty">Analisis muncul setelah DSR diupload.</p>';return}
   const E=eaAgg(90),R=retAgg(90),newN=E.list.filter(g=>g.flag==='new').length,outN=E.list.filter(g=>g.flag==='out').length;
   $id('lsSub').textContent='90 hari terakhir · sales s/d '+tgl(data.salesEnd);
-  body.innerHTML=`<button type="button" class="iv-todo ct-btn" data-ls="ea"><b>${nf(E.qty)}</b><span>pcs lost sales lewat Endless Aisle · ${jt(E.net)} (${(E.share*100).toFixed(1).replace('.',',')}% sales)<small>${nf(E.list.length)} produk · ${newN} belum pernah ada di toko · ${outN} stok toko habis →</small></span></button>
+  body.innerHTML=`${window.ofaDsrWarn(data.dsrBroken)}<button type="button" class="iv-todo ct-btn" data-ls="ea"><b>${nf(E.qty)}</b><span>pcs lost sales lewat Endless Aisle · ${jt(E.net)} (${(E.share*100).toFixed(1).replace('.',',')}% sales)<small>${nf(E.list.length)} produk · ${newN} belum pernah ada di toko · ${outN} stok toko habis →</small></span></button>
    <button type="button" class="iv-todo" data-ls="ret" style="margin-top:8px"><b>${nf(R.inv)}</b><span>invoice retur · ${jt(R.net)}<small>${nf(R.list.length)} produk diretur · lihat rate retur per produk →</small></span></button>`;
  };
  function chips(){return `<div class="dp-chips" id="lsPer">${[30,90,0].map(p=>`<button type="button" data-per="${p}" class="${p===per?'on':''}">${PER[p]}</button>`).join('')}</div>`}
