@@ -1788,7 +1788,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    res=await api('uploadInventoryBySku',Object.assign(arg,{force:true}));
   }
   setSku(res);
-  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok)';
+  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok'+(res.sheet?', sheet "'+res.sheet+'"':'')+')';
  }
  $id('ivFile').onchange=async e=>{
   const files=[...(e.target.files||[])];e.target.value='';if(!files.length)return;
