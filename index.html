@@ -408,6 +408,16 @@ textarea.in{min-height:240px;resize:vertical}
 .dp-badge.wait{color:var(--mut)}
 .dp-more{border:0;background:none;color:var(--mut);font-size:13px;font-weight:700;padding:8px 2px 0}
 .dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.deck{max-width:560px;margin-top:26px}
+.deck-tabs{position:sticky;top:var(--hdr,64px);z-index:4;display:flex;gap:4px;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.deck-tabs button{flex:1;min-width:0;border:0;background:none;border-radius:999px;padding:9px 4px;font-weight:700;font-size:13.5px;color:var(--mut);white-space:nowrap}
+.deck-tabs button.on{background:var(--ink);color:var(--inkfg)}
+.deck-track{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;transition:height .25s ease}
+.deck-track::-webkit-scrollbar{display:none}
+.deck-pg{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always;padding-bottom:4px}
+.deck-pg>section{max-width:none}
+.deck-pg>section:first-child{margin-top:14px}
+.deck-hint{display:block;text-align:center;font-size:12px;color:var(--mut);margin-top:10px}
 .wk-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:12px}
 .wk-hero b{display:block;font-size:30px;letter-spacing:-1px;line-height:1.1}
 .wk-hero span{color:var(--mut);font-size:13px}
@@ -638,73 +648,86 @@ textarea.in{min-height:240px;resize:vertical}
     <a class="btn" href="#tools">Jelajahi tools</a>
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
     <button type="button" class="ck-bar" id="ckOpen"><span>🔍</span><div><b>Cek stok produk</b><small>Cari nama, warna, kode, atau scan barcode</small></div><i>📷</i></button>
-    <section class="sales loading" id="sales" aria-label="Sales bulan ini">
-      <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
-      <div id="slBody">
-        <div class="sl-main"><b id="slGross">Rp000 jt</b><span id="slTarget">dari target</span></div>
-        <div class="sl-bar"><i id="slFill"></i><u id="slPace" hidden></u></div>
-        <div class="sl-legend"><span id="slAch">&nbsp;</span><span id="slPaceTxt"></span></div>
-        <div class="sl-grid">
-          <div><small id="slYdayL">Kemarin</small><b id="slYday">Rp0 jt</b><em id="slYdayT">&nbsp;</em></div>
-          <div><small>Butuh/hari</small><b id="slNeed">Rp0 jt</b><em id="slNeedT">&nbsp;</em></div>
-          <div><small>Proyeksi</small><b id="slProj">0%</b><em id="slProjT">&nbsp;</em></div>
-        </div>
-        <div class="sl-top-ra" id="slTopRa"></div>
+    <div class="deck" id="deck">
+      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button></div>
+      <div class="deck-track" id="deckTrack">
+      <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
+        <section class="sales loading" id="sales" aria-label="Sales bulan ini">
+          <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
+          <div id="slBody">
+            <div class="sl-main"><b id="slGross">Rp000 jt</b><span id="slTarget">dari target</span></div>
+            <div class="sl-bar"><i id="slFill"></i><u id="slPace" hidden></u></div>
+            <div class="sl-legend"><span id="slAch">&nbsp;</span><span id="slPaceTxt"></span></div>
+            <div class="sl-grid">
+              <div><small id="slYdayL">Kemarin</small><b id="slYday">Rp0 jt</b><em id="slYdayT">&nbsp;</em></div>
+              <div><small>Butuh/hari</small><b id="slNeed">Rp0 jt</b><em id="slNeedT">&nbsp;</em></div>
+              <div><small>Proyeksi</small><b id="slProj">0%</b><em id="slProjT">&nbsp;</em></div>
+            </div>
+            <div class="sl-top-ra" id="slTopRa"></div>
+          </div>
+          <div class="sl-msg" id="slMsg" hidden></div>
+          <div class="sl-actions">
+            <button class="btn light" type="button" id="slBrief">📝 Buat Briefing</button>
+            <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
+          </div>
+          <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
+        </section>
+        <section class="shift" id="shift" aria-label="Jadwal hari ini">
+          <div class="sh-head"><div><h3>Jadwal Hari Ini</h3><p id="shDate"></p></div><button class="btn ghost" type="button" id="shPlan">Atur Jadwal</button></div>
+          <div class="sh-groups" id="shGroups"></div>
+          <div id="shAlert"></div>
+        </section>
+        <section class="daily" id="daily" aria-label="Tugas hari ini">
+          <div class="dl-head">
+            <div class="dl-ring" id="dlRing"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="19"/><circle class="val" id="dlArc" cx="22" cy="22" r="19"/></svg><b id="dlPct">0%</b></div>
+            <div class="dl-txt"><h3>Tugas Hari Ini</h3><p id="dlSum">Belum ada tugas</p></div>
+          </div>
+          <div class="dl-mini" id="dlMini"></div>
+          <div class="seg dl-seg" id="dlSeg" role="group" aria-label="Shift untuk tugas baru"><button type="button" data-ds="U" class="on">Umum</button><button type="button" data-ds="P">Pagi</button><button type="button" data-ds="M">Middle</button><button type="button" data-ds="S">Sore</button></div>
+          <form class="dl-add" id="dlForm" autocomplete="off"><input type="hidden" id="dlShift" value="U"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
+          <div id="dlCarry"></div>
+          <div id="dlList"></div>
+          <button class="dl-toggle" id="dlToggle" type="button" hidden></button>
+          <ul class="dl-list done" id="dlDone" hidden></ul>
+          <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
+        </section>
       </div>
-      <div class="sl-msg" id="slMsg" hidden></div>
-      <div class="sl-actions">
-        <button class="btn light" type="button" id="slBrief">📝 Buat Briefing</button>
-        <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
+      <div class="deck-pg" role="tabpanel" aria-label="Laporan">
+        <section class="rs" id="wk" aria-label="Laporan mingguan">
+          <div class="sh-head"><div><h3>Laporan Mingguan</h3><p id="wkSub">Ringkasan minggu lalu untuk Store Manager</p></div></div>
+          <div id="wkBody"></div>
+        </section>
+        <section class="rs" id="ls" aria-label="Lost sales dan retur">
+          <div class="sh-head"><div><h3>Lost Sales &amp; Retur</h3><p id="lsSub">Permintaan Endless Aisle dan barang yang diretur</p></div></div>
+          <div id="lsBody"></div>
+        </section>
       </div>
-      <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
-    </section>
-    <section class="rs" id="wk" aria-label="Laporan mingguan">
-      <div class="sh-head"><div><h3>Laporan Mingguan</h3><p id="wkSub">Ringkasan minggu lalu untuk Store Manager</p></div></div>
-      <div id="wkBody"></div>
-    </section>
-    <section class="shift" id="shift" aria-label="Jadwal hari ini">
-      <div class="sh-head"><div><h3>Jadwal Hari Ini</h3><p id="shDate"></p></div><button class="btn ghost" type="button" id="shPlan">Atur Jadwal</button></div>
-      <div class="sh-groups" id="shGroups"></div>
-      <div id="shAlert"></div>
-    </section>
-    <section class="daily" id="daily" aria-label="Tugas hari ini">
-      <div class="dl-head">
-        <div class="dl-ring" id="dlRing"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="19"/><circle class="val" id="dlArc" cx="22" cy="22" r="19"/></svg><b id="dlPct">0%</b></div>
-        <div class="dl-txt"><h3>Tugas Hari Ini</h3><p id="dlSum">Belum ada tugas</p></div>
+      <div class="deck-pg" role="tabpanel" aria-label="Stok">
+        <section class="inv" id="inv" aria-label="Kepatuhan display">
+          <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
+          <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
+          <div id="ivBody"></div>
+          <div class="iv-status" id="ivStatus"></div>
+          <div class="iv-sku" id="ivSku"></div>
+          <div id="ctBox"></div>
+        </section>
+        <section class="perf" id="perf" aria-label="Performa produk">
+          <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
+          <div id="pfBody"></div>
+        </section>
+        <section class="rs" id="rs" aria-label="Permintaan restock">
+          <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
+          <div id="rsBody"></div>
+        </section>
       </div>
-      <div class="dl-mini" id="dlMini"></div>
-      <div class="seg dl-seg" id="dlSeg" role="group" aria-label="Shift untuk tugas baru"><button type="button" data-ds="U" class="on">Umum</button><button type="button" data-ds="P">Pagi</button><button type="button" data-ds="M">Middle</button><button type="button" data-ds="S">Sore</button></div>
-      <form class="dl-add" id="dlForm" autocomplete="off"><input type="hidden" id="dlShift" value="U"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
-      <div id="dlCarry"></div>
-      <div id="dlList"></div>
-      <button class="dl-toggle" id="dlToggle" type="button" hidden></button>
-      <ul class="dl-list done" id="dlDone" hidden></ul>
-      <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
-    </section>
-    <section class="inv" id="inv" aria-label="Kepatuhan display">
-      <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
-      <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
-      <div id="ivBody"></div>
-      <div class="iv-status" id="ivStatus"></div>
-      <div class="iv-sku" id="ivSku"></div>
-      <div id="ctBox"></div>
-    </section>
-    <section class="perf" id="perf" aria-label="Performa produk">
-      <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
-      <div id="pfBody"></div>
-    </section>
-    <section class="rs" id="rs" aria-label="Permintaan restock">
-      <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
-      <div id="rsBody"></div>
-    </section>
-    <section class="rs" id="ls" aria-label="Lost sales dan retur">
-      <div class="sh-head"><div><h3>Lost Sales &amp; Retur</h3><p id="lsSub">Permintaan Endless Aisle dan barang yang diretur</p></div></div>
-      <div id="lsBody"></div>
-    </section>
-    <section class="disp" id="disp" aria-label="Riwayat ganti display">
-      <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
-      <div class="dp-list" id="dpList"></div>
-    </section>
+      <div class="deck-pg" role="tabpanel" aria-label="Display">
+        <section class="disp" id="disp" aria-label="Riwayat ganti display">
+          <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
+          <div class="dp-list" id="dpList"></div>
+        </section>
+      </div>
+      </div>
+    </div>
   </div>
   <div class="cluster" id="cl"></div>
 </div>
@@ -2469,6 +2492,36 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const baseRender=render;render=async function(){await baseRender();renderLost()};
  setTimeout(()=>load(false),4800);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
+})();
+/* ====== DASHBOARD GESER (4 halaman) ====== */
+(function(){
+ const deck=document.getElementById('deck'),track=document.getElementById('deckTrack');if(!deck||!track)return;
+ const tabs=[...document.querySelectorAll('#deckTabs [data-pg]')],pages=[...track.children],hdr=document.querySelector('header');
+ let cur=0,raf=0;
+ const setHdr=()=>deck.style.setProperty('--hdr',(hdr?hdr.offsetHeight:0)+'px');
+ const fit=()=>{track.style.height=pages[cur].offsetHeight+'px'};
+ function keepTop(){
+  const top=deck.getBoundingClientRect().top,h=hdr?hdr.offsetHeight:0;
+  if(top<h)window.scrollTo({top:window.scrollY+top-h-8,behavior:'smooth'});
+ }
+ function mark(i,fromSwipe){
+  if(i<0||i>=pages.length)return;
+  const changed=i!==cur;cur=i;
+  tabs.forEach((t,j)=>{t.classList.toggle('on',j===i);t.setAttribute('aria-selected',j===i?'true':'false')});
+  fit();
+  if(changed){try{sessionStorage.setItem('ofa_deck',String(i))}catch(e){}if(fromSwipe)keepTop()}
+ }
+ function go(i,smooth){track.scrollTo({left:i*track.clientWidth,behavior:smooth?'smooth':'auto'});mark(i)}
+ tabs.forEach((t,i)=>t.addEventListener('click',()=>{go(i,true);keepTop()}));
+ track.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));if(i!==cur)mark(i,true)})},{passive:true});
+ if(window.ResizeObserver){const ro=new ResizeObserver(()=>fit());pages.forEach(p=>ro.observe(p))}
+ window.addEventListener('resize',()=>{setHdr();go(cur,false)});
+ // buka halaman yang berisi kartu tertentu, mis. ofaDeckShow('rs')
+ window.ofaDeckShow=function(id){const el=document.getElementById(id);const i=pages.findIndex(p=>p.contains(el));if(i>=0)go(i,true)};
+ setHdr();
+ let start=0;try{start=Math.min(pages.length-1,Math.max(0,Number(sessionStorage.getItem('ofa_deck'))||0))}catch(e){}
+ requestAnimationFrame(()=>go(start,false));
+ setTimeout(fit,1500);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
