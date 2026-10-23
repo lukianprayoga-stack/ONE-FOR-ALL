@@ -514,6 +514,33 @@ textarea.in{min-height:240px;resize:vertical}
 .ck-loc em{font-style:normal;font-weight:700}
 @media(max-width:760px){.ck-bar{max-width:none;margin-top:12px}}
 @media(max-width:760px){.bnav{grid-template-columns:repeat(5,1fr)!important}}
+/* ====== PERMINTAAN RESTOCK ====== */
+.rs{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.rs-req{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--bg);border-radius:14px;padding:11px 12px;margin-top:6px;text-align:left;color:var(--fg);font-size:13px}
+.rs-req span{flex:1;min-width:0;line-height:1.35}
+.rs-req span small{display:block;color:var(--mut);font-size:12px}
+.rs-st{flex:none;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:800;color:#fff;background:#2f80ed}
+.rs-st.dikirim{background:#8b5cf6}.rs-st.diterima{background:#22a559}.rs-st.batal{background:#9ca3af}
+.rs-grp{padding:10px 0;border-bottom:1px solid var(--line)}
+.rs-gh{display:flex;gap:10px;align-items:center}
+.rs-gh .iv-img{width:48px;height:48px}
+.rs-gh div{flex:1;min-width:0;font-size:13px;line-height:1.3}
+.rs-gh b{display:block;font-size:14px}
+.rs-gh small{color:var(--mut);font-size:12px}
+.rs-row{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:13px}
+.rs-row input[type=checkbox]{width:20px;height:20px;flex:none}
+.rs-row span{flex:1;min-width:0;line-height:1.3}
+.rs-row span small{display:block;color:var(--mut);font-size:11.5px}
+.rs-row .in{width:64px;flex:none;padding:6px 8px;text-align:center}
+.rs-row.off{opacity:.45}
+.rs-foot{position:sticky;bottom:-1px;background:var(--card);padding:10px 0 4px;border-top:1px solid var(--line);margin-top:8px}
+.rs-foot .btn{width:100%}
+.rs-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rs-item span{flex:1;min-width:0}
+.rs-item small{display:block;color:var(--mut);font-size:11.5px}
+.rs-item b.ok{color:#1a8a49}
+.rs-txt{white-space:pre-wrap;font-size:12px;background:var(--bg);border-radius:12px;padding:10px;max-height:180px;overflow:auto;margin:10px 0}
+@media(max-width:760px){.rs{margin-top:12px;max-width:none;border-radius:20px;padding:16px}}
 </style>
 </head>
 <body>
@@ -593,6 +620,10 @@ textarea.in{min-height:240px;resize:vertical}
     <section class="perf" id="perf" aria-label="Performa produk">
       <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
       <div id="pfBody"></div>
+    </section>
+    <section class="rs" id="rs" aria-label="Permintaan restock">
+      <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
+      <div id="rsBody"></div>
     </section>
     <section class="disp" id="disp" aria-label="Riwayat ganti display">
       <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
@@ -2073,6 +2104,160 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  };
  $id('ckOpen').onclick=()=>window.ofaOpenStock();
  setTimeout(()=>load(false).catch(()=>{}),5000);
+})();
+/* ====== PERMINTAAN RESTOCK ====== */
+(function(){
+ const box=document.getElementById('rs');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_restock',TTL=60*60e3,STORE='EIGER Store Soekarno SoloBaru (7014)';
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const DEF={cover:30,minSold:2};
+ const ST={diminta:'Diminta',dikirim:'Dikirim DC',diterima:'Diterima',batal:'Dibatalkan'};
+ let data=null,busy=false,sel=null,view=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const cfg=()=>Object.assign({},DEF,meta.__restockCfg||{});
+ const reqs=()=>Array.isArray(meta.__restock)?meta.__restock:[];
+ function saveReqs(l){meta.__restock=l.slice(0,40);ls.set('ofa_meta',meta)}
+ const rows=()=>data&&data.items?data.items.map(a=>({k:a[0],n:a[1],c:a[2],z:a[3],l3:a[4],l4:a[5],q30:a[6],q90:a[7],last:a[8],av:a[9],price:a[10],img:a[11]})):[];
+ function availOf(k){
+  const r=rows().find(x=>x.k===k);if(r)return r.av;
+  try{const s=JSON.parse(localStorage.getItem('ofa_stok')||'null');if(s&&s.items)for(const it of s.items)for(const z of it[8])if(z[1]===k)return z[2]}catch(e){}
+  return null;
+ }
+ function suggest(){
+  const c=cfg(),open={};
+  reqs().filter(r=>r.st==='diminta'||r.st==='dikirim').forEach(r=>r.items.forEach(i=>open[i.k]=1));
+  const out=[];let skipped=0;
+  rows().forEach(r=>{
+   const need=Math.ceil(r.q30*c.cover/30)-r.av;
+   if(need<=0||!(r.q30>=c.minSold||r.av<=0))return;
+   if(open[r.k]){skipped++;return}
+   out.push(Object.assign({need},r));
+  });
+  return {list:out.sort((a,b)=>b.q30-a.q30||a.n.localeCompare(b.n)),skipped};
+ }
+ window.renderRestock=function(){
+  const body=$id('rsBody');if(!body)return;
+  if(!data||!data.items){body.innerHTML='<p class="dp-empty">Saran restock muncul setelah DSR dan inventory by SKU diupload.</p>';return}
+  const S=suggest(),pcs=S.list.reduce((t,r)=>t+r.need,0),c=cfg();
+  $id('rsSub').textContent='Stok cukup untuk '+c.cover+' hari · sales s/d '+tgl(data.salesEnd)+(data.stockDate?' · stok '+tgl(data.stockDate):'');
+  const R=reqs().slice(0,6);
+  body.innerHTML=`<button type="button" class="iv-todo ${S.list.length?'':'ok'}" data-rs="new"><b>${nf(S.list.length)}</b><span>${S.list.length?'SKU perlu restock · '+nf(pcs)+' pcs':'Tidak ada SKU yang perlu restock'}<small>${S.list.length?'Pilih & buat permintaan →':''}${S.skipped?(S.list.length?' · ':'')+S.skipped+' SKU sudah ada di permintaan berjalan':''}</small></span></button>
+   ${R.length?'<p class="hint" style="margin:12px 0 2px">Permintaan terakhir</p>'+R.map(reqRow).join(''):''}`;
+ };
+ function arrived(r){let n=0;r.items.forEach(i=>{const a=availOf(i.k);if(a!=null&&a>i.a0)n++});return n}
+ function reqRow(r){
+  const pcs=r.items.reduce((t,i)=>t+i.q,0),arr=r.st==='batal'?0:arrived(r);
+  return `<button type="button" class="rs-req" data-rq="${esc(r.id)}"><span><b>${esc(r.id)}</b> · ${tgl(r.at)}<small>${r.items.length} SKU · ${nf(pcs)} pcs${arr?' · '+arr+' SKU sudah datang':''}</small></span><i class="rs-st ${r.st}">${ST[r.st]||r.st}</i></button>`;
+ }
+ /* --- pilih saran --- */
+ function openNew(){
+  const S=suggest();sel={};S.list.forEach(r=>sel[r.k]=r.need);
+  view={list:S.list,q:'',cat:''};
+  openModal('Saran Restock',`<div class="iv-list"><p class="hint" style="margin:0 0 8px">Jumlah saran = kebutuhan ${cfg().cover} hari (terjual 30 hari terakhir) dikurangi stok sekarang. Hapus centang atau ubah jumlah bila perlu.</p>
+   <div class="iv-tools"><input class="in" id="rsQ" type="search" placeholder="Cari nama, warna, kode…"></div>
+   <div class="dp-chips" id="rsCats">${['',...new Set(S.list.map(r=>r.l3).filter(Boolean))].map(x=>`<button type="button" data-cat="${esc(x)}" class="${x?'':'on'}">${esc(x||'Semua')}</button>`).join('')}</div>
+   <div id="rsList"></div><div class="rs-foot"><button class="btn" type="button" id="rsMake"></button></div></div>`);
+  $id('rsQ').addEventListener('input',e=>{view.q=e.target.value.trim().toLowerCase();drawList()});
+  drawList();
+ }
+ function drawList(){
+  const L=view.list.filter(r=>(!view.cat||r.l3===view.cat)&&(!view.q||(r.n+' '+r.c+' '+r.k+' '+r.l4+' '+r.z).toLowerCase().includes(view.q)));
+  const groups=[],gi={};
+  L.forEach(r=>{const key=r.k.slice(0,9)+'|'+r.c;if(gi[key]==null){gi[key]=groups.length;groups.push({r,items:[]})}groups[gi[key]].items.push(r)});
+  $id('rsList').innerHTML=groups.length?groups.slice(0,80).map(g=>`<div class="rs-grp"><div class="rs-gh"><span class="iv-img">${g.r.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(g.r.img)}" alt="">`:'🏷️'}</span><div><b>${esc(g.r.n)}</b><small>${esc(g.r.c)} · ${esc(g.r.l4||g.r.l3||'-')}${g.r.price?' · '+rp(g.r.price):''}</small></div></div>
+   ${g.items.map(r=>`<label class="rs-row${sel[r.k]?'':' off'}"><input type="checkbox" data-ck="${r.k}" ${sel[r.k]?'checked':''}><span>Ukuran <b>${esc(r.z)}</b><small>terjual 30h ${nf(r.q30)} · stok ${nf(r.av)}${r.last?' · terakhir '+tgl(r.last):''}</small></span><input class="in" type="number" min="1" inputmode="numeric" data-q="${r.k}" value="${sel[r.k]||r.need}"></label>`).join('')}</div>`).join('')
+   +(groups.length>80?`<p class="hint">${groups.length-80} produk lain. Perjelas pencarian.</p>`:''):'<p class="dp-empty">Tidak ada saran.</p>';
+  foot();
+ }
+ function foot(){
+  const ks=Object.keys(sel).filter(k=>sel[k]>0),pcs=ks.reduce((t,k)=>t+sel[k],0);
+  const b=$id('rsMake');if(b){b.textContent=ks.length?'Buat permintaan · '+ks.length+' SKU · '+nf(pcs)+' pcs':'Pilih minimal 1 SKU';b.disabled=!ks.length}
+ }
+ /* --- detail permintaan --- */
+ function waText(r){
+  const pcs=r.items.reduce((t,i)=>t+i.q,0);
+  return ['*PERMINTAAN RESTOCK*',STORE,'No: '+r.id+' · '+tgl(r.at)+' '+String(r.at).slice(0,4),'Total: '+r.items.length+' SKU · '+pcs+' pcs','']
+   .concat(r.items.map((i,n)=>(n+1)+'. '+i.k+' · '+i.n+' '+i.c+' '+i.z+' · '+i.q+' pcs')).join('\n');
+ }
+ function openReq(id){
+  const r=reqs().find(x=>x.id===id);if(!r)return;
+  const pcs=r.items.reduce((t,i)=>t+i.q,0);
+  openModal('Permintaan '+r.id,`<p class="ct-meta">${tgl(r.at)} · ${r.items.length} SKU · ${nf(pcs)} pcs · <i class="rs-st ${r.st}">${ST[r.st]}</i></p>
+   <div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn" type="button" data-act="wa">Kirim via WA</button><button class="btn ghost" type="button" data-act="copy">Salin teks</button><button class="btn ghost" type="button" data-act="csv">Unduh CSV</button></div>
+   ${r.st==='diminta'||r.st==='dikirim'?`<p class="hint" style="margin:14px 0 6px">Perbarui status</p><div class="row" style="flex-wrap:wrap;gap:8px">${r.st==='diminta'?'<button class="btn ghost" type="button" data-act="dikirim">Sudah dikirim DC</button>':''}<button class="btn ghost" type="button" data-act="diterima">Sudah diterima</button><button class="btn ghost" type="button" data-act="batal">Batalkan</button></div>`:''}
+   <details style="margin-top:12px"><summary class="hint" style="cursor:pointer">Lihat teks WA</summary><div class="rs-txt" id="rsTxt">${esc(waText(r))}</div></details>
+   <p class="hint" style="margin:12px 0 0">Daftar barang · ✓ datang = stok sistem sudah bertambah sejak diminta</p>
+   <div>${r.items.map(i=>{const a=availOf(i.k),ok=r.st!=='batal'&&a!=null&&a>i.a0;return `<div class="rs-item"><span>${esc(i.n)} · ${esc(i.c)} · <b>${esc(i.z)}</b><small>${esc(i.k)} · stok saat diminta ${nf(i.a0)}${a!=null?' · sekarang '+nf(a):''}</small></span><b class="${ok?'ok':''}">${ok?'✓ datang':i.q+' pcs'}</b></div>`}).join('')}</div>`);
+  $id('pb').dataset.rq=id;
+ }
+ function setStatus(id,st){
+  const l=reqs().map(r=>r.id===id?Object.assign({},r,{st,log:(r.log||[]).concat([{st,at:new Date().toISOString()}])}):r);
+  saveReqs(l);renderRestock();openReq(id);
+ }
+ $('#pb').addEventListener('click',e=>{
+  if($id('rsList')){
+   const c=e.target.closest('[data-cat]');
+   if(c){view.cat=c.dataset.cat;c.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===c));return drawList()}
+   if(e.target.closest('#rsMake')){
+    const ks=view.list.filter(r=>sel[r.k]>0);if(!ks.length)return;
+    (window.ofaHeadGate||(f=>f()))(()=>{
+     const d=new Date(),day=d.getFullYear().toString().slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+     const n=reqs().filter(r=>r.id.startsWith('R'+day)).length+1,id='R'+day+'-'+n;
+     const r={id,at:d.toISOString(),st:'diminta',items:ks.map(x=>({k:x.k,n:x.n,c:x.c,z:x.z,q:sel[x.k],a0:x.av})),log:[{st:'diminta',at:d.toISOString()}]};
+     saveReqs([r].concat(reqs()));renderRestock();openReq(id);
+    });
+   }
+   return;
+  }
+  const id=$id('pb').dataset.rq,a=e.target.closest('[data-act]');
+  if(!id||!a||!$id('rsTxt'))return;
+  const r=reqs().find(x=>x.id===id);if(!r)return;
+  const act=a.dataset.act;
+  if(act==='wa')return window.open('https://wa.me/?text='+encodeURIComponent(waText(r)),'_blank');
+  if(act==='copy'){navigator.clipboard&&navigator.clipboard.writeText(waText(r)).then(()=>{a.textContent='Tersalin ✓'}).catch(()=>{});return}
+  if(act==='csv'){
+   const csv=['SKU,Nama,Warna,Ukuran,Qty'].concat(r.items.map(i=>[i.k,'"'+String(i.n).replace(/"/g,'""')+'"',i.c,i.z,i.q].join(','))).join('\n');
+   const url=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'})),l=document.createElement('a');l.href=url;l.download='restock_'+r.id+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);return;
+  }
+  if(ST[act])(window.ofaHeadGate||(f=>f()))(()=>setStatus(id,act));
+ });
+ $('#pb').addEventListener('change',e=>{
+  if(!$id('rsList'))return;
+  const ck=e.target.closest('[data-ck]'),q=e.target.closest('[data-q]');
+  if(ck){const k=ck.dataset.ck,inp=document.querySelector('[data-q="'+k+'"]');sel[k]=ck.checked?Math.max(1,Number(inp.value)||1):0;ck.closest('.rs-row').classList.toggle('off',!ck.checked);foot()}
+  if(q){const k=q.dataset.q,v=Math.max(0,Math.round(Number(q.value)||0));sel[k]=v;const c=document.querySelector('[data-ck="'+k+'"]');if(c){c.checked=v>0;c.closest('.rs-row').classList.toggle('off',!v)}foot()}
+ });
+ box.addEventListener('click',e=>{
+  if(e.target.closest('[data-rs=new]')&&data)return openNew();
+  const r=e.target.closest('[data-rq]');if(r)return openReq(r.dataset.rq);
+ });
+ $id('rsCfg').onclick=()=>(window.ofaHeadGate||(f=>f()))(()=>{
+  const c=cfg();
+  openModal('Aturan Restock',`<div class="pf-cfg"><span>Stok cukup untuk (hari)</span><input class="in" type="number" min="7" max="90" id="rsCover" value="${c.cover}"><span>Minimal terjual 30 hari</span><input class="in" type="number" min="1" max="20" id="rsMin" value="${c.minSold}"></div>
+   <p class="hint">SKU yang stoknya 0 dan terjual minimal 1 dalam 30 hari selalu disarankan.</p><div class="row"><button class="btn" type="button" id="rsSave">Simpan</button></div>`);
+  $id('rsSave').onclick=()=>{meta.__restockCfg={cover:Math.min(90,Math.max(7,Number($id('rsCover').value)||30)),minSold:Math.min(20,Math.max(1,Number($id('rsMin').value)||2))};ls.set('ofa_meta',meta);close();renderRestock()};
+ });
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&data&&Date.now()-(data.at||0)<TTL)return;
+  busy=true;
+  try{const d=await api('getRestockData',{});data=Object.assign(d,{at:Date.now()});try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}renderRestock()}
+  catch(err){if(!data)$id('rsBody').innerHTML='<p class="dp-empty">'+(/tidak dikenal/i.test(err.message)?'Perbarui Inventory.gs di Apps Script untuk memakai saran restock.':'Gagal memuat: '+esc(err.message))+'</p>'}
+  finally{busy=false}
+ }
+ renderRestock();
+ const baseRender=render;render=async function(){await baseRender();renderRestock()};
+ setTimeout(()=>load(false),4200);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
 })();
 </script>
 </body>
