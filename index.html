@@ -2802,8 +2802,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  try{ov=JSON.parse(localStorage.getItem(OK)||'null')}catch(e){}
  async function api(fn,arg){
   const pin=localStorage.getItem('salesTrackingPin')||'';
-  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
-  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+  // Koneksi ke Apps Script kadang putus (Failed to fetch) saat server sibuk menghitung ulang rumus.
+  // Fungsi yang aman diulang dicoba lagi otomatis sampai 2 kali.
+  const safe=/^katalog(Overview|Products|ProductDetail|Orders|Visitors|MasterUpload|MasterApply)$/.test(fn);
+  for(let t=0;;t++){
+   let r;
+   try{r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})})}
+   catch(e){if(safe&&t<2){await new Promise(ok=>setTimeout(ok,3000*(t+1)));continue}
+    throw new Error('Koneksi ke server terputus. Periksa internet lalu coba lagi.')}
+   let j;try{j=await r.json()}catch(e){if(safe&&t<2){await new Promise(ok=>setTimeout(ok,3000*(t+1)));continue}throw new Error('Server sedang sibuk. Coba lagi sebentar.')}
+   if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+  }
  }
  const gate=f=>(window.ofaHeadGate||(g=>g()))(f);
  const toast=t=>window.ofaToast&&window.ofaToast(t);
@@ -2863,7 +2872,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!force&&prod&&Date.now()-(prod.t||0)<TTL)return;
   loading.prod=1;if(tab==='produk'&&!prod)render();
   try{prod=Object.assign(await api('katalogProducts',{}),{t:Date.now()});mapItems();try{localStorage.setItem(PK,JSON.stringify(prod))}catch(e){}if(tab==='produk'&&page.classList.contains('open'))render()}
-  catch(e){if(tab==='produk'&&!prod)$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+  catch(e){if(tab==='produk'&&page.classList.contains('open')){if(!prod)$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p><p class="dp-empty"><button class="btn ghost" type="button" data-kta="reload">↻ Coba lagi</button></p>';else toast('Daftar produk belum diperbarui. Ketuk ↻ Muat ulang.')}}
   finally{loading.prod=0}
  }
 
@@ -3031,7 +3040,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    const r=await api('katalogMasterApply',{type:p.type,overwritePhotos:!!overwrite});
    prog('Selesai',1);mPend=null;
    $id('pb').innerHTML=masterResult(r,label,p.type);
-   loadOv(true);prod=null;IT=[];if(tab==='produk')render();loadProd(true);
+   loadOv(true);loadProd(true);
   }catch(e){const a=$id('ktMProg');if(a)a.innerHTML=errTxt(e)}
  }
  function masterResult(r,label,type){
@@ -3043,7 +3052,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  async function reapply(){
   openModal('Terapkan master','<p class="dp-empty">Menerapkan master harga &amp; foto ke Product Assets…</p>');
-  try{const r=await api('katalogMasterApply',{type:'all',overwritePhotos:false});$id('pb').innerHTML=masterResult(r,'Master harga & foto','all');prod=null;IT=[];if(tab==='produk')render();loadProd(true)}
+  try{const r=await api('katalogMasterApply',{type:'all',overwritePhotos:false});$id('pb').innerHTML=masterResult(r,'Master harga & foto','all');loadProd(true)}
   catch(e){$id('pb').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
  }
 
