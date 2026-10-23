@@ -408,6 +408,65 @@ textarea.in{min-height:240px;resize:vertical}
 .dp-badge.wait{color:var(--mut)}
 .dp-more{border:0;background:none;color:var(--mut);font-size:13px;font-weight:700;padding:8px 2px 0}
 .dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.kt{position:fixed;inset:0;z-index:15;background:var(--bg);overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.kt.open{display:block}
+body.kt-on{overflow:hidden}
+.kt-top{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;padding:12px 16px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.kt-back{flex:none;border:0;background:var(--card);border-radius:50%;width:40px;height:40px;font-size:19px;color:var(--fg)}
+.kt-top>div{flex:1;min-width:0}.kt-top b{display:block;font-size:17px;letter-spacing:-.2px}.kt-top small{display:block;color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kt-web{flex:none;padding:8px 13px;font-size:13px}.kt-web[hidden]{display:none}
+.kt-tabs{position:sticky;top:65px;z-index:3;display:flex;gap:4px;max-width:728px;margin:10px auto 0;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(10px)}
+@media(max-width:760px){.kt-tabs{margin:10px 16px 0}}
+.kt-tabs button{position:relative;flex:1;min-width:0;border:0;background:none;border-radius:999px;padding:9px 2px;font-weight:700;font-size:13px;color:var(--mut)}
+.kt-tabs button.on{background:var(--ink);color:var(--inkfg)}
+.kt-tabs i{display:inline-block;vertical-align:1px;margin-left:4px;min-width:17px;height:17px;border-radius:99px;background:#e5484d;color:#fff;font-size:10.5px;font-style:normal;font-weight:800;line-height:17px;padding:0 4px}
+.kt-body{max-width:760px;margin:0 auto;padding:14px 16px 96px}
+.kt-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kt-sum button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:10px;text-align:left;color:var(--fg);min-width:0}
+.kt-sum b{display:block;font-size:20px;letter-spacing:-.4px}.kt-sum small{display:block;color:var(--mut);font-size:11.5px;line-height:1.25}
+.kt-bad{color:#dc2626}
+.kt-tools{display:flex;gap:8px;margin:12px 0 2px}.kt-tools .in{flex:1;min-width:0}.kt-tools select.in{flex:0 0 38%}
+.kt-row{display:flex;gap:10px;width:100%;border:0;background:var(--card);border-radius:14px;padding:10px;margin-top:8px;text-align:left;color:var(--fg)}
+.kt-row .iv-img{width:64px;height:64px;background:var(--bg)}
+.kt-row .iv-img img{width:100%;height:100%;object-fit:cover}
+.kt-tx{flex:1;min-width:0;font-size:13px;line-height:1.35}.kt-tx b{display:block;font-size:14px}.kt-tx small{display:block;color:var(--mut);font-size:12px}
+.kt-pr s{color:var(--mut)}.kt-pr em{font-style:normal;color:#dc2626;font-weight:700}
+.kt-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.kt-tag{font-style:normal;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 6px;background:var(--bg);color:var(--mut)}
+.kt-tag.promo{background:rgba(220,38,38,.12);color:#c81e1e}.kt-tag.best{background:rgba(245,158,11,.16);color:#8a5a00}.kt-tag.new{background:rgba(47,128,237,.14);color:#1a56db}.kt-tag.warn{background:rgba(245,130,32,.16);color:#9a4a00}
+.kt-more{width:100%;margin-top:10px}
+.kt-link{border:0;background:none;color:#2f80ed;font-weight:700;padding:0;font-size:inherit}
+.kt-desc{min-height:130px!important}
+.kt-urls{margin:-6px 0 10px}.kt-urls .in{margin-top:6px}
+.kt-sw{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-right:14px}
+.kt-sw input{width:19px;height:19px;accent-color:#22a559}
+.kt-card{background:var(--card);border-radius:18px;padding:14px;margin-top:14px}
+.kt-card h4{font-size:15px;margin:0}.kt-card>.hint{margin:4px 0 6px}
+.kt-ch{display:flex;justify-content:space-between;align-items:center;gap:8px}.kt-ch .btn{padding:7px 12px;font-size:13px}
+.kt-li{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}
+.kt-li:last-of-type{border-bottom:0}
+.kt-li .in{padding:8px 10px;min-width:0}.kt-li .kt-sw{margin-right:0}
+.kt-thumb{flex:none;width:76px;height:46px;border-radius:9px;background:var(--bg) center/cover no-repeat}
+.kt-emo{flex:0 0 52px;text-align:center;font-size:18px}
+.kt-mv{display:flex;gap:4px;flex:none}
+.kt-ic{border:1px solid var(--line);background:var(--bg);border-radius:9px;width:32px;height:32px;font-size:14px;color:var(--fg)}
+.kt-kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:7px 10px;align-items:center;margin-top:10px;font-size:13px}
+.kt-kv>span:nth-child(odd){color:var(--mut)}.kt-kv a{color:#2f80ed;word-break:break-all}
+.kt-kvi{margin-top:8px}.kt-kvi .in{padding:8px 10px}
+.kt-color{width:54px;height:34px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px}
+.kt-ord{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--card);border-radius:14px;padding:12px;margin-top:8px;text-align:left;color:var(--fg);font-size:13px}
+.kt-ord span{flex:1;min-width:0;line-height:1.35}.kt-ord small{display:block;color:var(--mut);font-size:12px}
+.kt-st{flex:none;font-style:normal;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:800;color:#fff;background:#e5484d}
+.kt-st.s1{background:#2f80ed}.kt-st.s2{background:#8b5cf6}.kt-st.s3{background:#22a559}.kt-st.s4{background:#9ca3af}
+.kt-lock{text-align:center;padding:34px 12px;background:var(--card);border-radius:18px}.kt-lock b{font-size:17px}.kt-lock .btn{margin-top:12px}
+.kt-h4{font-size:14px;margin:16px 0 4px}
+.kt-total{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:10px;font-size:14px}.kt-total small{display:block;color:var(--mut);font-size:11.5px;text-align:right}
+.kt-bars{display:flex;align-items:flex-end;gap:2px;height:96px;margin-top:10px;padding-bottom:2px;border-bottom:1px solid var(--line)}
+.kt-bars i{flex:1;min-width:2px;background:#2f80ed;border-radius:3px 3px 0 0;min-height:2px}
+.kt-wa{color:#1a8a49;font-weight:800}
+.kt-bslot{aspect-ratio:16/7!important;width:100%}
+.bnav .bn-kt{position:relative}
+.bn-dot{position:absolute;top:6px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:#e5484d;border:2px solid var(--bg)}
 .deck{max-width:560px;margin-top:26px}
 .deck-tabs{position:sticky;top:var(--hdr,64px);z-index:4;display:flex;gap:4px;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
 .deck-tabs button{flex:1;min-width:0;border:0;background:none;border-radius:999px;padding:9px 4px;font-weight:700;font-size:13.5px;color:var(--mut);white-space:nowrap}
@@ -581,7 +640,7 @@ textarea.in{min-height:240px;resize:vertical}
 .ck-loc div{padding:2px 0}
 .ck-loc em{font-style:normal;font-weight:700}
 @media(max-width:760px){.ck-bar{max-width:none;margin-top:12px}}
-@media(max-width:760px){.bnav{grid-template-columns:repeat(5,1fr)!important}}
+@media(max-width:760px){.bnav{grid-template-columns:repeat(6,1fr)!important}}
 /* ====== PERMINTAAN RESTOCK ====== */
 .rs{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
 .rs-req{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--bg);border-radius:14px;padding:11px 12px;margin-top:6px;text-align:left;color:var(--fg);font-size:13px}
@@ -632,7 +691,7 @@ textarea.in{min-height:240px;resize:vertical}
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#"><img class="logo-ic" src="icons/icon-192.png" alt="">ONE FOR ALL <small>STORE MANAGER</small></a>
-  <nav><a href="#tim">Team</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
+  <nav><a href="#katalog" id="navKt">Katalog</a><a href="#tim">Team</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
   <div class="hdr-actions">
     <button class="sync" id="syncPill" type="button" aria-live="polite"></button>
     <button class="btn ghost" id="installBtn" hidden>Pasang aplikasi</button>
@@ -759,11 +818,17 @@ textarea.in{min-height:240px;resize:vertical}
 <nav class="bnav" aria-label="Navigasi utama">
   <button data-go="top" class="on"><span>⌂</span>Beranda</button>
   <button data-go="stok"><span>⌕</span>Stok</button>
+  <button data-go="katalog" class="bn-kt"><span>◈</span>Katalog<i class="bn-dot" id="ktDot" hidden></i></button>
   <button data-go="tools"><span>▦</span>Tools</button>
   <button data-go="tim"><span>☺</span>Tim</button>
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
+<div class="kt" id="kt" role="dialog" aria-modal="true" aria-label="Kelola Katalog">
+  <div class="kt-top"><button class="kt-back" id="ktBack" type="button" aria-label="Kembali">←</button><div><b>Kelola Katalog</b><small id="ktSub">Website katalog toko</small></div><a class="btn ghost kt-web" id="ktWeb" target="_blank" rel="noopener" hidden>Website ↗</a></div>
+  <div class="kt-tabs" id="ktTabs" role="tablist"><button type="button" data-kt="produk" class="on">Produk</button><button type="button" data-kt="pesanan">Pesanan<i id="ktBadge" hidden></i></button><button type="button" data-kt="tampilan">Tampilan</button><button type="button" data-kt="pengunjung">Pengunjung</button></div>
+  <div class="kt-body" id="ktBody"></div>
+</div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
@@ -1044,7 +1109,7 @@ renderTeam();
   return SH.map(s=>({s,label:label(s,ty),names:s==='U'?[]:(groups[s]||[]).map(m=>first(m.n)),items:open.filter(x=>x.s===s).map(x=>x.t)})).filter(g=>g.items.length);
  };
  function toast(text,onUndo){
-  const t=$('#toast');$('#toastTxt').textContent=text;undo=onUndo;
+  const t=$('#toast');$('#toastTxt').textContent=text;undo=onUndo;$('#toastBtn').style.display=onUndo?'':'none';
   t.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.classList.remove('on');undo=null},4500);
  }
  $('#toastBtn').onclick=()=>{if(undo)undo();undo=null;$('#toast').classList.remove('on')};
@@ -1189,6 +1254,7 @@ renderTeam();
   const b=e.target.closest('button');if(!b)return;const k=b.dataset.go;
   if(k==='add')return editor(null);
   if(k==='stok')return window.ofaOpenStock&&window.ofaOpenStock();
+  if(k==='katalog')return window.ofaOpenKatalog&&window.ofaOpenKatalog();
   if(k==='top')scrollTo({top:0,behavior:'smooth'});else document.getElementById(k).scrollIntoView({behavior:'smooth'});
   mark(k);
  };
@@ -2712,6 +2778,409 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const baseRender=render;render=async function(){await baseRender();renderWeek()};
  setTimeout(()=>load(false),5400);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
+})();
+/* ====== KELOLA KATALOG WEBSITE ====== */
+(function(){
+ const $id=i=>document.getElementById(i);
+ const page=$id('kt');if(!page)return;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const jam=k=>String(k||'').slice(11,16);
+ const PK='ofa_kt_prod',OK='ofa_kt_ov',TTL=30*60e3;
+ const ST=['Pesanan Baru','Diproses','Dikirim','Selesai','Dibatalkan'];
+ const STC={'Pesanan Baru':'s0','Diproses':'s1','Dikirim':'s2','Selesai':'s3','Dibatalkan':'s4'};
+ const FILTERS=[['all','Semua'],['live','Tampil di web'],['fix','Perlu dilengkapi'],['promo','Promo'],['best','Best Seller'],['neu','Produk Baru'],['off','Tidak tampil']];
+ let prod=null,IT=[],ov=null,orders=null,vis={},tab='produk',unlocked=false,loading={},pv={q:'',cat:'',f:'all',n:40},ordF='all',visDays=30,draft=null;
+ try{prod=JSON.parse(localStorage.getItem(PK)||'null')}catch(e){}
+ try{ov=JSON.parse(localStorage.getItem(OK)||'null')}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const gate=f=>(window.ofaHeadGate||(g=>g()))(f);
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+ const errTxt=e=>/tidak dikenal/i.test(e&&e.message||'')?'Pasang Katalog.gs di Apps Script Sales Tracking lalu Deploy New version.':'Gagal: '+esc(e&&e.message||String(e));
+ function mapItems(){IT=prod&&prod.items?prod.items.map(a=>{const o={};prod.fields.forEach((f,i)=>o[f]=a[i]);return o}):[]}
+ mapItems();
+ function saveProd(){if(!prod)return;prod.items=IT.map(o=>prod.fields.map(f=>o[f]));try{localStorage.setItem(PK,JSON.stringify(prod))}catch(e){}}
+ // Foto Google Drive (link /file/d/ID) ditampilkan lewat lh3 agar bisa jadi <img>
+ function imgSrc(u){u=String(u||'').trim();const m=u.match(/\/file\/d\/([\w-]+)/)||u.match(/[?&]id=([\w-]+)/);return m?'https://lh3.googleusercontent.com/d/'+m[1]+'=w600':u}
+ const live=o=>o.sizes.some(z=>z[3]);
+ const stockOf=o=>o.sizes.reduce((t,z)=>t+(z[2]||0),0);
+ const needFix=o=>!o.img||!o.price;
+ function waNum(p){p=String(p||'').replace(/\D/g,'');if(p.startsWith('0'))p='62'+p.slice(1);else if(p.startsWith('8'))p='62'+p;return p}
+ function shrink(file){
+  return new Promise((ok,no)=>{const img=new Image(),u=URL.createObjectURL(file);
+   img.onload=()=>{const m=1280,k=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.85).split(',')[1])};
+   img.onerror=()=>{URL.revokeObjectURL(u);no(new Error('File bukan gambar.'))};img.src=u});
+ }
+ async function upload(file,name){const data=await shrink(file);const r=await api('uploadCatalogPhoto',{data,mimeType:'image/jpeg',name});return r.url}
+
+ /* ---------- buka / tutup halaman ---------- */
+ function open(t){
+  page.classList.add('open');document.body.classList.add('kt-on');
+  if(location.hash!=='#katalog')history.pushState({kt:1},'','#katalog');
+  show(t||tab);loadOv(false);
+ }
+ function close(){page.classList.remove('open');document.body.classList.remove('kt-on')}
+ window.ofaOpenKatalog=open;
+ $id('ktBack').onclick=()=>{if(history.state&&history.state.kt)history.back();else{close();if(location.hash==='#katalog')history.replaceState(null,'',location.pathname+location.search)}};
+ window.addEventListener('popstate',()=>{if(page.classList.contains('open')&&location.hash!=='#katalog')close();else if(!page.classList.contains('open')&&location.hash==='#katalog')open()});
+ const navKt=$id('navKt');if(navKt)navKt.onclick=e=>{e.preventDefault();open()};
+ function show(t){
+  tab=t;[...document.querySelectorAll('#ktTabs [data-kt]')].forEach(b=>b.classList.toggle('on',b.dataset.kt===t));
+  page.scrollTop=0;render();
+ }
+ $id('ktTabs').onclick=e=>{const b=e.target.closest('[data-kt]');if(b)show(b.dataset.kt)};
+ function render(){({produk:renderProduk,pesanan:renderPesanan,tampilan:renderTampilan,pengunjung:renderPengunjung})[tab]()}
+ function setHead(){
+  const u=meta.__katalogUrl,w=$id('ktWeb');if(u){w.href=u;w.hidden=false}else w.hidden=true;
+  const n=ov&&ov.orders?ov.orders.baru:0,d=$id('ktDot'),b=$id('ktBadge');
+  if(d)d.hidden=!n;if(b){b.textContent=n||'';b.hidden=!n}
+  const nm=ov&&ov.store?(ov.store.find(x=>x[0]==='Nama Toko')||[])[1]:'';$id('ktSub').textContent=nm||'Website katalog toko';
+ }
+
+ /* ---------- data ---------- */
+ async function loadOv(force){
+  if(loading.ov||!configured())return;
+  if(!force&&ov&&Date.now()-(ov.at||0)<TTL){setHead();return}
+  loading.ov=1;
+  try{ov=Object.assign(await api('katalogOverview',{}),{at:Date.now()});try{localStorage.setItem(OK,JSON.stringify(ov))}catch(e){}setHead();if(page.classList.contains('open')&&tab==='tampilan'&&!draft)render()}
+  catch(e){if(page.classList.contains('open')&&tab==='tampilan'&&!ov)$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+  finally{loading.ov=0}
+ }
+ async function loadProd(force){
+  if(loading.prod||!configured())return;
+  if(!force&&prod&&Date.now()-(prod.t||0)<TTL)return;
+  loading.prod=1;if(tab==='produk'&&!prod)render();
+  try{prod=Object.assign(await api('katalogProducts',{}),{t:Date.now()});mapItems();try{localStorage.setItem(PK,JSON.stringify(prod))}catch(e){}if(tab==='produk'&&page.classList.contains('open'))render()}
+  catch(e){if(tab==='produk'&&!prod)$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+  finally{loading.prod=0}
+ }
+
+ /* ---------- PRODUK ---------- */
+ function renderProduk(){
+  const b=$id('ktBody');
+  if(!prod){b.innerHTML='<p class="dp-empty">Memuat produk katalog… (±10 detik)</p>';loadProd(false);return}
+  const L=IT,cats=[...new Set(L.map(o=>o.cat).filter(Boolean))].sort();
+  const cnt={live:L.filter(live).length,off:L.filter(o=>!live(o)).length,fix:L.filter(needFix).length,promo:L.filter(o=>o.promo>0).length,best:L.filter(o=>o.best).length,neu:L.filter(o=>o.neu).length};
+  b.innerHTML=`<div class="kt-sum">
+   <button type="button" data-kf="live"><b>${nf(cnt.live)}</b><small>produk tampil di web</small></button>
+   <button type="button" data-kf="fix"><b class="${cnt.fix?'kt-bad':''}">${nf(cnt.fix)}</b><small>tanpa foto / harga</small></button>
+   <button type="button" data-kf="promo"><b>${nf(cnt.promo)}</b><small>sedang promo</small></button></div>
+   <div class="kt-tools"><input class="in" id="ktQ" type="search" placeholder="Cari nama, warna, SKU…" value="${esc(pv.q)}"><select class="in" id="ktCat"><option value="">Semua kategori</option>${cats.map(c=>`<option ${c===pv.cat?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+   <div class="dp-chips" id="ktF">${FILTERS.map(([k,t])=>`<button type="button" data-kf="${k}" class="${pv.f===k?'on':''}">${t}${k!=='all'?' '+nf(cnt[k]):''}</button>`).join('')}</div>
+   <div id="ktList"></div>
+   <p class="hint">Data ${esc(prod.at||'')} · ${nf(L.length)} produk (generic + warna) dari ${nf(prod.skus)} SKU · <button type="button" class="kt-link" data-kta="reload">↻ Muat ulang</button></p>
+   <p class="hint">Ukuran tampil di website otomatis jika stoknya ada di Stock Database. Harga promo dan badge PROMO otomatis dari tab Promo DCNP / SMDS.</p>`;
+  $id('ktQ').addEventListener('input',e=>{pv.q=e.target.value;pv.n=40;drawList()});
+  $id('ktCat').addEventListener('change',e=>{pv.cat=e.target.value;pv.n=40;drawList()});
+  drawList();
+ }
+ function filtered(){
+  const q=pv.q.trim().toLowerCase(),words=q.split(/\s+/).filter(Boolean);
+  return IT.filter(o=>{
+   if(pv.cat&&o.cat!==pv.cat)return false;
+   const f=pv.f;
+   if(f==='live'&&!live(o)||f==='off'&&live(o)||f==='fix'&&!needFix(o)||f==='promo'&&!(o.promo>0)||f==='best'&&!o.best||f==='neu'&&!o.neu)return false;
+   if(!words.length)return true;
+   const hay=(o.n+' '+o.c+' '+o.g+' '+o.cat+' '+o.sub+' '+o.sizes.map(z=>z[1]+' '+z[0]).join(' ')).toLowerCase();
+   return words.every(w=>hay.includes(w));
+  }).sort((a,b)=>(live(b)-live(a))||a.n.localeCompare(b.n));
+ }
+ function tags(o){
+  const t=[];
+  if(o.promo>0)t.push('<i class="kt-tag promo">PROMO −'+Math.round((1-o.promo/(o.price||o.promo))*100)+'%</i>');
+  if(o.badge&&o.badge!=='PROMO')t.push('<i class="kt-tag">'+esc(o.badge)+'</i>');
+  if(o.best)t.push('<i class="kt-tag best">Best Seller</i>');
+  if(o.neu)t.push('<i class="kt-tag new">Produk Baru</i>');
+  if(!o.img)t.push('<i class="kt-tag warn">Tanpa foto</i>');
+  if(!o.price)t.push('<i class="kt-tag warn">Harga kosong</i>');
+  if(!live(o))t.push('<i class="kt-tag off">Tidak tampil · stok habis</i>');
+  return t.join('');
+ }
+ function drawList(){
+  const L=filtered(),box=$id('ktList');if(!box)return;
+  document.querySelectorAll('#ktF [data-kf]').forEach(x=>x.classList.toggle('on',x.dataset.kf===pv.f));
+  box.innerHTML=(L.length?L.slice(0,pv.n).map(o=>{
+   const lv=o.sizes.filter(z=>z[3]).length;
+   return `<button type="button" class="kt-row" data-kp="${esc(o.k)}"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(imgSrc(o.img))}" alt="">`:'🏷️'}</span>
+    <span class="kt-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.cat||'-')}${o.sub?' · '+esc(o.sub):''}</small>
+    <small class="kt-pr">${o.promo>0?`<s>${rp(o.price)}</s> <em>${rp(o.promo)}</em>`:o.price?rp(o.price):''} · ${lv}/${o.sizes.length} ukuran tampil · stok ${nf(stockOf(o))}</small>
+    <span class="kt-tags">${tags(o)}</span></span></button>`}).join('')
+   +(L.length>pv.n?`<button type="button" class="btn ghost kt-more" data-kta="more">Tampilkan lagi (${nf(L.length-pv.n)} produk)</button>`:'')
+   :'<p class="dp-empty">Tidak ada produk yang cocok.</p>');
+ }
+ async function openEdit(k){
+  const o=IT.find(x=>x.k===k);if(!o)return;
+  const skus=o.sizes.map(z=>z[1]);
+  openModal(o.n,'<p class="dp-empty">Memuat data produk…</p>');
+  let d;
+  try{d=await api('katalogProductDetail',{skus})}catch(e){$id('pb').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>';return}
+  if(!$id('pb'))return;
+  const photos=d.photos.slice(0,3);while(photos.length<3)photos.push('');
+  $id('pb').innerHTML=`<div class="ct-form kt-ed" data-ke="${esc(k)}">
+   <p class="ct-meta">${esc(o.c)} · generic ${esc(o.g)} · ${esc(o.cat||'-')}${o.sub?' / '+esc(o.sub):''}</p>
+   <div class="ck-sz">${o.sizes.map(z=>`<span class="ck-chip${z[3]?'':' off'}" title="${esc(z[1])}">${esc(z[0])}<b>${nf(z[2])}</b></span>`).join('')}</div>
+   <p class="hint" style="margin:6px 0 12px">Ukuran hijau tampil di website. Coret = stok habis, otomatis disembunyikan.</p>
+   <label class="ct-l">Foto produk (foto pertama = foto utama)</label>
+   <div class="ct-ph">${photos.map((u,i)=>`<label class="ct-slot" data-slot="${i}"><b>${i+1}</b>${u?`<img src="${esc(imgSrc(u))}" referrerpolicy="no-referrer" alt="">`:'<span>＋ Foto</span>'}<input type="file" accept="image/*" data-up="${i}"></label>`).join('')}</div>
+   <details class="kt-urls"><summary class="hint">Pakai link foto / hapus foto</summary>${photos.map((u,i)=>`<input class="in" data-url="${i}" placeholder="https://… foto ${i+1}" value="${esc(u)}">`).join('')}</details>
+   <label class="ct-l">Harga normal</label><input class="in" id="ktPrice" type="number" inputmode="numeric" min="0" value="${d.price||o.price||''}">
+   <p class="hint" style="margin-top:4px">${o.promo>0?'Harga promo saat ini <b>'+rp(o.promo)+'</b> (otomatis dari tab Promo DCNP / SMDS).':'Tidak sedang promo. Harga promo diatur lewat tab Promo DCNP / SMDS.'}</p>
+   <label class="ct-l">Badge</label><input class="in" id="ktBdg" maxlength="24" placeholder="mis. HOT, LIMITED" value="${esc(d.badge)}">
+   <div style="margin:12px 0 4px"><label class="kt-sw"><input type="checkbox" id="ktBest" ${d.best?'checked':''}> Best Seller</label><label class="kt-sw"><input type="checkbox" id="ktNeu" ${d.neu?'checked':''}> Produk Baru</label></div>
+   <label class="ct-l">Deskripsi</label><textarea class="in kt-desc" id="ktDesc" maxlength="5000" placeholder="Bahan, fitur, ukuran, cara pakai…">${esc(d.desc)}</textarea>
+   <p class="iv-status err" id="ktErr"></p>
+   <div class="row"><button class="btn" type="button" id="ktSave">Simpan ke website</button></div>
+   <p class="hint">Disimpan ke ${o.sizes.length} SKU (semua ukuran) di tab Product Assets. Website memakai data baru saat halaman dibuka ulang.</p></div>`;
+ }
+ async function saveEdit(){
+  const ed=document.querySelector('.kt-ed');if(!ed)return;
+  const o=IT.find(x=>x.k===ed.dataset.ke);if(!o)return;
+  const err=$id('ktErr'),btn=$id('ktSave');
+  const price=Math.round(Number($id('ktPrice').value)||0);
+  const photos=[0,1,2].map(i=>(document.querySelector('[data-url="'+i+'"]')||{}).value||'').map(s=>s.trim());
+  if(!(price>0)){err.textContent='Harga normal belum diisi.';return}
+  if(photos.some(u=>u&&!/^https:\/\//i.test(u))){err.textContent='Link foto harus diawali https://';return}
+  btn.disabled=true;btn.textContent='Menyimpan…';err.textContent='';
+  try{
+   const r=await api('katalogSaveProduct',{skus:o.sizes.map(z=>z[1]),price,photos,desc:$id('ktDesc').value,badge:$id('ktBdg').value,best:$id('ktBest').checked,neu:$id('ktNeu').checked});
+   const ph=photos.filter(Boolean);
+   Object.assign(o,{price,img:ph[0]||'',imgs:ph.length,desc:$id('ktDesc').value.trim()?1:0,best:$id('ktBest').checked?1:0,neu:$id('ktNeu').checked?1:0});
+   if(o.badge!=='PROMO'||!(o.promo>0))o.badge=$id('ktBdg').value.trim();
+   saveProd();close_();drawList();
+   toast('Tersimpan ke '+r.updated+' SKU'+(r.added?' ('+r.added+' baru di Product Assets)':''));
+  }catch(e){err.innerHTML=errTxt(e);btn.disabled=false;btn.textContent='Simpan ke website'}
+ }
+ const close_=()=>{const x=$id('px');if(x)x.click()};
+
+ /* ---------- PESANAN ---------- */
+ async function loadOrders(){
+  if(loading.ord)return;loading.ord=1;
+  try{orders=await api('katalogOrders',{});if(ov&&ov.orders){ov.orders.baru=orders.items.filter(x=>x.status==='Pesanan Baru').length;setHead()}if(tab==='pesanan')render()}
+  catch(e){if(tab==='pesanan')$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+  finally{loading.ord=0}
+ }
+ function renderPesanan(){
+  const b=$id('ktBody');
+  if(!unlocked){b.innerHTML=`<div class="kt-lock"><b>🔒 Pesanan Web</b><p class="hint">Berisi nama, telepon, email, dan alamat pembeli. Buka dengan PIN Store Head.</p>${ov&&ov.orders?`<p class="ct-meta">${nf(ov.orders.total)} pesanan · ${nf(ov.orders.baru)} belum diproses</p>`:''}<button class="btn" type="button" data-kta="unlock">Buka pesanan</button></div>`;return}
+  if(!orders){b.innerHTML='<p class="dp-empty">Memuat pesanan…</p>';loadOrders();return}
+  const L=orders.items,cnt={};ST.forEach(s=>cnt[s]=0);L.forEach(o=>cnt[o.status]=(cnt[o.status]||0)+1);
+  const F=ordF==='all'?L:L.filter(o=>o.status===ordF);
+  b.innerHTML=`<div class="dp-chips" id="ktOF"><button type="button" data-of="all" class="${ordF==='all'?'on':''}">Semua ${nf(L.length)}</button>${ST.map(s=>`<button type="button" data-of="${s}" class="${ordF===s?'on':''}">${s} ${nf(cnt[s])}</button>`).join('')}</div>
+   ${F.length?F.map(o=>`<button type="button" class="kt-ord" data-ko="${esc(o.no)}"><span><b>${esc(o.name||'-')}</b> · ${tgl(o.at)} ${jam(o.at)}<small>${esc(o.no)} · ${nf(o.qty)} pcs · ${rp(o.subtotal)} · ${esc(o.exp||'-')}</small></span><i class="kt-st ${STC[o.status]||''}">${esc(o.status)}</i></button>`).join(''):'<p class="dp-empty">Belum ada pesanan di sini.</p>'}
+   <p class="hint">Status disimpan di kolom Status tab Pesanan Web. <button type="button" class="kt-link" data-kta="reloadOrd">↻ Muat ulang</button></p>`;
+ }
+ function parseItems(t){
+  return String(t||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>{
+   const name=(s.split('|')[0]||'').replace(/^\d+\.\s*/,'').replace(/\s*\[[^\]]*\]\s*$/,'').trim(),sku=(s.match(/\[([^\]]+)\]/)||[])[1]||'';
+   const get=k=>((s.match(new RegExp(k+':\\s*([^|]+)'))||[])[1]||'').trim();
+   return {name,sku,color:get('Warna'),size:get('Ukuran'),qty:get('Qty'),price:get('Harga')};
+  });
+ }
+ function orderText(o){
+  return ['*Pesanan '+o.no+'*',tgl(o.at)+' '+jam(o.at),'Nama: '+o.name,'Telepon: '+o.phone,'Email: '+o.email,'Alamat: '+o.address,'Member EAC: '+(o.eac||'-'),'Ekspedisi: '+(o.exp||'-'),'',o.detail,'','Subtotal: '+rp(o.subtotal)+' · Status: '+o.status].join('\n');
+ }
+ function openOrder(no){
+  const o=orders&&orders.items.find(x=>x.no===no);if(!o)return;
+  const I=parseItems(o.detail),store=ov&&ov.store?(ov.store.find(x=>x[0]==='Nama Toko')||[])[1]:'';
+  const msg='Halo '+o.name+', terima kasih sudah memesan di '+(store||'toko kami')+'. Pesanan '+o.no+' ('+nf(o.qty)+' pcs, subtotal '+rp(o.subtotal)+') sedang kami proses. ';
+  openModal('Pesanan '+o.no.replace(/^WEB-/,''),`<div class="kt-od" data-od="${esc(o.no)}">
+   <p class="ct-meta">${tgl(o.at)} ${o.at.slice(0,4)} · ${jam(o.at)} · <i class="kt-st ${STC[o.status]||''}">${esc(o.status)}</i></p>
+   <div class="kt-kv"><span>Nama</span><b>${esc(o.name)}</b><span>Telepon</span><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a><span>Email</span><a href="mailto:${esc(o.email)}">${esc(o.email)}</a><span>Alamat</span><span>${esc(o.address)}</span><span>Member EAC</span><span>${esc(o.eac||'-')}</span><span>Ekspedisi</span><span>${esc(o.exp||'-')}</span></div>
+   <div class="row"><a class="btn" href="https://wa.me/${waNum(o.phone)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat pembeli via WA</a><button class="btn ghost" type="button" data-koa="copy">Salin data pesanan</button></div>
+   <h4 class="kt-h4">Barang (${nf(o.qty)} pcs)</h4>
+   ${I.map(x=>`<div class="rs-item"><span>${esc(x.name)}<small>${esc(x.sku)}${x.color?' · '+esc(x.color):''}${x.size?' · '+esc(x.size):''}</small></span><b>${esc(x.qty)} × ${esc(x.price)}</b></div>`).join('')}
+   <p class="kt-total">Subtotal <b>${rp(o.subtotal)}</b><small>belum termasuk ongkir</small></p>
+   <h4 class="kt-h4">Ubah status</h4>
+   <div class="row" style="margin-top:6px">${ST.filter(s=>s!==o.status).map(s=>`<button class="btn ghost" type="button" data-kos="${s}">${s}</button>`).join('')}</div></div>`);
+ }
+ async function setStatus(no,st,btn){
+  btn.disabled=true;btn.textContent='Menyimpan…';
+  try{await api('katalogSetOrderStatus',{no,status:st});const o=orders.items.find(x=>x.no===no);if(o)o.status=st;
+   if(ov&&ov.orders){ov.orders.baru=orders.items.filter(x=>x.status==='Pesanan Baru').length;setHead()}
+   openOrder(no);if(tab==='pesanan')render();toast('Status '+no+' → '+st)}
+  catch(e){btn.textContent=errTxt(e).replace(/<[^>]+>/g,'')}
+ }
+
+ /* ---------- TAMPILAN WEBSITE ---------- */
+ function newDraft(){return ov?{banners:ov.banners.map(r=>r.slice()),categories:ov.categories.map(r=>r.slice()),store:ov.store.map(r=>r.slice()),settings:ov.settings.map(r=>r.slice()),dirty:{}}:null}
+ function renderTampilan(){
+  const b=$id('ktBody');
+  if(!ov){b.innerHTML='<p class="dp-empty">Memuat tampilan website…</p>';loadOv(true);return}
+  if(!draft)draft=newDraft();
+  const D=draft,cats=[...new Set(IT.map(o=>o.cat).filter(Boolean))].sort();
+  const bool=v=>/^(true|false)$/i.test(String(v));
+  b.innerHTML=`<section class="kt-card"><div class="kt-ch"><h4>Banner beranda</h4><button class="btn ghost" type="button" data-kta="addBanner">＋ Banner</button></div>
+   <p class="hint">Berganti otomatis tiap 5 detik di bagian atas website. Urutan sesuai daftar ini.</p>
+   ${D.banners.length?D.banners.map((r,i)=>`<div class="kt-li"><span class="kt-thumb" style="background-image:url('${esc(imgSrc(r[3])).replace(/'/g,'%27')}')"></span><span class="kt-tx"><b>${esc(r[1]||'(tanpa judul)')}</b><small>${esc(r[2]||'')}</small><small>${r[4]?esc(r[4])+' → '+esc(r[5]||'#produk'):'tanpa tombol'}</small></span>
+    <label class="kt-sw" title="Tampil"><input type="checkbox" data-bon="${i}" ${r[6]?'checked':''}></label>
+    <span class="kt-mv"><button class="kt-ic" type="button" data-bup="${i}" aria-label="Naik">↑</button><button class="kt-ic" type="button" data-bed="${i}" aria-label="Ubah">✎</button></span></div>`).join(''):'<p class="dp-empty">Belum ada banner.</p>'}
+   <div class="row"><button class="btn" type="button" data-kts="Banners" ${D.dirty.Banners?'':'disabled'}>Simpan banner</button></div></section>
+  <section class="kt-card"><div class="kt-ch"><h4>Kategori cepat</h4><button class="btn ghost" type="button" data-kta="addCat">＋ Kategori</button></div>
+   <p class="hint">Tombol kategori di website. Nama harus sama dengan kategori produk: ${cats.length?cats.map(esc).join(', '):'Backpack, Footwear, Apparel, Accessories, Equipment'}.</p>
+   ${D.categories.map((r,i)=>`<div class="kt-li"><input class="in kt-emo" data-cic="${i}" value="${esc(r[2])}" maxlength="4" aria-label="Ikon"><input class="in" data-cnm="${i}" value="${esc(r[1])}" aria-label="Nama kategori" list="ktCats">
+    <label class="kt-sw" title="Tampil"><input type="checkbox" data-con="${i}" ${r[3]?'checked':''}></label><span class="kt-mv"><button class="kt-ic" type="button" data-cup="${i}" aria-label="Naik">↑</button><button class="kt-ic" type="button" data-cdel="${i}" aria-label="Hapus">✕</button></span></div>`).join('')}
+   <datalist id="ktCats">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+   <div class="row"><button class="btn" type="button" data-kts="Categories" ${D.dirty.Categories?'':'disabled'}>Simpan kategori</button></div></section>
+  <section class="kt-card"><h4>Info toko</h4><p class="hint">Nama, tagline, alamat, jam buka, dan media sosial di header & footer. Nomor WhatsApp dipakai tombol pesan.</p>
+   ${D.store.map((r,i)=>`<div class="kt-kv kt-kvi"><span>${esc(r[0])}</span>${r[0]==='Alamat'||r[0]==='Deskripsi'?`<textarea class="in" rows="3" data-kv="store:${i}">${esc(r[1])}</textarea>`:`<input class="in" data-kv="store:${i}" value="${esc(r[1])}">`}</div>`).join('')}
+   <div class="row"><button class="btn" type="button" data-kts="Store" ${D.dirty.Store?'':'disabled'}>Simpan info toko</button></div></section>
+  <section class="kt-card"><h4>Pengaturan website</h4><p class="hint">Judul dan subjudul tampil di banner beranda bila belum ada banner aktif.</p>
+   ${D.settings.map((r,i)=>`<div class="kt-kv kt-kvi"><span>${esc(r[0])}</span>${bool(r[1])?`<label class="kt-sw"><input type="checkbox" data-kv="settings:${i}" ${String(r[1]).toUpperCase()==='TRUE'?'checked':''}> ${String(r[1]).toUpperCase()==='TRUE'?'Ya':'Tidak'}</label>`:/^#[0-9a-f]{6}$/i.test(r[1])?`<input type="color" class="kt-color" data-kv="settings:${i}" value="${esc(r[1])}">`:`<input class="in" data-kv="settings:${i}" value="${esc(r[1])}">`}</div>`).join('')}
+   <div class="row"><button class="btn" type="button" data-kts="Settings" ${D.dirty.Settings?'':'disabled'}>Simpan pengaturan</button></div></section>
+  <section class="kt-card"><h4>Link website katalog</h4><p class="hint">Untuk tombol "Website ↗" di atas. Isi dengan URL web app katalog (berakhiran /exec).</p>
+   <div class="kt-li"><input class="in" id="ktUrl" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(meta.__katalogUrl||'')}"><button class="btn ghost" type="button" data-kta="saveUrl">Simpan</button></div></section>`;
+ }
+ function dirty(k){draft.dirty[k]=1;const b=document.querySelector('[data-kts="'+k+'"]');if(b)b.disabled=false}
+ function editBanner(i){
+  const r=draft.banners[i]||['','','','','Lihat Produk','#produk',true,0],isNew=i>=draft.banners.length;
+  openModal(isNew?'Banner baru':'Ubah banner',`<div class="ct-form kt-bf" data-bi="${i}">
+   <label class="ct-slot kt-bslot"><b>Foto</b>${r[3]?`<img src="${esc(imgSrc(r[3]))}" referrerpolicy="no-referrer" alt="">`:'<span>＋ Foto banner (melebar, mis. 1600×700)</span>'}<input type="file" accept="image/*" id="ktBFile"></label>
+   <input class="in" id="ktBFoto" placeholder="atau link foto https://…" value="${esc(r[3])}" style="margin-top:6px">
+   <label class="ct-l">Judul</label><input class="in" id="ktBJ" maxlength="80" value="${esc(r[1])}">
+   <label class="ct-l">Subjudul</label><input class="in" id="ktBS" maxlength="160" value="${esc(r[2])}">
+   <label class="ct-l">Teks tombol (kosongkan bila tanpa tombol)</label><input class="in" id="ktBT" maxlength="40" value="${esc(r[4])}">
+   <label class="ct-l">Tujuan tombol</label><input class="in" id="ktBL" list="ktLinks" value="${esc(r[5]||'#produk')}">
+   <datalist id="ktLinks"><option value="#produk">Semua produk</option><option value="#promoSection">Promo pilihan</option><option value="#bestSellerSection">Best Seller</option><option value="#newArrivalSection">New Arrival</option><option value="#kategoriSection">Kategori</option></datalist>
+   <p class="iv-status err" id="ktBErr"></p>
+   <div class="row"><button class="btn" type="button" id="ktBOk">${isNew?'Tambahkan':'Terapkan'}</button>${isNew?'':'<button class="btn danger" type="button" id="ktBDel">Hapus banner</button>'}</div>
+   <p class="hint">Tekan "Simpan banner" di halaman Tampilan agar perubahan masuk ke website.</p></div>`);
+ }
+
+ /* ---------- PENGUNJUNG ---------- */
+ async function loadVis(d){
+  if(loading['v'+d])return;loading['v'+d]=1;
+  try{vis[d]=Object.assign(await api('katalogVisitors',{days:d}),{t:Date.now()});if(tab==='pengunjung'&&visDays===d)render()}
+  catch(e){if(tab==='pengunjung'&&visDays===d)$id('ktBody').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+  finally{loading['v'+d]=0}
+ }
+ function renderPengunjung(){
+  const b=$id('ktBody'),V=vis[visDays];
+  const chips=`<div class="dp-chips" id="ktVD">${[[7,'7 hari'],[30,'30 hari'],[90,'90 hari'],[0,'Semua']].map(([d,t])=>`<button type="button" data-vd="${d}" class="${visDays===d?'on':''}">${t}</button>`).join('')}</div>`;
+  if(!V||Date.now()-V.t>10*60e3){b.innerHTML=chips+'<p class="dp-empty">Menghitung statistik pengunjung…</p>';loadVis(visDays);if(!V)return}
+  const pct=(a,c)=>c?(Math.round(a/c*1000)/10).toString().replace('.',',')+'%':'0%';
+  const from=V.from||V.first,to=V.to,days=[];
+  if(from){let d=from;for(let i=0;i<400&&d<=to;i++){days.push(d);const p=d.split('-').map(Number);d=new Date(Date.UTC(p[0],p[1]-1,p[2]+1)).toISOString().slice(0,10)}}
+  const mx=Math.max(1,...days.map(d=>V.daily[d]||0));
+  const devT=Object.values(V.devices).reduce((t,n)=>t+n,0);
+  const hrs=Object.keys(V.hours).sort((a,b)=>V.hours[b]-V.hours[a]).slice(0,3);
+  const list=(L,f)=>L.length?L.map(f).join(''):'<p class="dp-empty">Belum ada data.</p>';
+  b.innerHTML=chips+`<div class="wk-kpis" style="margin-top:12px">
+   <div class="wk-k"><small>Kunjungan</small><b>${nf(V.pv)}</b><em>${nf(V.sessions)} pengunjung unik</em></div>
+   <div class="wk-k"><small>Produk dilihat</small><b>${nf(V.views)}</b><em>${V.sessions?(V.views/V.sessions).toFixed(1).replace('.',','):0} per pengunjung</em></div>
+   <div class="wk-k"><small>Klik WhatsApp</small><b>${nf(V.wa)}</b><em>${pct(V.wa,V.pv)} dari kunjungan</em></div>
+   <div class="wk-k"><small>Pesanan web</small><b>${nf(V.orders)}</b><em>${rp(V.orderValue)} · ${pct(V.orders,V.sessions)} pengunjung</em></div></div>
+   <section class="kt-card"><h4>Kunjungan per hari</h4><p class="hint">${tgl(from)} – ${tgl(to)} ${to.slice(0,4)}${V.banner?' · '+nf(V.banner)+' klik banner':''}</p>
+    <div class="kt-bars">${days.map(d=>`<i style="height:${((V.daily[d]||0)/mx*100).toFixed(1)}%" title="${tgl(d)}: ${nf(V.daily[d]||0)} kunjungan"></i>`).join('')}</div>
+    <p class="hint">Jam paling ramai: ${hrs.length?hrs.map(h=>h+'.00 ('+nf(V.hours[h])+')').join(' · '):'-'}${devT?' · '+Object.keys(V.devices).map(k=>esc(k)+' '+pct(V.devices[k],devT)).join(' · '):''}</p></section>
+   <section class="kt-card"><h4>Produk paling dilihat</h4>${list(V.products,(p,i)=>`<div class="wk-row"><i>${i+1}</i><span>${esc(p[0]||p[1])}<small>${esc(p[1])}</small></span><b>${nf(p[2])}×${p[3]?` <small class="kt-wa">${nf(p[3])} WA</small>`:''}</b></div>`)}</section>
+   <section class="kt-card"><h4>Dicari tapi tidak ketemu</h4><p class="hint">Kata yang diketik pengunjung tanpa hasil. Bisa jadi produk yang perlu ditambahkan ke katalog.</p>${list(V.empty,(x,i)=>`<div class="wk-row"><i>${i+1}</i><span>${esc(x[0])}</span><b>${nf(x[1])}×</b></div>`)}</section>
+   <section class="kt-card"><h4>Kata pencarian</h4>${list(V.searches,(x,i)=>`<div class="wk-row"><i>${i+1}</i><span>${esc(x[0])}</span><b>${nf(x[1])}×</b></div>`)}</section>
+   <section class="kt-card"><h4>Kategori paling diminati</h4>${list(V.cats,(x,i)=>`<div class="wk-row"><i>${i+1}</i><span>${esc(x[0])}</span><b>${nf(x[1])} dilihat</b></div>`)}</section>
+   <p class="hint">Sumber: tab Log Aktivitas (data sejak ${tgl(V.first)} ${String(V.first||'').slice(0,4)}).</p>`;
+ }
+
+ /* ---------- event ---------- */
+ page.addEventListener('click',e=>{
+  const kf=e.target.closest('[data-kf]');if(kf){pv.f=kf.dataset.kf;pv.n=40;if(!$id('ktList'))return;return drawList()}
+  const kp=e.target.closest('[data-kp]');if(kp){const k=kp.dataset.kp;return gate(()=>openEdit(k))}
+  const ko=e.target.closest('[data-ko]');if(ko)return openOrder(ko.dataset.ko);
+  const of=e.target.closest('[data-of]');if(of){ordF=of.dataset.of;return render()}
+  const vd=e.target.closest('[data-vd]');if(vd){visDays=Number(vd.dataset.vd);return render()}
+  const a=e.target.closest('[data-kta]');
+  if(a){const k=a.dataset.kta;
+   if(k==='more'){pv.n+=40;return drawList()}
+   if(k==='reload'){prod=null;IT=[];render();return loadProd(true)}
+   if(k==='unlock')return gate(()=>{unlocked=true;render()});
+   if(k==='reloadOrd'){orders=null;return render()}
+   if(k==='addBanner')return editBanner(draft.banners.length);
+   if(k==='addCat'){draft.categories.push(['','', '🏷️',true,0]);dirty('Categories');return render()}
+   if(k==='saveUrl'){const u=$id('ktUrl').value.trim();if(u&&!/^https:\/\//.test(u)){toast('Link harus diawali https://');return}meta.__katalogUrl=u;ls.set('ofa_meta',meta);setHead();toast(u?'Link website disimpan':'Link website dihapus');return}
+  }
+  if(!draft)return;
+  const bup=e.target.closest('[data-bup]');if(bup){const i=+bup.dataset.bup;if(i>0){const L=draft.banners;[L[i-1],L[i]]=[L[i],L[i-1]];dirty('Banners');render()}return}
+  const bed=e.target.closest('[data-bed]');if(bed)return editBanner(+bed.dataset.bed);
+  const cup=e.target.closest('[data-cup]');if(cup){const i=+cup.dataset.cup;if(i>0){const L=draft.categories;[L[i-1],L[i]]=[L[i],L[i-1]];dirty('Categories');render()}return}
+  const cdel=e.target.closest('[data-cdel]');if(cdel){draft.categories.splice(+cdel.dataset.cdel,1);dirty('Categories');return render()}
+  const s=e.target.closest('[data-kts]');if(s)return gate(()=>saveSection(s.dataset.kts,s));
+ });
+ page.addEventListener('change',e=>{
+  if(!draft)return;const t=e.target;
+  if(t.dataset.bon!=null){draft.banners[+t.dataset.bon][6]=t.checked;dirty('Banners')}
+  if(t.dataset.con!=null){draft.categories[+t.dataset.con][3]=t.checked;dirty('Categories')}
+  if(t.dataset.kv&&t.type==='checkbox'){const[g,i]=t.dataset.kv.split(':');draft[g][+i][1]=t.checked?'TRUE':'FALSE';t.parentNode.lastChild.textContent=t.checked?' Ya':' Tidak';dirty(g==='store'?'Store':'Settings')}
+ });
+ page.addEventListener('input',e=>{
+  if(!draft)return;const t=e.target;
+  if(t.dataset.cic!=null){draft.categories[+t.dataset.cic][2]=t.value;dirty('Categories')}
+  if(t.dataset.cnm!=null){draft.categories[+t.dataset.cnm][1]=t.value;dirty('Categories')}
+  if(t.dataset.kv&&t.type!=='checkbox'){const[g,i]=t.dataset.kv.split(':');draft[g][+i][1]=t.value;dirty(g==='store'?'Store':'Settings')}
+ });
+ async function saveSection(k,btn){
+  btn.disabled=true;const old=btn.textContent;btn.textContent='Menyimpan…';
+  try{
+   if(k==='Banners'||k==='Categories'){
+    const rows=k==='Banners'?draft.banners:draft.categories.filter(r=>String(r[1]).trim());
+    const r=await api('katalogSaveTable',{sheet:k,rows});toast(k==='Banners'?r.saved+' banner tersimpan':r.saved+' kategori tersimpan');
+   }else{
+    const src=k==='Store'?draft.store:draft.settings,values={};src.forEach(r=>values[r[0]]=r[1]);
+    const r=await api('katalogSaveKeyValues',{sheet:k,values});toast(r.changed?r.changed+' isian diperbarui':'Tidak ada perubahan');
+   }
+   delete draft.dirty[k];await loadOv(true);
+   const keep=draft.dirty;draft=newDraft();Object.keys(keep).forEach(x=>draft.dirty[x]=1);render();
+  }catch(e){btn.disabled=false;btn.textContent=old;toast(errTxt(e).replace(/<[^>]+>/g,''))}
+ }
+ // tombol di modal (form produk, banner, pesanan)
+ $('#pb').addEventListener('click',async e=>{
+  if(e.target.closest('#ktSave'))return saveEdit();
+  const od=e.target.closest('.kt-od');
+  if(od){const no=od.dataset.od;
+   const s=e.target.closest('[data-kos]');if(s)return gate(()=>setStatus(no,s.dataset.kos,s));
+   if(e.target.closest('[data-koa=copy]')){const o=orders.items.find(x=>x.no===no);navigator.clipboard&&navigator.clipboard.writeText(orderText(o)).then(()=>toast('Data pesanan disalin')).catch(()=>{})}
+   return;
+  }
+  const bf=e.target.closest('.kt-bf');
+  if(bf){const i=+bf.dataset.bi;
+   if(e.target.closest('#ktBOk')){
+    const foto=$id('ktBFoto').value.trim();if(foto&&!/^https:\/\//i.test(foto)){$id('ktBErr').textContent='Link foto harus diawali https://';return}
+    const r=[draft.banners[i]?draft.banners[i][0]:'',$id('ktBJ').value.trim(),$id('ktBS').value.trim(),foto,$id('ktBT').value.trim(),$id('ktBL').value.trim()||'#produk',draft.banners[i]?draft.banners[i][6]:true,0];
+    if(!r[1]&&!r[3]){$id('ktBErr').textContent='Isi judul atau foto banner.';return}
+    draft.banners[i]=r;dirty('Banners');close_();if(tab==='tampilan')render();return}
+   if(e.target.closest('#ktBDel')){draft.banners.splice(i,1);dirty('Banners');close_();if(tab==='tampilan')render();return}
+  }
+ });
+ $('#pb').addEventListener('change',async e=>{
+  const up=e.target.closest('[data-up]');
+  if(up&&up.files[0]){
+   const i=+up.dataset.up,slot=up.closest('.ct-slot'),ed=document.querySelector('.kt-ed'),o=ed&&IT.find(x=>x.k===ed.dataset.ke);
+   slot.querySelector('span,img')&&slot.querySelector('span,img').remove();slot.insertAdjacentHTML('beforeend','<span>Mengunggah…</span>');
+   try{const url=await upload(up.files[0],(o?o.g+'_'+o.c:'produk')+'_'+(i+1));
+    slot.querySelector('span').remove();slot.insertAdjacentHTML('beforeend','<img src="'+esc(url)+'" alt="">');
+    document.querySelector('[data-url="'+i+'"]').value=url}
+   catch(err){slot.querySelector('span').textContent='Gagal: '+(err.message||err)}
+   return;
+  }
+  if(e.target.id==='ktBFile'&&e.target.files[0]){
+   const slot=e.target.closest('.ct-slot');slot.querySelector('span,img')&&slot.querySelector('span,img').remove();slot.insertAdjacentHTML('beforeend','<span>Mengunggah…</span>');
+   try{const url=await upload(e.target.files[0],'banner_'+Date.now());slot.querySelector('span').remove();slot.insertAdjacentHTML('beforeend','<img src="'+esc(url)+'" alt="">');$id('ktBFoto').value=url}
+   catch(err){slot.querySelector('span').textContent='Gagal: '+(err.message||err)}
+  }
+ });
+ $('#pb').addEventListener('input',e=>{
+  const u=e.target.closest('[data-url]');if(!u)return;
+  const slot=document.querySelector('.ct-slot[data-slot="'+u.dataset.url+'"]');if(!slot)return;
+  const v=u.value.trim(),img=slot.querySelector('img,span');if(img)img.remove();
+  slot.insertAdjacentHTML('beforeend',v?'<img src="'+esc(imgSrc(v))+'" referrerpolicy="no-referrer" alt="">':'<span>＋ Foto</span>');
+ });
+ setHead();
+ setTimeout(()=>{if(configured()&&localStorage.getItem('salesTrackingPin'))loadOv(false)},6500);
+ if(location.hash==='#katalog')setTimeout(()=>open(),300);
 })();
 </script>
 </body>

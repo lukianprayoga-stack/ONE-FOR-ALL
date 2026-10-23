@@ -1,6 +1,6 @@
 /* Service worker ONE FOR ALL.
    Naikkan angka versi setiap kali isi aplikasi diubah agar HP mengambil versi baru. */
-const CACHE = 'ofa-v22';
+const CACHE = 'ofa-v23';
 const SHELL = [
   './',
   './index.html',
