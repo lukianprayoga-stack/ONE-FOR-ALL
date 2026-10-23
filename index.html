@@ -1886,8 +1886,14 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    if(!confirm(res.message+'\n\nTetap ganti Stock Database? Isi lama tetap tersimpan di sheet cadangan.'))return 'Inventory by SKU dibatalkan';
    res=await api('uploadInventoryBySku',Object.assign(arg,{force:true}));
   }
-  setSku(res);loadCat(true);
-  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok'+(res.sheet?', sheet "'+res.sheet+'"':'')+')'+(res.sync?' · '+syncText(res.sync):'')+(res.syncError?' · Sinkron katalog gagal: '+res.syncError:'');
+  setSku(res);
+  const head='Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok'+(res.sheet?', sheet "'+res.sheet+'"':'')+')';
+  status(head+' · Menyinkronkan katalog website… ±1–3 menit, biarkan aplikasi tetap terbuka');
+  let tail;
+  try{tail=syncText(await api('syncCatalog',{}))}
+  catch(err){tail='Sinkron katalog belum berhasil: '+(err&&err.message||err)+' Buka kartu biru lalu ketuk "Sinkron ulang katalog".'}
+  loadCat(true);
+  return head+' · '+tail;
  }
  $id('ivFile').onchange=async e=>{
   const files=[...(e.target.files||[])];e.target.value='';if(!files.length)return;
