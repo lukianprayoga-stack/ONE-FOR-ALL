@@ -450,6 +450,15 @@ textarea.in{min-height:240px;resize:vertical}
 .iv-status.err{color:#d33a40}
 .iv-sku{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4}
 .iv-sku:empty{display:none}
+.ct-btn{background:rgba(47,128,237,.1)}
+.ct-btn.ok{background:rgba(34,165,89,.12)}
+.ct-form .ct-ph{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 14px}
+.ct-slot{position:relative;aspect-ratio:1;border-radius:14px;border:2px dashed var(--line);background:var(--bg);display:grid;place-items:center;overflow:hidden;cursor:pointer;font-size:12px;color:var(--mut);text-align:center;padding:4px}
+.ct-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ct-slot b{position:absolute;left:6px;top:6px;z-index:1;background:rgba(0,0,0,.55);color:#fff;border-radius:99px;font-size:10px;padding:1px 6px}
+.ct-slot input{display:none}
+.ct-form label.ct-l{display:block;font-size:13px;font-weight:700;margin:6px 0 4px}
+.ct-meta{font-size:13px;color:var(--mut);margin:0 0 10px;line-height:1.4}
 .pf-stack{display:flex;height:12px;border-radius:99px;overflow:hidden;margin-top:12px;background:var(--line)}
 .pf-stack i{display:block;min-width:2px}
 .pf-rows{display:grid;gap:4px;margin-top:10px}
@@ -551,6 +560,7 @@ textarea.in{min-height:240px;resize:vertical}
       <div id="ivBody"></div>
       <div class="iv-status" id="ivStatus"></div>
       <div class="iv-sku" id="ivSku"></div>
+      <div id="ctBox"></div>
     </section>
     <section class="perf" id="perf" aria-label="Performa produk">
       <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
@@ -879,6 +889,7 @@ renderTeam();
   t.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.classList.remove('on');undo=null},4500);
  }
  $('#toastBtn').onclick=()=>{if(undo)undo();undo=null;$('#toast').classList.remove('on')};
+ window.ofaToast=toast;
 
  $('#dlForm').onsubmit=e=>{
   e.preventDefault();const inp=$('#dlIn'),t=inp.value.trim();if(!t)return;
@@ -1654,12 +1665,100 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const restock=()=>R.filter(o=>o.stock<=0&&o.q30>0).sort((a,b)=>b.q30-a.q30);
  function status(t,err){const n=$id('ivStatus');n.textContent=t||'';n.className='iv-status'+(err?' err':'')}
 
+ /* --- katalog website: master foto & harga --- */
+ let ctData=null,ctBusy=false,ctList=null;
+ try{ctData=JSON.parse(localStorage.getItem('ofa_cat_todo')||'null')}catch(e){}
+ function drawCat(){
+  const n=$id('ctBox');if(!n)return;
+  if(!ctData||!Array.isArray(ctData.items)){n.innerHTML='';return}
+  const L=ctData.items,sy=ctData.sync;
+  n.innerHTML=`<button type="button" class="iv-todo ct-btn ${L.length?'':'ok'}" id="ctOpen"><b>${nf(L.length)}</b><span>${L.length?'produk ada stok belum lengkap foto/harga di website':'Semua produk yang ada stok sudah lengkap foto & harga'}<small>${L.length?'Lengkapi master foto & harga →':''}${sy&&sy.at?(L.length?' · ':'')+'sinkron katalog '+tgl(String(sy.at).slice(0,10))+' '+String(sy.at).slice(11,16):''}</small></span></button>`;
+ }
+ async function loadCat(force){
+  if(ctBusy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&ctData&&Date.now()-(ctData.at||0)<30*60e3)return;
+  ctBusy=true;
+  try{const r=await api('getCatalogTodo',{});ctData=Object.assign(r,{at:Date.now()});try{localStorage.setItem('ofa_cat_todo',JSON.stringify(ctData))}catch(e){}drawCat()}
+  catch(err){}finally{ctBusy=false}
+ }
+ function catRow(o){
+  return `<div class="iv-it" data-ct="${esc(o.k)}" role="button" tabindex="0"><span class="iv-img">${o.photos&&o.photos[0]?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.photos[0])}" alt="">`:'📷'}</span>
+   <span class="iv-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.g)}${o.sizes?' · ukuran '+esc(o.sizes):''}</small>
+   <small>Stok ${nf(o.qty)} pcs · ${o.price?rp(o.price):'<b style="display:inline;color:#d33a40;font-size:12px">harga kosong</b>'} · ${o.photos&&o.photos[0]?'foto ada':'<b style="display:inline;color:#d33a40;font-size:12px">foto kosong</b>'}</small></span></div>`;
+ }
+ function drawCatList(){
+  const q=(ctList.q||'').toLowerCase(),L=ctData.items.filter(o=>!q||(o.n+' '+o.c+' '+o.g+' '+o.sizes).toLowerCase().includes(q));
+  $id('ctItems').innerHTML=L.length?L.slice(0,ctList.n).map(catRow).join('')+(L.length>ctList.n?`<button type="button" class="btn ghost iv-more" data-ctmore="1">Tampilkan lebih banyak (${nf(L.length-ctList.n)} lagi)</button>`:''):'<p class="dp-empty">Tidak ada produk.</p>';
+  $id('ctCnt').textContent=nf(L.length)+' produk (per generic & warna)';
+ }
+ function openCat(){
+  if(!ctData)return;ctList={q:'',n:40};
+  openModal('Lengkapi Foto & Harga',`<div class="iv-list"><p class="hint" style="margin:0 0 8px">Produk di bawah ada stoknya tapi foto atau harganya belum ada, jadi tampil kurang lengkap di website. Satu kali simpan berlaku untuk semua ukuran dengan generic & warna yang sama.</p>
+   <div class="iv-tools"><input class="in" id="ctQ" type="search" placeholder="Cari nama, warna, kode…"></div><p class="hint" id="ctCnt" style="margin:8px 0 0"></p><div id="ctItems"></div>
+   <button type="button" class="btn ghost iv-more" id="ctSync">↻ Sinkron ulang katalog</button></div>`);
+  $id('ctQ').addEventListener('input',e=>{ctList.q=e.target.value.trim();ctList.n=40;drawCatList()});
+  drawCatList();
+ }
+ function shrink(file){
+  return new Promise((ok,no)=>{const img=new Image(),u=URL.createObjectURL(file);
+   img.onload=()=>{const m=1280,k=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.85).split(',')[1])};
+   img.onerror=()=>{URL.revokeObjectURL(u);no(new Error('File bukan gambar.'))};img.src=u});
+ }
+ function catForm(o){
+  const files=[null,null,null];
+  openModal(o.n,`<div class="ct-form"><p class="ct-meta">${esc(o.c)} · generic ${esc(o.g)}${o.sizes?' · ukuran '+esc(o.sizes):''} · stok ${nf(o.qty)} pcs</p>
+   <label class="ct-l">Foto produk (foto pertama = foto utama)</label>
+   <div class="ct-ph">${[0,1,2].map(i=>`<label class="ct-slot" data-slot="${i}">${o.photos&&o.photos[i]?`<img src="${esc(o.photos[i])}" referrerpolicy="no-referrer" alt="">`:''}<b>${i+1}</b><span>📷<br>${i?'Foto '+(i+1):'Foto utama'}</span><input type="file" accept="image/*" data-file="${i}"></label>`).join('')}</div>
+   <label class="ct-l" for="ctPrice">Harga (Rp)</label><input class="in" id="ctPrice" type="number" inputmode="numeric" min="0" step="1000" value="${o.price||''}" placeholder="contoh 349000">
+   <p class="hint" id="ctErr" style="color:#e5484d;min-height:1em"></p>
+   <div class="row"><button class="btn" type="button" id="ctSave">Simpan ke katalog</button><button class="btn ghost" type="button" id="ctBack">Kembali</button></div></div>`);
+  document.querySelectorAll('[data-file]').forEach(inp=>inp.addEventListener('change',e=>{
+   const i=+inp.dataset.file,f=inp.files&&inp.files[0];if(!f)return;files[i]=f;
+   const slot=inp.closest('.ct-slot');let im=slot.querySelector('img');if(!im){im=document.createElement('img');slot.prepend(im)}im.src=URL.createObjectURL(f);
+  }));
+  $id('ctBack').onclick=openCat;
+  $id('ctSave').onclick=async()=>{
+   const b=$id('ctSave'),err=$id('ctErr'),price=Number($id('ctPrice').value)||0;
+   if(!(price>0)&&!files.some(Boolean)){err.textContent='Isi harga atau pilih foto terlebih dahulu.';return}
+   if(!(price>0)&&!o.price){err.textContent='Harga belum diisi.';return}
+   b.disabled=true;err.textContent='';
+   try{
+    const photos=['','',''];
+    for(let i=0;i<3;i++)if(files[i]){b.textContent='Mengunggah foto '+(i+1)+'…';const data=await shrink(files[i]);const r=await api('uploadCatalogPhoto',{data,mimeType:'image/jpeg',name:o.g+'_'+o.c+'_'+(i+1)});photos[i]=r.url}
+    b.textContent='Menyimpan…';
+    const r=await api('saveCatalogMaster',{g:o.g,c:o.c,price:price||o.price,photos});
+    photos.forEach((u,i)=>{if(u)o.photos[i]=u});o.price=price||o.price;
+    if(o.price&&o.photos[0])ctData.items=ctData.items.filter(x=>x.k!==o.k);
+    try{localStorage.setItem('ofa_cat_todo',JSON.stringify(ctData))}catch(e){}
+    drawCat();openCat();
+    if(window.ofaToast)window.ofaToast('Tersimpan untuk '+r.updated+' SKU · tampil di website');
+   }catch(e2){err.textContent='Gagal: '+(e2&&e2.message||e2);b.disabled=false;b.textContent='Simpan ke katalog'}
+  };
+ }
+ $('#pb').addEventListener('click',async e=>{
+  if(!document.getElementById('ctItems'))return;
+  const it=e.target.closest('[data-ct]');
+  if(it){const o=ctData.items.find(x=>x.k===it.dataset.ct);if(o)(window.ofaHeadGate||(f=>f()))(()=>catForm(o));return}
+  if(e.target.closest('[data-ctmore]')){ctList.n+=40;return drawCatList()}
+  const sb=e.target.closest('#ctSync');
+  if(sb){sb.disabled=true;sb.textContent='Menyinkronkan katalog… (±1 menit)';
+   try{const r=await api('syncCatalog',{});await loadCat(true);openCat();if(window.ofaToast)window.ofaToast(syncText(r))}
+   catch(err){sb.textContent='Gagal: '+(err&&err.message||err);sb.disabled=false}}
+ });
+ box.addEventListener('click',e=>{if(e.target.closest('#ctOpen'))openCat()});
+ function syncText(r){
+  if(!r)return '';
+  const p=[];if(r.newSkus)p.push('+'+nf(r.newSkus)+' SKU baru');if(r.productsAdded)p.push(nf(r.productsAdded)+' produk ditambahkan ke website');
+  if(r.autoPhoto)p.push(nf(r.autoPhoto)+' foto otomatis');if(r.autoPrice)p.push(nf(r.autoPrice)+' harga otomatis');if(r.productsFixed)p.push(nf(r.productsFixed)+' baris Products diperbaiki');
+  return 'Katalog tersinkron'+(p.length?': '+p.join(', '):', tidak ada perubahan');
+ }
  function drawSku(){
   const k=skuMeta,n=$id('ivSku');if(!n)return;
   n.textContent=k&&k.rows?'Stok katalog website: '+nf(k.rows)+' SKU, '+nf(k.inStock)+' ada stok · data '+tgl(String(k.date).slice(0,10))+' '+String(k.date).slice(11,16):'';
  }
  window.renderInv=function(){
-  drawSku();
+  drawSku();drawCat();
   if(!data){
    const msg='<p class="dp-empty">Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b> dari sistem. Aplikasi menghitung kepatuhan display (target 95%) dan performa setiap produk. File <b>export inventory by SKU</b> bisa dipilih bersamaan untuk memperbarui stok katalog website.</p>';
    $id('ivBody').innerHTML=msg;$id('pfBody').innerHTML='<p class="dp-empty">Performa produk muncul setelah inventory diupload.</p>';return;
@@ -1787,8 +1886,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    if(!confirm(res.message+'\n\nTetap ganti Stock Database? Isi lama tetap tersimpan di sheet cadangan.'))return 'Inventory by SKU dibatalkan';
    res=await api('uploadInventoryBySku',Object.assign(arg,{force:true}));
   }
-  setSku(res);
-  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok'+(res.sheet?', sheet "'+res.sheet+'"':'')+')';
+  setSku(res);loadCat(true);
+  return 'Stok katalog ✓ ('+nf(res.rows)+' SKU, '+nf(res.inStock)+' ada stok'+(res.sheet?', sheet "'+res.sheet+'"':'')+')'+(res.sync?' · '+syncText(res.sync):'')+(res.syncError?' · Sinkron katalog gagal: '+res.syncError:'');
  }
  $id('ivFile').onchange=async e=>{
   const files=[...(e.target.files||[])];e.target.value='';if(!files.length)return;
@@ -1828,8 +1927,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  try{const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(c&&c.items)setData(c,false)}catch(e){}
  renderInv();
  const baseRender=render;render=async function(){await baseRender();renderInv()};
- setTimeout(()=>refresh(false),3600);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(false)});
+ setTimeout(()=>{refresh(false);loadCat(false)},3600);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden){refresh(false);loadCat(false)}});
 })();
 </script>
 </body>
