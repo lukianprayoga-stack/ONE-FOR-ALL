@@ -421,6 +421,11 @@ body.kt-on{overflow:hidden}
 .kt-tabs button.on{background:var(--ink);color:var(--inkfg)}
 .kt-tabs i{display:inline-block;vertical-align:1px;margin-left:4px;min-width:17px;height:17px;border-radius:99px;background:#e5484d;color:#fff;font-size:10.5px;font-style:normal;font-weight:800;line-height:17px;padding:0 4px}
 .kt-body{max-width:760px;margin:0 auto;padding:14px 16px 96px}
+.kt-master .hint{margin:4px 0 4px}
+.kt-ms{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.kt-ms span{flex:1;min-width:0}.kt-ms b{display:block}.kt-ms small{display:block;color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kt-ms .btn{padding:7px 12px;font-size:13px;flex:none}
+.kt-mbar{background:var(--line)!important;margin-top:8px}.kt-mbar i{background:#22a559!important}
 .kt-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .kt-sum button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:10px;text-align:left;color:var(--fg);min-width:0}
 .kt-sum b{display:block;font-size:20px;letter-spacing:-.4px}.kt-sum small{display:block;color:var(--mut);font-size:11.5px;line-height:1.25}
@@ -2868,7 +2873,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!prod){b.innerHTML='<p class="dp-empty">Memuat produk katalog… (±10 detik)</p>';loadProd(false);return}
   const L=IT,cats=[...new Set(L.map(o=>o.cat).filter(Boolean))].sort();
   const cnt={live:L.filter(live).length,off:L.filter(o=>!live(o)).length,fix:L.filter(needFix).length,promo:L.filter(o=>o.promo>0).length,best:L.filter(o=>o.best).length,neu:L.filter(o=>o.neu).length};
-  b.innerHTML=`<div class="kt-sum">
+  b.innerHTML=`${masterCard()}<div class="kt-sum">
    <button type="button" data-kf="live"><b>${nf(cnt.live)}</b><small>produk tampil di web</small></button>
    <button type="button" data-kf="fix"><b class="${cnt.fix?'kt-bad':''}">${nf(cnt.fix)}</b><small>tanpa foto / harga</small></button>
    <button type="button" data-kf="promo"><b>${nf(cnt.promo)}</b><small>sedang promo</small></button></div>
@@ -2958,6 +2963,89 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   }catch(e){err.innerHTML=errTxt(e);btn.disabled=false;btn.textContent='Simpan ke website'}
  }
  const close_=()=>{const x=$id('px');if(x)x.click()};
+
+
+ /* ---------- MASTER HARGA & FOTO ---------- */
+ let mPend=null;
+ function masterCard(){
+  const m=(ov&&ov.masters)||{};
+  const line=(t,label)=>{const x=m[t];return `<div class="kt-ms"><span><b>${label}</b><small>${x?nf(x.rows)+' SKU · '+esc(x.file||'')+' · '+tgl(x.at)+' '+String(x.at||'').slice(11,16):'Belum diupload'}</small></span><button class="btn ghost" type="button" data-kmu="${t}">⇪ Upload</button></div>`};
+  return `<section class="kt-card kt-master"><div class="kt-ch"><h4>Master harga &amp; foto</h4>${m.harga||m.foto?'<button class="btn ghost" type="button" data-kta="mapply">↻ Terapkan ulang</button>':''}</div>
+   <p class="hint">Upload sekali, harga dan foto langsung masuk ke Product Assets. Setiap stok diperbarui, SKU baru otomatis memakai harga &amp; foto dari master. Produk yang tidak ada di master diisi manual lewat daftar di bawah.</p>
+   ${line('harga','Master Harga')}${line('foto','Master Foto')}<input type="file" id="ktMFile" accept=".xlsx,.xls,.csv" hidden></section>`;
+ }
+ function loadX(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ async function parseMaster(file,type){
+  await loadX();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellText:false,cellDates:false,cellHTML:false,cellStyles:false});
+  const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const sku=v=>typeof v==='number'?String(Math.round(v)):String(v==null?'':v).trim().replace(/\.0+$/,'');
+  const out=new Map();let sheets=[];
+  for(const name of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:''});
+   let hi=-1,h=null;
+   for(let i=0;i<Math.min(8,rows.length);i++){const n=(rows[i]||[]).map(norm);if(n.some(x=>x==='sku'||x==='sellersku'||x==='article')){hi=i;h=n;break}}
+   if(hi<0)continue;
+   const iS=h.findIndex(x=>x==='sku'||x==='sellersku'||x==='article'),iX=h.findIndex(x=>x==='crosssite'||x==='color'||x==='genericwarna');
+   const X=row=>iX>=0?String(row[iX]||'').trim().toUpperCase():'';
+   if(type==='harga'){
+    const iH=h.indexOf('harga'),iL=h.indexOf('locamount');if(iH<0&&iL<0)continue;sheets.push(name);
+    for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[],k=sku(row[iS]);if(!/^\d{6,}$/.test(k)||out.has(k))continue;
+     let v=iH>=0?Number(row[iH]):0;if(!(v>0)&&iL>=0)v=Number(String(row[iL]).replace(/[^\d]/g,''));
+     if(v>0)out.set(k,[k,X(row),Math.round(v)])}
+   }else{
+    const gi=h.map((x,i)=>/^gambar\d+$/.test(x)?i:-1).filter(i=>i>=0);if(!gi.length)continue;sheets.push(name);
+    for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[],k=sku(row[iS]);if(!/^\d{6,}$/.test(k)||out.has(k))continue;
+     const ph=gi.map(i=>String(row[i]||'').trim()).filter(u=>/^https:\/\//i.test(u)).slice(0,3);
+     if(ph.length)out.set(k,[k,X(row),ph[0]||'',ph[1]||'',ph[2]||''])}
+   }
+  }
+  return {rows:[...out.values()],sheets};
+ }
+ async function pickMaster(file){
+  const type=mPend&&mPend.type;if(!type||!file)return;
+  const label=type==='harga'?'Master Harga':'Master Foto';
+  openModal(label,'<p class="dp-empty">Membaca file '+esc(file.name)+'…</p>');
+  let d;
+  try{d=await parseMaster(file,type)}catch(e){$id('pb').innerHTML='<p class="dp-empty">Gagal membaca file: '+esc(e.message||e)+'</p>';return}
+  if(!d.rows.length){$id('pb').innerHTML='<p class="dp-empty">'+(type==='harga'?'Kolom Article / SKU dan Harga tidak ditemukan.':'Kolom SKU dan Gambar1 tidak ditemukan.')+' Pastikan memilih file '+label+'.</p>';return}
+  mPend={type,file,data:d};
+  const set=new Set(d.rows.map(r=>r[0])),allSku=IT.flatMap(o=>o.sizes.map(z=>z[1])),hit=allSku.filter(k=>set.has(k)).length;
+  $id('pb').innerHTML=`<div class="kt-mf"><p class="ct-meta">${esc(file.name)} · sheet ${esc(d.sheets.join(', '))}</p>
+   <p class="wk-p"><b>${nf(d.rows.length)} SKU</b> ${type==='harga'?'punya harga':'punya foto'} di file ini${allSku.length?` · cocok dengan <b>${nf(hit)}</b> dari ${nf(allSku.length)} SKU katalog`:''}.</p>
+   ${type==='harga'?'<p class="hint">Harga di Product Assets diganti dengan harga master untuk SKU yang ada di file. SKU yang tidak ada di master tidak diubah.</p><div class="row"><button class="btn" type="button" data-kmgo="0">Upload &amp; terapkan</button></div>'
+   :'<p class="hint">Pilih cara mengisi foto di Product Assets:</p><div class="row"><button class="btn" type="button" data-kmgo="0">Isi yang kosong saja</button><button class="btn ghost" type="button" data-kmgo="1">Timpa semua dari master</button></div><p class="hint">"Isi yang kosong saja" tidak mengubah foto yang sudah ada, termasuk foto yang kamu unggah manual.</p>'}</div>`;
+ }
+ async function runMaster(overwrite){
+  const p=mPend;if(!p||!p.data)return;
+  const label=p.type==='harga'?'Master Harga':'Master Foto',rows=p.data.rows,total=rows.length;
+  openModal(label,'<div class="kt-mf"><p class="wk-p" id="ktMProg">Mengunggah…</p><div class="sl-bar kt-mbar"><i id="ktMBar" style="width:2%"></i></div></div>');
+  const prog=(t,f)=>{const a=$id('ktMProg'),b=$id('ktMBar');if(a)a.textContent=t;if(b)b.style.width=Math.round(f*100)+'%'};
+  try{
+   for(let i=0;i<total;i+=4000){prog('Mengunggah '+nf(Math.min(i+4000,total))+' dari '+nf(total)+' SKU…',.05+.75*i/total);
+    await api('katalogMasterUpload',{type:p.type,start:i,total,rows:rows.slice(i,i+4000),file:p.file.name})}
+   prog('Menerapkan ke Product Assets…',.9);
+   const r=await api('katalogMasterApply',{type:p.type,overwritePhotos:!!overwrite});
+   prog('Selesai',1);mPend=null;
+   $id('pb').innerHTML=masterResult(r,label,p.type);
+   loadOv(true);prod=null;IT=[];if(tab==='produk')render();loadProd(true);
+  }catch(e){const a=$id('ktMProg');if(a)a.innerHTML=errTxt(e)}
+ }
+ function masterResult(r,label,type){
+  return `<div class="kt-mf"><p class="wk-p"><b>${esc(label)} diterapkan ke ${nf(r.rows)} baris Product Assets.</b></p><ul class="wk-ul">
+   ${type!=='foto'?'<li>Harga diperbarui: <b>'+nf(r.priceChanged)+' SKU</b></li>':''}
+   ${type!=='harga'?'<li>Foto diisi: <b>'+nf(r.photoFilled)+' SKU</b>'+(r.photoReplaced?' · diganti: <b>'+nf(r.photoReplaced)+'</b>':'')+'</li>':''}
+   <li>SKU ada stok yang masih tanpa harga: <b>${nf(r.noPrice)}</b>, tanpa foto: <b>${nf(r.noPhoto)}</b></li></ul>
+   <p class="hint">Sisanya diisi manual: tutup jendela ini lalu pilih filter <b>Perlu dilengkapi</b>.</p></div>`;
+ }
+ async function reapply(){
+  openModal('Terapkan master','<p class="dp-empty">Menerapkan master harga &amp; foto ke Product Assets…</p>');
+  try{const r=await api('katalogMasterApply',{type:'all',overwritePhotos:false});$id('pb').innerHTML=masterResult(r,'Master harga & foto','all');prod=null;IT=[];if(tab==='produk')render();loadProd(true)}
+  catch(e){$id('pb').innerHTML='<p class="dp-empty">'+errTxt(e)+'</p>'}
+ }
 
  /* ---------- PESANAN ---------- */
  async function loadOrders(){
@@ -3089,6 +3177,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  /* ---------- event ---------- */
  page.addEventListener('click',e=>{
   const kf=e.target.closest('[data-kf]');if(kf){pv.f=kf.dataset.kf;pv.n=40;if(!$id('ktList'))return;return drawList()}
+  const mu=e.target.closest('[data-kmu]');if(mu){mPend={type:mu.dataset.kmu};const f=$id('ktMFile');f.value='';return f.click()}
   const kp=e.target.closest('[data-kp]');if(kp){const k=kp.dataset.kp;return gate(()=>openEdit(k))}
   const ko=e.target.closest('[data-ko]');if(ko)return openOrder(ko.dataset.ko);
   const of=e.target.closest('[data-of]');if(of){ordF=of.dataset.of;return render()}
@@ -3096,6 +3185,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const a=e.target.closest('[data-kta]');
   if(a){const k=a.dataset.kta;
    if(k==='more'){pv.n+=40;return drawList()}
+   if(k==='mapply')return gate(reapply);
    if(k==='reload'){prod=null;IT=[];render();return loadProd(true)}
    if(k==='unlock')return gate(()=>{unlocked=true;render()});
    if(k==='reloadOrd'){orders=null;return render()}
@@ -3111,6 +3201,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const s=e.target.closest('[data-kts]');if(s)return gate(()=>saveSection(s.dataset.kts,s));
  });
  page.addEventListener('change',e=>{
+  if(e.target.id==='ktMFile'&&e.target.files[0])return pickMaster(e.target.files[0]);
   if(!draft)return;const t=e.target;
   if(t.dataset.bon!=null){draft.banners[+t.dataset.bon][6]=t.checked;dirty('Banners')}
   if(t.dataset.con!=null){draft.categories[+t.dataset.con][3]=t.checked;dirty('Categories')}
@@ -3139,6 +3230,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  // tombol di modal (form produk, banner, pesanan)
  $('#pb').addEventListener('click',async e=>{
   if(e.target.closest('#ktSave'))return saveEdit();
+  const mg=e.target.closest('[data-kmgo]');if(mg){const ow=mg.dataset.kmgo==='1';return gate(()=>runMaster(ow))}
   const od=e.target.closest('.kt-od');
   if(od){const no=od.dataset.od;
    const s=e.target.closest('[data-kos]');if(s)return gate(()=>setStatus(no,s.dataset.kos,s));
