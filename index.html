@@ -487,6 +487,33 @@ textarea.in{min-height:240px;resize:vertical}
 .pf-cfg span{display:flex;align-items:center;gap:8px;font-weight:600}
 .pf-cfg span i{width:10px;height:10px;border-radius:50%}
 @media(max-width:760px){.inv,.perf{margin-top:12px;max-width:none;border-radius:20px;padding:16px}.iv-tile b{font-size:23px}}
+/* ====== CEK STOK CEPAT ====== */
+.ck-bar{display:flex;align-items:center;gap:12px;width:100%;max-width:560px;margin-top:16px;border:1.5px solid var(--line);background:var(--card);border-radius:18px;padding:12px 14px;text-align:left;color:var(--fg)}
+.ck-bar>span{font-size:20px}
+.ck-bar b{display:block;font-size:15px}
+.ck-bar small{display:block;color:var(--mut);font-size:12px;font-weight:500}
+.ck-bar>div{flex:1;min-width:0}
+.ck-bar i{font-style:normal;font-size:20px;background:var(--bg);border-radius:12px;padding:6px 9px}
+.ck-search{display:flex;gap:6px}
+.ck-search .in{flex:1;min-width:0}
+.ck-cam{margin-top:10px;border-radius:16px;overflow:hidden;background:#000;position:relative}
+.ck-cam video{display:block;width:100%;max-height:46vh;object-fit:cover}
+.ck-cam i{position:absolute;left:12%;right:12%;top:50%;height:2px;background:#ff4f1f;box-shadow:0 0 12px #ff4f1f}
+.ck-it{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.ck-tx{flex:1;min-width:0;font-size:13px;line-height:1.35}
+.ck-tx b{display:block;font-size:14px}
+.ck-tx small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+.ck-tx s{opacity:.7}
+.ck-sz{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.ck-chip{border-radius:9px;padding:3px 8px;font-size:12px;font-weight:700;background:rgba(34,165,89,.14);color:var(--fg)}
+.ck-chip b{display:inline;font-size:12px;color:#1a8a49;margin-left:3px}
+.ck-chip.off{background:var(--bg);color:var(--mut);text-decoration:line-through}
+.ck-chip.hit{outline:2px solid #2f80ed}
+.ck-loc{margin-top:6px;font-size:12px;line-height:1.45}
+.ck-loc div{padding:2px 0}
+.ck-loc em{font-style:normal;font-weight:700}
+@media(max-width:760px){.ck-bar{max-width:none;margin-top:12px}}
+@media(max-width:760px){.bnav{grid-template-columns:repeat(5,1fr)!important}}
 </style>
 </head>
 <body>
@@ -515,6 +542,7 @@ textarea.in{min-height:240px;resize:vertical}
     <p class="lead">Kelola toko dari satu dashboard: catat, hitung, atur tugas, dan buka semua tool tanpa pindah tab. Ganti tampilan tiap kartu dengan foto atau video pendekmu sendiri.</p>
     <a class="btn" href="#tools">Jelajahi tools</a>
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
+    <button type="button" class="ck-bar" id="ckOpen"><span>🔍</span><div><b>Cek stok produk</b><small>Cari nama, warna, kode, atau scan barcode</small></div><i>📷</i></button>
     <section class="sales loading" id="sales" aria-label="Sales bulan ini">
       <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
       <div id="slBody">
@@ -600,6 +628,7 @@ textarea.in{min-height:240px;resize:vertical}
 <div class="remark" aria-label="Remark"><i></i>Lukian Prayoga</div>
 <nav class="bnav" aria-label="Navigasi utama">
   <button data-go="top" class="on"><span>⌂</span>Beranda</button>
+  <button data-go="stok"><span>⌕</span>Stok</button>
   <button data-go="tools"><span>▦</span>Tools</button>
   <button data-go="tim"><span>☺</span>Tim</button>
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
@@ -1024,6 +1053,7 @@ renderTeam();
  nav.onclick=e=>{
   const b=e.target.closest('button');if(!b)return;const k=b.dataset.go;
   if(k==='add')return editor(null);
+  if(k==='stok')return window.ofaOpenStock&&window.ofaOpenStock();
   if(k==='top')scrollTo({top:0,behavior:'smooth'});else document.getElementById(k).scrollIntoView({behavior:'smooth'});
   mark(k);
  };
@@ -1935,6 +1965,114 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const baseRender=render;render=async function(){await baseRender();renderInv()};
  setTimeout(()=>{refresh(false);loadCat(false)},3600);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){refresh(false);loadCat(false)}});
+})();
+/* ====== CEK STOK CEPAT ====== */
+(function(){
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_stok',TTL=60*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ let idx=null,loading=null,stream=null,timer=0,reader=null,lastQ='';
+ try{idx=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ function prep(d){
+  d.list=d.items.map(a=>{const o={g:a[0],c:a[1],n:a[2],l3:a[3],l4:a[4],price:a[5],promo:a[6],img:a[7],sizes:a[8].map(z=>({sz:z[0],sku:z[1],av:z[2],s:z[3],w:z[4],bs:z[5],bw:z[6]}))};
+   o.stock=o.sizes.reduce((t,z)=>t+z.av,0);o.hay=(o.n+' '+o.c+' '+o.l3+' '+o.l4+' '+o.g+' '+o.sizes.map(z=>z.sku+' '+z.sz).join(' ')).toLowerCase();return o});
+  return d;
+ }
+ if(idx&&idx.items)prep(idx);
+ function load(force){
+  if(loading)return loading;
+  if(!force&&idx&&Date.now()-(idx.at||0)<TTL)return Promise.resolve(idx);
+  if(!configured()||!localStorage.getItem('salesTrackingPin'))return Promise.resolve(idx);
+  loading=api('getStockIndex',{}).then(d=>{d.at=Date.now();idx=prep(d);try{localStorage.setItem(CK,JSON.stringify({at:d.at,items:d.items,stockDate:d.stockDate,binDate:d.binDate}))}catch(e){}return idx})
+   .finally(()=>{loading=null});
+  return loading;
+ }
+ function info(){
+  const n=$id('ckInfo');if(!n)return;
+  n.textContent=idx&&idx.list?nf(idx.list.length)+' produk (generic & warna)'+(idx.stockDate?' · stok sistem '+tgl(idx.stockDate)+' '+String(idx.stockDate).slice(11,16):'')+(idx.binDate?' · lokasi bin '+tgl(idx.binDate):''):'';
+ }
+ function find(q){
+  q=String(q||'').trim().toLowerCase();if(!idx||!idx.list||!q)return [];
+  const digits=q.replace(/\D/g,'');
+  if(/^\d{6,}$/.test(q.replace(/\s/g,''))){
+   const hit=idx.list.filter(o=>o.sizes.some(z=>z.sku===digits||digits.includes(z.sku)||z.sku.startsWith(digits))||digits.startsWith(o.g)||o.g.startsWith(digits.slice(0,9)));
+   return hit.map(o=>({o,hit:o.sizes.filter(z=>z.sku===digits||digits.includes(z.sku)).map(z=>z.sku)}));
+  }
+  const toks=q.split(/\s+/).filter(Boolean);
+  return idx.list.filter(o=>toks.every(t=>o.hay.includes(t))).map(o=>({o,hit:o.sizes.filter(z=>toks.includes(z.sz.toLowerCase())).map(z=>z.sku)}))
+   .sort((a,b)=>(b.o.stock>0)-(a.o.stock>0)||a.o.n.localeCompare(b.o.n));
+ }
+ function card(r){
+  const o=r.o,price=o.promo>0?o.promo:o.price;
+  const loc=o.sizes.filter(z=>z.s||z.w).map(z=>`<div><em>${esc(z.sz)}</em> — ${z.s?'Selling area: '+esc(z.bs):''}${z.s&&z.w?' · ':''}${z.w?'Gudang: '+esc(z.bw):''}</div>`).join('');
+  return `<div class="ck-it"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.img)}" alt="">`:'🏷️'}</span>
+   <div class="ck-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.l4||o.l3||'-')} · ${esc(o.g)}</small>
+   ${price?`<small>${rp(price)}${o.promo>0&&o.price>o.promo?` <s>${rp(o.price)}</s>`:''}</small>`:''}
+   <div class="ck-sz">${o.sizes.map(z=>`<span class="ck-chip${z.av>0?'':' off'}${r.hit.includes(z.sku)?' hit':''}" title="${esc(z.sku)}">${esc(z.sz)}${z.av>0?`<b>${nf(z.av)}</b>`:''}</span>`).join('')}</div>
+   ${loc?`<div class="ck-loc">${loc}</div>`:(o.stock>0?'<div class="ck-loc">Lokasi bin belum ada di data inventory by bin.</div>':'<div class="ck-loc">Stok habis di toko.</div>')}</div></div>`;
+ }
+ function draw(){
+  const q=$id('ckQ')?$id('ckQ').value:'';lastQ=q;
+  const box=$id('ckRes');if(!box)return;
+  if(!idx||!idx.list){box.innerHTML='<p class="dp-empty">'+(loading?'Memuat data stok…':'Data stok belum ada. Upload inventory by SKU & by bin di kartu Kepatuhan Display.')+'</p>';return}
+  if(!q.trim()){box.innerHTML='<p class="dp-empty">Ketik nama produk (contoh: <b>pinch blk 42</b>), kode SKU/generic, atau tekan <b>📷 Scan</b> untuk membaca barcode label.</p>';return}
+  const R=find(q);
+  box.innerHTML=R.length?R.slice(0,30).map(card).join('')+(R.length>30?`<p class="hint">${nf(R.length-30)} produk lain cocok. Perjelas pencarian.</p>`:''):`<p class="dp-empty">Tidak ada produk yang cocok dengan "<b>${esc(q)}</b>".</p>`;
+ }
+ function stopCam(){
+  clearInterval(timer);timer=0;
+  try{if(reader)reader.reset()}catch(e){}reader=null;
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  const c=$id('ckCam');if(c)c.hidden=true;
+ }
+ function found(code){
+  stopCam();const q=$id('ckQ');if(!q)return;
+  q.value=String(code).trim();draw();
+  if(navigator.vibrate)navigator.vibrate(60);
+ }
+ function loadZxing(){
+  if(window.ZXing)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca barcode gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ async function scan(){
+  const cam=$id('ckCam'),vid=$id('ckVid'),msg=$id('ckInfo');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){msg.textContent='Kamera tidak tersedia di perangkat ini.';return}
+  cam.hidden=false;
+  try{
+   if('BarcodeDetector' in window){
+    const det=new BarcodeDetector({formats:['ean_13','ean_8','code_128','code_39','upc_a','upc_e','itf','qr_code']});
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    vid.srcObject=stream;await vid.play();
+    timer=setInterval(async()=>{try{const r=await det.detect(vid);if(r&&r[0])found(r[0].rawValue)}catch(e){}},300);
+   }else{
+    await loadZxing();
+    reader=new ZXing.BrowserMultiFormatReader();
+    await reader.decodeFromConstraints({video:{facingMode:'environment'}},vid,res=>{if(res)found(res.getText())});
+   }
+  }catch(err){stopCam();msg.textContent='Kamera tidak bisa dibuka: '+(err&&err.message||err)+'. Izinkan akses kamera untuk aplikasi ini.'}
+ }
+ window.ofaOpenStock=function(){
+  openModal('Cek Stok',`<div class="ck-search"><input class="in" id="ckQ" type="search" placeholder="Nama, warna, ukuran, atau kode" autocomplete="off" enterkeyhint="search"><button class="btn ghost" type="button" id="ckScan">📷 Scan</button></div>
+   <div class="ck-cam" id="ckCam" hidden><video id="ckVid" playsinline muted></video><i></i></div>
+   <p class="hint" id="ckInfo" style="margin:8px 0 0"></p><div id="ckRes"></div>`);
+  cleanup=stopCam;
+  const q=$id('ckQ');q.value=lastQ;
+  let t=0;q.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(draw,120)});
+  $id('ckScan').onclick=()=>{if(stream||reader)stopCam();else scan()};
+  info();draw();setTimeout(()=>q.focus(),50);
+  load(false).then(()=>{info();draw()}).catch(err=>{const n=$id('ckInfo');if(n)n.textContent=/tidak dikenal/i.test(err.message)?'Perbarui Inventory.gs di Apps Script untuk memakai Cek Stok.':'Gagal memuat stok: '+err.message;draw()});
+  if(!idx)draw();
+ };
+ $id('ckOpen').onclick=()=>window.ofaOpenStock();
+ setTimeout(()=>load(false).catch(()=>{}),5000);
 })();
 </script>
 </body>
