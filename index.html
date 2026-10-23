@@ -408,6 +408,60 @@ textarea.in{min-height:240px;resize:vertical}
 .dp-badge.wait{color:var(--mut)}
 .dp-more{border:0;background:none;color:var(--mut);font-size:13px;font-weight:700;padding:8px 2px 0}
 .dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.wk-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:12px}
+.wk-hero b{display:block;font-size:30px;letter-spacing:-1px;line-height:1.1}
+.wk-hero span{color:var(--mut);font-size:13px}
+.wk-hero em{font-style:normal;font-weight:700;font-size:14px;text-align:right;white-space:nowrap}
+.wk-hero em small{display:block;font-weight:500;color:var(--mut);font-size:11px}
+.wk-up{color:#15803d!important}.wk-down{color:#dc2626!important}
+.wk-bars{display:flex;gap:6px;align-items:stretch;height:96px;margin-top:14px}
+.wk-b{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.wk-col{position:relative;flex:1;width:100%;max-width:36px;background:rgba(127,127,127,.12);border-radius:8px}
+.wk-col i{position:absolute;left:0;right:0;bottom:0;background:#f59e0b;border-radius:8px}
+.wk-col i.ok{background:#22a559}
+.wk-col u{position:absolute;left:-3px;right:-3px;height:2px;margin-bottom:-1px;background:var(--fg);opacity:.8;border-radius:2px}
+.wk-b small{font-size:11px;color:var(--mut)}
+.wk-b.fut .wk-col{opacity:.45}
+.wk-leg{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:11.5px;color:var(--mut);margin:8px 0 0}
+.wk-sw{display:inline-block;width:10px;height:10px;border-radius:3px;background:#22a559;margin-right:-3px}
+.wk-sw.lo{background:#f59e0b}
+.wk-sw.t{height:2px;background:var(--fg)}
+.wk-rep h4{font-size:15px;margin:18px 0 8px}
+.wk-rep h4 small{font-weight:500;color:var(--mut);font-size:12px}
+.wk-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:560px){.wk-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.wk-k{background:rgba(127,127,127,.09);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:0}
+.wk-k small{display:block;color:var(--mut);font-size:11px}
+.wk-k b{display:block;font-size:17px;margin-top:2px;letter-spacing:-.3px}
+.wk-k em{display:block;font-style:normal;font-size:11.5px;font-weight:600;color:var(--mut);margin-top:2px}
+.wk-tbl{overflow-x:auto}
+.wk-tbl table{width:100%;border-collapse:collapse;font-size:12.5px}
+.wk-tbl th{text-align:right;color:var(--mut);font-weight:600;padding:6px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+.wk-tbl td{text-align:right;padding:7px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+.wk-tbl th:first-child,.wk-tbl td:first-child{text-align:left;white-space:normal}
+.wk-tbl td small{display:block;font-size:11px;font-weight:600}
+.wk-row{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.wk-row i{font-style:normal;color:var(--mut);width:18px;text-align:right}
+.wk-row span{flex:1;min-width:0}
+.wk-row small{display:block;color:var(--mut);font-size:11.5px}
+.wk-row b{white-space:nowrap}
+.wk-ul{margin:0;padding-left:18px;font-size:13px;line-height:1.55}
+.wk-p{font-size:13px;line-height:1.5;margin:0 0 8px}
+.wk-p small{color:var(--mut)}
+.wk-pre{white-space:pre-wrap}
+.wk-note{min-height:96px;resize:vertical;font:inherit;font-size:13px}
+.wk-act{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.wk-act .btn{padding:9px 14px;font-size:13px}
+#wkPrint{display:none}
+@media print{
+ body.wk-printing>*:not(#wkPrint){display:none!important}
+ body.wk-printing{background:#fff!important}
+ body.wk-printing #wkPrint{display:block;color:#111;background:#fff;font-size:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #wkPrint h2{font-size:20px;margin:0 0 4px}
+ #wkPrint .wk-k,#wkPrint .wk-col{background:#f3f4f6}
+ #wkPrint .wk-rep h4{break-after:avoid}
+ #wkPrint .wk-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
 .dsr-warn{background:#fff4e5;color:#7a3e00;border:1px solid #f5c58a;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0 0 10px}
 .dsr-warn b{color:inherit}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .dsr-warn{background:#3a2608;color:#ffd9a8;border-color:#7a4a12}}
@@ -603,6 +657,10 @@ textarea.in{min-height:240px;resize:vertical}
         <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
       </div>
       <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
+    </section>
+    <section class="rs" id="wk" aria-label="Laporan mingguan">
+      <div class="sh-head"><div><h3>Laporan Mingguan</h3><p id="wkSub">Ringkasan minggu lalu untuk Store Manager</p></div></div>
+      <div id="wkBody"></div>
     </section>
     <section class="shift" id="shift" aria-label="Jadwal hari ini">
       <div class="sh-head"><div><h3>Jadwal Hari Ini</h3><p id="shDate"></p></div><button class="btn ghost" type="button" id="shPlan">Atur Jadwal</button></div>
@@ -1747,6 +1805,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  const todo=()=>R.filter(o=>o.stock>0&&!(o.s>0)).sort((a,b)=>(b.q90-a.q90)||(b.w-a.w));
  const restock=()=>R.filter(o=>o.stock<=0&&o.q30>0).sort((a,b)=>b.q30-a.q30);
+ window.ofaPerfSnap=function(){
+  if(!data||!data.summary||!R)return null;
+  const c=cfg(),cnt={};TIERS.forEach(t=>cnt[t[0]]=0);R.forEach(o=>{const t=tier(o,c);if(t)cnt[t]++});
+  const s=data.summary;
+  return {date:data.meta&&data.meta.date,gp:s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp:s.colorTotal?s.colorDisplayed/s.colorTotal:0,todo:todo().length,cnt,restock:restock().length};
+ };
  function status(t,err){const n=$id('ivStatus');n.textContent=t||'';n.className='iv-status'+(err?' err':'')}
 
  /* --- katalog website: master foto & harga --- */
@@ -2167,6 +2231,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   });
   return {list:out.sort((a,b)=>b.q30-a.q30||a.n.localeCompare(b.n)),skipped};
  }
+ window.ofaRestockSnap=function(from,to){
+  const S=data&&data.items?suggest():{list:[]},L=reqs();
+  return {skus:S.list.length,pcs:S.list.reduce((t,r)=>t+r.need,0),open:L.filter(r=>r.st==='diminta'||r.st==='dikirim').length,
+   made:L.filter(r=>{const d=new Date(r.at),k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');return k>=from&&k<=to}).length};
+ };
  window.renderRestock=function(){
   const body=$id('rsBody');if(!body)return;
   if(!data||!data.items){body.innerHTML='<p class="dp-empty">Saran restock muncul setelah DSR dan inventory by SKU diupload.</p>';return}
@@ -2399,6 +2468,196 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  renderLost();
  const baseRender=render;render=async function(){await baseRender();renderLost()};
  setTimeout(()=>load(false),4800);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
+})();
+/* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
+(function(){
+ const box=document.getElementById('wk');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_week',TTL=60*60e3,STORE='EIGER Store Soekarno SoloBaru (7014)';
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const jt=v=>{v=Number(v)||0;const a=Math.abs(v),s=v<0?'-':'';return a>=1e6?s+'Rp'+(a/1e6).toFixed(1).replace('.',',')+' jt':a>=1e3?s+'Rp'+Math.round(a/1e3)+' rb':s+rp(a)};
+ const pc=v=>Math.round((Number(v)||0)*100)+'%';
+ const dec=(v,d)=>(Number(v)||0).toFixed(d==null?2:d).replace('.',',');
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],HARI=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const range=(a,b)=>{const p=a.split('-').map(Number),q=b.split('-').map(Number);return p[1]===q[1]?p[2]+'–'+q[2]+' '+BLN[q[1]-1]:p[2]+' '+BLN[p[1]-1]+' – '+q[2]+' '+BLN[q[1]-1]};
+ const shift=(k,d)=>{const p=k.split('-').map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2]+d)).toISOString().slice(0,10)};
+ const monday=k=>{const p=k.split('-').map(Number),w=new Date(Date.UTC(p[0],p[1]-1,p[2])).getUTCDay();return shift(k,-((w+6)%7))};
+ const dTxt=(a,b)=>{if(!b)return '';const d=(a-b)/b;return (d>=0?'▲ ':'▼ ')+(Math.round(Math.abs(d)*1000)/10).toString().replace('.',',')+'%'};
+ const ud=(a,b)=>b==null?'':a>=b?'wk-up':'wk-down';
+ let cache={},busy=false,shown='';
+ try{cache=JSON.parse(localStorage.getItem(CK)||'{}')||{}}catch(e){cache={}}
+ function saveCache(){const o={last:cache.last};Object.keys(cache).filter(k=>k!=='last').sort().slice(-8).forEach(k=>o[k]=cache[k]);cache=o;try{localStorage.setItem(CK,JSON.stringify(cache))}catch(e){}}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const notes=()=>{const v=meta.__weekNote;return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+ function setNote(start,txt){const n=Object.assign({},notes());if(txt)n[start]=txt.slice(0,1500);else delete n[start];Object.keys(n).sort().slice(0,-12).forEach(k=>delete n[k]);meta.__weekNote=n;ls.set('ofa_meta',meta)}
+ const latest=()=>{const e=cache.last&&cache[cache.last];return e?e.d:null};
+ const snapPerf=()=>{try{return window.ofaPerfSnap&&window.ofaPerfSnap()}catch(e){return null}};
+ const snapRs=d=>{try{return window.ofaRestockSnap&&window.ofaRestockSnap(d.week.start,d.week.end)}catch(e){return null}};
+
+ function bars(d){
+  const mx=Math.max(1,...d.daily.map(x=>Math.max(x[1],x[3])));
+  return `<div class="wk-bars">${d.daily.map(x=>{const w=new Date(x[0]+'T00:00:00').getDay();
+   return `<div class="wk-b${x[4]?'':' fut'}" title="${tgl(x[0])}: ${jt(x[1])} / target ${jt(x[3])}"><div class="wk-col"><i class="${x[3]&&x[1]>=x[3]?'ok':''}" style="height:${(x[1]/mx*100).toFixed(1)}%"></i>${x[3]?`<u style="bottom:${(x[3]/mx*100).toFixed(1)}%"></u>`:''}</div><small>${HARI[w]}</small></div>`}).join('')}</div>
+   <p class="wk-leg"><i class="wk-sw"></i>capai target <i class="wk-sw lo"></i>di bawah target <i class="wk-sw t"></i>target harian</p>`;
+ }
+ window.renderWeek=function(){
+  const body=$id('wkBody');if(!body)return;
+  const d=latest();
+  if(!d){body.innerHTML='<p class="dp-empty">'+(busy?'Menyusun laporan minggu lalu…':'Laporan muncul setelah data DSR tersedia.')+'</p>';return}
+  if(d.message){body.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
+  const c=d.cur,t=d.target;
+  $id('wkSub').textContent=range(d.week.start,d.week.end)+(d.week.complete?'':' · data s/d '+tgl(d.week.dataEnd))+' · untuk Store Manager';
+  body.innerHTML=`${window.ofaDsrWarn?window.ofaDsrWarn(d.dsrBroken):''}<div class="wk-hero"><div><b>${jt(c.gross)}</b><span>${t.sales?pc(c.gross/t.sales)+' dari target minggu '+jt(t.sales):'Target bulanan belum diisi'}</span></div>${d.prev?`<em class="${ud(c.gross,d.prev.gross)}">${dTxt(c.gross,d.prev.gross)}<small>vs minggu lalu</small></em>`:''}</div>
+   ${bars(d)}
+   <button type="button" class="iv-todo ct-btn" data-wk="open"><b>📄</b><span>Buka laporan lengkap<small>${nf(c.trx)} transaksi · UPT ${dec(c.upt)} · ${d.ras.length} RA · kirim WA atau simpan PDF →</small></span></button>`;
+ };
+
+ function kpi(l,v,s,cls){return `<div class="wk-k"><small>${l}</small><b>${v}</b>${s?`<em class="${cls||''}">${s}</em>`:''}</div>`}
+ function stockHtml(P,RS){
+  const L=[];
+  if(P){
+   L.push(`Display (inventory ${tgl(P.date)}): by generic <b>${pc(P.gp)}</b> · by color <b>${pc(P.cp)}</b>, target 95%${P.todo?' · '+nf(P.todo)+' warna belum dipajang':''}`);
+   L.push(`Performa produk: <b>${nf(P.cnt.sl+P.cnt.l)}</b> laku · <b>${nf(P.cnt.tl)}</b> tidak laku · <b>${nf(P.cnt.ds)}</b> deadstock (generic-warna)`);
+  }
+  if(RS)L.push(`Restock: <b>${nf(RS.skus)} SKU</b> perlu dipesan (${nf(RS.pcs)} pcs) · ${nf(RS.open)} permintaan berjalan${RS.made?' · '+nf(RS.made)+' dibuat minggu ini':''}`);
+  return L.length?'<ul class="wk-ul">'+L.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'<p class="dp-empty">Data stok belum dimuat. Buka kartu Kepatuhan Display dan Permintaan Restock dulu.</p>';
+ }
+ const items=L=>L.map(x=>esc(x[0]+' '+x[1])+(x[2]>1?' ('+nf(x[2])+')':'')).join(', ');
+ function report(d,forPrint){
+  const c=d.cur,p=d.prev,t=d.target,note=notes()[d.week.start]||'';
+  return `<div class="wk-rep">
+  <p class="ct-meta">${STORE}<br>Minggu ${range(d.week.start,d.week.end)} ${d.week.end.slice(0,4)}${d.week.complete?'':' · data s/d '+tgl(d.week.dataEnd)+' ('+d.week.days+' hari)'}${p?' · dibanding '+range(d.prevWeek.start,d.prevWeek.end):''}</p>
+  ${window.ofaDsrWarn?window.ofaDsrWarn(d.dsrBroken):''}
+  <h4>Sales &amp; target</h4>
+  <div class="wk-kpis">
+   ${kpi('Sales (gross)',jt(c.gross),t.sales?pc(c.gross/t.sales)+' dari target '+jt(t.sales):'target belum diisi',t.sales?ud(c.gross,t.sales):'')}
+   ${kpi('vs minggu lalu',p?dTxt(c.gross,p.gross):'-',p?'minggu lalu '+jt(p.gross):'',p?ud(c.gross,p.gross):'')}
+   ${kpi('Net sales',jt(c.net),'diskon '+dec(c.disc*100,1)+'%')}
+   ${kpi('Transaksi',nf(c.trx),p?'minggu lalu '+nf(p.trx):'',p?ud(c.trx,p.trx):'')}
+   ${kpi('UPT',dec(c.upt),p?'minggu lalu '+dec(p.upt):'',p?ud(c.upt,p.upt):'')}
+   ${kpi('ATV',jt(c.atv),p?'minggu lalu '+jt(p.atv):'',p?ud(c.atv,p.atv):'')}
+   ${kpi('Endless Aisle',jt(c.ea.gross),nf(c.ea.trx)+' trx'+(t.ea?' · '+pc(c.ea.gross/t.ea)+' target':''))}
+   ${kpi('Voucher',jt(c.vc.net),nf(c.vc.trx)+' trx'+(t.vc?' · '+pc(c.vc.net/t.vc)+' target':''))}
+  </div>
+  ${bars(d)}
+  <p class="wk-p">Jam paling ramai: <b>${esc(d.peak.label)}</b> · ${jt(d.peak.gross)} · ${nf(d.peak.trx)} transaksi</p>
+  <h4>Kinerja RA</h4>
+  ${d.ras.length?`<div class="wk-tbl"><table><thead><tr><th>RA</th><th>Sales</th><th>Target</th><th>Trx</th><th>UPT</th><th>ATV</th></tr></thead><tbody>${d.ras.map(r=>`<tr><td>${esc(r.n)}${p&&r.pg?`<small class="${ud(r.gross,r.pg)}">${dTxt(r.gross,r.pg)} vs minggu lalu</small>`:''}</td><td>${jt(r.gross)}</td><td class="${r.t?ud(r.gross,r.t):''}">${r.t?pc(r.gross/r.t):'-'}</td><td>${nf(r.trx)}</td><td>${dec(r.upt)}</td><td>${jt(r.atv)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="dp-empty">Belum ada data RA.</p>'}
+  <h4>Produk terlaris</h4>
+  ${d.top.length?d.top.map((x,i)=>`<div class="wk-row"><i>${i+1}</i><span>${esc(x[0])} · ${esc(x[1])}<small>${esc(x[2]||'-')} · ${jt(x[4])}</small></span><b>${nf(x[3])} pcs</b></div>`).join(''):'<p class="dp-empty">Belum ada penjualan.</p>'}
+  ${d.cats.length?`<p class="wk-p" style="margin-top:8px"><small>Per kategori: ${d.cats.map(x=>esc(x[0])+' '+jt(x[2])).join(' · ')}</small></p>`:''}
+  <h4>Stok &amp; display <small>kondisi saat ini</small></h4>
+  ${stockHtml(snapPerf(),snapRs(d))}
+  <h4>Lost sales &amp; retur</h4>
+  <p class="wk-p">Endless Aisle (barang tidak ada di toko): <b>${nf(d.lost.qty)} pcs · ${jt(d.lost.gross!=null?d.lost.gross:d.lost.net)}</b> dari ${nf(d.lost.trx)} transaksi${d.lost.items.length?'<br><small>'+items(d.lost.items)+'</small>':''}</p>
+  <p class="wk-p">Retur: <b>${nf(d.ret.inv)} invoice · ${nf(d.ret.qty)} pcs · ${jt(d.ret.net)}</b>${d.ret.items.length?'<br><small>'+items(d.ret.items)+'</small>':''}</p>
+  <h4>Catatan Store Head</h4>
+  ${forPrint?(note?`<p class="wk-p wk-pre">${esc(note)}</p>`:'<p class="wk-p">-</p>'):`<textarea class="in wk-note" id="wkNote" maxlength="1500" placeholder="Pencapaian, kendala, dan rencana minggu depan. Ikut terkirim di WA dan PDF.">${esc(note)}</textarea>`}
+  </div>`;
+ }
+ function waText(d){
+  const c=d.cur,p=d.prev,t=d.target,P=snapPerf(),RS=snapRs(d),note=notes()[d.week.start]||'',L=[];
+  L.push('*LAPORAN MINGGUAN*',STORE,'Minggu '+range(d.week.start,d.week.end)+' '+d.week.end.slice(0,4)+(d.week.complete?'':' (data s/d '+tgl(d.week.dataEnd)+')'),'');
+  L.push('*Sales & target*');
+  L.push('Sales: '+jt(c.gross)+(t.sales?' ('+pc(c.gross/t.sales)+' dari target '+jt(t.sales)+')':''));
+  if(p)L.push('vs minggu lalu: '+dTxt(c.gross,p.gross)+' (minggu lalu '+jt(p.gross)+')');
+  L.push('Net: '+jt(c.net)+' · diskon '+dec(c.disc*100,1)+'%');
+  L.push('Transaksi '+nf(c.trx)+(p?' ('+dTxt(c.trx,p.trx)+')':'')+' · UPT '+dec(c.upt)+' · ATV '+jt(c.atv));
+  L.push('Endless Aisle: '+jt(c.ea.gross)+' · '+nf(c.ea.trx)+' trx'+(t.ea?' ('+pc(c.ea.gross/t.ea)+' target)':''));
+  L.push('Voucher: '+jt(c.vc.net)+' · '+nf(c.vc.trx)+' trx'+(t.vc?' ('+pc(c.vc.net/t.vc)+' target)':''));
+  L.push('Jam ramai: '+d.peak.label,'');
+  if(d.ras.length){L.push('*Kinerja RA*');d.ras.forEach((r,i)=>L.push((i+1)+'. '+r.n+' · '+jt(r.gross)+(r.t?' ('+pc(r.gross/r.t)+' target)':'')+' · '+nf(r.trx)+' trx · UPT '+dec(r.upt)));L.push('')}
+  if(d.top.length){L.push('*Produk terlaris*');d.top.slice(0,5).forEach((x,i)=>L.push((i+1)+'. '+x[0]+' '+x[1]+' · '+nf(x[3])+' pcs'));L.push('')}
+  if(P||RS){
+   L.push('*Stok & display*');
+   if(P){L.push('Display by generic '+pc(P.gp)+' · by color '+pc(P.cp)+' (target 95%)');L.push('Deadstock '+nf(P.cnt.ds)+' · tidak laku '+nf(P.cnt.tl)+' generic-warna')}
+   if(RS)L.push('Restock: '+nf(RS.skus)+' SKU perlu ('+nf(RS.pcs)+' pcs) · '+nf(RS.open)+' permintaan berjalan');
+   L.push('');
+  }
+  L.push('*Lost sales & retur*');
+  L.push('Barang Endless Aisle: '+nf(d.lost.qty)+' pcs · '+jt(d.lost.gross!=null?d.lost.gross:d.lost.net)+(d.lost.items.length?' — '+d.lost.items.slice(0,5).map(x=>x[0]+' '+x[1]).join(', '):''));
+  L.push('Retur: '+nf(d.ret.inv)+' invoice · '+nf(d.ret.qty)+' pcs · '+jt(d.ret.net));
+  if(note)L.push('','*Catatan Store Head*',note);
+  return L.join('\n');
+ }
+ function weeks(d){
+  const out=[],last=monday(d.salesEnd);
+  for(let i=0;i<6;i++){const s=shift(last,-7*i);if(shift(s,6)<d.salesStart)break;out.push(s)}
+  return out;
+ }
+ function draw(start){
+  const e=cache[start],rep=$id('wkRep');if(!rep)return;
+  shown=start;
+  document.querySelectorAll('#wkWeeks [data-wks]').forEach(b=>b.classList.toggle('on',b.dataset.wks===start));
+  if(!e){rep.innerHTML='<p class="dp-empty">Menyusun laporan…</p>';return}
+  const d=e.d;
+  if(d.message){rep.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
+  rep.innerHTML=`<div class="wk-act"><button class="btn" type="button" data-wka="wa">Kirim via WA</button><button class="btn ghost" type="button" data-wka="copy">Salin teks</button><button class="btn ghost" type="button" data-wka="pdf">Simpan PDF</button></div>`+report(d,false);
+ }
+ async function fetchWeek(start,force){
+  const e=start?cache[start]:(cache.last&&cache[cache.last]);
+  if(!force&&e&&Date.now()-e.at<TTL)return e.d;
+  const d=await api('getWeeklyReport',start?{start}:{});
+  const key=(d.week&&d.week.start)||start;
+  if(key){cache[key]={at:Date.now(),d};if(!start)cache.last=key;saveCache()}
+  return d;
+ }
+ async function openReport(){
+  const d=latest();if(!d||d.message)return;
+  const W=weeks(d),lastMon=monday(d.salesEnd);
+  openModal('Laporan Mingguan',`<div class="dp-chips" id="wkWeeks">${W.map(s=>`<button type="button" data-wks="${s}">${s===lastMon&&shift(s,6)>d.salesEnd?'Minggu ini':range(s,shift(s,6))}</button>`).join('')}</div><div id="wkRep"></div>`);
+  draw(d.week.start);
+ }
+ async function pick(start){
+  draw(start);
+  if(cache[start]&&Date.now()-cache[start].at<TTL)return;
+  try{await fetchWeek(start,true);if(shown===start)draw(start)}
+  catch(err){if(shown===start&&$id('wkRep'))$id('wkRep').innerHTML='<p class="dp-empty">Gagal memuat: '+esc(err.message)+'</p>'}
+ }
+ function printPdf(d){
+  let a=$id('wkPrint');if(!a){a=document.createElement('div');a.id='wkPrint';document.body.appendChild(a)}
+  a.innerHTML='<h2>Laporan Mingguan Toko</h2>'+report(d,true);
+  document.body.classList.add('wk-printing');
+  const done=()=>{document.body.classList.remove('wk-printing');window.removeEventListener('afterprint',done)};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{window.print();setTimeout(done,1500)},60);
+ }
+ box.addEventListener('click',e=>{if(e.target.closest('[data-wk=open]'))openReport()});
+ $('#pb').addEventListener('click',e=>{
+  if(!$id('wkRep'))return;
+  const w=e.target.closest('[data-wks]');if(w)return pick(w.dataset.wks);
+  const a=e.target.closest('[data-wka]');if(!a)return;
+  const d=cache[shown]&&cache[shown].d;if(!d)return;
+  const act=a.dataset.wka;
+  if(act==='wa')return window.open('https://wa.me/?text='+encodeURIComponent(waText(d)),'_blank');
+  if(act==='copy'){navigator.clipboard&&navigator.clipboard.writeText(waText(d)).then(()=>{a.textContent='Tersalin ✓'}).catch(()=>{});return}
+  if(act==='pdf')printPdf(d);
+ });
+ let noteT=null;
+ $('#pb').addEventListener('input',e=>{
+  if(e.target.id!=='wkNote')return;
+  const v=e.target.value.trim(),s=shown;clearTimeout(noteT);noteT=setTimeout(()=>setNote(s,v),500);
+ });
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  const e=cache.last&&cache[cache.last];
+  if(!force&&e&&Date.now()-e.at<TTL)return;
+  busy=true;if(!e)renderWeek();
+  try{await fetchWeek('',true);renderWeek()}
+  catch(err){if(!latest())$id('wkBody').innerHTML='<p class="dp-empty">'+(/tidak dikenal/i.test(err.message)?'Perbarui Inventory.gs di Apps Script untuk memakai laporan mingguan.':'Gagal memuat: '+esc(err.message))+'</p>'}
+  finally{busy=false}
+ }
+ window.ofaWeekText=()=>{const d=latest();return d&&!d.message?waText(d):''};
+ renderWeek();
+ const baseRender=render;render=async function(){await baseRender();renderWeek()};
+ setTimeout(()=>load(false),5400);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
 })();
 </script>
