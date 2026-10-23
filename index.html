@@ -541,6 +541,16 @@ textarea.in{min-height:240px;resize:vertical}
 .rs-item b.ok{color:#1a8a49}
 .rs-txt{white-space:pre-wrap;font-size:12px;background:var(--bg);border-radius:12px;padding:10px;max-height:180px;overflow:auto;margin:10px 0}
 @media(max-width:760px){.rs{margin-top:12px;max-width:none;border-radius:20px;padding:16px}}
+/* ====== LOST SALES & RETUR ====== */
+.ls-cat{display:grid;grid-template-columns:110px 1fr 54px;gap:6px 8px;align-items:center;font-size:12.5px;margin:8px 0 4px}
+.ls-cat i{display:block;height:8px;border-radius:99px;background:#2f80ed}
+.ls-cat b{text-align:right}
+.ls-flag{display:inline-block;border-radius:99px;padding:1px 8px;font-size:11px;font-weight:800;color:#fff;margin-top:4px}
+.ls-flag.new{background:#8b5cf6}.ls-flag.out{background:#ef4444}.ls-flag.have{background:#22a559}
+.ls-sz{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ls-sz label{display:flex;align-items:center;gap:5px;background:var(--bg);border-radius:10px;padding:4px 8px;font-size:12px}
+.ls-sz label input{width:16px;height:16px}
+.ls-sz label em{font-style:normal;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -624,6 +634,10 @@ textarea.in{min-height:240px;resize:vertical}
     <section class="rs" id="rs" aria-label="Permintaan restock">
       <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
       <div id="rsBody"></div>
+    </section>
+    <section class="rs" id="ls" aria-label="Lost sales dan retur">
+      <div class="sh-head"><div><h3>Lost Sales &amp; Retur</h3><p id="lsSub">Permintaan Endless Aisle dan barang yang diretur</p></div></div>
+      <div id="lsBody"></div>
     </section>
     <section class="disp" id="disp" aria-label="Riwayat ganti display">
       <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
@@ -2199,6 +2213,15 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    <div>${r.items.map(i=>{const a=availOf(i.k),ok=r.st!=='batal'&&a!=null&&a>i.a0;return `<div class="rs-item"><span>${esc(i.n)} · ${esc(i.c)} · <b>${esc(i.z)}</b><small>${esc(i.k)} · stok saat diminta ${nf(i.a0)}${a!=null?' · sekarang '+nf(a):''}</small></span><b class="${ok?'ok':''}">${ok?'✓ datang':i.q+' pcs'}</b></div>`}).join('')}</div>`);
   $id('pb').dataset.rq=id;
  }
+ window.ofaRestockCreate=function(items,src){
+  if(!items||!items.length)return;
+  (window.ofaHeadGate||(f=>f()))(()=>{
+   const d=new Date(),day=d.getFullYear().toString().slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+   const n=reqs().filter(r=>r.id.startsWith('R'+day)).length+1,id='R'+day+'-'+n;
+   const r={id,at:d.toISOString(),st:'diminta',src:src||'',items:items.map(x=>({k:x.k,n:x.n,c:x.c,z:x.z,q:Math.max(1,x.q|0),a0:Math.max(0,x.a0|0)})),log:[{st:'diminta',at:d.toISOString()}]};
+   saveReqs([r].concat(reqs()));renderRestock();openReq(id);
+  });
+ };
  function setStatus(id,st){
   const l=reqs().map(r=>r.id===id?Object.assign({},r,{st,log:(r.log||[]).concat([{st,at:new Date().toISOString()}])}):r);
   saveReqs(l);renderRestock();openReq(id);
@@ -2257,6 +2280,116 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  renderRestock();
  const baseRender=render;render=async function(){await baseRender();renderRestock()};
  setTimeout(()=>load(false),4200);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
+})();
+/* ====== LOST SALES (ENDLESS AISLE) & RETUR ====== */
+(function(){
+ const box=document.getElementById('ls');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_lost',TTL=60*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const jt=v=>{v=Number(v)||0;return v>=1e6?'Rp'+(v/1e6).toFixed(1).replace('.',',')+' jt':rp(v)};
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const PER={30:'30 hari',90:'90 hari',0:'Semua'};
+ let data=null,busy=false,per=90,mode='ea',pick={};
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const from=p=>{if(!p||!data||!data.salesEnd)return '';const q=data.salesEnd.split('-').map(Number);return new Date(Date.UTC(q[0],q[1]-1,q[2]-(p-1))).toISOString().slice(0,10)};
+ const sk=k=>{const a=data.skus[k]||['?','','-','','',-1,0,''];return {k,n:a[0],c:a[1],z:a[2],l3:a[3],l4:a[4],av:a[5],price:a[6],img:a[7]}};
+ function eaAgg(p){
+  const f=from(p),L=data.ea.filter(x=>!f||x[0]>=f);
+  let qty=0,net=0;const inv={},cat={},grp={};
+  L.forEach(x=>{qty+=x[2];net+=x[3];inv[x[4]]=1;const s=sk(x[1]);cat[s.l3||'-']=(cat[s.l3||'-']||0)+x[2];
+   const key=x[1].slice(0,9)+'|'+s.c,g=grp[key]||(grp[key]={key,s,qty:0,net:0,inv:{},last:'',by:{}});
+   g.qty+=x[2];g.net+=x[3];g.inv[x[4]]=1;if(x[0]>g.last)g.last=x[0];g.by[x[1]]=(g.by[x[1]]||0)+x[2];});
+  const store=Object.keys(data.day).filter(d=>!f||d>=f).reduce((t,d)=>t+data.day[d],0);
+  const fam=k=>Object.keys(data.skus).filter(x=>x.slice(0,9)===k.split('|')[0]&&sk(x).c===k.split('|')[1]);
+  const list=Object.values(grp).map(g=>{
+   const sizes=fam(g.key).map(sk),known=sizes.filter(z=>z.av>=0),stock=known.reduce((t,z)=>t+z.av,0);
+   g.flag=!known.length?'new':stock>0?'have':'out';g.sizes=sizes;g.stock=stock;g.trx=Object.keys(g.inv).length;return g;
+  }).sort((a,b)=>b.qty-a.qty||b.net-a.net);
+  return {L,qty,net,trx:Object.keys(inv).length,share:store?net/store:0,cat,list};
+ }
+ function retAgg(p){
+  const f=from(p),L=data.ret.filter(x=>!f||x[0]>=f);
+  const inv={},grp={},ra={};let net=0;
+  L.forEach(x=>{if(x[2]>0)net+=x[3];inv[x[5]]=x[4];if(x[6])ra[x[6]]=ra[x[6]]||{};if(x[6])ra[x[6]][x[5]]=1;
+   const s=sk(x[1]),g=grp[x[1]]||(grp[x[1]]={s,q:0,st:{},last:''});if(x[2]>0)g.q+=x[2];g.st[x[4]]=1;if(x[0]>g.last)g.last=x[0];});
+  const list=Object.values(grp).filter(g=>g.q>0).map(g=>Object.assign(g,{rate:(data.sold[g.s.k]||0)?g.q/data.sold[g.s.k]:0})).sort((a,b)=>b.q-a.q||b.rate-a.rate);
+  const byStatus={};Object.values(inv).forEach(s=>byStatus[s]=(byStatus[s]||0)+1);
+  return {inv:Object.keys(inv).length,byStatus,net,list,ra:Object.keys(ra).map(n=>[n,Object.keys(ra[n]).length]).sort((a,b)=>b[1]-a[1])};
+ }
+ window.renderLost=function(){
+  const body=$id('lsBody');if(!body)return;
+  if(!data||!data.ea){body.innerHTML='<p class="dp-empty">Analisis muncul setelah DSR diupload.</p>';return}
+  const E=eaAgg(90),R=retAgg(90),newN=E.list.filter(g=>g.flag==='new').length,outN=E.list.filter(g=>g.flag==='out').length;
+  $id('lsSub').textContent='90 hari terakhir · sales s/d '+tgl(data.salesEnd);
+  body.innerHTML=`<button type="button" class="iv-todo ct-btn" data-ls="ea"><b>${nf(E.qty)}</b><span>pcs lost sales lewat Endless Aisle · ${jt(E.net)} (${(E.share*100).toFixed(1).replace('.',',')}% sales)<small>${nf(E.list.length)} produk · ${newN} belum pernah ada di toko · ${outN} stok toko habis →</small></span></button>
+   <button type="button" class="iv-todo" data-ls="ret" style="margin-top:8px"><b>${nf(R.inv)}</b><span>invoice retur · ${jt(R.net)}<small>${nf(R.list.length)} produk diretur · lihat rate retur per produk →</small></span></button>`;
+ };
+ function chips(){return `<div class="dp-chips" id="lsPer">${[30,90,0].map(p=>`<button type="button" data-per="${p}" class="${p===per?'on':''}">${PER[p]}</button>`).join('')}</div>`}
+ const flagTxt={new:'Belum pernah ada di toko',out:'Stok toko habis',have:'Ada stok sekarang'};
+ function drawEA(){
+  const E=eaAgg(per),mx=Math.max(1,...Object.values(E.cat));
+  const sel=Object.keys(pick).filter(k=>pick[k]);
+  $id('pt').textContent='Lost Sales · Endless Aisle';
+  $id('pb').innerHTML=`<div class="iv-list">${chips()}
+   <p class="hint" style="margin:8px 0 0">Endless Aisle = pelanggan membeli barang yang tidak tersedia di toko, dikirim dari gudang/toko lain. Datanya menunjukkan permintaan yang belum bisa dipenuhi stok toko.</p>
+   <p class="ct-meta" style="margin-top:8px"><b>${nf(E.qty)} pcs</b> · ${nf(E.trx)} transaksi · ${rp(E.net)} · ${(E.share*100).toFixed(1).replace('.',',')}% dari sales periode ini</p>
+   <div class="ls-cat">${Object.entries(E.cat).sort((a,b)=>b[1]-a[1]).map(([c,q])=>`<span>${esc(c)}</span><i style="width:${q/mx*100}%"></i><b>${nf(q)}</b>`).join('')}</div>
+   <div class="row" style="gap:8px;margin:10px 0"><button class="btn ghost" type="button" data-lsact="csv">Unduh data (CSV)</button><button class="btn" type="button" data-lsact="restock" ${sel.length?'':'disabled'}>Masukkan ke restock (${sel.length})</button></div>
+   <div id="lsList">${E.list.slice(0,120).map(g=>`<div class="rs-grp"><div class="rs-gh"><span class="iv-img">${g.s.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(g.s.img)}" alt="">`:'🏷️'}</span><div><b>${esc(g.s.n)}</b><small>${esc(g.s.c)} · ${esc(g.s.l4||g.s.l3||'-')}${g.s.price?' · '+rp(g.s.price):''}</small><br><small>EA ${nf(g.qty)} pcs · ${g.trx} trx · ${rp(g.net)} · terakhir ${tgl(g.last)}</small><br><span class="ls-flag ${g.flag}">${flagTxt[g.flag]}${g.flag==='have'?' ('+nf(g.stock)+' pcs)':''}</span></div></div>
+    <div class="ls-sz">${Object.keys(g.by).map(k=>{const z=sk(k);return `<label><input type="checkbox" data-pk="${k}" ${pick[k]?'checked':''}>${esc(z.z)} <b>×${nf(g.by[k])}</b> <em>stok ${z.av<0?'–':nf(z.av)}</em></label>`}).join('')}</div></div>`).join('')}
+   ${E.list.length>120?`<p class="hint">${E.list.length-120} produk lain ada di file CSV.</p>`:''}${E.list.length?'':'<p class="dp-empty">Tidak ada transaksi Endless Aisle pada periode ini.</p>'}</div></div>`;
+ }
+ function drawRet(){
+  const R=retAgg(per);
+  $id('pt').textContent='Analisis Retur';
+  const st={returned:'retur penuh','part returned':'retur sebagian',return:'dokumen retur'};
+  $id('pb').innerHTML=`<div class="iv-list">${chips()}
+   <p class="ct-meta" style="margin-top:8px"><b>${nf(R.inv)} invoice</b> · ${rp(R.net)} · ${Object.entries(R.byStatus).map(([k,v])=>v+' '+(st[k]||k)).join(' · ')}</p>
+   ${R.ra.length?`<p class="hint" style="margin:6px 0 0">Per RA: ${R.ra.map(([n,v])=>esc(n.split(' ')[0])+' '+v).join(' · ')}</p>`:''}
+   <p class="hint" style="margin:6px 0 8px">Rate = jumlah diretur ÷ total terjual SKU tersebut sejak Januari. Untuk retur sebagian, sistem tidak mencatat barang mana yang dikembalikan, jadi semua barang di invoice ikut terhitung.</p>
+   ${R.list.map(g=>`<div class="iv-it"><span class="iv-img">${g.s.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(g.s.img)}" alt="">`:'🏷️'}</span><span class="iv-tx"><b>${esc(g.s.n)}</b><small>${esc(g.s.c)} · ukuran ${esc(g.s.z)} · ${esc(g.s.l4||g.s.l3||'-')}</small><small>Diretur ${nf(g.q)} pcs · rate ${(g.rate*100).toFixed(0)}% dari ${nf(data.sold[g.s.k]||0)} terjual · ${Object.keys(g.st).map(x=>st[x]||x).join(', ')} · ${tgl(g.last)}</small></span></div>`).join('')||'<p class="dp-empty">Tidak ada retur pada periode ini.</p>'}</div>`;
+ }
+ function draw(){mode==='ea'?drawEA():drawRet()}
+ box.addEventListener('click',e=>{const b=e.target.closest('[data-ls]');if(!b||!data)return;mode=b.dataset.ls;pick={};openModal('',' ');draw()});
+ $('#pb').addEventListener('click',e=>{
+  if(!$id('lsPer'))return;
+  const pb=e.target.closest('[data-per]');if(pb){per=+pb.dataset.per;return draw()}
+  const a=e.target.closest('[data-lsact]');if(!a)return;
+  if(a.dataset.lsact==='csv'){
+   const E=eaAgg(per),q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+   const rows=[['Tanggal','Invoice','SKU','Nama','Warna','Ukuran','Kategori','Sub kategori','Qty','Net','RA','Stok toko sekarang']].concat(E.L.map(x=>{const s=sk(x[1]);return [x[0],x[4],x[1],s.n,s.c,s.z,s.l3,s.l4,x[2],x[3],x[5],s.av<0?'tidak terdaftar':s.av]}));
+   const url=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv'})),l=document.createElement('a');l.href=url;l.download='lost_sales_endless_aisle_'+(per?per+'hari':'semua')+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+  }
+  if(a.dataset.lsact==='restock'&&window.ofaRestockCreate){
+   const E=eaAgg(per),qty={};E.L.forEach(x=>qty[x[1]]=(qty[x[1]]||0)+x[2]);
+   window.ofaRestockCreate(Object.keys(pick).filter(k=>pick[k]).map(k=>{const s=sk(k);return {k,n:s.n,c:s.c,z:s.z,q:qty[k]||1,a0:s.av}}),'lost-sales');
+  }
+ });
+ $('#pb').addEventListener('change',e=>{
+  const c=e.target.closest('[data-pk]');if(!c||!$id('lsPer'))return;
+  pick[c.dataset.pk]=c.checked;const b=document.querySelector('[data-lsact=restock]');const n=Object.values(pick).filter(Boolean).length;
+  if(b){b.disabled=!n;b.textContent='Masukkan ke restock ('+n+')'}
+ });
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&data&&Date.now()-(data.at||0)<TTL)return;
+  busy=true;
+  try{const d=await api('getLostSalesData',{});data=Object.assign(d,{at:Date.now()});try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}renderLost()}
+  catch(err){if(!data)$id('lsBody').innerHTML='<p class="dp-empty">'+(/tidak dikenal/i.test(err.message)?'Perbarui Inventory.gs di Apps Script untuk memakai analisis ini.':'Gagal memuat: '+esc(err.message))+'</p>'}
+  finally{busy=false}
+ }
+ renderLost();
+ const baseRender=render;render=async function(){await baseRender();renderLost()};
+ setTimeout(()=>load(false),4800);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
 })();
 </script>
