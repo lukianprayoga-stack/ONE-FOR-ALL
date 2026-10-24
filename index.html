@@ -2964,7 +2964,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    }
   }
   if(names)return {kind:'names',names};
-  throw new Error('Kolom Blind Counting ID, Total SKU, Qty yang Diharapkan/Dihitung tidak ditemukan. Pilih file export blind_counting dari sistem.');
+  throw new Error('Kolom skucode, Bin Code, Qty yang Diharapkan & Qty yang Dihitung tidak ditemukan. Pilih file export blind_counting_details_BCP… dari sistem.');
  }
 
  /* ---------- nama produk per SKU ---------- */
@@ -3363,7 +3363,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const rowHtml=r=>`<div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>`;
  function render(){
   const b=$id('bcBody');if(!b)return;
-  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>blind_counting</b> hasil export sistem setelah BC sebulan selesai. Nilai barang <b>plus</b> dan <b>minus</b> tiap sesi dihitung otomatis, lalu Berita Acara siap diunduh dan ditandatangani.</p>`;$id('bcSub').textContent='Berita acara blind counting bulanan · barang plus & minus';return}
+  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>blind_counting_details_BCP…xlsx</b> hasil export sistem setelah BC sebulan selesai. Barang <b>plus</b> dan <b>minus</b> per SKU dipisah otomatis, nama produk diambil dari data stok, lalu Berita Acara (REG-FRM-35) siap diunduh dan ditandatangani.</p>`;$id('bcSub').textContent='Berita acara blind counting bulanan · barang plus & minus';return}
   if(rep.mode==='sesi')return renderSesi(b);
   const R=rep,K=calc(R),st=R.st||{},acc=st.lines?st.match/st.lines:0,ap=approvers(K.net),miss=missing(),c=cfg();
   $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi||0)+' sesi BC · '+nf(st.lines||0)+' baris dihitung';
