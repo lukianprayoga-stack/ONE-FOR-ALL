@@ -723,6 +723,69 @@ body.kt-on{overflow:hidden}
 .ls-sz label{display:flex;align-items:center;gap:5px;background:var(--bg);border-radius:10px;padding:4px 8px;font-size:12px}
 .ls-sz label input{width:16px;height:16px}
 .ls-sz label em{font-style:normal;color:var(--mut)}
+/* ====== TAMPILAN DESKTOP (dashboard aplikasi) ====== */
+.side{display:none}
+@media(min-width:761px){
+ .bar{display:none}
+ .hero{display:block;max-width:1640px;margin:0 auto;padding:26px clamp(20px,3vw,40px) 6px}
+ .hero h1,.hero .lead,.hero>div>.btn,.hero .cluster{display:none}
+ .hero>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hello stats" "ck ck" "deck deck";column-gap:24px;align-items:end}
+ .hello{display:block;grid-area:hello;margin:0}
+ .hello small{display:block;color:var(--mut);font-size:14px;font-weight:600}
+ .hello b{display:block;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.8px;line-height:1.15;margin-top:2px}
+ .stats{grid-area:stats;display:grid;grid-template-columns:repeat(3,minmax(104px,auto));gap:10px;margin:0}
+ .stats>div{background:var(--card);border-radius:16px;padding:10px 16px}
+ .stats b{font-size:24px;letter-spacing:-1px}
+ .stats span{font-size:12px}
+ .ck-bar{grid-area:ck;max-width:none;margin-top:18px}
+ .deck{grid-area:deck;max-width:none;margin-top:18px}
+ .deck-tabs{max-width:640px}
+ .deck-track{display:block;overflow:visible;height:auto!important;scroll-snap-type:none}
+ .deck-pg{display:none}
+ .deck-pg.cur{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:18px;align-items:start;padding-top:16px}
+ .deck-pg>section,.deck-pg>section:first-child{margin:0!important;max-width:none!important;min-width:0}
+ .deck-pg>#sales{grid-row:span 2}
+ #team{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:22px 18px}
+ #grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:26px 18px}
+ .mq,#why{display:none}
+ .sec{max-width:1640px;padding:44px clamp(20px,3vw,40px) 10px}
+ .sec h2{font-size:clamp(28px,3vw,44px);letter-spacing:-.04em}
+ footer{margin-top:50px;padding:26px clamp(20px,3vw,40px)}
+ footer .big{display:none}
+ footer p{margin:0}
+ .panel{width:min(640px,100%)}
+ header nav a[href="#why"]{display:none}
+ #addTop{white-space:nowrap}
+ #team .meta h3,#grid .meta h3{font-size:17px;letter-spacing:-.3px;line-height:1.2}
+ #team .tc.head .meta h3{font-size:22px}
+ .sec>.lead{font-size:15px;margin:8px 0 18px}
+}
+@media(min-width:1100px){
+ body{padding-left:236px}
+ header nav{display:none}
+ .side{display:flex;flex-direction:column;gap:2px;position:fixed;left:0;top:0;bottom:0;width:236px;z-index:6;padding:16px 14px 18px;background:var(--card);border-right:1px solid var(--line);overflow-y:auto}
+ .side-logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.04em;font-size:19px;padding:4px 8px 16px;color:var(--fg);text-decoration:none;line-height:1.1}
+ .side-logo img{width:34px;height:34px;border-radius:9px}
+ .side-logo small{display:block;font-size:10px;letter-spacing:.08em;font-weight:700;color:var(--mut)}
+ .side-h{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);padding:14px 10px 6px}
+ .side button{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;border-radius:12px;padding:10px 12px;font:inherit;font-size:14.5px;font-weight:600;color:var(--fg);text-align:left;cursor:pointer}
+ .side button span{width:20px;text-align:center;font-size:16px;opacity:.75}
+ .side button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+ .side button.on{background:var(--ink);color:var(--inkfg)}
+ .side button.on span{opacity:1}
+ .side kbd{margin-left:auto;font:600 11px/1 inherit;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:3px 5px}
+ .side button.on kbd{color:var(--inkfg);border-color:color-mix(in srgb,var(--inkfg) 30%,transparent)}
+ .side-foot{margin-top:auto;padding:14px 8px 54px;font-size:12px;color:var(--mut);line-height:1.5}
+ header .logo{visibility:hidden;width:0;overflow:hidden;white-space:nowrap}
+ header{justify-content:flex-end;padding:12px clamp(20px,3vw,40px)}
+ .deck-tabs{display:none}
+ .hero{padding-top:6px}
+ .side.kt-open [data-pg].on{background:none;color:var(--fg)}
+ .deck-pg.cur{padding-top:0}
+ .remark{left:24px;right:auto;bottom:20px;font-size:13px;padding:8px 14px;animation:none;box-shadow:none}
+ .kt{left:236px}
+}
+@media(min-width:1500px){.deck-pg.cur{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -733,6 +796,22 @@ body.kt-on{overflow:hidden}
   <div class="sp-bar"><i></i></div>
   <div class="sp-by">BY LUKIAN PRAYOGA</div>
 </div>
+<aside class="side" id="side" aria-label="Menu utama">
+  <a class="side-logo" href="#"><img src="icons/icon-192.png" alt=""><span>ONE FOR ALL<small>STORE MANAGER</small></span></a>
+  <p class="side-h">Dashboard</p>
+  <button type="button" data-pg="0"><span>⌂</span>Hari Ini<kbd>1</kbd></button>
+  <button type="button" data-pg="1"><span>▤</span>Laporan<kbd>2</kbd></button>
+  <button type="button" data-pg="2"><span>▣</span>Stok<kbd>3</kbd></button>
+  <button type="button" data-pg="3"><span>◫</span>Display<kbd>4</kbd></button>
+  <button type="button" data-pg="4"><span>✎</span>Admin<kbd>5</kbd></button>
+  <p class="side-h">Alat</p>
+  <button type="button" data-sd="stok"><span>⌕</span>Cek stok<kbd>/</kbd></button>
+  <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
+  <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
+  <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
+  <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
+  <p class="side-foot">Tekan <b>1–5</b> untuk pindah halaman dashboard, <b>/</b> untuk cek stok.</p>
+</aside>
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#"><img class="logo-ic" src="icons/icon-192.png" alt="">ONE FOR ALL <small>STORE MANAGER</small></a>
@@ -3471,6 +3550,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(i<0||i>=pages.length)return;
   const changed=i!==cur;cur=i;
   tabs.forEach((t,j)=>{t.classList.toggle('on',j===i);t.setAttribute('aria-selected',j===i?'true':'false')});
+  pages.forEach((p,j)=>p.classList.toggle('cur',j===i));
+  document.querySelectorAll('#side [data-pg]').forEach(b=>b.classList.toggle('on',+b.dataset.pg===i));
   fit();
   if(changed){try{sessionStorage.setItem('ofa_deck',String(i))}catch(e){}if(fromSwipe)keepTop()}
  }
@@ -3485,6 +3566,35 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  let start=0;try{start=Math.min(pages.length-1,Math.max(0,Number(sessionStorage.getItem('ofa_deck'))||0))}catch(e){}
  requestAnimationFrame(()=>go(start,false));
  setTimeout(fit,1500);
+})();
+/* ====== MENU SAMPING DESKTOP ====== */
+(function(){
+ const side=document.getElementById('side');if(!side)return;
+ function page(i){
+  const t=document.querySelector('#deckTabs [data-pg="'+i+'"]');if(t)t.click();
+  if(scrollY>160)scrollTo({top:0,behavior:'smooth'});
+ }
+ side.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.pg!=null){const kt=document.getElementById('kt');if(kt&&kt.classList.contains('open')){const bk=document.getElementById('ktBack');if(bk)bk.click()}return page(+b.dataset.pg)}
+  const k=b.dataset.sd,kt=document.getElementById('kt');
+  if(kt&&kt.classList.contains('open')&&k!=='katalog'){const bk=document.getElementById('ktBack');if(bk)bk.click()}
+  if(k==='stok')return window.ofaOpenStock&&window.ofaOpenStock();
+  if(k==='katalog')return window.ofaOpenKatalog&&window.ofaOpenKatalog();
+  if(k==='add'){const a=document.querySelector('.bnav [data-go="add"]');return a&&a.click()}
+  const el=document.getElementById(k);if(el)el.scrollIntoView({behavior:'smooth'});
+ });
+ // tandai menu Katalog saat layar Kelola Katalog terbuka
+ const kt=document.getElementById('kt'),kb=side.querySelector('[data-sd="katalog"]');
+ if(kt&&kb)new MutationObserver(()=>{const o=kt.classList.contains('open');kb.classList.toggle('on',o);side.classList.toggle('kt-open',o)}).observe(kt,{attributes:true,attributeFilter:['class']});
+ // pintasan keyboard di desktop: 1–5 halaman dashboard, / cek stok
+ addEventListener('keydown',e=>{
+  if(!matchMedia('(min-width:761px)').matches||e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  if(document.querySelector('.ov.open,.kt.open,#ck.open,.ck.open'))return;
+  if(/^[1-5]$/.test(e.key)){e.preventDefault();page(+e.key-1)}
+  else if(e.key==='/'){e.preventDefault();window.ofaOpenStock&&window.ofaOpenStock()}
+ });
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
