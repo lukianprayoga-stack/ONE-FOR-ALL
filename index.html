@@ -648,6 +648,22 @@ body.kt-on{overflow:hidden}
 @media(max-width:760px){.bnav{grid-template-columns:repeat(6,1fr)!important}}
 /* ====== PERMINTAAN RESTOCK ====== */
 .rs{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.ks-hbtn{display:flex;gap:6px;flex:none}
+.ks-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.ks-tiles .iv-tile b{font-size:16px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ks-warn{margin-top:12px;background:#fff4e5;color:#8a4b00;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+.ks-gl{display:grid;gap:6px}
+.ks-g{position:relative;display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--bg);border-radius:12px;padding:9px 12px;overflow:hidden;font-size:13px}
+.ks-g span{position:relative;z-index:1;min-width:0;line-height:1.3}.ks-g small{display:block;color:var(--mut);font-size:11.5px}
+.ks-g em{position:relative;z-index:1;font-style:normal;font-weight:700;white-space:nowrap}
+.ks-g i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,var(--ink) 9%,transparent);border-radius:12px}
+.ks-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.ks-act .btn{padding:11px 16px;font-size:14px}
+.ks-list{display:grid;gap:4px;max-height:60vh;overflow:auto}
+.ks-row{display:flex;justify-content:space-between;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.ks-row span{min-width:0;line-height:1.35}.ks-row small{display:block;color:var(--mut);font-size:11.5px}
+.ks-row em{font-style:normal;font-weight:700;white-space:nowrap;color:#d33a40}.ks-row em.in{color:#1a8a49}
+.ks-form{display:grid;gap:8px}.ks-f span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
+@media(max-width:760px){.ks-tiles .iv-tile{padding:10px}.ks-tiles .iv-tile b{font-size:14px}}
 .rs-req{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--bg);border-radius:14px;padding:11px 12px;margin-top:6px;text-align:left;color:var(--fg);font-size:13px}
 .rs-req span{flex:1;min-width:0;line-height:1.35}
 .rs-req span small{display:block;color:var(--mut);font-size:12px}
@@ -713,7 +729,7 @@ body.kt-on{overflow:hidden}
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
     <button type="button" class="ck-bar" id="ckOpen"><span>🔍</span><div><b>Cek stok produk</b><small>Cari nama, warna, kode, atau scan barcode</small></div><i>📷</i></button>
     <div class="deck" id="deck">
-      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button></div>
+      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
       <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
         <section class="sales loading" id="sales" aria-label="Sales bulan ini">
@@ -788,6 +804,14 @@ body.kt-on{overflow:hidden}
         <section class="disp" id="disp" aria-label="Riwayat ganti display">
           <div class="sh-head"><div><h3>Riwayat Ganti Display</h3><p id="dpSub">Dampak perubahan display ke penjualan</p></div><button class="btn ghost" type="button" id="dpAdd">+ Catat</button></div>
           <div class="dp-list" id="dpList"></div>
+        </section>
+      </div>
+      <div class="deck-pg" role="tabpanel" aria-label="Admin">
+        <section class="rs" id="kas" aria-label="Rekap kas">
+          <div class="sh-head"><div><h3>Rekap Kas</h3><p id="ksSub">Laporan pengeluaran kas bulanan siap tanda tangan</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="ksCfg" aria-label="Pengaturan rekap kas (Store Head)">⚙</button><button class="btn ghost" type="button" id="ksUp">⇪ Upload</button></div></div>
+          <input type="file" id="ksFile" accept=".xlsx,.xls,.csv" hidden>
+          <div id="ksBody"></div>
+          <div class="iv-status" id="ksStatus"></div>
         </section>
       </div>
       </div>
@@ -2583,7 +2607,253 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  setTimeout(()=>load(false),4800);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
 })();
-/* ====== DASHBOARD GESER (4 halaman) ====== */
+/* ====== REKAP KAS (laporan pengeluaran kas bulanan, siap tanda tangan) ====== */
+(function(){
+ const box=document.getElementById('kas');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_kas';
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const BULAN=['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+ const cap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const DEF={store:'ST EG SOLO BARU - 7014',holder:'LUKIAN PRAYOGA',acct:'1430811394',loc:'7014 - ST EG SOLO BARU',t1:'Store Head',n1:'Lukian Prayoga',t2:'Head of Jateng 1 Branch',n2:'Fany Dzikri Hakim',file:'REKAP PENGELUARAN KAS 7014-EG SOBA'};
+ const cfg=()=>Object.assign({},DEF,meta.__kasCfg||{});
+ let rep=null;try{rep=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){rep=null}
+
+ /* ---------- baca file PettyCash dari sistem ---------- */
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+ function money(v){
+  if(typeof v==='number')return v;
+  let s=String(v==null?'':v).trim().replace(/rp|\s/gi,'');if(!s)return 0;
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'');
+  const n=Number(s.replace(/[^\d.-]/g,''));return isFinite(n)?n:0;
+ }
+ // tanggal -> [y,m,d,h,mi,s]
+ function when(v){
+  if(v instanceof Date&&!isNaN(v))return [v.getFullYear(),v.getMonth()+1,v.getDate(),v.getHours(),v.getMinutes(),v.getSeconds()];
+  if(typeof v==='number'&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*864e5));return [d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate(),d.getUTCHours(),d.getUTCMinutes(),d.getUTCSeconds()]}
+  const s=String(v==null?'':v).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if(m)return [+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)];
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if(m)return [+m[3],+m[2],+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0)];
+  return null;
+ }
+ const p2=n=>('0'+n).slice(-2);
+ const wtxt=w=>w?w[0]+'-'+p2(w[1])+'-'+p2(w[2])+' '+p2(w[3])+':'+p2(w[4])+':'+p2(w[5]):'';
+ async function parse(file){
+  await loadXlsx();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});
+  for(const name of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:''});
+   let hi=-1,h=null;
+   for(let i=0;i<Math.min(15,rows.length);i++){const n=(rows[i]||[]).map(norm);if(n.includes('idcode')&&(n.includes('credit')||n.includes('debit'))){hi=i;h=n;break}}
+   if(hi<0)continue;
+   const ix=k=>h.indexOf(k),c={no:ix('idcode'),loc:ix('locationcode'),dr:ix('debit'),cr:ix('credit'),bal:ix('balance'),gl:h.findIndex(x=>x.startsWith('costitem')),st:ix('status'),rem:ix('remarks'),at:ix('createdat'),from:ix('fromto')};
+   const out=[];
+   rows.slice(hi+1).forEach(r=>{
+    const no=String(r[c.no]==null?'':r[c.no]).trim();if(!no)return;
+    out.push({no,loc:String(r[c.loc]==null?'':r[c.loc]).trim(),dr:money(r[c.dr]),cr:money(r[c.cr]),bal:money(r[c.bal]),gl:String(c.gl>=0?r[c.gl]:'').trim(),st:String(c.st>=0?r[c.st]:'').trim(),rem:String(r[c.rem]==null?'':r[c.rem]).replace(/\s+/g,' ').trim(),w:when(r[c.at])});
+   });
+   if(out.length)return {rows:out,sheet:name};
+  }
+  throw new Error('Kolom "ID Code", "Debit"/"Credit" tidak ditemukan. Pilih file PettyCash hasil export sistem.');
+ }
+ function build(parsed,fileName){
+  const rows=parsed.rows.slice().sort((a,b)=>wtxt(a.w).localeCompare(wtxt(b.w))||a.no.localeCompare(b.no));
+  const months={};rows.forEach(r=>{if(r.w){const k=r.w[0]+'-'+p2(r.w[1]);months[k]=(months[k]||0)+1}});
+  const ym=Object.keys(months).sort((a,b)=>months[b]-months[a])[0]||'';
+  const warn=[];
+  const mk=Object.keys(months);if(mk.length>1)warn.push('File berisi '+mk.length+' bulan ('+mk.sort().join(', ')+'). Laporan memakai semua baris; pastikan rentang tarik datanya satu bulan.');
+  const bad=rows.filter(r=>r.st&&!/^complete/i.test(r.st));if(bad.length)warn.push(bad.length+' transaksi belum "Complete": '+bad.slice(0,4).map(r=>r.no+' ('+r.st+')').join(', ')+(bad.length>4?'…':''));
+  const locs=[...new Set(rows.map(r=>r.loc).filter(Boolean))];if(locs.length>1)warn.push('Ada '+locs.length+' kode lokasi: '+locs.join(', '));
+  const noDate=rows.filter(r=>!r.w).length;if(noDate)warn.push(noDate+' baris tanpa tanggal.');
+  const out=rows.reduce((t,r)=>t+r.cr,0),inn=rows.reduce((t,r)=>t+r.dr,0);
+  const f=rows[0],l=rows[rows.length-1];
+  const open=f?f.bal+f.cr-f.dr:0,close=l?l.bal:0;
+  const check=Math.round(open-out+inn-close);
+  if(rows.length&&Math.abs(check)>1)warn.push('Saldo tidak runtut (selisih '+rp(check)+'). Cek apakah ada transaksi yang tidak ikut ditarik.');
+  const gl={};rows.forEach(r=>{if(r.cr>0){const k=r.gl||'LAINNYA';(gl[k]=gl[k]||{n:0,v:0}).n++;gl[k].v+=r.cr}});
+  const y=+ym.slice(0,4),m=+ym.slice(5,7);
+  const last=y?new Date(Date.UTC(y,m,0)).getUTCDate():0;
+  return {ym,label:y?BULAN[m-1]+' '+y:'',from:y?ym+'-01':'',to:y?ym+'-'+p2(last):'',rows,out,inn,open,close,n:rows.length,nOut:rows.filter(r=>r.cr>0).length,
+   gl:Object.keys(gl).map(k=>[k,gl[k].n,gl[k].v]).sort((a,b)=>b[2]-a[2]),warn,file:fileName,at:Date.now()};
+ }
+
+ /* ---------- penulis .xlsx (tanpa pustaka luar) ---------- */
+ const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+ function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRC[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+ function zip(files){
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  const u16=v=>[v&255,(v>>>8)&255],u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+  files.forEach(([name,txt])=>{
+   const nm=enc.encode(name),data=enc.encode(txt),crc=crc32(data);
+   const head=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0)]);
+   parts.push(head,nm,data);
+   central.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nm);
+   off+=head.length+nm.length+data.length;
+  });
+  const cl=central.reduce((t,a)=>t+a.length,0);
+  const end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cl),...u32(off),...u16(0)]);
+  return new Blob([...parts,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+ }
+ const X=s=>String(s==null?'':s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+ const COL=i=>String.fromCharCode(65+i);
+ const serial=w=>(Date.UTC(w[0],w[1]-1,w[2],w[3],w[4],w[5])-Date.UTC(1899,11,30))/864e5;
+ // gaya sel (indeks cellXfs di styles.xml)
+ const S={txt:0,bold:1,th:2,td:3,tdDate:4,tdNum:5,totL:6,totN:7,sigT:8,sigN:9,title:10,note:11,tdC:12};
+ const STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="yyyy-mm-dd hh:mm:ss"/></numFmts>
+<fonts count="5"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><u/><sz val="11"/><name val="Calibri"/><family val="2"/></font><font><b/><sz val="14"/><name val="Calibri"/><family val="2"/></font><font><i/><sz val="9"/><color rgb="FF7F7F7F"/><name val="Calibri"/><family val="2"/></font></fonts>
+<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD9D9D9"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color auto="1"/></left><right style="thin"><color auto="1"/></right><top style="thin"><color auto="1"/></top><bottom style="thin"><color auto="1"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="13">
+<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>
+<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="top"/></xf>
+<xf numFmtId="3" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="center"/></xf>
+<xf numFmtId="3" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center"/></xf>
+<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center"/></xf>
+<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf>
+</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+ // lembar kerja dari daftar baris: tiap baris {h:tinggi, c:[[kolom, nilai, gaya, rumus?]]}
+ function sheetXml(o){
+  const rows=o.rows.map((r,i)=>{
+   if(!r)return '';
+   const n=i+1,cells=(r.c||[]).map(([ci,v,s,f])=>{
+    const ref=COL(ci)+n,st=s?` s="${s}"`:'';
+    if(f)return `<c r="${ref}"${st}><f>${X(f)}</f><v>${Number(v)||0}</v></c>`;
+    if(v===''||v==null)return `<c r="${ref}"${st}/>`;
+    if(typeof v==='number')return `<c r="${ref}"${st}><v>${v}</v></c>`;
+    return `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${X(v)}</t></is></c>`;
+   }).join('');
+   return `<row r="${n}"${r.h?` ht="${r.h}" customHeight="1"`:''}>${cells}</row>`;
+  }).join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:${COL(o.widths.length-1)}${o.rows.length}"/><sheetViews><sheetView workbookViewId="0"${o.frozen?'':''}>${o.frozen?`<pane ySplit="${o.frozen}" topLeftCell="A${o.frozen+1}" activePane="bottomLeft" state="frozen"/>`:''}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/>
+<cols>${o.widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData>${o.merges&&o.merges.length?`<mergeCells count="${o.merges.length}">${o.merges.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells>`:''}<printOptions horizontalCentered="1"/><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/><headerFooter><oddFooter>&amp;L${X(o.footer||'')}&amp;RHalaman &amp;P dari &amp;N</oddFooter></headerFooter></worksheet>`;
+ }
+ function workbook(R){
+  const c=cfg(),rows=[],merges=[];
+  rows.push({c:[[0,'Nama Toko',S.txt],[1,': '+c.store,S.txt]]});
+  rows.push({c:[[0,'Nama Pemegang Kas',S.txt],[1,': '+c.holder,S.txt]]});
+  rows.push({c:[[0,'No. Rekening Pemegang Kas',S.txt],[1,': '+c.acct,S.txt]]});
+  rows.push(null);
+  rows.push({c:[[0,'Date range : '+R.from+' – '+R.to,S.txt]]});
+  rows.push({c:[[0,'Location : '+c.loc,S.txt]]});
+  rows.push({h:20,c:['Transaction date','Transaction no','Remarks','Opening balance','Debit','Credit'].map((t,i)=>[i,t,S.th])});
+  const first=rows.length+1;
+  R.rows.forEach(r=>{
+   const lines=Math.max(1,Math.ceil(r.rem.length/78));
+   rows.push({h:lines>1?15*lines:0,c:[[0,r.w?serial(r.w):'',r.w?S.tdDate:S.td],[1,r.no,S.td],[2,r.rem,S.td],[3,r.bal,S.tdNum],[4,r.dr||'',S.tdNum],[5,r.cr||'',S.tdNum]]});
+  });
+  const lastData=rows.length;
+  rows.push({h:20,c:[[0,'TOTAL',S.totL],[1,'',S.totL],[2,'',S.totL],[3,'',S.totL],[4,R.inn,S.totN,`SUM(E${first}:E${lastData})`],[5,R.out,S.totN,`SUM(F${first}:F${lastData})`]]});
+  merges.push(`A${rows.length}:D${rows.length}`);
+  rows.push(null);rows.push(null);
+  rows.push({c:[[0,c.t1,S.sigT],[3,c.t2,S.sigT]]});merges.push(`D${rows.length}:E${rows.length}`);
+  const sigTop=rows.length+1;
+  for(let i=0;i<4;i++)rows.push({h:22,c:[]});
+  merges.push(`D${sigTop}:E${sigTop+3}`,`A${sigTop}:A${sigTop+3}`);
+  rows.push({c:[[0,c.n1,S.sigN],[3,c.n2,S.sigN]]});merges.push(`D${rows.length}:E${rows.length}`);
+  const title=R.label||'Rekap Kas';
+  const s1=sheetXml({rows,widths:[32.43,20.29,75.86,22.14,14,14],merges,footer:'Rekap Pengeluaran Kas '+cap(title)});
+  // ringkasan per akun biaya
+  const r2=[],m2=[];
+  r2.push({h:22,c:[[0,'RINGKASAN PENGELUARAN KAS PER AKUN — '+title,S.title]]});
+  r2.push({c:[[0,c.store+' · '+R.from+' – '+R.to,S.note]]});
+  r2.push(null);
+  r2.push({h:20,c:[[0,'Cost Item / GL Account',S.th],[1,'Jumlah transaksi',S.th],[2,'Total (Rp)',S.th],[3,'Porsi',S.th]]});
+  const f2=r2.length+1;
+  R.gl.forEach(g=>r2.push({c:[[0,g[0],S.td],[1,g[1],S.tdC],[2,g[2],S.tdNum],[3,R.out?Math.round(g[2]/R.out*1000)/10+'%':'',S.tdC]]}));
+  const l2=r2.length;
+  r2.push({h:20,c:[[0,'TOTAL PENGELUARAN',S.totL],[1,R.nOut,S.totN,`SUM(B${f2}:B${l2})`],[2,R.out,S.totN,`SUM(C${f2}:C${l2})`],[3,'',S.totL]]});
+  r2.push(null);
+  r2.push({c:[[0,'Saldo awal bulan',S.td],[2,R.open,S.tdNum]]});m2.push(`A${r2.length}:B${r2.length}`);
+  r2.push({c:[[0,'Penggantian / penerimaan kas (Debit)',S.td],[2,R.inn,S.tdNum]]});m2.push(`A${r2.length}:B${r2.length}`);
+  r2.push({c:[[0,'Pengeluaran kas (Credit)',S.td],[2,R.out,S.tdNum]]});m2.push(`A${r2.length}:B${r2.length}`);
+  r2.push({c:[[0,'Saldo akhir bulan',S.totL],[1,'',S.totL],[2,R.close,S.totN]]});m2.push(`A${r2.length}:B${r2.length}`);
+  const s2=sheetXml({rows:r2,widths:[46,18,20,12],merges:m2,footer:'Ringkasan Kas '+cap(title)});
+  const sn=(title.slice(0,31)||'REKAP KAS').replace(/[\\/?*\[\]:]/g,' '),q="'"+sn.replace(/'/g,"''")+"'";
+  const wbx=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="${X(sn)}" sheetId="1" r:id="rId1"/><sheet name="Ringkasan" sheetId="2" r:id="rId2"/></sheets><definedNames><definedName name="_xlnm.Print_Area" localSheetId="0">${X(q)}!$A$1:$F$${rows.length}</definedName><definedName name="_xlnm.Print_Titles" localSheetId="0">${X(q)}!$7:$7</definedName></definedNames></workbook>`;
+  return zip([
+   ['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>'],
+   ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
+   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('Rekap Pengeluaran Kas '+title)}</dc:title><dc:creator>OFA Hub</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
+   ['xl/workbook.xml',wbx],
+   ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+   ['xl/styles.xml',STYLES],
+   ['xl/worksheets/sheet1.xml',s1],
+   ['xl/worksheets/sheet2.xml',s2]
+  ]);
+ }
+ function download(R){
+  const blob=workbook(R),name=(cfg().file+' - '+(R.label||'KAS')).replace(/[\\/:*?"<>|]+/g,' ')+'.xlsx';
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+  if(window.ofaToast)window.ofaToast('Excel diunduh: '+name);
+  return name;
+ }
+ window.ofaKasXlsx=R=>workbook(R||rep);
+
+ /* ---------- tampilan kartu ---------- */
+ function render(){
+  const b=$id('ksBody');if(!b)return;
+  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>PettyCash</b> hasil export sistem (satu bulan). Laporan Excel siap tanda tangan dibuat otomatis, formatnya sama dengan rekap pengeluaran kas toko.</p>`;$id('ksSub').textContent='Laporan pengeluaran kas bulanan siap tanda tangan';return}
+  const R=rep,mx=Math.max(1,...R.gl.map(g=>g[2]));
+  $id('ksSub').textContent=cap(R.label)+' · '+R.n+' transaksi';
+  b.innerHTML=`<div class="wk-hero"><div><span>Pengeluaran kas ${esc(cap(R.label))}</span><b>${rp(R.out)}</b></div><em>${R.nOut} transaksi<small>${R.from.slice(8)}–${R.to.slice(8)} ${esc(cap(R.label))}</small></em></div>
+   <div class="ks-tiles"><div class="iv-tile"><small>Saldo awal</small><b>${rp(R.open)}</b></div><div class="iv-tile"><small>Penggantian kas</small><b>${rp(R.inn)}</b></div><div class="iv-tile"><small>Saldo akhir</small><b>${rp(R.close)}</b></div></div>
+   ${R.warn.length?`<div class="ks-warn">${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
+   <p class="wk-p" style="margin:14px 0 6px"><b>Per akun biaya</b></p>
+   <div class="ks-gl">${R.gl.slice(0,6).map(g=>`<div class="ks-g"><span>${esc(cap(g[0]))}<small>${g[1]} transaksi</small></span><em>${rp(g[2])}</em><i style="width:${(g[2]/mx*100).toFixed(1)}%"></i></div>`).join('')}</div>
+   ${R.gl.length>6?`<p class="hint" style="margin-top:6px">+${R.gl.length-6} akun lainnya ada di Excel (lembar Ringkasan).</p>`:''}
+   <div class="ks-act"><button class="btn" type="button" data-ks="xlsx">⬇ Unduh Excel siap tanda tangan</button><button class="btn ghost" type="button" data-ks="list">Lihat transaksi</button></div>
+   <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc(cfg().n1)} &amp; ${esc(cfg().n2)}.</p>`;
+ }
+ function showList(){
+  const R=rep;if(!R)return;
+  openModal('Transaksi kas '+cap(R.label),`<div class="ks-list">${R.rows.map(r=>`<div class="ks-row"><span><b>${esc(r.rem||'-')}</b><small>${r.w?r.w[2]+'/'+r.w[1]+' '+p2(r.w[3])+':'+p2(r.w[4]):''} · ${esc(r.no)} · ${esc(cap(r.gl))}${r.st&&!/^complete/i.test(r.st)?' · <b style="color:#d33a40">'+esc(r.st)+'</b>':''}</small></span><em class="${r.dr?'in':''}">${r.dr?'+'+rp(r.dr):'−'+rp(r.cr)}</em></div>`).join('')}</div>
+   <p class="hint">Saldo awal ${rp(R.open)} · masuk ${rp(R.inn)} · keluar ${rp(R.out)} · saldo akhir ${rp(R.close)}</p>`);
+ }
+ function settings(){
+  const c=cfg(),f=(k,l,ph)=>`<label class="ks-f"><span>${l}</span><input class="in" id="ks_${k}" value="${esc(c[k])}" placeholder="${esc(ph||'')}"></label>`;
+  openModal('Pengaturan Rekap Kas',`<div class="ks-form">${f('store','Nama toko')}${f('holder','Nama pemegang kas')}${f('acct','No. rekening pemegang kas')}${f('loc','Lokasi')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Tanda tangan kiri</b></p>${f('t1','Jabatan')}${f('n1','Nama')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Tanda tangan kanan</b></p>${f('t2','Jabatan')}${f('n2','Nama')}
+   ${f('file','Awalan nama file')}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" type="button" id="ksSave">Simpan</button><button class="btn ghost" type="button" id="ksReset">Kembalikan bawaan</button></div>`);
+  $id('ksSave').onclick=()=>{const v={};Object.keys(DEF).forEach(k=>{const e=$id('ks_'+k);v[k]=(e?e.value:'').trim()||DEF[k]});meta.__kasCfg=v;ls.set('ofa_meta',meta);close();render();if(window.ofaToast)window.ofaToast('Pengaturan rekap kas disimpan')};
+  $id('ksReset').onclick=()=>{delete meta.__kasCfg;ls.set('ofa_meta',meta);close();render()};
+ }
+ async function pick(file){
+  const st=$id('ksStatus');st.className='iv-status';st.textContent='Membaca '+file.name+'…';
+  try{
+   const p=await parse(file),R=build(p,file.name);
+   if(!R.n)throw new Error('Tidak ada transaksi di file ini.');
+   rep=R;try{localStorage.setItem(CK,JSON.stringify(rep))}catch(e){}
+   const h=Object.assign({},meta.__kasHist||{});h[R.ym]={out:R.out,inn:R.inn,n:R.n,close:R.close};Object.keys(h).sort().slice(0,-12).forEach(k=>delete h[k]);meta.__kasHist=h;ls.set('ofa_meta',meta);
+   st.textContent='✓ '+R.n+' transaksi '+cap(R.label)+' terbaca'+(R.warn.length?' · '+R.warn.length+' catatan perlu dicek':'');
+   render();
+  }catch(e){st.className='iv-status err';st.textContent='Gagal membaca file: '+(e.message||e)}
+ }
+ $id('ksUp').onclick=()=>$id('ksFile').click();
+ $id('ksFile').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)pick(f)};
+ $id('ksCfg').onclick=()=>(window.ofaHeadGate||(g=>g()))(settings);
+ box.addEventListener('click',e=>{const a=e.target.closest('[data-ks]');if(!a)return;if(a.dataset.ks==='xlsx'&&rep)download(rep);if(a.dataset.ks==='list')showList()});
+ render();
+})();
+/* ====== DASHBOARD GESER (5 halaman) ====== */
 (function(){
  const deck=document.getElementById('deck'),track=document.getElementById('deckTrack');if(!deck||!track)return;
  const tabs=[...document.querySelectorAll('#deckTabs [data-pg]')],pages=[...track.children],hdr=document.querySelector('header');
