@@ -1,6 +1,6 @@
 /* Service worker ONE FOR ALL.
    Naikkan angka versi setiap kali isi aplikasi diubah agar HP mengambil versi baru. */
-const CACHE = 'ofa-v29';
+const CACHE = 'ofa-v30';
 const SHELL = [
   './',
   './index.html',
@@ -37,9 +37,10 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate' || (request.headers.get('accept') || '').includes('text/html')) {
-    // Halaman: ambil yang terbaru dulu, pakai salinan tersimpan saat tidak ada sinyal.
+    // Halaman: ambil yang terbaru dulu (lewati cache browser ±10 menit dari GitHub Pages),
+    // pakai salinan tersimpan saat tidak ada sinyal.
     event.respondWith(
-      fetch(request)
+      fetch(new Request(request.url, {cache: 'no-cache', credentials: 'same-origin'}))
         .then(response => {
           const copy = response.clone();
           caches.open(CACHE).then(cache => cache.put(request, copy));
