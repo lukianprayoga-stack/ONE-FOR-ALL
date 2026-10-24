@@ -2941,6 +2941,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    for(let i=0;i<Math.min(20,rows.length);i++){
     const h=(rows[i]||[]).map(norm);
     const iE=pick(h,'qtyyangdiharapkan','expectedqty','qtyexpected'),iC=pick(h,'qtyyangdihitung','countedqty','qtycounted'),iS=pick(h,'skucode','sku','kodesku');
+    if(pick(h,'blindcountingid')>=0&&pick(h,'totalsku')>=0&&iS<0){const out=parseSesi(rows,i,h);if(out.length)return {kind:'sesi',rows:out}}
     if(iE>=0&&iC>=0&&iS>=0){
      const c={bc:pick(h,'blindcountingid'),per:pick(h,'periodid'),d:pick(h,'tanggal','date'),mc:pick(h,'mclevel4name','mclv4','mclevel4'),pc:pick(h,'totalpricecutoff'),ps:pick(h,'totalpricescan'),
       sel:pick(h,'selisihtotalprice'),bin:pick(h,'bincode'),sst:pick(h,'statusstock'),inv:pick(h,'statusinvestigasi'),iss:pick(h,'statusissue'),sbc:pick(h,'statusblindcounting'),rem:pick(h,'remark','remarks','keterangan')};
@@ -2963,7 +2964,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    }
   }
   if(names)return {kind:'names',names};
-  throw new Error('Kolom "Qty yang Diharapkan", "Qty yang Dihitung" dan "skucode" tidak ditemukan. Pilih file export blind_counting_details dari sistem.');
+  throw new Error('Kolom Blind Counting ID, Total SKU, Qty yang Diharapkan/Dihitung tidak ditemukan. Pilih file export blind_counting dari sistem.');
  }
 
  /* ---------- nama produk per SKU ---------- */
@@ -2974,11 +2975,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   return m;
  }
  function applyNames(){
-  if(!rep)return 0;const m=nameMap();let n=0;
+  if(!rep||rep.mode==='sesi')return 0;const m=nameMap();let n=0;
   rep.rows.forEach(r=>{if(!r.nm&&m[r.sku]){r.nm=m[r.sku];n++}});
   return n;
  }
- const missing=()=>rep?rep.rows.filter(r=>!r.nm).length:0;
+ const missing=()=>rep&&rep.mode!=='sesi'?rep.rows.filter(r=>!r.nm).length:0;
  async function fetchNames(){
   if(!configured()||!localStorage.getItem('salesTrackingPin'))throw new Error('Hub belum tersambung ke Apps Script (PIN/URL belum diisi).');
   const pin=localStorage.getItem('salesTrackingPin')||'';
@@ -3032,7 +3033,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const X=s=>String(s==null?'':s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
  const COL=i=>i<26?String.fromCharCode(65+i):String.fromCharCode(64+Math.floor(i/26))+String.fromCharCode(65+i%26);
  const serialDay=iso=>{const p=String(iso||'').split('-').map(Number);return p.length===3&&p[0]?(Date.UTC(p[0],p[1]-1,p[2])-Date.UTC(1899,11,30))/864e5:''};
- const S={txt:1,bold:2,title:3,form:4,formD:5,th:6,tdC:7,td:8,tdN:9,secM:10,secP:11,subL:12,subN:13,totL:14,totN:15,para:16,sigT:17,sigN:18,note:19,tdD:20,pct:21,tdQ:22,subQ:23,totQ:24};
+ const S={txt:1,bold:2,title:3,form:4,formD:5,th:6,tdC:7,td:8,tdN:9,secM:10,secP:11,subL:12,subN:13,totL:14,totN:15,para:16,sigT:17,sigN:18,note:19,tdD:20,pct:21,tdQ:22,subQ:23,totQ:24,secZ:25,totP:26};
  const XF=(n,f,fi,b,al,extra)=>`<xf numFmtId="${n}" fontId="${f}" fillId="${fi}" borderId="${b}" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1">${al?`<alignment ${al}/>`:''}</xf>`;
  const XFS=[
   XF(0,0,0,0),XF(0,0,0,0),XF(0,1,0,0),
@@ -3045,7 +3046,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   XF(0,1,5,1,'horizontal="right" vertical="center"'),XF(164,1,5,1,'horizontal="right" vertical="center"'),
   XF(0,0,0,0,'vertical="top" wrapText="1"'),XF(0,0,0,0,'horizontal="center"'),XF(0,1,0,0,'horizontal="center"'),XF(0,3,0,0,'vertical="top"'),
   XF(165,0,0,1,'horizontal="center" vertical="top"'),XF(166,0,0,1,'horizontal="right" vertical="top"'),
-  XF(164,0,0,1,'horizontal="center" vertical="top"'),XF(164,1,2,1,'horizontal="center" vertical="center"'),XF(164,1,5,1,'horizontal="center" vertical="center"')
+  XF(164,0,0,1,'horizontal="center" vertical="top"'),XF(164,1,2,1,'horizontal="center" vertical="center"'),XF(164,1,5,1,'horizontal="center" vertical="center"'),
+  XF(0,1,2,1,'vertical="center"'),XF(166,1,5,1,'horizontal="right" vertical="center"')
  ];
  const STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt numFmtId="164" formatCode="#,##0;[Red]-#,##0"/><numFmt numFmtId="165" formatCode="d mmm yyyy"/><numFmt numFmtId="166" formatCode="0.0%"/></numFmts>
@@ -3167,35 +3169,202 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   Object.keys(iss).forEach(k=>{const o=iss[k];r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.p,S.tdN],[3,o.m,S.tdN],[4,o.p+o.m,S.tdN],[5,o.ba?'Ya':'Tidak',S.tdC]]})});
   const s3=sheetXml({rows:r3,widths:[30,12,16,14,12,14,14],merges:m3,footer:'Ringkasan BC '+cap(title)});
 
-  const sn=('BA BC '+title).slice(0,31).replace(/[\\/?*\[\]:]/g,' '),q="'"+sn.replace(/'/g,"''")+"'";
-  const ct=n=>`<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`;
+  return pack(R,[['BA BC '+title,s1,`$A$1:$I$${rows.length}`,`$${h1}:$${h1+1}`],['Rincian',s2,'',`$3:$3`,`$A$3:$P$${e2}`],['Ringkasan',s3]]);
+ }
+ // sheets: [[nama, xml, area cetak, judul cetak, filter]]
+ function pack(R,sheets){
+  const title=R.label||'BLIND COUNTING',q=n=>"'"+n.replace(/'/g,"''")+"'";
+  const nm=sheets.map(x=>x[0].slice(0,31).replace(/[\\/?*\[\]:]/g,' '));
+  const dn=sheets.map((x,i)=>(x[4]?`<definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">${X(q(nm[i]))}!${x[4]}</definedName>`:'')+(x[2]?`<definedName name="_xlnm.Print_Area" localSheetId="${i}">${X(q(nm[i]))}!${x[2]}</definedName>`:'')+(x[3]?`<definedName name="_xlnm.Print_Titles" localSheetId="${i}">${X(q(nm[i]))}!${x[3]}</definedName>`:'')).join('');
   const wbx=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="${X(sn)}" sheetId="1" r:id="rId1"/><sheet name="Rincian" sheetId="2" r:id="rId2"/><sheet name="Ringkasan" sheetId="3" r:id="rId3"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="1" hidden="1">Rincian!$A$3:$P$${e2}</definedName><definedName name="_xlnm.Print_Area" localSheetId="0">${X(q)}!$A$1:$I$${rows.length}</definedName><definedName name="_xlnm.Print_Titles" localSheetId="0">${X(q)}!$${h1}:$${h1+1}</definedName><definedName name="_xlnm.Print_Titles" localSheetId="1">Rincian!$3:$3</definedName></definedNames><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`;
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets>${nm.map((n,i)=>`<sheet name="${X(n)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets>${dn?`<definedNames>${dn}</definedNames>`:''}<calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`;
+  const WS='application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
   return window.ofaZip([
-   ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${ct(1)}${ct(2)}${ct(3)}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
+   ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="${WS}"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
    ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('BA Blind Counting '+title)}</dc:title><dc:creator>OFA Hub</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
    ['xl/workbook.xml',wbx],
-   ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet3.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+   ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="${REL}worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="${REL}styles" Target="styles.xml"/></Relationships>`],
    ['xl/styles.xml',STYLES],
-   ['xl/worksheets/sheet1.xml',s1],['xl/worksheets/sheet2.xml',s2],['xl/worksheets/sheet3.xml',s3]
+   ...sheets.map((x,i)=>['xl/worksheets/sheet'+(i+1)+'.xml',x[1]])
   ]);
  }
+ /* ---------- mode rekap per sesi (file blind_counting_YYYY-MM-DD.xlsx) ---------- */
+ // Selisih Total Price = jumlah selisih mutlak per SKU; bersih = Scan − Cutoff.
+ // Maka plus = (mutlak + bersih)/2 dan minus = (mutlak − bersih)/2, tepat sama dengan rincian per SKU.
+ function parseSesi(rows,i,h){
+  const c={bc:pick(h,'blindcountingid'),per:pick(h,'periodid'),smp:pick(h,'samplingid'),d:pick(h,'tanggal','date'),mcc:pick(h,'mclevel4code'),mc:pick(h,'mclevel4name','mclevel4'),
+   pc:pick(h,'totalpricecutoff'),ps:pick(h,'totalpricescan'),sel:pick(h,'selisihtotalprice'),exp:pick(h,'qtyyangdiharapkan'),cnt:pick(h,'qtyyangdihitung'),
+   sku:pick(h,'totalsku'),skuc:pick(h,'totalskudihitung'),pt:pick(h,'namapetugas'),st:pick(h,'status'),sst:pick(h,'statusstock'),inv:pick(h,'statusinvestigasi'),iss:pick(h,'statusissue'),done:pick(h,'selesaipada'),upd:pick(h,'diperbaruipada')};
+  const out=[];
+  rows.slice(i+1).forEach(r=>{
+   const g=k=>c[k]>=0?r[c[k]]:'',t=k=>{const v=g(k);return blank(v)?'':String(v).replace(/\s+/g,' ').trim()};
+   const bc=t('bc');if(!bc)return;
+   const pc=num(g('pc')),ps=num(g('ps')),net=ps-pc,gross=Math.max(Math.abs(net),num(g('sel')));
+   out.push({bc,per:t('per'),smp:t('smp'),d:day(g('d')),mcc:t('mcc'),mc:t('mc'),pc,ps,net,plus:(gross+net)/2,minus:-(gross-net)/2,gross,
+    exp:num(g('exp')),cnt:num(g('cnt')),sku:num(g('sku')),skuc:num(g('skuc')),pt:cap(t('pt')),st:t('st'),sst:t('sst'),inv:t('inv'),iss:t('iss'),done:t('done')||t('upd')});
+  });
+  return out;
+ }
+ function buildSesi(rows,fileName){
+  const per={},months={};rows.forEach(r=>{if(r.per)per[r.per]=1;if(r.d){const k=r.d.slice(0,7);months[k]=(months[k]||0)+1}});
+  let ym='';const pk=Object.keys(per);
+  if(pk.length===1){const m=pk[0].match(/(\d{2})(\d{2})$/);if(m)ym='20'+m[1]+'-'+m[2]}
+  if(!ym)ym=Object.keys(months).sort((a,b)=>months[b]-months[a])[0]||'';
+  const y=+ym.slice(0,4),mo=+ym.slice(5,7);
+  const L=rows.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.bc.localeCompare(b.bc)).map((r,k)=>Object.assign(r,{k,gap:r.cnt-r.exp,mis:r.gross!==0||r.cnt!==r.exp||/mismatch/i.test(r.sst)}));
+  const ds=L.map(r=>r.d).filter(Boolean).sort(),sum=k=>L.reduce((t,r)=>t+r[k],0);
+  const warn=[];
+  if(pk.length>1)warn.push('File berisi '+pk.length+' periode BC ('+pk.join(', ')+'). Pastikan tarik data satu bulan.');
+  const notClosed=L.filter(r=>r.st&&!/closed/i.test(r.st));if(notClosed.length)warn.push(notClosed.length+' sesi belum Closed: '+notClosed.slice(0,4).map(r=>r.bc.slice(-3)+' '+cap(r.mc)+' ('+r.st+')').join(', ')+(notClosed.length>4?'…':''));
+  const unsolved=L.filter(r=>r.mis&&!/solved/i.test(r.inv));if(unsolved.length)warn.push(unsolved.length+' sesi selisih investigasinya belum "Solved".');
+  const skuGap=sum('sku')-sum('skuc');if(skuGap>0)warn.push(nf(skuGap)+' SKU dari '+nf(sum('sku'))+' tidak terhitung saat BC (Total SKU − Total SKU Dihitung).');
+  return {mode:'sesi',ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',
+   st:{sesi:L.length,match:L.filter(r=>!r.mis).length,sku:sum('sku'),skuc:sum('skuc'),exp:sum('exp'),cnt:sum('cnt'),care:sum('pc'),scan:sum('ps'),gross:sum('gross')},
+   rows:L,jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
+ }
+ function calcSesi(R){
+  const L=R.rows.filter(r=>r.mis),sum=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  const minus=L.filter(r=>r.net<0),plus=L.filter(r=>r.net>0),zero=L.filter(r=>r.net===0);
+  return {L,minus,plus,zero,vPlus:sum(L,'plus'),vMinus:sum(L,'minus'),net:sum(L,'net'),gap:sum(L,'gap'),
+   noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved/i.test(r.inv||'')).length};
+ }
+ function workbookSesi(R){
+  const c=cfg(),K=calcSesi(R),st=R.st,rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl),W=11;
+  const push=r=>{rows.push(r);return rows.length};
+  const all=(st0,list)=>[...Array(W).keys()].map(i=>[i,'',st0]).map(x=>{const f=list.find(y=>y[0]===x[0]);return f||x});
+  const accV=st.care?Math.max(0,1-st.gross/st.care):0,accS=st.sesi?st.match/st.sesi:0;
+  push({h:20,c:all(S.title,[[0,'EIGERINDO MPI',S.title],[3,'BERITA ACARA HASIL BLIND COUNTING',S.title],[9,'Periode',S.form],[10,R.period||'-',S.form]])});
+  push({h:20,c:all(S.title,[[9,'Toko',S.form],[10,c.suffix||c.store,S.form]])});
+  push({h:20,c:all(S.title,[[9,'Tanggal',S.form],[10,serialDay(R.tgl),S.formD]])});
+  mg.push('A1:C3','D1:I3');
+  push(null);
+  push({c:[[0,'Perihal berita acara:',S.txt],[3,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
+  push({c:[[3,(R.jenis==='akhir'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
+  push(null);
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} telah direkap hasil blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) sebanyak ${nf(st.sesi)} sesi dengan ${nf(st.skuc)} SKU terhitung. Sebanyak ${nf(st.match)} sesi sesuai dan ${nf(K.L.length)} sesi terdapat selisih stock dengan barang plus senilai ${rp(K.vPlus)} dan barang minus senilai ${rp(K.vMinus)}, sehingga nominal selisih bersih mencapai ${rp(K.net)}.`;
+  let n=push({h:Math.max(28,13.5*lines(para,170)),c:[[0,para,S.para]]});mg.push(`A${n}:K${n}`);
+  n=push({c:[[0,'Adapun ringkasan hasil serta rincian selisih per sesi blind counting adalah sebagai berikut:',S.para]]});mg.push(`A${n}:K${n}`);
+  push(null);
+  // ringkasan dua kolom
+  n=push({h:16,c:all(S.th,[[0,'RINGKASAN HASIL',S.th]])});mg.push(`A${n}:K${n}`);
+  const kvL=[['Sesi blind counting (sesuai · selisih)',nf(st.sesi)+' ('+nf(st.match)+' · '+nf(K.L.length)+')'],['SKU terhitung / total SKU',nf(st.skuc)+' / '+nf(st.sku)],['Qty CARE (sistem)',st.exp],['Qty fisik terhitung',st.cnt],['Selisih qty bersih',st.cnt-st.exp],['Akurasi sesi',accS]];
+  const kvR=[['Nilai stok CARE (Rp)',st.care],['Nilai fisik / scan (Rp)',st.scan],['Barang plus (Rp)',K.vPlus],['Barang minus (Rp)',K.vMinus],['Selisih bersih (Rp)',K.net],['Akurasi nilai',accV]];
+  const fmt=v=>typeof v==='string'?S.td:(v>0&&v<1&&v!==Math.round(v))?S.pct:S.tdN;
+  kvL.forEach((l,i)=>{const r=kvR[i];n=push({c:all(S.td,[[0,l[0],S.td],[4,l[1],fmt(l[1])],[7,r[0],S.td],[10,r[1],fmt(r[1])]])});mg.push(`A${n}:D${n}`,`E${n}:G${n}`,`H${n}:J${n}`)});
+  push(null);
+  const h1=push({h:28,c:['No','Tanggal','Blind Counting ID','Kategori (MC Lv 4)','Qty CARE','Qty Fisik','Selisih Qty','Plus (Rp)','Minus (Rp)','Bersih (Rp)','Keterangan*'].map((t,i)=>[i,t,S.th])});
+  let no=0;const subs=[];
+  const section=(lab,st0,list,sub)=>{
+   if(!list.length)return;
+   const s=push({h:16,c:all(st0,[[0,lab,st0]])});mg.push(`A${s}:K${s}`);
+   const f=rows.length+1;
+   list.forEach(r=>{no++;const rem=remOf(R,r);push({h:lines(rem,30)>1?13.5*lines(rem,30):0,c:[[0,no,S.tdC],[1,serialDay(r.d),S.tdD],[2,r.bc,S.tdC],[3,r.mc,S.td],[4,r.exp,S.tdQ],[5,r.cnt,S.tdQ],[6,r.gap,S.tdQ],[7,r.plus,S.tdN],[8,r.minus,S.tdN],[9,r.net,S.tdN],[10,rem,S.td]]})});
+   const l=rows.length,sm=k=>list.reduce((t,r)=>t+r[k],0);
+   const t=push({h:16,c:[[0,'Subtotal '+sub,S.subL],[1,'',S.subL],[2,'',S.subL],[3,list.length+' sesi',S.subL],
+    ...['exp','cnt','gap'].map((k,j)=>[4+j,sm(k),S.subQ,`SUM(${COL(4+j)}${f}:${COL(4+j)}${l})`]),...['plus','minus','net'].map((k,j)=>[7+j,sm(k),S.subN,`SUM(${COL(7+j)}${f}:${COL(7+j)}${l})`]),[10,'',S.subL]]});
+   mg.push(`A${t}:C${t}`);subs.push(t);
+  };
+  section('A. SESI DENGAN SELISIH BERSIH MINUS',S.secM,K.minus,'minus');
+  section('B. SESI DENGAN SELISIH BERSIH PLUS',S.secP,K.plus,'plus');
+  section('C. SESI PLUS & MINUS SALING MENUTUP (bersih 0)',S.secZ,K.zero,'saling menutup');
+  if(!subs.length){const e=push({c:all(S.td,[[0,'Tidak ada selisih stock pada periode ini.',S.td]])});mg.push(`A${e}:K${e}`)}
+  const tf=k=>subs.length?subs.map(s=>k+s).join('+'):'0';
+  const T=push({h:18,c:[[0,'Total Selisih',S.totL],[1,'',S.totL],[2,'',S.totL],[3,K.L.length+' sesi',S.totL],
+   ...['exp','cnt','gap'].map((k,j)=>[4+j,K.L.reduce((t,r)=>t+r[k],0),S.totQ,tf(COL(4+j))]),[7,K.vPlus,S.totN,tf('H')],[8,K.vMinus,S.totN,tf('I')],[9,K.net,S.totN,tf('J')],[10,'',S.totL]]});
+  mg.push(`A${T}:C${T}`);
+  push(null);
+  const five=approvers(K.net).length>3,nm=v=>'('+(v?String(v).toUpperCase():'____________________')+')';
+  n=push({c:[[0,'Dibuat oleh',S.sigT],[3,'Diperiksa oleh',S.sigT],[4,'Disetujui oleh**',S.sigT]]});mg.push(`A${n}:C${n}`,`E${n}:K${n}`);
+  for(let i=0;i<4;i++)push({h:20,c:[]});
+  n=push({c:[[0,nm(c.n1),S.sigN],[3,nm(c.n2),S.sigN],[4,nm(c.n3),S.sigN],[7,nm(c.n4),S.sigN],...(five?[[10,nm(c.n5),S.sigN]]:[])]});mg.push(`A${n}:C${n}`,`E${n}:G${n}`,`H${n}:J${n}`);
+  n=push({c:[[0,c.t1,S.sigT],[3,c.t2,S.sigT],[4,c.t3,S.sigT],[7,c.t4,S.sigT],...(five?[[10,c.t5,S.sigT]]:[])]});mg.push(`A${n}:C${n}`,`E${n}:G${n}`,`H${n}:J${n}`);
+  push(null);
+  ['* Keterangan diisi penyebab/penyelesaian selisih per sesi. Plus = nilai barang yang fisiknya lebih dari CARE, minus = nilai barang yang fisiknya kurang dari CARE (dari kolom Selisih Total Price & Total Price Cutoff/Scan).',
+   '** Persetujuan sesuai nominal selisih: Rp5.000.000 oleh Head of Branch, Head of Regional Dept. · Rp10.000.000 ditambah Deputy Head of R&S Division · Rp15.000.000 ditambah Head of R&S Division'].forEach(t=>push({h:12,c:[[0,t,S.note]]}));
+  const s1=sheetXml({rows,widths:[5,11.5,17,28,8,8,8,13,13,13,28],merges:mg,grid:false,land:true,footer:'BA Blind Counting '+cap(title)});
+
+  // Rincian semua sesi
+  const r2=[],m2=[];
+  r2.push({h:20,c:[[0,'RINCIAN SESI BLIND COUNTING — '+title,S.title]]});m2.push('A1:T1');
+  r2.push({c:[[0,c.store+' · periode '+(R.period||'-')+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:'')+' · sumber '+(R.file||''),S.note]]});m2.push('A2:T2');
+  const HD=['No','Tanggal','Blind Counting ID','Sampling ID','Kategori','Petugas','Total SKU','SKU Dihitung','Qty CARE','Qty Fisik','Selisih Qty','Nilai CARE (Rp)','Nilai Fisik (Rp)','Plus (Rp)','Minus (Rp)','Bersih (Rp)','Status','Status Stock','Investigasi','Keterangan'];
+  r2.push({h:28,c:HD.map((t,i)=>[i,t,S.th])});
+  R.rows.forEach((r,i)=>{const rem=remOf(R,r);r2.push({h:lines(rem,32)>1?13.5*lines(rem,32):0,c:[[0,i+1,S.tdC],[1,serialDay(r.d),S.tdD],[2,r.bc,S.tdC],[3,r.smp,S.tdC],[4,r.mc,S.td],[5,r.pt,S.td],[6,r.sku,S.tdQ],[7,r.skuc,S.tdQ],[8,r.exp,S.tdQ],[9,r.cnt,S.tdQ],[10,r.gap,S.tdQ],
+   [11,r.pc,S.tdN],[12,r.ps,S.tdN],[13,r.plus,S.tdN],[14,r.minus,S.tdN],[15,r.net,S.tdN],[16,r.st||'-',S.tdC],[17,r.sst||'-',S.tdC],[18,r.inv||'-',S.tdC],[19,rem,S.td]]})});
+  const e2=r2.length,tt=k=>R.rows.reduce((t,r)=>t+r[k],0);
+  r2.push({h:18,c:[[0,'TOTAL',S.totL],...[1,2,3,4,5].map(i=>[i,'',S.totL]),...['sku','skuc','exp','cnt','gap'].map((k,j)=>[6+j,tt(k),S.totQ,`SUM(${COL(6+j)}4:${COL(6+j)}${e2})`]),...['pc','ps','plus','minus','net'].map((k,j)=>[11+j,tt(k),S.totN,`SUM(${COL(11+j)}4:${COL(11+j)}${e2})`]),...[16,17,18,19].map(i=>[i,'',S.totL])]});m2.push(`A${r2.length}:F${r2.length}`);
+  const s2=sheetXml({rows:r2,widths:[5,11.5,17,16,24,22,7,8,7,7,7,15,15,12,12,12,9,9,9,30],merges:m2,land:true,frozen:3,filter:`A3:T${e2}`,footer:'Rincian Sesi BC '+cap(title)});
+
+  // Ringkasan per petugas & per minggu
+  const r3=[],m3=[];
+  r3.push({h:20,c:[[0,'RINGKASAN BLIND COUNTING — '+title,S.title]]});m3.push('A1:H1');
+  r3.push({c:[[0,c.store+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:''),S.note]]});m3.push('A2:H2');
+  r3.push(null);
+  const grp=(label,keyOf)=>{
+   r3.push({h:28,c:[label,'Sesi','Sesi selisih','SKU dihitung','Akurasi sesi','Plus (Rp)','Minus (Rp)','Bersih (Rp)'].map((t,i)=>[i,t,S.th])});
+   const f=r3.length+1,G={};
+   R.rows.forEach(r=>{const k=keyOf(r)||'-',o=G[k]||(G[k]={n:0,m:0,s:0,p:0,mi:0,ne:0});o.n++;if(r.mis)o.m++;o.s+=r.skuc;o.p+=r.plus;o.mi+=r.minus;o.ne+=r.net});
+   Object.keys(G).sort().forEach(k=>{const o=G[k],i=r3.length+1;r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.m,S.tdQ],[3,o.s,S.tdN],[4,o.n?(o.n-o.m)/o.n:0,S.pct,`IF(B${i}=0,0,(B${i}-C${i})/B${i})`],[5,o.p,S.tdN],[6,o.mi,S.tdN],[7,o.ne,S.tdN]]})});
+   const l=r3.length,V=Object.values(G),sm=k=>V.reduce((t,o)=>t+o[k],0),i=r3.length+1;
+   r3.push({h:18,c:[[0,'TOTAL',S.totL],[1,sm('n'),S.totQ,`SUM(B${f}:B${l})`],[2,sm('m'),S.totQ,`SUM(C${f}:C${l})`],[3,sm('s'),S.totN,`SUM(D${f}:D${l})`],[4,sm('n')?(sm('n')-sm('m'))/sm('n'):0,S.totP,`IF(B${i}=0,0,(B${i}-C${i})/B${i})`],[5,sm('p'),S.totN,`SUM(F${f}:F${l})`],[6,sm('mi'),S.totN,`SUM(G${f}:G${l})`],[7,sm('ne'),S.totN,`SUM(H${f}:H${l})`]]});
+   r3.push(null);
+  };
+  grp('Petugas',r=>r.pt);
+  grp('Minggu (Senin)',r=>{if(!r.d)return '';const p=r.d.split('-').map(Number),d=new Date(Date.UTC(p[0],p[1]-1,p[2]));d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return dateText(d.toISOString().slice(0,10)).tgl});
+  const s3=sheetXml({rows:r3,widths:[30,8,10,12,11,14,14,14],merges:m3,footer:'Ringkasan BC '+cap(title)});
+  return pack(R,[['BA BC '+title,s1,`$A$1:$K$${rows.length}`,`$${h1}:$${h1}`],['Rincian Sesi',s2,'',`$3:$3`,`$A$3:$T$${e2}`],['Ringkasan',s3]]);
+ }
+ const rowSesi=(r,k)=>`<div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}</small></span><em class="${k==='minus'||(!k&&r.net<0)?'m':'p'}">${rp(k?r[k]:r.net)}<small>${k?'bersih '+rp(r.net):(r.gap>0?'+':'')+nf(r.gap)+' pcs'}</small></em></div>`;
+ const rpj=v=>Math.abs(v)>=1e6?(v<0?'-':'')+'Rp'+(Math.abs(v)/1e6).toFixed(1).replace('.',',')+' jt':rp(v);
+ function renderSesi(b){
+  const R=rep,K=calcSesi(R),st=R.st,ap=approvers(K.net),c=cfg(),accS=st.sesi?st.match/st.sesi:0,accV=st.care?Math.max(0,1-st.gross/st.care):0;
+  $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi)+' sesi BC · '+nf(st.skuc)+' SKU dihitung';
+  const top=k=>K.L.filter(r=>r[k]!==0).sort((x,y)=>Math.abs(y[k])-Math.abs(x[k])).slice(0,4).map(r=>rowSesi(r,k)).join('');
+  const hist=Object.entries(meta.__bcHist||{}).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
+  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} dari ${nf(st.sesi)} sesi selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} · ${esc(R.period||'')}</small></em></div>
+   <div class="ks-tiles"><div class="iv-tile bc-t m"><small>Barang minus</small><b title="${rp(K.vMinus)}">${rpj(K.vMinus)}</b><span>${nf(K.L.filter(r=>r.minus).length)} sesi</span></div><div class="iv-tile bc-t p"><small>Barang plus</small><b title="${rp(K.vPlus)}">${rpj(K.vPlus)}</b><span>${nf(K.L.filter(r=>r.plus).length)} sesi</span></div><div class="iv-tile bc-t"><small>Akurasi nilai</small><b>${(accV*100).toFixed(1).replace('.',',')}%</b><span>${nf(st.match)}/${nf(st.sesi)} sesi</span></div></div>
+   ${R.warn.length?`<div class="ks-warn">${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
+   <div class="bc-cols"><div><p class="wk-p bc-h m"><b>Minus terbesar</b><span>per sesi</span></p>${top('minus')||'<p class="hint">Tidak ada barang minus.</p>'}</div>
+   <div><p class="wk-p bc-h p"><b>Plus terbesar</b><span>per sesi</span></p>${top('plus')||'<p class="hint">Tidak ada barang plus.</p>'}</div></div>
+   <p class="hint">Qty CARE ${nf(st.exp)} → fisik ${nf(st.cnt)} pcs (${st.cnt-st.exp>0?'+':''}${nf(st.cnt-st.exp)}) · nilai CARE ${rp(st.care)}${K.noRem?` · ${K.noRem} sesi selisih belum ada keterangan (<button type="button" class="bc-lnk" data-bc="list">isi</button>, opsional)`:''}</p>
+   <div class="bc-form"><label class="ks-f"><span>Tanggal BA</span><input class="in" type="date" id="bcTgl" value="${esc(R.tgl||today())}"></label>
+    <label class="ks-f"><span>Perihal</span><select class="in" id="bcJenis"><option value="akhir"${R.jenis==='akhir'?' selected':''}>Penyelesaian selisih (akhir periode)</option><option value="berjalan"${R.jenis==='berjalan'?' selected':''}>Selisih di bulan berjalan</option></select></label></div>
+   <p class="hint bc-ap">Nominal ${rp(Math.abs(K.net))} → ${ap.length?'persetujuan: '+esc(ap.join(', ')):'di bawah Rp5.000.000, cukup dibuat '+esc(c.t1)+' &amp; diperiksa '+esc(c.t2)}.</p>
+   <div class="ks-act"><button class="btn" type="button" data-bc="xlsx">⬇ Unduh BA Excel siap tanda tangan</button><button class="btn ghost" type="button" data-bc="list">Rincian &amp; keterangan</button></div>
+   ${hist.length>1?`<div class="bc-hist">${hist.map(([k,v])=>`<span><small>${esc(cap(BULAN[+k.slice(5,7)-1]).slice(0,3))} ${k.slice(2,4)}</small><b class="${v.net<0?'bc-neg':''}">${rp(v.net)}</b></span>`).join('')}</div>`:''}
+   <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc(c.n1||c.t1)} &amp; ${esc(c.n2||c.t2)}.</p>`;
+  $id('bcTgl').onchange=e=>{rep.tgl=e.target.value||today();save()};
+  $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;save()};
+ }
+ function showListSesi(){
+  const R=rep,K=calcSesi(R);
+  const item=r=>`<div class="bc-li"><div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}</small><small>${r.plus?'<span style="color:#1a8a49">plus '+rp(r.plus)+'</span>':''}${r.plus&&r.minus?' · ':''}${r.minus?'<span style="color:#d33a40">minus '+rp(r.minus)+'</span>':''}</small></span><em class="${r.net<0?'m':'p'}">${rp(r.net)}<small>${r.gap>0?'+':''}${nf(r.gap)} pcs</small></em></div>
+   <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Keterangan penyebab / penyelesaian (opsional)"></div>`;
+  const sec=(lab,cls,list,v)=>list.length?`<p class="wk-p bc-h ${cls}"><b>${lab}</b><span>${list.length} sesi · ${rp(v)}</span></p>${list.map(item).join('')}`:'';
+  const sm=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  openModal('Sesi selisih '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Satu baris = satu sesi blind counting. Keterangan yang diisi di sini ikut masuk ke Excel.</p>
+   <div class="ks-list bc-list">${sec('A. Selisih bersih minus','m',K.minus,sm(K.minus,'net'))}${sec('B. Selisih bersih plus','p',K.plus,sm(K.plus,'net'))}${sec('C. Plus & minus saling menutup','',K.zero,0)}${K.L.length?'':'<p class="hint">Semua sesi sesuai, tidak ada selisih.</p>'}</div>`);
+  document.querySelectorAll('[data-bck]').forEach(inp=>inp.addEventListener('input',()=>{const r=rep.rows[+inp.dataset.bck];rep.edit=rep.edit||{};if(!inp.value.trim())delete rep.edit[r.k];else rep.edit[r.k]=inp.value;save();clearTimeout(showListSesi.t);showListSesi.t=setTimeout(render,400)}));
+ }
+
+ const book=R=>R.mode==='sesi'?workbookSesi(R):workbook(R);
  const fileName=R=>{const c=cfg();return (c.file+' '+cap(R.label||'')+(c.suffix?' - '+c.suffix:'')).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.xlsx'};
  function download(R){
-  const blob=workbook(R),name=fileName(R);
+  const blob=book(R),name=fileName(R);
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
   if(window.ofaToast)window.ofaToast('Excel diunduh: '+name);
   return name;
  }
- window.ofaBcXlsx=R=>workbook(R||rep);
+ window.ofaBcXlsx=R=>book(R||rep);
 
  /* ---------- tampilan kartu ---------- */
  const rowHtml=r=>`<div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>`;
  function render(){
   const b=$id('bcBody');if(!b)return;
-  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>blind_counting_details</b> hasil export sistem setelah BC sebulan selesai. Barang <b>plus</b> dan <b>minus</b> dipisah otomatis, lalu Berita Acara (REG-FRM-35) siap diunduh dan ditandatangani.</p>`;$id('bcSub').textContent='Berita acara selisih stock bulanan · barang plus & minus';return}
+  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>blind_counting</b> hasil export sistem setelah BC sebulan selesai. Nilai barang <b>plus</b> dan <b>minus</b> tiap sesi dihitung otomatis, lalu Berita Acara siap diunduh dan ditandatangani.</p>`;$id('bcSub').textContent='Berita acara blind counting bulanan · barang plus & minus';return}
+  if(rep.mode==='sesi')return renderSesi(b);
   const R=rep,K=calc(R),st=R.st||{},acc=st.lines?st.match/st.lines:0,ap=approvers(K.net),miss=missing(),c=cfg();
   $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi||0)+' sesi BC · '+nf(st.lines||0)+' baris dihitung';
   const top=(a,asc)=>a.slice().sort((x,y)=>asc?x.nom-y.nom:y.nom-x.nom).slice(0,4).map(rowHtml).join('');
@@ -3217,12 +3386,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;save()};
  }
  function remember(){
-  const K=calc(rep),h=Object.assign({},meta.__bcHist||{});
-  h[rep.ym]={net:K.net,plus:K.vPlus,minus:K.vMinus,n:K.L.length,acc:rep.st&&rep.st.lines?rep.st.match/rep.st.lines:0};
+  const sesi=rep.mode==='sesi',K=sesi?calcSesi(rep):calc(rep),h=Object.assign({},meta.__bcHist||{});
+  h[rep.ym]={net:K.net,plus:K.vPlus,minus:K.vMinus,n:K.L.length,acc:sesi?(rep.st.sesi?rep.st.match/rep.st.sesi:0):(rep.st&&rep.st.lines?rep.st.match/rep.st.lines:0)};
   Object.keys(h).sort().slice(0,-12).forEach(k=>delete h[k]);meta.__bcHist=h;ls.set('ofa_meta',meta);
  }
  function showList(){
-  const R=rep;if(!R)return;const K=calc(R);
+  const R=rep;if(!R)return;if(R.mode==='sesi')return showListSesi();const K=calc(R);
   const item=r=>`<div class="bc-li${inScope(R,r)?'':' off'}"><div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${esc(r.mc||'')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · ${esc(r.iss||'belum ada status')}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}${K.pair.has(r.sku)?' · plus/minus antar bin':''}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>
    <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Penyebab / penyelesaian selisih"></div>`;
   const rest=R.rows.filter(r=>!inScope(R,r));
@@ -3259,8 +3428,15 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     s.textContent='✓ Daftar nama '+nf(Object.keys(p.names).length)+' SKU disimpan'+(rep?' · '+n+' nama terisi'+(missing()?' · '+missing()+' masih kosong':''):'. Sekarang upload file blind_counting_details.');
     return;
    }
+   if(p.kind==='sesi'){
+    const R=buildSesi(p.rows,file.name),old=rep&&rep.ym===R.ym?rep:null;
+    if(old){R.jenis=old.jenis;R.tgl=old.tgl;if(old.mode==='sesi'){const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.bc]=old.edit[r.k]});R.rows.forEach(r=>{if(o[r.bc]!=null)R.edit[r.k]=o[r.bc]})}}
+    rep=R;save();remember();render();
+    s.textContent='✓ '+nf(R.st.sesi)+' sesi BC '+cap(R.label)+' terbaca · '+calcSesi(R).L.length+' sesi ada selisih';
+    return;
+   }
    const R=build(p.rows,file.name);
-   const old=rep&&rep.ym===R.ym?rep:null;
+   const old=rep&&rep.ym===R.ym&&rep.mode!=='sesi'?rep:null;
    if(old){R.scope=old.scope;R.jenis=old.jenis;R.tgl=old.tgl;const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.sku+'|'+r.bin+'|'+r.d]=old.edit[r.k]});R.rows.forEach(r=>{const v=o[r.sku+'|'+r.bin+'|'+r.d];if(v!=null)R.edit[r.k]=v})}
    rep=R;applyNames();save();remember();render();
    s.textContent='✓ '+nf(R.st.lines)+' baris BC '+cap(R.label)+' terbaca · '+R.rows.length+' baris selisih';
