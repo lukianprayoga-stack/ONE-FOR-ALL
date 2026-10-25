@@ -2333,12 +2333,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(P){const F=P.fields;P.items.forEach(a=>{const o={};F.forEach((f,i)=>o[f]=a[i]);map[o.k]=o})}
   const ref=(data&&data.meta&&data.meta.date)||(P&&P.salesEnd)||new Date().toISOString().slice(0,10);
   R.forEach(o=>{
-   const x=map[o.k];
-   if(x){
-    let start=x.f1||'';if(x.fs&&!x.awal&&(!start||x.fs<start))start=x.fs;
-    o.plcKira=!start||(!!x.awal&&!x.f1);if(!start)start=P.salesStart||x.fs||ref;
-    if(x.awal&&x.f1&&P.salesStart&&x.f1<=P.salesStart)o.plcKira=true;
-    o.plc=mdiff(start,ref);o.tq=Math.max(0,x.tq||0);o.q4=x.q4||0;o.noSale=o.q4<=0;o.since=start;
+   let x=map[o.k];
+   if(x||P&&P.txFrom){
+    x=x||{};
+    const c=[x.f1,x.fi,x.ft,x.fs&&!x.awal?x.fs:''].filter(Boolean).sort();
+    let start=c[0]||'',kira=false;
+    // tidak ada catatan masuk/transaksi sejak awal data transaksi -> sudah ada sebelum tanggal itu
+    if(P.txFrom&&!x.fi&&!x.ft&&(!start||start>P.txFrom)){start=P.txFrom;kira=true}
+    if(!start){start=P.salesStart||x.fs||ref;kira=true}
+    if(P.salesStart&&start<=P.salesStart)kira=true;
+    if(!P.txFrom&&x.awal&&!x.f1)kira=true;
+    o.plcKira=kira;o.plc=mdiff(start,ref);o.tq=Math.max(0,x.tq||0);o.q4=x.q4||0;o.noSale=o.q4<=0;o.since=start;o.masuk=x.fi&&x.fi===start?x.fi:'';
    }else{
     // belum ada data PLC: perkiraan dari 90 hari terakhir
     o.plc=P?mdiff(P.salesStart||ref,ref):null;o.plcKira=true;o.tq=Math.max(0,o.q90||0);o.q4=o.q90||0;o.noSale=!(o.q90>0);o.since='';
@@ -2506,12 +2511,13 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   R.forEach(o=>{const t=tier(o,c);if(t){cnt[t]++;pcs[t]+=o.stock}});
   const tot=TIERS.reduce((a,t)=>a+cnt[t[0]],0),rs=restock();
   $id('pfSub').textContent=nf(tot)+' generic-warna · PLC × sell through';
-  const kira=R.filter(o=>o.stock>0&&o.plcKira).length,miss=!plc||!plc.items;
+  const kira=R.filter(o=>o.stock>0&&o.plcKira).length,miss=!plc||!plc.items,tx=plc&&plc.txFrom;
   $id('pfBody').innerHTML=`<div class="pf-stack">${TIERS.map(t=>cnt[t[0]]?`<i style="flex:${cnt[t[0]]};background:${t[2]}" title="${t[1]}"></i>`:'').join('')}</div>
    <div class="pf-rows">${TIERS.map(t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`).join('')}
    <button type="button" class="pf-row restock" data-list="rs"><i style="background:#2f80ed"></i><span>Laku tapi stok habis</span><b>${nf(rs.length)}</b><small>perlu restock</small></button></div>
    <p class="hint">PLC = umur produk di toko sejak pertama masuk. Sell through = terjual sejak masuk ÷ (terjual + stok). Dead Stock = PLC lebih dari ${c.plc} bulan dan tidak terjual 4 bulan terakhir. <button type="button" class="pf-lnk" id="pfRule">Lihat aturan</button></p>
-   ${miss?`<p class="hint" style="color:#b45309">Masih perkiraan dari penjualan 90 hari terakhir. Pasang <b>Performa.gs</b> di Apps Script agar PLC & sell through dihitung sejak barang masuk.</p>`:kira?`<p class="hint">${nf(kira)} produk memakai PLC perkiraan (sudah ada sebelum data penjualan ${tgl(plc.salesStart)} atau sebelum pencatatan inventory).</p>`:''}`;
+   ${miss?`<p class="hint" style="color:#b45309">Masih perkiraan dari penjualan 90 hari terakhir. Pasang <b>Performa.gs</b> di Apps Script agar PLC & sell through dihitung sejak barang masuk.</p>`:kira?`<p class="hint">${tx?`Barang masuk dari SKU transaction history ${tgl(plc.txFrom)} ${String(plc.txFrom).slice(0,4)} – ${tgl(plc.txTo)}. `:''}${kira?nf(kira)+' produk ditandai ≥ karena sudah ada sebelum '+(tx?'awal data transaksi':'data penjualan '+tgl(plc.salesStart))+'.':''}</p>`:''}
+   ${!miss&&!tx?`<p class="hint" style="color:#b45309">Upload <b>SKU Transaction History</b> (lewat ⇪ Upload di Kepatuhan Display) agar tanggal barang masuk akurat.</p>`:''}`;
  };
  window.ofaInvBrief=function(){
   if(!data)return [];const s=data.summary||{},gp=s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp=s.colorTotal?s.colorDisplayed/s.colorTotal:0,T=todo().length,rs=restock().length;
@@ -2527,7 +2533,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   return `<div class="iv-it${on?' done':''}" data-k="${esc(o.k)}"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.img)}" alt="">`:'🏷️'}</span>
    <span class="iv-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.l4||o.l3||'-')} · ${esc(o.g)}</small>
    <small>Stok S ${nf(o.s)} · W ${nf(o.w)} · terjual 30h ${nf(o.q30)}${o.last?' · terakhir '+tgl(o.last):''}</small>
-   ${o.stock>0&&kind!=='todo'?`<small>PLC ${o.plc==null?'?':(o.plcKira?'≥':'')+Math.floor(o.plc)} bln · ST ${pc(o.stL)} (terjual ${nf(o.tq)} sejak masuk)${o.noSale?' · 4 bln tanpa penjualan':''}</small>`:''}
+   ${o.stock>0&&kind!=='todo'?`<small>PLC ${o.plc==null?'?':(o.plcKira?'≥':'')+Math.floor(o.plc)} bln${o.masuk?' (masuk '+tgl(o.masuk)+')':''} · ST ${pc(o.stL)} (terjual ${nf(o.tq)} sejak masuk)${o.noSale&&o.plc>4?' · 4 bln tanpa penjualan':o.tq<=0?' · belum terjual':''}</small>`:''}
    ${kind==='todo'&&o.bw?`<small class="iv-bin">📍 ${esc(o.bw)}</small>`:''}${kind!=='todo'&&o.bs?`<small>Selling area: ${esc(o.bs)}</small>`:''}
    ${price?`<small>${rp(price)}${o.promo>0&&o.price>o.promo?` <s>${rp(o.price)}</s>`:''}</small>`:''}
    ${kind!=='todo'&&t?`<span class="iv-tag" style="background:${t[2]}">${t[1]}</span>`:''}</span>
@@ -2637,6 +2643,31 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   loadCat(true);
   return head+' · '+tail;
  }
+ // SKU Transaction History: diringkas per generic|warna sebelum dikirim
+ function txDate(v){
+  if(typeof v==='number'&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*864e5));return d.toISOString().slice(0,10)}
+  const m=String(v==null?'':v).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);
+  const n=String(v==null?'':v).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);return n?n[3]+'-'+('0'+n[2]).slice(-2)+'-'+('0'+n[1]).slice(-2):'';
+ }
+ async function upTx(rows,hi,f){
+  const h=rows[hi].map(norm),ix=k=>h.indexOf(k);
+  const c={sku:ix('skucode'),nm:ix('skuname'),ty:ix('type'),q:ix('quantity'),d:ix('transactiondate')};
+  if(c.sku<0||c.ty<0||c.d<0)throw new Error('kolom SKU Code / Type / Transaction Date tidak ditemukan');
+  const G={},minD=(a,b)=>!a?b:!b?a:a<b?a:b;let from='',to='',n=0;
+  rows.slice(hi+1).forEach(r=>{
+   const sku=String(r[c.sku]==null?'':r[c.sku]).replace(/\.0+$/,'').trim(),d=txDate(r[c.d]);if(!/^\d{9,}$/.test(sku)||!d)return;
+   const parts=String(c.nm>=0?r[c.nm]:'').split(',').map(x=>x.replace(/\s+/g,' ').trim()),color=parts.length>=3?parts[parts.length-2]||'-':'-';
+   const k=sku.slice(0,9)+'|'+color,g=G[k]||(G[k]={fi:'',ft:'',li:''}),q=Number(c.q>=0?r[c.q]:0)||0;n++;
+   g.ft=minD(g.ft,d);from=minD(from,d);if(d>to)to=d;
+   if(/inbound/i.test(String(r[c.ty]))&&!/outbound/i.test(String(r[c.ty]))&&q>0){g.fi=minD(g.fi,d);if(d>g.li)g.li=d}
+  });
+  if(!n)throw new Error('tidak ada transaksi yang terbaca');
+  const items=Object.keys(G).map(k=>[k,G[k].fi,G[k].ft,G[k].li]);
+  status('Mengunggah riwayat transaksi SKU ('+nf(n)+' baris, '+nf(items.length)+' produk)…');
+  const res=await api('uploadSkuTransactions',{items,from,to,rows:n,fileName:f.name});
+  await loadPlc(true);
+  return 'Riwayat transaksi SKU ✓ '+tgl(res.from)+' – '+tgl(res.to)+' ('+nf(res.masuk)+' produk ada barang masuk)';
+ }
  $id('ivFile').onchange=async e=>{
   const files=[...(e.target.files||[])];e.target.value='';if(!files.length)return;
   busy=true;$id('ivUp').disabled=true;const done=[];let bad=false;
@@ -2650,15 +2681,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     const rows=(ws&&XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''}))||[];
     const hb=rows.findIndex(r=>r.some(v=>norm(v)==='bincode'));
     const hs=rows.findIndex(r=>{const h=r.map(norm);return h.includes('skucode')&&h.includes('totalqty')});
-    if(hb>=0)parsed.push({f,rows,hi:hb,kind:'bin'});
+    const ht=rows.findIndex(r=>{const h=r.map(norm);return h.includes('skucode')&&h.includes('transactiondate')&&h.includes('type')});
+    if(ht>=0)parsed.push({f,rows,hi:ht,kind:'tx'});
+    else if(hb>=0)parsed.push({f,rows,hi:hb,kind:'bin'});
     else if(hs>=0)parsed.push({f,rows,hi:hs,kind:'sku'});
-    else{done.push(f.name+': bukan file inventory by bin / by SKU');bad=true}
+    else{done.push(f.name+': bukan file inventory by bin / by SKU / SKU transaction history');bad=true}
    }catch(err){done.push(f.name+': '+(err&&err.message||err));bad=true}
   }
-  parsed.sort((a,b)=>(a.kind==='sku'?0:1)-(b.kind==='sku'?0:1));
+  const ord={sku:0,bin:1,tx:2};parsed.sort((a,b)=>ord[a.kind]-ord[b.kind]);
   for(const p of parsed){
-   try{done.push(await (p.kind==='bin'?upBin:upSku)(p.rows,p.hi,p.f))}
-   catch(err){const m=err&&err.message||String(err);done.push((p.kind==='bin'?'Inventory by bin':'Inventory by SKU')+' gagal: '+(/tidak dikenal/i.test(m)?'perbarui Inventory.gs di Apps Script':m));bad=true}
+   try{done.push(await (p.kind==='bin'?upBin:p.kind==='tx'?upTx:upSku)(p.rows,p.hi,p.f))}
+   catch(err){const m=err&&err.message||String(err);done.push(({bin:'Inventory by bin',sku:'Inventory by SKU',tx:'Riwayat transaksi SKU'})[p.kind]+' gagal: '+(/tidak dikenal/i.test(m)?'perbarui '+(p.kind==='tx'?'Performa.gs':'Inventory.gs')+' di Apps Script':m));bad=true}
   }
   status(done.join(' · '),bad);busy=false;$id('ivUp').disabled=false;
  };
