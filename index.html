@@ -2643,13 +2643,22 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  async function loadSSR(force){
   if(!configured()||!localStorage.getItem('salesTrackingPin'))return;
   if(!force&&ssr&&!ssr.missing&&Date.now()-(ssr.at||0)<60*60e3)return;
-  try{const r=await api('getSSR',{});ssr=Object.assign(r,{at:Date.now()});try{localStorage.setItem(SK,JSON.stringify(ssr))}catch(e){}renderSSR()}
-  catch(e){if(/tidak dikenal/i.test(e.message||'')){ssr={missing:1,at:Date.now()};renderSSR()}}
+  if(ssrBusy)return;ssrBusy=true;ssrErr='';renderSSR();
+  try{const r=await api('getSSR',{});ssr=Object.assign(r,{at:Date.now()});try{localStorage.setItem(SK,JSON.stringify(ssr))}catch(e){}}
+  catch(e){const m=e&&e.message||String(e);if(/tidak dikenal/i.test(m))ssr={missing:1,at:Date.now()};else ssrErr=m}
+  finally{ssrBusy=false;renderSSR()}
  }
+ let ssrBusy=false,ssrErr='';
  window.renderSSR=function(){
   const b=$id('ssBody');if(!b)return;const c=scfg();
   if(!data){b.innerHTML='<p class="dp-empty">SSR muncul setelah inventory by bin diupload.</p>';return}
-  if(!ssr||ssr.missing||!ssr.q4){b.innerHTML=`<p class="dp-empty">${ssr&&ssr.missing?'Pasang versi terbaru <b>Performa.gs</b> di Apps Script untuk menghitung SSR.':'Memuat penjualan 4 bulan terakhir…'}</p>`;return}
+  if(!ssr||ssr.missing||!ssr.q4){
+   const msg=ssr&&ssr.missing?'Server belum punya fungsi SSR. Tempel versi terbaru <b>Performa.gs</b> di Apps Script lalu Deploy → New version.'
+    :ssrErr?'Gagal memuat SSR: '+esc(ssrErr)
+    :ssrBusy||!ssr?'Memuat penjualan 4 bulan terakhir… (biasanya 10–30 detik)'
+    :'Belum ada data penjualan di Database DSR untuk 4 bulan terakhir.';
+   b.innerHTML=`<p class="dp-empty">${msg}</p>${ssrBusy?'':'<div class="row" style="margin-top:6px"><button class="btn ghost" type="button" id="ssRetry">Muat ulang SSR</button></div>'}`;
+   const rt=$id('ssRetry');if(rt)rt.onclick=()=>loadSSR(true);return}
   const L=R.filter(o=>o.stock>0&&!nonMerch(o)),stock=L.reduce((t,o)=>t+o.stock,0);
   const avg=ssr.q4/4,cur=avg>0?stock/avg:0,asp=ssr.q4>0?ssr.net4/ssr.q4:0;
   const man=meta.__ssrTgt&&ssr.next&&meta.__ssrTgt[ssr.next.month];
@@ -2797,7 +2806,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  try{const c=JSON.parse(localStorage.getItem(CACHE)||'null');if(c&&c.items)setData(c,false)}catch(e){}
  renderInv();
  const baseRender=render;render=async function(){await baseRender();renderInv()};
- setTimeout(()=>{refresh(false);loadCat(false)},3600);
+ setTimeout(()=>{refresh(false);loadCat(false);loadSSR(false)},3600);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){refresh(false);loadCat(false)}});
 })();
 /* ====== CEK STOK CEPAT ====== */
