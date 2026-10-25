@@ -786,6 +786,65 @@ body.kt-on{overflow:hidden}
  .kt{left:236px}
 }
 @media(min-width:1500px){.deck-pg.cur{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* ====== AKUN & AKSES ====== */
+#gate{display:none}
+.gated{overflow:hidden}
+.gated #gate{display:grid;position:fixed;inset:0;z-index:95;place-items:center;overflow-y:auto;padding:24px 16px calc(24px + env(safe-area-inset-bottom));background:radial-gradient(120% 80% at 50% 0%,#0e46e6 0%,#0a2a8f 30%,#06133f 62%,#02060f 100%)}
+.gated body>*:not(#gate):not(#splash):not(.toast){visibility:hidden}
+.gate-card{width:min(420px,100%);background:var(--bg);color:var(--fg);border-radius:24px;padding:24px 22px 20px;box-shadow:0 30px 80px #0008}
+.gate-logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.gate-logo img{width:46px;height:46px;border-radius:12px}
+.gate-logo b{display:block;font-size:22px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.gate-logo small{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--mut);margin-top:3px}
+.gate-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border-radius:999px;padding:4px;margin-bottom:14px}
+.gate-tabs button{border:0;background:none;border-radius:999px;padding:10px;font:inherit;font-weight:700;color:var(--mut);cursor:pointer}
+.gate-tabs button.on{background:var(--ink);color:var(--inkfg)}
+.gate-f{display:grid;gap:10px}
+.gate-f label>span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
+.gate-f label>span i{font-weight:500;font-style:normal}
+.gate-f .in{font-size:16px;padding:12px 14px}
+.gate-pw{display:flex!important;gap:6px;margin:0!important}
+.gate-pw .in{flex:1;min-width:0}
+.gate-pw button{border:0;background:var(--card);border-radius:10px;padding:0 12px;font-size:16px;cursor:pointer}
+.gate-ck{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.gate-ck input{width:18px;height:18px}
+.gate-f .btn{padding:13px;font-size:15px;justify-content:center;text-align:center}
+.gate-f .btn:disabled{opacity:.6}
+.gate-err{color:#e5484d;font-size:13px;min-height:1em;margin:0}
+.gate-ok{background:#e3f4e8;color:#14642f;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0}
+.gate-note{font-size:12px;color:var(--mut);line-height:1.5;margin:2px 0 0}
+.gate-info{background:#fff4e5;color:#8a4b00;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin:0 0 12px}
+.me-btn{position:relative;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:var(--ink);color:var(--inkfg);font-weight:800;font-size:13px;letter-spacing:.02em;cursor:pointer;flex:none}
+.me-btn[hidden],.on-chip[hidden]{display:none!important}
+.me-btn i{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#e5484d;color:#fff;font:700 11px/18px inherit;font-style:normal;padding:0 5px;border:2px solid var(--bg)}
+.on-chip{display:flex;align-items:center;gap:6px;border:0;background:var(--card);border-radius:999px;padding:8px 12px;font:inherit;font-size:12.5px;font-weight:700;color:var(--fg);cursor:pointer;white-space:nowrap}
+.on-chip i{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+.ak-me{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.ak-av{position:relative;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--card);font-weight:800;font-size:13px;flex:none}
+.ak-me .ak-av{width:46px;height:46px;background:var(--ink);color:var(--inkfg);font-size:15px}
+.ak-av.on::after{content:"";position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid var(--bg)}
+.ak-tx{flex:1;min-width:0;line-height:1.3}
+.ak-tx b{display:block;font-size:14px}
+.ak-tx small{display:block;color:var(--mut);font-size:12px;overflow:hidden;text-overflow:ellipsis}
+.ak-tag{font-style:normal;font-size:10.5px;font-weight:700;background:var(--card);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.ak-tag.off{background:#fde8e8;color:#b42318}
+.ak-h{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 4px}
+.ak-h span{color:var(--mut);font-size:12px;font-weight:700}
+.ak-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.ak-row.off{opacity:.6}
+.ak-wait{background:color-mix(in srgb,#f5a524 10%,transparent);border-radius:12px;padding:10px;border:0;margin-bottom:6px}
+.ak-btns{display:flex;gap:6px;flex:none}
+.ak-btns .btn{padding:8px 12px;font-size:13px}
+.ak-sel{width:auto;flex:none;padding:7px 8px;font-size:13px;border-radius:10px}
+.ak-you{font-size:12px;color:var(--mut);font-weight:700;flex:none}
+.ak-det{margin-top:14px}
+.ak-det summary{cursor:pointer;font-weight:700;font-size:14px}
+.ak-pw{display:grid;gap:8px;margin-top:12px}
+@media(max-width:560px){.ak-wait{flex-wrap:wrap}.ak-btns{width:100%;padding-left:48px}.ak-btns .btn{flex:1}}
+@media(max-width:760px){.on-chip{padding:7px 10px;font-size:11px}.on-chip span{display:none}.me-btn{width:36px;height:36px;font-size:12px}}
+/* menu khusus pemilik disembunyikan untuk staf */
+.role-staf #deckTabs [data-pg="4"],.role-staf .deck-pg[aria-label="Admin"],.role-staf #side [data-pg="4"],.role-staf #side [data-sd="katalog"],.role-staf .bnav [data-go="katalog"],.role-staf #navKt,.role-staf #ctBox,.role-staf #team [data-tadd],.role-staf .tc .edit{display:none!important}
+@media(max-width:760px){.role-staf .bnav{grid-template-columns:repeat(5,1fr)!important}}
 </style>
 </head>
 <body>
@@ -812,15 +871,18 @@ body.kt-on{overflow:hidden}
   <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
   <p class="side-foot">Tekan <b>1–5</b> untuk pindah halaman dashboard, <b>/</b> untuk cek stok.</p>
 </aside>
+<div id="gate" hidden></div>
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
 <header>
   <a class="logo" href="#"><img class="logo-ic" src="icons/icon-192.png" alt="">ONE FOR ALL <small>STORE MANAGER</small></a>
   <nav><a href="#katalog" id="navKt">Katalog</a><a href="#tim">Team</a><a href="#tools">Tools</a><a href="#why">Kenapa</a></nav>
   <div class="hdr-actions">
     <button class="sync" id="syncPill" type="button" aria-live="polite"></button>
+    <button class="on-chip" id="onBtn" type="button" hidden title="Sedang membuka dashboard"><i></i><b id="onN">0</b><span>online</span></button>
     <button class="btn ghost" id="installBtn" hidden>Pasang aplikasi</button>
     <button class="btn" id="addTop">+ Tambah tool</button>
     <button class="icon-btn" id="installIcon" hidden aria-label="Pasang aplikasi">⤓</button>
+    <button class="me-btn" id="meBtn" type="button" hidden aria-label="Akun saya"><span id="meIni">?</span><i id="meBadge" hidden></i></button>
   </div>
 </header>
 <div class="hero">
@@ -970,6 +1032,240 @@ body.kt-on{overflow:hidden}
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 
 <script>
+/* ====== AKUN & AKSES: masuk, daftar, konfirmasi pemilik, siapa yang sedang membuka ====== */
+(function(){
+ const SK='ofa_sesi',ON='ofa_akun_on',PK='salesTrackingPin',root=document.documentElement;
+ const g=i=>document.getElementById(i);
+ const H=v=>String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ let ses=null;try{ses=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){ses=null}
+ if(ses&&(!ses.token||!ses.akun||(ses.exp&&ses.exp<Date.now()))){ses=null;try{localStorage.removeItem(SK)}catch(e){}}
+ const pemilik=()=>!!ses&&ses.akun.peran==='pemilik';
+ function setRole(){
+  const r=ses?(ses.akun.peran==='pemilik'?'pemilik':'staf'):'';
+  window.ofaRole=r;window.ofaAkun=ses?ses.akun:null;
+  root.classList.toggle('role-staf',r==='staf');root.classList.toggle('role-pemilik',r==='pemilik');
+ }
+ setRole();
+ if(!ses&&localStorage.getItem(ON)==='1')root.classList.add('gated');
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ async function api(fn,arg,opt){
+  const pin=ses?ses.token:(localStorage.getItem(PK)||'');
+  const r=await fetch(HUB_API_URL,Object.assign({method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg||{})],pin})},opt||{}));
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal terhubung');return j.result;
+ }
+ function perangkat(){
+  const u=navigator.userAgent||'';
+  const os=/iPhone|iPad/.test(u)?'iPhone/iPad':/Android/.test(u)?(/Mobile/.test(u)?'HP Android':'Tablet Android'):/Windows/.test(u)?'Windows':/Mac OS/.test(u)?'Mac':/Linux/.test(u)?'Linux':'Perangkat';
+  const br=/Edg\//.test(u)?'Edge':/SamsungBrowser/.test(u)?'Samsung Internet':/Chrome\//.test(u)?'Chrome':/Firefox\//.test(u)?'Firefox':/Safari\//.test(u)?'Safari':'';
+  return os+(br?' · '+br:'')+(matchMedia('(display-mode: standalone)').matches?' · aplikasi':'');
+ }
+ const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'?';
+ const cap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+
+ /* ---------- layar masuk / daftar ---------- */
+ let gateMode='masuk',adaPemilik=true;
+ function showGate(){
+  root.classList.add('gated');window.ofaGated=true;
+  const el=g('gate');if(!el)return;el.hidden=false;
+  // PIN lama di perangkat ini tidak dipakai lagi: akses lewat akun
+  const old=localStorage.getItem(PK);if(old&&!/^s1\./.test(old))localStorage.removeItem(PK);
+  renderGate();
+ }
+ function renderGate(err){
+  const el=g('gate');if(!el)return;
+  const daftar=gateMode==='daftar';
+  el.innerHTML=`<div class="gate-card" role="dialog" aria-modal="true" aria-labelledby="gateT">
+   <div class="gate-logo"><img src="icons/icon-192.png" alt=""><div><b id="gateT">ONE FOR ALL</b><small>STORE MANAGER</small></div></div>
+   <div class="gate-tabs" role="tablist"><button type="button" data-gt="masuk" class="${daftar?'':'on'}">Masuk</button><button type="button" data-gt="daftar" class="${daftar?'on':''}">Daftar</button></div>
+   ${!adaPemilik?`<p class="gate-info">Belum ada akun pemilik. Pemilik toko daftar dulu dengan mencentang <b>Saya pemilik toko</b> dan mengisi kode pemilik (PIN internal).</p>`:''}
+   ${daftar?`<form id="gF" class="gate-f" autocomplete="on">
+     <label><span>Nama lengkap</span><input class="in" name="nama" autocomplete="name" required maxlength="60"></label>
+     <label><span>Jabatan <i>(opsional)</i></span><input class="in" name="jabatan" placeholder="mis. Kasir, RA, SPV" maxlength="40"></label>
+     <label><span>Username</span><input class="in" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" pattern="[A-Za-z0-9._]{3,20}" required placeholder="huruf kecil/angka, 3–20"></label>
+     <label><span>Sandi</span><input class="in" name="sandi" type="password" autocomplete="new-password" minlength="6" required></label>
+     <label><span>Ulangi sandi</span><input class="in" name="sandi2" type="password" autocomplete="new-password" minlength="6" required></label>
+     <label class="gate-ck"><input type="checkbox" name="owner" ${!adaPemilik?'checked':''}> Saya pemilik toko</label>
+     <label class="gate-kode" ${adaPemilik?'hidden':''}><span>Kode pemilik (PIN internal)</span><input class="in" name="kode" type="password" inputmode="numeric" autocomplete="off"></label>
+     <p class="gate-err" id="gErr">${H(err||'')}</p>
+     <button class="btn" type="submit">Daftar</button>
+     <p class="gate-note">Akun staf aktif setelah dikonfirmasi pemilik toko.</p></form>`
+   :`<form id="gF" class="gate-f" autocomplete="on">
+     <label><span>Username</span><input class="in" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+     <label><span>Sandi</span><span class="gate-pw"><input class="in" name="sandi" type="password" autocomplete="current-password" required><button type="button" data-gt="lihat" aria-label="Lihat sandi">👁</button></span></label>
+     <p class="gate-err" id="gErr">${H(err||'')}</p>
+     <button class="btn" type="submit">Masuk</button>
+     <p class="gate-note">Belum punya akun? Ketuk <b>Daftar</b>, lalu tunggu konfirmasi pemilik toko. Lupa sandi? Minta pemilik mereset sandi.</p></form>`}
+  </div>`;
+  const f=g('gF');
+  f.onsubmit=e=>{e.preventDefault();daftar?doDaftar(f):doMasuk(f)};
+  if(daftar){const ck=f.owner,k=f.querySelector('.gate-kode');ck.onchange=()=>{k.hidden=!ck.checked}}
+  setTimeout(()=>{const i=f.querySelector('input');if(i&&matchMedia('(min-width:761px)').matches)i.focus()},60);
+ }
+ function busy(f,on,t){const b=f.querySelector('[type=submit]');b.disabled=on;if(t)b.textContent=t}
+ async function doMasuk(f){
+  const e=g('gErr');e.textContent='';busy(f,true,'Memeriksa…');
+  try{const r=await api('akunMasuk',{username:f.username.value.trim(),sandi:f.sandi.value,perangkat:perangkat()});mulai(r)}
+  catch(err){e.textContent=/fetch|network|load failed/i.test(err.message)?'Tidak ada koneksi. Coba lagi.':err.message;busy(f,false,'Masuk')}
+ }
+ async function doDaftar(f){
+  const e=g('gErr');e.textContent='';
+  const u=f.username.value.trim().toLowerCase();
+  if(!/^[a-z0-9._]{3,20}$/.test(u)){e.textContent='Username 3–20 karakter: huruf kecil, angka, titik atau garis bawah.';return}
+  if(f.sandi.value!==f.sandi2.value){e.textContent='Kedua sandi tidak sama.';return}
+  if(f.owner.checked&&!f.kode.value.trim()){e.textContent='Isi kode pemilik (PIN internal).';return}
+  busy(f,true,'Mengirim…');
+  try{
+   const r=await api('akunDaftar',{nama:f.nama.value,jabatan:f.jabatan.value,username:u,sandi:f.sandi.value,kodePemilik:f.owner.checked?f.kode.value.trim():'',perangkat:perangkat()});
+   if(r.token)return mulai(r);
+   gateMode='masuk';renderGate();
+   const ok=document.createElement('p');ok.className='gate-ok';ok.textContent='✓ '+(r.pesan||'Pendaftaran terkirim.');
+   g('gF').prepend(ok);g('gF').username.value=u;
+  }catch(err){e.textContent=/fetch|network|load failed/i.test(err.message)?'Tidak ada koneksi. Coba lagi.':err.message;busy(f,false,'Daftar')}
+ }
+ function mulai(r){
+  ses={token:r.token,exp:r.exp,akun:r.akun};
+  try{localStorage.setItem(SK,JSON.stringify(ses));localStorage.setItem(PK,r.token);localStorage.setItem(ON,'1')}catch(e){}
+  location.reload();
+ }
+ async function keluar(pesan){
+  const t=ses&&ses.token;
+  if(t&&!pesan){try{await api('akunKeluar',{})}catch(e){}}
+  ses=null;try{localStorage.removeItem(SK);if(localStorage.getItem(PK)===t)localStorage.removeItem(PK)}catch(e){}
+  if(pesan){try{sessionStorage.setItem('ofa_gate_msg',pesan)}catch(e){}}
+  location.reload();
+ }
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('#gate [data-gt]');if(!b)return;
+  if(b.dataset.gt==='lihat'){const i=b.previousElementSibling;i.type=i.type==='password'?'text':'password';return}
+  gateMode=b.dataset.gt;renderGate();
+ });
+
+ /* ---------- tombol akun & daftar online di header ---------- */
+ let online=[],menunggu=0;
+ function chips(){
+  const me=g('meBtn'),on=g('onBtn');
+  if(me){me.hidden=!ses;if(ses){g('meIni').textContent=ini(ses.akun.nama);me.title=ses.akun.nama+' · '+(pemilik()?'Pemilik':'Staf');const bd=g('meBadge');bd.hidden=!(pemilik()&&menunggu);bd.textContent=menunggu}}
+  if(on){on.hidden=!pemilik();g('onN').textContent=online.length}
+ }
+ const lalu=t=>{const s=Math.max(0,Math.round((Date.now()-t)/1000));return s<60?'baru saja':s<3600?Math.round(s/60)+' mnt lalu':s<86400?Math.round(s/3600)+' jam lalu':Math.round(s/86400)+' hari lalu'};
+ const jam=t=>new Date(t).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+ const tgl=t=>t?new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'-';
+ const onlineHtml=list=>list.length?list.map(o=>`<div class="ak-row"><span class="ak-av on">${H(ini(o.n))}</span><span class="ak-tx"><b>${H(o.n||'Pemilik (PIN)')}${o.r==='pemilik'?' <em class="ak-tag">Pemilik</em>':''}</b><small>${H(o.p||'Dashboard')} · ${H(o.d||'')}</small><small>buka sejak ${jam(o.s)} · aktif ${lalu(o.t)}</small></span></div>`).join(''):'<p class="hint">Tidak ada yang sedang membuka dashboard.</p>';
+ function sandiForm(){
+  return `<form id="akPw" class="ak-pw"><p class="wk-p"><b>Ganti sandi</b></p>
+   <input class="in" name="lama" type="password" autocomplete="current-password" placeholder="Sandi sekarang" required>
+   <input class="in" name="baru" type="password" autocomplete="new-password" minlength="6" placeholder="Sandi baru (min. 6)" required>
+   <input class="in" name="baru2" type="password" autocomplete="new-password" minlength="6" placeholder="Ulangi sandi baru" required>
+   <p class="hint" id="akPwMsg"></p><button class="btn ghost" type="submit">Simpan sandi baru</button></form>`;
+ }
+ function pasangSandi(){
+  const f=g('akPw');if(!f)return;
+  f.onsubmit=async e=>{e.preventDefault();const m=g('akPwMsg');
+   if(f.baru.value!==f.baru2.value){m.textContent='Kedua sandi baru tidak sama.';return}
+   m.textContent='Menyimpan…';
+   try{await api('akunGantiSandi',{sandiLama:f.lama.value,sandiBaru:f.baru.value});f.reset();m.textContent='✓ Sandi diganti. Perangkat lain dengan akun ini perlu masuk lagi.'}
+   catch(err){m.textContent=err.message}};
+ }
+ function bukaAkun(){
+  if(!ses)return;
+  const a=ses.akun;
+  const head=`<div class="ak-me"><span class="ak-av">${H(ini(a.nama))}</span><span class="ak-tx"><b>${H(a.nama)}</b><small>@${H(a.username)} · ${pemilik()?'Pemilik toko':'Staf'}${a.jabatan?' · '+H(a.jabatan):''}</small></span><button class="btn ghost" type="button" id="akOut">Keluar</button></div>`;
+  if(!pemilik()){
+   openModal('Akun saya',head+`<p class="hint">Menu Admin, Kelola Katalog, dan pengaturan khusus pemilik toko.</p>`+sandiForm());
+   g('akOut').onclick=()=>keluar();pasangSandi();return;
+  }
+  openModal('Akun & akses',head+`<div id="akBody"><p class="hint">Memuat akun…</p></div><details class="ak-det"><summary>Ganti sandi saya</summary>${sandiForm()}</details>`);
+  g('akOut').onclick=()=>keluar();pasangSandi();
+  muatKelola();
+  const iv=setInterval(()=>{if(g('akBody'))muatKelola(true);else clearInterval(iv)},20000);
+  cleanup=()=>clearInterval(iv);
+ }
+ let kelola=null;
+ async function muatKelola(diam){
+  try{kelola=await api('akunKelola',{});online=kelola.online||[];menunggu=kelola.akun.filter(x=>x.status==='menunggu').length;chips();gambarKelola()}
+  catch(err){if(!diam&&g('akBody'))g('akBody').innerHTML=`<p class="hint" style="color:#d33a40">${H(err.message)}</p>`}
+ }
+ function gambarKelola(){
+  const b=g('akBody');if(!b||!kelola)return;
+  const A=kelola.akun,wait=A.filter(x=>x.status==='menunggu'),rest=A.filter(x=>x.status!=='menunggu').sort((x,y)=>(x.status==='aktif'?0:1)-(y.status==='aktif'?0:1)||(y.terakhir||0)-(x.terakhir||0));
+  const st={aktif:'Aktif',nonaktif:'Nonaktif',ditolak:'Ditolak'};
+  b.innerHTML=`${wait.length?`<p class="wk-p ak-h"><b>Menunggu konfirmasi</b><span>${wait.length}</span></p>${wait.map(x=>`<div class="ak-row ak-wait"><span class="ak-av">${H(ini(x.nama))}</span><span class="ak-tx"><b>${H(x.nama)}</b><small>@${H(x.username)}${x.jabatan?' · '+H(x.jabatan):''} · daftar ${tgl(x.dibuat)} ${jam(x.dibuat)}</small></span><span class="ak-btns"><button class="btn" type="button" data-ak="setujui" data-u="${H(x.username)}">Setujui</button><button class="btn ghost" type="button" data-ak="tolak" data-u="${H(x.username)}">Tolak</button></span></div>`).join('')}`:''}
+   <p class="wk-p ak-h"><b>Sedang membuka dashboard</b><span>${online.length}</span></p>${onlineHtml(online)}
+   <p class="wk-p ak-h"><b>Semua akun</b><span>${rest.length}</span></p>
+   ${rest.map(x=>`<div class="ak-row${x.status==='aktif'?'':' off'}"><span class="ak-av${x.online?' on':''}">${H(ini(x.nama))}</span><span class="ak-tx"><b>${H(x.nama)}${x.peran==='pemilik'?' <em class="ak-tag">Pemilik</em>':''}${x.status!=='aktif'?` <em class="ak-tag off">${st[x.status]||H(x.status)}</em>`:''}</b><small>@${H(x.username)}${x.jabatan?' · '+H(x.jabatan):''}</small><small>${x.online?'● sedang membuka · '+H(x.online.p||''):x.terakhir?'terakhir aktif '+lalu(x.terakhir):'belum pernah masuk'}</small></span>
+    ${ses.akun.username===x.username?'<span class="ak-you">Anda</span>':`<select class="in ak-sel" data-u="${H(x.username)}" aria-label="Aksi untuk ${H(x.nama)}"><option value="">Atur…</option>${x.status==='aktif'?`<option value="resetSandi">Reset sandi</option><option value="${x.peran==='pemilik'?'jadikanStaf">Jadikan staf':'jadikanPemilik">Jadikan pemilik'}</option><option value="nonaktif">Nonaktifkan</option>`:'<option value="aktifkan">Aktifkan lagi</option>'}<option value="hapus">Hapus akun</option></select>`}</div>`).join('')||'<p class="hint">Belum ada akun lain.</p>'}
+   <p class="hint">Staf yang dinonaktifkan, dihapus, atau direset sandinya langsung keluar dari semua perangkat.</p>`;
+ }
+ async function atur(aksi,u,extra){
+  const nm=(kelola&&kelola.akun.find(x=>x.username===u)||{}).nama||u;
+  try{kelola=await api('akunAtur',Object.assign({aksi,username:u},extra||{}));online=kelola.online||[];menunggu=kelola.akun.filter(x=>x.status==='menunggu').length;chips();gambarKelola();
+   toast({setujui:nm+' bisa masuk sekarang',tolak:'Pendaftaran '+nm+' ditolak',nonaktif:nm+' dinonaktifkan',aktifkan:nm+' aktif lagi',hapus:'Akun '+nm+' dihapus',resetSandi:'Sandi '+nm+' direset',jadikanPemilik:nm+' sekarang pemilik',jadikanStaf:nm+' sekarang staf'}[aksi]||'Tersimpan')}
+  catch(err){toast(err.message);gambarKelola()}
+ }
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-ak]');if(b&&b.closest('#akBody'))atur(b.dataset.ak,b.dataset.u);
+  if(e.target.closest('#meBtn'))bukaAkun();
+  if(e.target.closest('#onBtn')){if(pemilik())bukaAkun()}
+ });
+ document.addEventListener('change',e=>{
+  const s=e.target.closest('.ak-sel');if(!s||!s.value)return;
+  const aksi=s.value,u=s.dataset.u,nm=(kelola.akun.find(x=>x.username===u)||{}).nama||u;s.value='';
+  if(aksi==='resetSandi'){const p=prompt('Sandi baru untuk '+nm+' (min. 6 karakter). Beritahukan langsung ke orangnya:');if(p==null)return;if(p.length<6){toast('Sandi minimal 6 karakter');return}return atur(aksi,u,{sandiBaru:p})}
+  if((aksi==='hapus'||aksi==='nonaktif'||aksi==='jadikanPemilik')&&!confirm({hapus:'Hapus akun '+nm+'? Ia harus daftar ulang.',nonaktif:'Nonaktifkan '+nm+'? Ia langsung keluar dari dashboard.',jadikanPemilik:'Jadikan '+nm+' pemilik? Ia bisa membuka semua menu dan mengatur akun.'}[aksi]))return;
+  atur(aksi,u);
+ });
+
+ /* ---------- detak: kabari server halaman yang sedang dibuka ---------- */
+ function halaman(){
+  if(document.querySelector('.kt.open'))return 'Kelola Katalog';
+  const o=document.querySelector('#ov.open #pt');if(o&&o.textContent)return o.textContent.slice(0,32);
+  const t=document.querySelector('#deckTabs .on');return t?t.textContent:'Dashboard';
+ }
+ let lastHal='',hbBusy=false;
+ async function detak(pergi){
+  if(!ses||hbBusy&&!pergi)return;hbBusy=true;lastHal=halaman();
+  try{
+   const r=await api('akunDetak',{halaman:lastHal,perangkat:perangkat(),pergi:!!pergi},pergi?{keepalive:true}:null);
+   if(r&&r.online){online=r.online;menunggu=r.menunggu||0;chips();if(g('akBody')&&kelola){gambarKelola()}}
+  }catch(err){if(/Sesi|masuk lagi/i.test(err.message))keluar('Sesi berakhir. Silakan masuk lagi.')}
+  finally{hbBusy=false}
+ }
+
+ /* ---------- mulai ---------- */
+ setTimeout(async()=>{
+  if(!configured())return;
+  const msg=(()=>{try{const m=sessionStorage.getItem('ofa_gate_msg');sessionStorage.removeItem('ofa_gate_msg');return m}catch(e){return ''}})();
+  if(!ses&&localStorage.getItem(ON)==='1'){showGate();if(msg)renderGate(msg)}
+  if(ses){
+   chips();
+   try{
+    const r=await api('akunSaya',{});
+    const a=r.akun||{};
+    if(a.peran!==ses.akun.peran||a.nama!==ses.akun.nama||a.jabatan!==ses.akun.jabatan){const ubahPeran=a.peran!==ses.akun.peran;ses.akun=Object.assign(ses.akun,a);localStorage.setItem(SK,JSON.stringify(ses));if(ubahPeran)return location.reload();setRole()}
+    menunggu=r.menunggu||0;chips();
+   }catch(err){
+    if(/Sesi|masuk lagi/i.test(err.message))return keluar('Sesi berakhir. Silakan masuk lagi.');
+    if(/tidak dikenal/i.test(err.message)){try{localStorage.removeItem(ON)}catch(e){}}
+   }
+   detak();
+   setInterval(()=>{if(document.visibilityState==='visible')detak()},45000);
+   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')detak(true);else detak()});
+   let t=0;const cek=()=>{clearTimeout(t);t=setTimeout(()=>{if(halaman()!==lastHal)detak()},1500)};
+   const mo=new MutationObserver(cek);
+   ['deckTabs','ov','kt'].forEach(id=>{const el=g(id);if(el)mo.observe(el,{attributes:true,subtree:id==='deckTabs',attributeFilter:['class']})});
+   return;
+  }
+  try{
+   const r=await api('akunStatus',{});
+   adaPemilik=!!r.adaPemilik;
+   try{localStorage.setItem(ON,'1')}catch(e){}
+   showGate();if(msg)renderGate(msg);
+  }catch(err){
+   if(/tidak dikenal/i.test(err.message)){try{localStorage.removeItem(ON)}catch(e){}root.classList.remove('gated');const el=g('gate');if(el)el.hidden=true;window.ofaGated=false}
+  }
+ },0);
+})();
 /* ====== KONFIGURASI ======
    media: isi dengan path gambar/video di repo, contoh "media/catatan.mp4" atau "media/catatan.jpg".
    Kosongkan untuk memakai animasi bawaan. Bisa juga diganti lewat tombol ✎ di tiap kartu. */
@@ -1141,7 +1437,7 @@ function editTeam(id){
   $('#t_d').onclick=async()=>{team=team.filter(x=>x.id!==id);ls.set('ofa_team',team);await idb.op('delete','tm_'+id);close();renderTeam()};
  }
 }
-$('#team').onclick=e=>{if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
+$('#team').onclick=e=>{if(window.ofaRole==='staf'){if(e.target.closest('[data-t],[data-tadd]')&&window.ofaToast)window.ofaToast('Data tim diatur oleh pemilik toko');return}if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
 renderTeam();
 /* ====== APLIKASI HP (PWA) ====== */
 (function(){
@@ -1191,7 +1487,7 @@ renderTeam();
  function shiftInfo(){try{if(window.ofaShiftInfo)return window.ofaShiftInfo(new Date())}catch(e){}return {ty:{},groups:{}}}
  const label=(s,ty)=>s==='U'?'Umum':((ty[s]&&ty[s].n)||NM[s]);
  const color=(s,ty)=>s==='U'?CL.U:((ty[s]&&ty[s].c)||CL[s]);
- const isHead=()=>{const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
+ const isHead=()=>{if(window.ofaRole==='pemilik')return true;if(window.ofaRole==='staf')return false;const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
 
  function items(){
   const day=raw(),st={};day.forEach(x=>{if(x.rid)st[x.rid]=x});
@@ -1306,7 +1602,7 @@ renderTeam();
   };
   $('#hpOk').onclick=go;a.onkeydown=e=>{if(e.key==='Enter')go()};
  }
- function headGate(then){if(isHead())return then();pinForm(!meta.__headPin,then)}
+ function headGate(then){if(isHead())return then();if(window.ofaRole==='staf'){if(window.ofaToast)window.ofaToast('Pengaturan ini khusus pemilik toko');return}pinForm(!meta.__headPin,then)}
  window.ofaHeadGate=headGate;
 
  /* --- editor tugas rutin --- */
@@ -1378,7 +1674,8 @@ renderTeam();
  function hello(){
   const d=new Date(),h=d.getHours(),salam=h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';
   const head=(Array.isArray(team)&&team.find(m=>m.head))||null;
-  const name=head&&head.n&&!/^Nama /.test(head.n)?head.n.trim().split(/\s+/)[0]:'';
+  const acc=window.ofaAkun,first=v=>{const w=String(v||'').trim().split(/\s+/)[0]||'';return w?w[0].toUpperCase()+w.slice(1).toLowerCase():''};
+  const name=acc&&acc.nama?first(acc.nama):head&&head.n&&!/^Nama /.test(head.n)?head.n.trim().split(/\s+/)[0]:'';
   $('#helloDate').textContent=days[d.getDay()]+', '+d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();
   $('#helloName').textContent=salam+(name?', '+name:'')+' 👋';
  }
@@ -1435,7 +1732,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   catch(e){throw new Error('offline')}
   const j=await res.json();
   if(j.ok)return j.result;
-  if(!retried&&/PIN/.test(j.error||'')){
+  if(!retried&&/PIN/.test(j.error||'')&&localStorage.getItem('ofa_akun_on')!=='1'){
    const p=prompt('Masukkan PIN ONE FOR ALL Hub:');
    if(p!==null&&p.trim()){localStorage.setItem('salesTrackingPin',p.trim());return call(fn,arg,true)}
   }
@@ -1653,7 +1950,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   }finally{busy=false}
  }
  $id('slRefresh').onclick=()=>{
-  if(configured()&&!localStorage.getItem('salesTrackingPin')){const p=prompt('Masukkan PIN ONE FOR ALL Hub:');if(p&&p.trim())localStorage.setItem('salesTrackingPin',p.trim());else return}
+  if(configured()&&!localStorage.getItem('salesTrackingPin')&&localStorage.getItem('ofa_akun_on')!=='1'){const p=prompt('Masukkan PIN ONE FOR ALL Hub:');if(p&&p.trim())localStorage.setItem('salesTrackingPin',p.trim());else return}
   load(true);
  };
  $id('slOpen').onclick=()=>{if(configured())window.open(HUB_API_URL,'_blank','noopener');else alert('Alamat dashboard sales belum diatur.')};
@@ -3564,6 +3861,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  window.ofaDeckShow=function(id){const el=document.getElementById(id);const i=pages.findIndex(p=>p.contains(el));if(i>=0)go(i,true)};
  setHdr();
  let start=0;try{start=Math.min(pages.length-1,Math.max(0,Number(sessionStorage.getItem('ofa_deck'))||0))}catch(e){}
+ if(window.ofaRole==='staf'&&pages[start]&&pages[start].getAttribute('aria-label')==='Admin')start=0;
  requestAnimationFrame(()=>go(start,false));
  setTimeout(fit,1500);
 })();
@@ -3571,7 +3869,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
 (function(){
  const side=document.getElementById('side');if(!side)return;
  function page(i){
-  const t=document.querySelector('#deckTabs [data-pg="'+i+'"]');if(t)t.click();
+  const t=document.querySelector('#deckTabs [data-pg="'+i+'"]');if(!t||window.ofaRole==='staf'&&i===4)return;t.click();
   if(scrollY>160)scrollTo({top:0,behavior:'smooth'});
  }
  side.addEventListener('click',e=>{
@@ -3838,6 +4136,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
 
  /* ---------- buka / tutup halaman ---------- */
  function open(t){
+  if(window.ofaRole==='staf'){if(window.ofaToast)window.ofaToast('Kelola Katalog khusus pemilik toko');if(location.hash==='#katalog')history.replaceState(null,'',location.pathname+location.search);return}
   page.classList.add('open');document.body.classList.add('kt-on');
   if(location.hash!=='#katalog')history.pushState({kt:1},'','#katalog');
   show(t||tab);loadOv(false);
