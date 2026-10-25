@@ -904,6 +904,43 @@ html.scrolled header{border-bottom-color:var(--line)}
  #team .tc.add .media{font-size:40px}
 }
 .modal,.panel{box-shadow:var(--shadow)}
+/* ====== PERINGKAT RA ====== */
+.pg-col{display:contents}
+#sales:has(~#raRank) .sl-top-ra{display:none}
+.deck-pg>.pg-col>section{max-width:none}
+.deck-pg>.pg-col:first-child>section:first-child{margin-top:14px}
+.rr .sh-head .btn{padding:7px 14px;font-size:13px}
+.rr-m{margin-top:12px}
+.rr-m>small{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.rr-m>small em{font-style:normal;font-weight:600;letter-spacing:0;text-transform:none}
+.rr-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rr-pair.one{grid-template-columns:1fr}
+.rr-t{display:block;width:100%;text-align:left;border:0;background:var(--bg);color:var(--fg);border-radius:14px;padding:10px 12px;min-width:0;position:relative;font:inherit;cursor:pointer}
+.rr-t:hover{outline:1px solid var(--line)}
+.rr-t i{display:inline-flex;align-items:center;gap:4px;font-style:normal;font-size:11.5px;font-weight:700}
+.rr-t.up i{color:#16a34a}.rr-t.dn i{color:#e5484d}
+:root[data-theme=dark] .rr-t.up i{color:#4ade80}:root[data-theme=dark] .rr-t.dn i{color:#ff8a8a}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rr-t.up i{color:#4ade80}:root:not([data-theme=light]) .rr-t.dn i{color:#ff8a8a}}
+.rr-t b{display:block;font-size:15px;line-height:1.25;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-t span{display:block;font-size:12.5px;color:var(--mut);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-t span strong{color:var(--fg);font-size:14px}
+.rr-t u{position:absolute;top:10px;right:10px;text-decoration:none;font-size:10.5px;font-weight:700;border-radius:6px;padding:1px 6px;background:var(--card);color:var(--mut)}
+.rr-note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.4}
+.rr-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.rr-tbl th{position:sticky;top:0;background:var(--panel);font-size:11.5px;color:var(--mut);font-weight:700;text-align:right;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rr-tbl th button{border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer}
+.rr-tbl th.on{color:var(--fg)}
+.rr-tbl th:first-child,.rr-tbl td:first-child{text-align:left}
+.rr-tbl td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.rr-tbl td:first-child{white-space:normal;font-weight:600}
+.rr-tbl td small{display:block;color:var(--mut);font-size:11px;font-weight:500}
+.rr-tbl .lo{color:#e5484d}.rr-tbl .hi{color:#16a34a}
+.rr-wrap{overflow-x:auto;margin:0 -4px}
+@media(min-width:761px){
+ .deck-pg.cur>.pg-col{display:flex;flex-direction:column;gap:18px;min-width:0}
+ .deck-pg.cur>.pg-col>section{margin:0!important;max-width:none!important;min-width:0}
+}
+@media(min-width:1500px){.deck-pg.cur:has(>.pg-col){grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -958,6 +995,7 @@ html.scrolled header{border-bottom-color:var(--line)}
       <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
       <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
+        <div class="pg-col">
         <section class="sales loading" id="sales" aria-label="Sales bulan ini">
           <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
           <div id="slBody">
@@ -978,6 +1016,12 @@ html.scrolled header{border-bottom-color:var(--line)}
           </div>
           <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
         </section>
+        <section class="shift rr" id="raRank" aria-label="Peringkat RA">
+          <div class="sh-head"><div><h3>Peringkat RA</h3><p id="rrSub">Menunggu data sales…</p></div><button class="btn ghost" type="button" id="rrAll">Semua RA</button></div>
+          <div id="rrBody"></div>
+        </section>
+        </div>
+        <div class="pg-col">
         <section class="shift" id="shift" aria-label="Jadwal hari ini">
           <div class="sh-head"><div><h3>Jadwal Hari Ini</h3><p id="shDate"></p></div><button class="btn ghost" type="button" id="shPlan">Atur Jadwal</button></div>
           <div class="sh-groups" id="shGroups"></div>
@@ -997,6 +1041,7 @@ html.scrolled header{border-bottom-color:var(--line)}
           <ul class="dl-list done" id="dlDone" hidden></ul>
           <button class="dl-admin" id="dlAdmin" type="button">⚙ Atur tugas rutin (Store Head)</button>
         </section>
+        </div>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Laporan">
         <section class="rs" id="wk" aria-label="Laporan mingguan">
@@ -1965,7 +2010,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    peak:(d.hourlySales&&d.hourlySales.peak)||null,
    endless:d.endless?{target:d.endless.target,grossSales:d.endless.grossSales,achievement:d.endless.achievement}:null,
    voucher:d.voucher?{target:d.voucher.target,netSales:d.voucher.netSales,achievement:d.voucher.achievement}:null,
-   ras:(d.ras||[]).map(r=>({name:r.name,grossSales:r.grossSales,netSales:r.netSales,target:r.target,achievement:r.achievement,gap:r.gap,upt:r.upt,eacRate:r.eacRate,transactions:r.transactions})),
+   ras:(d.ras||[]).map(r=>({name:r.name,grossSales:r.grossSales,netSales:r.netSales,target:r.target,achievement:r.achievement,gap:r.gap,upt:r.upt,qty:r.qty,eacRate:r.eacRate,eacTransactions:r.eacTransactions,transactions:r.transactions,
+    endlessGrossSales:r.endlessGrossSales,endlessTarget:r.endlessTarget,endlessAchievement:r.endlessAchievement,endlessTransactions:r.endlessTransactions})),
    at:Date.now()};
  }
  function show(d){
@@ -1991,6 +2037,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   $id('slProj').textContent=s.target?pct(s.projectedAchievement):jt(s.projectedSales);
   $id('slProjT').textContent=jt(s.projectedSales);
   const top=(d.ras||[]).slice().sort((a,b)=>(b.grossSales||0)-(a.grossSales||0))[0];
+  renderRank(d);
   $id('slTopRa').textContent=top?'🥇 RA teratas: '+nama(top.name)+' · '+jt(top.grossSales)+(top.target?' ('+pct(top.achievement)+')':''):'';
   const ago=Math.round((Date.now()-d.at)/60000);
   $id('slAt').textContent='Diperbarui '+(ago<1?'baru saja':ago<60?ago+' menit lalu':new Date(d.at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}));
@@ -2023,6 +2070,64 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  };
  $id('slOpen').onclick=()=>{const k=localStorage.getItem('salesTrackingPin')||'';if(configured())window.open(HUB_API_URL+(/^s1\./.test(k)?'?sesi='+encodeURIComponent(k):''),'_blank','noopener');else alert('Alamat dashboard sales belum diatur.')};
 
+
+ /* ---- peringkat RA ---- */
+ const dec2=v=>(Number(v)||0).toFixed(2).replace('.',',');
+ const RRM={
+  sales:{t:'Sales',v:r=>r.grossSales||0,f:r=>jt(r.grossSales)+(r.target?' · '+pct(r.achievement):'')},
+  ea:{t:'Sales EA',v:r=>r.endlessGrossSales||0,f:r=>jt(r.endlessGrossSales)+(r.endlessTarget?' · '+pct(r.endlessAchievement):'')+' · '+(r.endlessTransactions||0)+' trx'},
+  upt:{t:'UPT',v:r=>r.upt||0,f:r=>dec2(r.upt)+' pcs/trx · '+(r.transactions||0)+' trx'},
+  eac:{t:'EAC',v:r=>r.eacRate||0,f:r=>pct(r.eacRate)+' · '+(r.eacTransactions!=null?r.eacTransactions+'/':'')+(r.transactions||0)+' trx'}
+ };
+ function rrList(d){return (d.ras||[]).filter(r=>r&&r.name&&!/^[-\s]*$/.test(r.name)&&((r.transactions||0)>0||(r.grossSales||0)>0))}
+ function rrMin(L){const t=L.map(r=>r.transactions||0).sort((a,b)=>a-b),med=t.length?t[Math.floor(t.length/2)]:0;return Math.max(3,Math.round(med*.2))}
+ function rrTile(k,r,up,note){
+  if(!r)return '';
+  return `<button type="button" class="rr-t ${up?'up':'dn'}" data-rr="${k}"><i>${up?'▲ Tertinggi':'▼ Terendah'}</i><b>${esc(nama(r.name))}</b><span><strong>${RRM[k].f(r).split(' · ')[0]}</strong>${RRM[k].f(r).split(' · ').slice(1).map(x=>' · '+x).join('')}</span>${note?`<u>${note}</u>`:''}</button>`;
+ }
+ function renderRank(d){
+  const b=$id('rrBody');if(!b)return;
+  const L=rrList(d);
+  if(!d||!L.length){b.innerHTML='<p class="hint" style="margin-top:12px">Peringkat muncul setelah data sales per RA tersedia.</p>';$id('rrSub').textContent='Belum ada data RA';return}
+  const minT=rrMin(L),E=L.filter(r=>(r.transactions||0)>=minT),st=d.settings||{};
+  const best=(k,arr)=>arr.slice().sort((a,b)=>RRM[k].v(b)-RRM[k].v(a))[0];
+  const worst=(k,arr)=>arr.slice().sort((a,b)=>RRM[k].v(a)-RRM[k].v(b))[0];
+  const pair=(k,label,extra)=>{
+   const pool=k==='sales'?L:E,hi=best(k,pool),lo=pool.length>1?worst(k,pool):null;
+   return `<div class="rr-m"><small>${label}${extra?`<em>${extra}</em>`:''}</small><div class="rr-pair${lo&&lo!==hi?'':' one'}">${rrTile(k,hi,true)}${lo&&lo!==hi?rrTile(k,lo,false):''}</div></div>`;
+  };
+  const hasEa=L.some(r=>r.endlessGrossSales!=null),eaTop=best('ea',L);
+  const ea=!hasEa?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Ketuk ↻ Perbarui di kartu sales untuk memuat data EA.</p></div>`
+   :!(eaTop&&eaTop.endlessGrossSales>0)?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Belum ada penjualan Endless Aisle periode ini.</p></div>`
+   :`<div class="rr-m"><small>Sales EA</small><div class="rr-pair one">${rrTile('ea',eaTop,true)}</div></div>`;
+  b.innerHTML=pair('sales','Sales RA',d.store&&d.store.grossSales?'toko '+jt(d.store.grossSales):'')+ea
+   +pair('upt','UPT',st.uptTarget?'target '+String(st.uptTarget).replace('.',','):'')
+   +pair('eac','EAC',st.eacTarget?'target '+pct(st.eacTarget):'')
+   +`<p class="rr-note">Terendah UPT &amp; EAC hanya dari RA dengan minimal ${minT} transaksi, agar RA yang baru sedikit masuk tidak terhitung.</p>`;
+  $id('rrSub').textContent=L.length+' RA · '+(d.period&&d.period.end?'s/d '+tgl(d.period.end):'bulan ini');
+ }
+ function rrModal(sortKey){
+  const d=data;if(!d)return;
+  const L=rrList(d),minT=rrMin(L),st=d.settings||{};let key=sortKey||'sales';
+  const col=[['sales','Sales'],['ea','EA'],['upt','UPT'],['eac','EAC'],['trx','Trx']];
+  const val=(k,r)=>k==='trx'?(r.transactions||0):RRM[k].v(r);
+  const draw=()=>{
+   const rows=L.slice().sort((a,b)=>val(key,b)-val(key,a));
+   $id('rrTbl').innerHTML=`<thead><tr><th>#&nbsp;RA</th>${col.map(([k,t])=>`<th class="${k===key?'on':''}"><button type="button" data-k="${k}">${t}${k===key?' ▾':''}</button></th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>{
+    const few=(r.transactions||0)<minT;
+    return `<tr><td>${i+1}. ${esc(nama(r.name))}${few?'<small>transaksi sedikit</small>':''}</td>
+     <td>${jt(r.grossSales)}${r.target?`<small>${pct(r.achievement)}</small>`:''}</td>
+     <td>${r.endlessGrossSales!=null?jt(r.endlessGrossSales):'–'}${r.endlessTarget?`<small>${pct(r.endlessAchievement)}</small>`:''}</td>
+     <td class="${st.uptTarget&&!few?(r.upt>=st.uptTarget?'hi':'lo'):''}">${dec2(r.upt)}</td>
+     <td class="${st.eacTarget&&!few?(r.eacRate>=st.eacTarget?'hi':'lo'):''}">${pct(r.eacRate)}</td>
+     <td>${r.transactions||0}</td></tr>`}).join('')}</tbody>`;
+   $id('rrTbl').querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{key=x.dataset.k;draw()});
+  };
+  openModal('Peringkat RA',`<p class="hint" style="margin:0 0 10px">${d.period&&d.period.end?'Periode s/d '+tgl(d.period.end)+'. ':''}Ketuk judul kolom untuk mengurutkan.${st.uptTarget||st.eacTarget?' Hijau = capai target, merah = di bawah target.':''}</p><div class="rr-wrap"><table class="rr-tbl" id="rrTbl"></table></div>`);
+  draw();
+ }
+ $id('rrAll').onclick=()=>rrModal('sales');
+ $id('rrBody').onclick=e=>{const t=e.target.closest('[data-rr]');if(t)rrModal(t.dataset.rr)};
  /* ---- briefing ---- */
  function focusLines(d){
   const s=d.store,st=d.settings||{},out=[];
