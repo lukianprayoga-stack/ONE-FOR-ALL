@@ -2155,7 +2155,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const hasEa=L.some(r=>r.endlessGrossSales!=null),eaTop=best('ea',L);
   const ea=!hasEa?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Ketuk ↻ Perbarui di kartu sales untuk memuat data EA.</p></div>`
    :!(eaTop&&eaTop.endlessGrossSales>0)?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Belum ada penjualan Endless Aisle periode ini.</p></div>`
-   :`<div class="rr-m"><small>Sales EA</small><div class="rr-pair one">${rrTile('ea',eaTop,true)}</div></div>`;
+   :(()=>{const lo=L.length>1?worst('ea',L):null;
+     const two=lo&&lo!==eaTop;
+     return `<div class="rr-m"><small>Sales EA${d.endless&&d.endless.grossSales?`<em>toko ${jt(d.endless.grossSales)}</em>`:''}</small><div class="rr-pair${two?'':' one'}">${rrTile('ea',eaTop,true)}${two?rrTile('ea',lo,false,RRM.ea.v(lo)>0?'':'belum ada EA'):''}</div></div>`})();
   b.innerHTML=pair('sales','Sales RA',d.store&&d.store.grossSales?'toko '+jt(d.store.grossSales):'')+ea
    +pair('upt','UPT',st.uptTarget?'target '+String(st.uptTarget).replace('.',','):'')
    +pair('eac','EAC',st.eacTarget?'target '+pct(st.eacTarget):'')
