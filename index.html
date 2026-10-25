@@ -13,9 +13,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<script>try{var t=localStorage.getItem('ofa_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
-:root{--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff}
-@media(prefers-color-scheme:dark){:root{--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d}}
+:root{color-scheme:light;--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff;--warn-bg:#fff4e5;--warn-fg:#8a4b00;--warn-bd:#f5c58a;--ok-bg:#e3f4e8;--ok-fg:#14642f;--bad-bg:#fde8e8;--bad-fg:#b42318;--amber:#b45309;--panel:#fff;--shadow:0 10px 30px rgba(10,10,10,.08)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d;--warn-bg:#33240d;--warn-fg:#ffd59e;--warn-bd:#6b4813;--ok-bg:#0f2e1b;--ok-fg:#8fe0ad;--bad-bg:#3a1416;--bad-fg:#ffb3b0;--amber:#f2a93b;--panel:#141418;--shadow:0 10px 30px rgba(0,0,0,.45)}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d;--warn-bg:#33240d;--warn-fg:#ffd59e;--warn-bd:#6b4813;--ok-bg:#0f2e1b;--ok-fg:#8fe0ad;--bad-bg:#3a1416;--bad-fg:#ffb3b0;--amber:#f2a93b;--panel:#141418;--shadow:0 10px 30px rgba(0,0,0,.45)}
+html.theme-anim,html.theme-anim *{transition:background-color .25s,border-color .25s,color .2s!important}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font:16px/1.45 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;overflow-x:hidden}
@@ -107,7 +110,7 @@ footer p{margin-top:20px;opacity:.7;font-size:14px}
 @media(max-width:800px){.tc.head{grid-column:auto}.tc.head .media{aspect-ratio:4/5}}
 .ov{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:20}
 .ov.open{display:grid}
-.panel{background:var(--bg);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;animation:pop .18s}
+.panel{background:var(--panel);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;animation:pop .18s}
 @keyframes pop{from{transform:scale(.96);opacity:0}}
 .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .ph h2{font-size:20px}
@@ -536,10 +539,8 @@ body.kt-on{overflow:hidden}
  #wkPrint .wk-rep h4{break-after:avoid}
  #wkPrint .wk-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-.dsr-warn{background:#fff4e5;color:#7a3e00;border:1px solid #f5c58a;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0 0 10px}
+.dsr-warn{background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-bd);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0 0 10px}
 .dsr-warn b{color:inherit}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .dsr-warn{background:#3a2608;color:#ffd9a8;border-color:#7a4a12}}
-:root[data-theme=dark] .dsr-warn{background:#3a2608;color:#ffd9a8;border-color:#7a4a12}
 .dp-photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .dp-photos figure{margin:0}
 .dp-photos .ph{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--card);display:grid;place-items:center;color:var(--mut);font-size:12px;text-align:center}
@@ -655,7 +656,7 @@ body.kt-on{overflow:hidden}
 .ks-hbtn{display:flex;gap:6px;flex:none}
 .ks-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .ks-tiles .iv-tile b{font-size:16px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ks-warn{margin-top:12px;background:#fff4e5;color:#8a4b00;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+.ks-warn{margin-top:12px;background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5}
 .ks-gl{display:grid;gap:6px}
 .ks-g{position:relative;display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--bg);border-radius:12px;padding:9px 12px;overflow:hidden;font-size:13px}
 .ks-g span{position:relative;z-index:1;min-width:0;line-height:1.3}.ks-g small{display:block;color:var(--mut);font-size:11.5px}
@@ -795,7 +796,7 @@ body.kt-on{overflow:hidden}
 .gated{overflow:hidden}
 .gated #gate{display:grid;position:fixed;inset:0;z-index:95;place-items:center;overflow-y:auto;padding:24px 16px calc(24px + env(safe-area-inset-bottom));background:radial-gradient(120% 80% at 50% 0%,#0e46e6 0%,#0a2a8f 30%,#06133f 62%,#02060f 100%)}
 .gated body>*:not(#gate):not(#splash):not(.toast){visibility:hidden}
-.gate-card{width:min(420px,100%);background:var(--bg);color:var(--fg);border-radius:24px;padding:24px 22px 20px;box-shadow:0 30px 80px #0008}
+.gate-card{width:min(420px,100%);background:var(--panel);color:var(--fg);border-radius:24px;padding:24px 22px 20px;box-shadow:0 30px 80px #0008}
 .gate-logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .gate-logo img{width:46px;height:46px;border-radius:12px}
 .gate-logo b{display:block;font-size:22px;font-weight:900;letter-spacing:-.04em;line-height:1}
@@ -815,9 +816,9 @@ body.kt-on{overflow:hidden}
 .gate-f .btn{padding:13px;font-size:15px;justify-content:center;text-align:center}
 .gate-f .btn:disabled{opacity:.6}
 .gate-err{color:#e5484d;font-size:13px;min-height:1em;margin:0}
-.gate-ok{background:#e3f4e8;color:#14642f;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0}
+.gate-ok{background:var(--ok-bg);color:var(--ok-fg);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:0}
 .gate-note{font-size:12px;color:var(--mut);line-height:1.5;margin:2px 0 0}
-.gate-info{background:#fff4e5;color:#8a4b00;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin:0 0 12px}
+.gate-info{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin:0 0 12px}
 .me-btn{position:relative;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:var(--ink);color:var(--inkfg);font-weight:800;font-size:13px;letter-spacing:.02em;cursor:pointer;flex:none}
 .me-btn[hidden],.on-chip[hidden]{display:none!important}
 .me-btn i{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#e5484d;color:#fff;font:700 11px/18px inherit;font-style:normal;padding:0 5px;border:2px solid var(--bg)}
@@ -831,7 +832,7 @@ body.kt-on{overflow:hidden}
 .ak-tx b{display:block;font-size:14px}
 .ak-tx small{display:block;color:var(--mut);font-size:12px;overflow:hidden;text-overflow:ellipsis}
 .ak-tag{font-style:normal;font-size:10.5px;font-weight:700;background:var(--card);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
-.ak-tag.off{background:#fde8e8;color:#b42318}
+.ak-tag.off{background:var(--bad-bg);color:var(--bad-fg)}
 .ak-h{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 4px}
 .ak-h span{color:var(--mut);font-size:12px;font-weight:700}
 .ak-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
@@ -870,6 +871,39 @@ body.kt-on{overflow:hidden}
 .ss-bars i.p{background:color-mix(in srgb,var(--ink) 10%,transparent)}
 .ss-cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ss-cfg span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
 @media(max-width:560px){.ss-k b{font-size:26px}}
+/* ====== TEMA & KERAPIAN ====== */
+.theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
+.theme-btn:hover{border-color:var(--mut)}
+.side-theme{display:none}
+@media(min-width:1100px){
+ .side-theme{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:auto 4px 0;padding:3px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+ .side-theme button{display:block;padding:7px 2px;border-radius:9px;font-size:12px;font-weight:700;color:var(--mut);text-align:center;justify-content:center}
+ .side-theme button span{display:none}
+ .side-theme button.on{background:var(--ink);color:var(--inkfg)}
+ .side-theme button:hover:not(.on){background:var(--card)}
+ .side-theme+.side-foot{margin-top:0;padding-top:10px}
+}
+footer{background:var(--card);color:var(--mut);border-top:1px solid var(--line)}
+footer .big{color:var(--fg)}
+footer p{opacity:1}
+header{background:color-mix(in srgb,var(--bg) 97%,transparent);border-bottom:1px solid transparent;transition:border-color .2s}
+html.scrolled header{border-bottom-color:var(--line)}
+/* tab halaman (HP): latar penuh agar konten tidak terlihat di sela-sela saat menggulir */
+.deck-tabs{background:var(--card)}
+.deck-tabs::before{content:"";position:absolute;inset:-8px -16px -6px;background:var(--bg);z-index:-1}
+/* kartu tim di tablet/desktop: avatar bulat seragam, tidak terlalu besar */
+@media(min-width:761px){
+ #team{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:22px 18px}
+ #team .tc,#team .tc.head{grid-column:auto;text-align:center}
+ #team .tc .media,#team .tc.head .media{aspect-ratio:1/1;border-radius:50%}
+ #team .tc.head .media{box-shadow:0 0 0 3px var(--bg),0 0 0 6px var(--acc)}
+ #team .tc .ini{font-size:46px;letter-spacing:-1.5px}
+ #team .tc .meta{justify-content:center}
+ #team .tc .meta h3,#team .tc.head .meta h3{font-size:15px}
+ #team .tc .edit{top:4px;right:4px}
+ #team .tc.add .media{font-size:40px}
+}
+.modal,.panel{box-shadow:var(--shadow)}
 </style>
 </head>
 <body>
@@ -894,6 +928,7 @@ body.kt-on{overflow:hidden}
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
   <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
   <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
+  <div class="side-theme" role="radiogroup" aria-label="Tema"><button type="button" role="radio" data-th="auto">Otomatis</button><button type="button" role="radio" data-th="light">Terang</button><button type="button" role="radio" data-th="dark">Gelap</button></div>
   <p class="side-foot">Tekan <b>1–5</b> untuk pindah halaman dashboard, <b>/</b> untuk cek stok.</p>
 </aside>
 <div id="gate" hidden></div>
@@ -907,6 +942,7 @@ body.kt-on{overflow:hidden}
     <button class="btn ghost" id="installBtn" hidden>Pasang aplikasi</button>
     <button class="btn" id="addTop">+ Tambah tool</button>
     <button class="icon-btn" id="installIcon" hidden aria-label="Pasang aplikasi">⤓</button>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Ganti tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path id="themeIc" fill="currentColor" d=""/></svg></button>
     <button class="me-btn" id="meBtn" type="button" hidden aria-label="Akun saya"><span id="meIni">?</span><i id="meBadge" hidden></i></button>
   </div>
 </header>
@@ -2544,8 +2580,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    <div class="pf-rows">${TIERS.map(t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`).join('')}
    <button type="button" class="pf-row restock" data-list="rs"><i style="background:#2f80ed"></i><span>Laku tapi stok habis</span><b>${nf(rs.length)}</b><small>perlu restock</small></button></div>
    <p class="hint">PLC = umur produk di toko sejak pertama masuk. Sell through = terjual sejak masuk ÷ (terjual + stok). Dead Stock = PLC lebih dari ${c.plc} bulan dan tidak terjual 4 bulan terakhir. <button type="button" class="pf-lnk" id="pfRule">Lihat aturan</button></p>
-   ${miss?`<p class="hint" style="color:#b45309">Masih perkiraan dari penjualan 90 hari terakhir. Pasang <b>Performa.gs</b> di Apps Script agar PLC & sell through dihitung sejak barang masuk.</p>`:kira?`<p class="hint">${tx?`Barang masuk dari SKU transaction history ${tgl(plc.txFrom)} ${String(plc.txFrom).slice(0,4)} – ${tgl(plc.txTo)}. `:''}${kira?nf(kira)+' produk ditandai ≥ karena sudah ada sebelum '+(tx?'awal data transaksi':'data penjualan '+tgl(plc.salesStart))+'.':''}</p>`:''}
-   ${!miss&&!tx?`<p class="hint" style="color:#b45309">Upload <b>SKU Transaction History</b> (lewat ⇪ Upload di Kepatuhan Display) agar tanggal barang masuk akurat.</p>`:''}`;
+   ${miss?`<p class="hint" style="color:var(--amber)">Masih perkiraan dari penjualan 90 hari terakhir. Pasang <b>Performa.gs</b> di Apps Script agar PLC & sell through dihitung sejak barang masuk.</p>`:kira?`<p class="hint">${tx?`Barang masuk dari SKU transaction history ${tgl(plc.txFrom)} ${String(plc.txFrom).slice(0,4)} – ${tgl(plc.txTo)}. `:''}${kira?nf(kira)+' produk ditandai ≥ karena sudah ada sebelum '+(tx?'awal data transaksi':'data penjualan '+tgl(plc.salesStart))+'.':''}</p>`:''}
+   ${!miss&&!tx?`<p class="hint" style="color:var(--amber)">Upload <b>SKU Transaction History</b> (lewat ⇪ Upload di Kepatuhan Display) agar tanggal barang masuk akurat.</p>`:''}`;
  };
  window.ofaInvBrief=function(){
   if(!data)return [];const s=data.summary||{},gp=s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp=s.colorTotal?s.colorDisplayed/s.colorTotal:0,T=todo().length,rs=restock().length;
@@ -4763,6 +4799,36 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  setHead();
  setTimeout(()=>{if(configured()&&localStorage.getItem('salesTrackingPin'))loadOv(false)},6500);
  if(location.hash==='#katalog')setTimeout(()=>open(),300);
+})();
+
+
+ /* garis bawah header saat halaman digulir */
+ (function(){let on=null;const f=()=>{const v=scrollY>8;if(v!==on){on=v;document.documentElement.classList.toggle('scrolled',v)}};addEventListener('scroll',f,{passive:true});f()})();
+/* ====== TEMA: Otomatis / Terang / Gelap ====== */
+(function(){
+ const root=document.documentElement,mq=matchMedia('(prefers-color-scheme: dark)');
+ const IC={auto:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2v16a8 8 0 0 1 0-16Z',
+  light:'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-5 1 3h-2l1-3Zm0 20-1-3h2l-1 3ZM2 12l3-1v2l-3-1Zm20 0-3 1v-2l3 1ZM4.9 4.9l2.8 1.4-1.4 1.4-1.4-2.8Zm14.2 14.2-2.8-1.4 1.4-1.4 1.4 2.8ZM4.9 19.1l1.4-2.8 1.4 1.4-2.8 1.4ZM19.1 4.9l-1.4 2.8-1.4-1.4 2.8-1.4Z',
+  dark:'M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z'};
+ const NAMA={auto:'Otomatis (ikut perangkat)',light:'Terang',dark:'Gelap'};
+ const get=()=>{try{const t=localStorage.getItem('ofa_theme');return t==='light'||t==='dark'?t:'auto'}catch(e){return 'auto'}};
+ const meta=document.querySelector('meta[name=theme-color]');
+ function apply(t,anim){
+  if(anim){root.classList.add('theme-anim');setTimeout(()=>root.classList.remove('theme-anim'),350)}
+  if(t==='auto')root.removeAttribute('data-theme');else root.setAttribute('data-theme',t);
+  const dark=t==='dark'||t==='auto'&&mq.matches;
+  if(meta)meta.setAttribute('content',dark?'#0b0b0d':'#071a5c');
+  const ic=document.getElementById('themeIc');if(ic)ic.setAttribute('d',IC[t]);
+  const b=document.getElementById('themeBtn');if(b){b.title='Tema: '+NAMA[t];b.setAttribute('aria-label','Tema: '+NAMA[t]+'. Ketuk untuk ganti')}
+  document.querySelectorAll('.side-theme [data-th]').forEach(x=>{const on=x.dataset.th===t;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)});
+ }
+ function set(t){try{t==='auto'?localStorage.removeItem('ofa_theme'):localStorage.setItem('ofa_theme',t)}catch(e){}apply(t,true)}
+ window.ofaTheme={get,set};
+ apply(get(),false);
+ (mq.addEventListener?mq.addEventListener.bind(mq,'change'):mq.addListener.bind(mq))(()=>{if(get()==='auto')apply('auto',false)});
+ const btn=document.getElementById('themeBtn');
+ if(btn)btn.onclick=()=>{const n={auto:'light',light:'dark',dark:'auto'}[get()];set(n);window.ofaToast&&window.ofaToast('Tema: '+NAMA[n])};
+ document.querySelectorAll('.side-theme [data-th]').forEach(x=>x.onclick=()=>set(x.dataset.th));
 })();
 </script>
 </body>
