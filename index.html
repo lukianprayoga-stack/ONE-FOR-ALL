@@ -847,6 +847,29 @@ body.kt-on{overflow:hidden}
 @media(max-width:560px){.ak-wait{flex-wrap:wrap}.ak-btns{width:100%;padding-left:48px}.ak-btns .btn{flex:1}}
 @media(max-width:760px){.on-chip{padding:7px 10px;font-size:11px}.on-chip span{display:none}.me-btn{width:36px;height:36px;font-size:12px}}
 .role-staf #shPlan{display:none!important}
+.ss-hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.ss-k{background:var(--bg);border-radius:16px;padding:12px 14px;min-width:0}
+.ss-k small{display:block;color:var(--mut);font-size:12px;font-weight:700}
+.ss-k b{display:block;font-size:30px;letter-spacing:-1px;line-height:1.15;margin-top:2px}
+.ss-k em{display:inline-block;font-style:normal;font-size:11.5px;font-weight:700;border-radius:7px;padding:2px 8px;margin-top:4px;color:#fff}
+.ss-k span{display:block;color:var(--mut);font-size:11.5px;line-height:1.35;margin-top:6px}
+.ss-ok{background:#16a34a}.ss-lo{background:#d97706}.ss-hi{background:#dc2626}.ss-na{background:#9ca3af}
+.ss-gauge{position:relative;height:10px;border-radius:99px;background:linear-gradient(90deg,#fde68a,#bbf7d0 0,#bbf7d0 0) ;margin:16px 0 4px;background:var(--bg)}
+.ss-gauge i{position:absolute;top:0;bottom:0;border-radius:99px;background:color-mix(in srgb,#16a34a 28%,transparent)}
+.ss-gauge b{position:absolute;top:-4px;width:4px;height:18px;border-radius:3px;background:var(--fg);transform:translateX(-2px)}
+.ss-gauge u{position:absolute;top:-4px;width:4px;height:18px;border-radius:3px;background:#2f80ed;transform:translateX(-2px);text-decoration:none}
+.ss-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.ss-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.ss-tbl th{font-size:11.5px;color:var(--mut);text-align:right;font-weight:700;padding:6px 4px;border-bottom:1px solid var(--line)}
+.ss-tbl th:first-child,.ss-tbl td:first-child{text-align:left}
+.ss-tbl td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.ss-tbl td b{display:inline-block;min-width:40px;border-radius:7px;padding:1px 6px;color:#fff;text-align:center;font-size:12px}
+.ss-bars{display:flex;align-items:flex-end;gap:6px;height:70px;margin-top:12px}
+.ss-bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10.5px;color:var(--mut);gap:3px}
+.ss-bars i{display:block;width:100%;max-width:44px;border-radius:6px 6px 2px 2px;background:color-mix(in srgb,var(--ink) 22%,transparent)}
+.ss-bars i.p{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+.ss-cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ss-cfg span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
+@media(max-width:560px){.ss-k b{font-size:26px}}
 </style>
 </head>
 <body>
@@ -961,6 +984,10 @@ body.kt-on{overflow:hidden}
         <section class="perf" id="perf" aria-label="Performa produk">
           <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
           <div id="pfBody"></div>
+        </section>
+        <section class="perf" id="ssr" aria-label="Stock to sales ratio">
+          <div class="sh-head"><div><h3>Stock to Sales Ratio</h3><p id="ssSub">Stok dibanding rata-rata penjualan 4 bulan</p></div><button class="btn ghost" type="button" id="ssCfg" aria-label="Atur SSR (Store Head)">⚙</button></div>
+          <div id="ssBody"></div>
         </section>
         <section class="rs" id="rs" aria-label="Permintaan restock">
           <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
@@ -2511,6 +2538,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   R.forEach(o=>{const t=tier(o,c);if(t){cnt[t]++;pcs[t]+=o.stock}});
   const tot=TIERS.reduce((a,t)=>a+cnt[t[0]],0),rs=restock();
   $id('pfSub').textContent=nf(tot)+' generic-warna · PLC × sell through';
+  if(window.renderSSR)window.renderSSR();
   const kira=R.filter(o=>o.stock>0&&o.plcKira).length,miss=!plc||!plc.items,tx=plc&&plc.txFrom;
   $id('pfBody').innerHTML=`<div class="pf-stack">${TIERS.map(t=>cnt[t[0]]?`<i style="flex:${cnt[t[0]]};background:${t[2]}" title="${t[1]}"></i>`:'').join('')}</div>
    <div class="pf-rows">${TIERS.map(t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`).join('')}
@@ -2604,6 +2632,67 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   window.ofaHeadGate?window.ofaHeadGate(open):open();
  };
 
+
+ /* --- Stock to Sales Ratio (SSR) --- */
+ const SK='ofa_ssr';let ssr=null;try{ssr=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){ssr=null}
+ const scfg=()=>Object.assign({lo:2,hi:3},meta.__ssrCfg||{});
+ const nonMerch=o=>/^98/.test(String(o.g))||/paper ?bag|papper bag|packing w[ae]b/i.test(o.n||'');
+ const dec1=v=>(Math.round(v*10)/10).toLocaleString('id-ID',{minimumFractionDigits:1,maximumFractionDigits:1});
+ const BLN3=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ function sstat(v,c){if(!isFinite(v)||v<=0)return ['ss-na','–'];return v<c.lo?['ss-lo','Kurang stok']:v>c.hi?['ss-hi','Kelebihan stok']:['ss-ok','Ideal']}
+ async function loadSSR(force){
+  if(!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&ssr&&!ssr.missing&&Date.now()-(ssr.at||0)<60*60e3)return;
+  try{const r=await api('getSSR',{});ssr=Object.assign(r,{at:Date.now()});try{localStorage.setItem(SK,JSON.stringify(ssr))}catch(e){}renderSSR()}
+  catch(e){if(/tidak dikenal/i.test(e.message||'')){ssr={missing:1,at:Date.now()};renderSSR()}}
+ }
+ window.renderSSR=function(){
+  const b=$id('ssBody');if(!b)return;const c=scfg();
+  if(!data){b.innerHTML='<p class="dp-empty">SSR muncul setelah inventory by bin diupload.</p>';return}
+  if(!ssr||ssr.missing||!ssr.q4){b.innerHTML=`<p class="dp-empty">${ssr&&ssr.missing?'Pasang versi terbaru <b>Performa.gs</b> di Apps Script untuk menghitung SSR.':'Memuat penjualan 4 bulan terakhir…'}</p>`;return}
+  const L=R.filter(o=>o.stock>0&&!nonMerch(o)),stock=L.reduce((t,o)=>t+o.stock,0);
+  const avg=ssr.q4/4,cur=avg>0?stock/avg:0,asp=ssr.q4>0?ssr.net4/ssr.q4:0;
+  const man=meta.__ssrTgt&&ssr.next&&meta.__ssrTgt[ssr.next.month];
+  const tgtPcs=man?Number(man):ssr.next&&ssr.next.sales&&asp?ssr.next.sales/asp:0,nxt=tgtPcs>0?stock/tgtPcs:0;
+  const [k1,t1]=sstat(cur,c),[k2,t2]=sstat(nxt,c);
+  const mx=Math.max(6,c.hi*2,Math.ceil(Math.max(cur,nxt)+0.5)),pos=v=>Math.min(100,Math.max(0,v/mx*100));
+  const nl=ssr.next&&ssr.next.label?ssr.next.label.replace(/ \d{4}$/,''):'bulan depan';
+  // per kategori (MC Lv 3)
+  const cats={};L.forEach(o=>{const k=String(o.l3||'-').toUpperCase();(cats[k]=cats[k]||{s:0,q:0}).s+=o.stock});
+  Object.keys(ssr.byCat||{}).forEach(k=>{(cats[k]=cats[k]||{s:0,q:0}).q=ssr.byCat[k].q4});
+  const rows=Object.keys(cats).filter(k=>cats[k].s>0||cats[k].q>0&&k!=='-').map(k=>{const x=cats[k],a=x.q/4;return {k,s:x.s,a,v:a>0?x.s/a:Infinity}}).sort((a,b)=>(b.v===Infinity?1e9:b.v)-(a.v===Infinity?1e9:a.v));
+  const mm=(ssr.months||[]).slice(-5),mq=Math.max(1,...mm.map(x=>x.q));
+  $id('ssSub').textContent=nf(stock)+' pcs stok · sales '+tgl(ssr.from4)+' – '+tgl(ssr.end);
+  b.innerHTML=`<div class="ss-hero">
+    <div class="ss-k"><small>SSR Current</small><b>${cur>0?dec1(cur):'–'}</b>${cur>0?`<em class="${k1}">${t1}</em>`:''}<span>${nf(stock)} pcs ÷ rata-rata ${nf(avg)} pcs/bulan (4 bulan)</span></div>
+    <div class="ss-k"><small>SSR Next · ${esc(nl)}</small><b>${nxt>0?dec1(nxt):'–'}</b>${nxt>0?`<em class="${k2}">${t2}</em>`:''}<span>${tgtPcs>0?`${nf(stock)} pcs ÷ target ${nf(tgtPcs)} pcs${man?' (diisi manual)':` (Rp${nf(ssr.next.sales/1e6)} jt ÷ rata-rata Rp${nf(asp/1e3)} rb/pcs)`}`:'Target '+esc(nl)+' belum diisi. Isi di menu Target Sales Tracking atau ⚙.'}</span></div></div>
+   <div class="ss-gauge" title="Area hijau = SSR ideal"><i style="left:${pos(c.lo)}%;width:${pos(c.hi)-pos(c.lo)}%"></i>${cur>0?`<b style="left:${pos(cur)}%" title="Current"></b>`:''}${nxt>0?`<u style="left:${pos(nxt)}%" title="Next"></u>`:''}</div>
+   <div class="ss-scale"><span>0</span><span>ideal ${String(c.lo).replace('.',',')}–${String(c.hi).replace('.',',')}</span><span>${mx}</span></div>
+   <p class="hint" style="margin-top:6px"><span style="color:var(--fg)">▮ current</span> · <span style="color:#2f80ed">▮ next</span> · SSR ${dec1(cur||0)} berarti stok cukup untuk ±${dec1(cur||0)} bulan penjualan.</p>
+   <table class="ss-tbl"><thead><tr><th>Kategori</th><th>Stok</th><th>Sales/bln</th><th>SSR</th></tr></thead><tbody>
+    ${rows.map(r=>{const [kk]=sstat(r.v===Infinity?99:r.v,c);return `<tr><td>${esc(cap3(r.k))}</td><td>${nf(r.s)}</td><td>${nf(r.a)}</td><td><b class="${r.v===Infinity?'ss-hi':kk}">${r.v===Infinity?'∞':dec1(r.v)}</b></td></tr>`}).join('')}</tbody></table>
+   <div class="ss-bars">${mm.map(x=>{const part=x.m===String(ssr.end).slice(0,7);return `<div><span>${nf(x.q)}</span><i class="${part?'p':''}" style="height:${Math.max(4,x.q/mq*46)}px"></i>${BLN3[+x.m.slice(5,7)-1]}${part?'*':''}</div>`}).join('')}</div>
+   <p class="hint">Sales per bulan (pcs)${mm.some(x=>x.m===String(ssr.end).slice(0,7))?' · * bulan berjalan s/d '+tgl(ssr.end):''}. Stok dari inventory by bin ${tgl(data.meta&&data.meta.date)}, tanpa paper bag/packing.</p>`;
+ };
+ const cap3=v=>String(v||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ $id('ssCfg').onclick=()=>{
+  const open=()=>{
+   const c=scfg(),m=ssr&&ssr.next&&ssr.next.month,cur=m&&meta.__ssrTgt&&meta.__ssrTgt[m]||'';
+   openModal('Pengaturan SSR',`<div class="ss-cfg"><label><span>SSR ideal minimal</span><input class="in" type="number" step="0.1" min="0" id="ssLo" value="${c.lo}"></label><label><span>SSR ideal maksimal</span><input class="in" type="number" step="0.1" min="0" id="ssHi" value="${c.hi}"></label></div>
+    ${m?`<label style="display:block;margin-top:10px"><span style="display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px">Target sales ${esc(ssr.next.label)} (pcs) — kosongkan untuk memakai target Rp dari Sales Tracking</span><input class="in" type="number" min="0" id="ssTgt" value="${esc(cur)}" placeholder="${ssr.next.sales&&ssr.q4?nf(ssr.next.sales/(ssr.net4/ssr.q4))+' pcs (dari target Rp)':'mis. 900'}"></label>`:''}
+    <p class="hint" id="ssErr" style="color:#e5484d;min-height:1em"></p>
+    <div class="row"><button class="btn" type="button" id="ssSave">Simpan</button><button class="btn ghost" type="button" id="ssReset">Pakai bawaan (2–3)</button></div>`);
+   $id('ssSave').onclick=()=>{
+    const lo=Number($id('ssLo').value),hi=Number($id('ssHi').value);
+    if(!(lo>0&&hi>lo)){$id('ssErr').textContent='Isi minimal lebih kecil dari maksimal.';return}
+    meta.__ssrCfg={lo,hi};
+    if(m){const t=$id('ssTgt').value.trim(),T=Object.assign({},meta.__ssrTgt||{});if(t&&Number(t)>0)T[m]=Number(t);else delete T[m];Object.keys(T).sort().slice(0,-6).forEach(k=>delete T[k]);meta.__ssrTgt=T}
+    ls.set('ofa_meta',meta);close();renderSSR();
+   };
+   $id('ssReset').onclick=()=>{delete meta.__ssrCfg;ls.set('ofa_meta',meta);close();renderSSR()};
+  };
+  window.ofaHeadGate?window.ofaHeadGate(open):open();
+ };
  /* --- upload inventory --- */
  function loadXlsx(){
   if(window.XLSX)return Promise.resolve();
@@ -2621,7 +2710,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   status('Mengunggah inventory by bin ('+nf(body.length)+' baris) dan menghitung… ±30 detik');
   const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
   if(res.message)throw new Error(res.message);
-  setData(res,true);if(res.meta&&res.meta.sku)setSku(res.meta.sku);loadPlc(true);
+  setData(res,true);if(res.meta&&res.meta.sku)setSku(res.meta.sku);loadPlc(true);loadSSR(true);
   return 'Inventory by bin '+tgl(res.meta.date)+' ✓ ('+nf(res.meta.rows)+' baris)';
  }
  async function upSku(rows,hi,f){
@@ -2701,7 +2790,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   let c=null;try{c=JSON.parse(localStorage.getItem(CACHE)||'null')}catch(e){}
   if(!force&&c&&Date.now()-(c.at||0)<30*60e3)return;
   busy=true;if(!data)status('Memuat data inventory…');
-  try{const r=await api('getInventoryAnalysis',{});const k=r.skuMeta||(r.meta&&r.meta.sku);if(k)setSku(k);if(r.message){if(!data)status('Belum ada inventory. Ketuk ⇪ Upload.');}else{setData(r,true);status('');loadPlc(false)}}
+  try{const r=await api('getInventoryAnalysis',{});const k=r.skuMeta||(r.meta&&r.meta.sku);if(k)setSku(k);if(r.message){if(!data)status('Belum ada inventory. Ketuk ⇪ Upload.');}else{setData(r,true);status('');loadPlc(false);loadSSR(false)}}
   catch(err){const m=err&&err.message||String(err);status(/tidak dikenal/i.test(m)?'Pasang Inventory.gs di Apps Script terlebih dahulu.':'Tidak dapat memuat inventory: '+m,true)}
   finally{busy=false}
  }
