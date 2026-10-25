@@ -842,9 +842,6 @@ body.kt-on{overflow:hidden}
 .ak-pw{display:grid;gap:8px;margin-top:12px}
 @media(max-width:560px){.ak-wait{flex-wrap:wrap}.ak-btns{width:100%;padding-left:48px}.ak-btns .btn{flex:1}}
 @media(max-width:760px){.on-chip{padding:7px 10px;font-size:11px}.on-chip span{display:none}.me-btn{width:36px;height:36px;font-size:12px}}
-/* menu khusus pemilik disembunyikan untuk staf */
-.role-staf #deckTabs [data-pg="4"],.role-staf .deck-pg[aria-label="Admin"],.role-staf #side [data-pg="4"],.role-staf #side [data-sd="katalog"],.role-staf .bnav [data-go="katalog"],.role-staf #navKt,.role-staf #ctBox,.role-staf #team [data-tadd],.role-staf .tc .edit{display:none!important}
-@media(max-width:760px){.role-staf .bnav{grid-template-columns:repeat(5,1fr)!important}}
 </style>
 </head>
 <body>
@@ -1172,7 +1169,7 @@ body.kt-on{overflow:hidden}
   const a=ses.akun;
   const head=`<div class="ak-me"><span class="ak-av">${H(ini(a.nama))}</span><span class="ak-tx"><b>${H(a.nama)}</b><small>@${H(a.username)} · ${pemilik()?'Pemilik toko':'Staf'}${a.jabatan?' · '+H(a.jabatan):''}</small></span><button class="btn ghost" type="button" id="akOut">Keluar</button></div>`;
   if(!pemilik()){
-   openModal('Akun saya',head+`<p class="hint">Menu Admin, Kelola Katalog, dan pengaturan khusus pemilik toko.</p>`+sandiForm());
+   openModal('Akun saya',head+`<p class="hint">Mengonfirmasi akun dan melihat siapa yang sedang online diatur oleh pemilik toko.</p>`+sandiForm());
    g('akOut').onclick=()=>keluar();pasangSandi();return;
   }
   openModal('Akun & akses',head+`<div id="akBody"><p class="hint">Memuat akun…</p></div><details class="ak-det"><summary>Ganti sandi saya</summary>${sandiForm()}</details>`);
@@ -1437,7 +1434,7 @@ function editTeam(id){
   $('#t_d').onclick=async()=>{team=team.filter(x=>x.id!==id);ls.set('ofa_team',team);await idb.op('delete','tm_'+id);close();renderTeam()};
  }
 }
-$('#team').onclick=e=>{if(window.ofaRole==='staf'){if(e.target.closest('[data-t],[data-tadd]')&&window.ofaToast)window.ofaToast('Data tim diatur oleh pemilik toko');return}if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
+$('#team').onclick=e=>{if(e.target.closest('[data-tadd]'))return editTeam();const c=e.target.closest('[data-t]');if(c)editTeam(c.dataset.t)};
 renderTeam();
 /* ====== APLIKASI HP (PWA) ====== */
 (function(){
@@ -1487,7 +1484,7 @@ renderTeam();
  function shiftInfo(){try{if(window.ofaShiftInfo)return window.ofaShiftInfo(new Date())}catch(e){}return {ty:{},groups:{}}}
  const label=(s,ty)=>s==='U'?'Umum':((ty[s]&&ty[s].n)||NM[s]);
  const color=(s,ty)=>s==='U'?CL.U:((ty[s]&&ty[s].c)||CL[s]);
- const isHead=()=>{if(window.ofaRole==='pemilik')return true;if(window.ofaRole==='staf')return false;const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
+ const isHead=()=>{if(window.ofaRole==='pemilik')return true;const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
 
  function items(){
   const day=raw(),st={};day.forEach(x=>{if(x.rid)st[x.rid]=x});
@@ -1602,7 +1599,7 @@ renderTeam();
   };
   $('#hpOk').onclick=go;a.onkeydown=e=>{if(e.key==='Enter')go()};
  }
- function headGate(then){if(isHead())return then();if(window.ofaRole==='staf'){if(window.ofaToast)window.ofaToast('Pengaturan ini khusus pemilik toko');return}pinForm(!meta.__headPin,then)}
+ function headGate(then){if(isHead())return then();pinForm(!meta.__headPin,then)}
  window.ofaHeadGate=headGate;
 
  /* --- editor tugas rutin --- */
@@ -3861,7 +3858,6 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  window.ofaDeckShow=function(id){const el=document.getElementById(id);const i=pages.findIndex(p=>p.contains(el));if(i>=0)go(i,true)};
  setHdr();
  let start=0;try{start=Math.min(pages.length-1,Math.max(0,Number(sessionStorage.getItem('ofa_deck'))||0))}catch(e){}
- if(window.ofaRole==='staf'&&pages[start]&&pages[start].getAttribute('aria-label')==='Admin')start=0;
  requestAnimationFrame(()=>go(start,false));
  setTimeout(fit,1500);
 })();
@@ -3869,7 +3865,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
 (function(){
  const side=document.getElementById('side');if(!side)return;
  function page(i){
-  const t=document.querySelector('#deckTabs [data-pg="'+i+'"]');if(!t||window.ofaRole==='staf'&&i===4)return;t.click();
+  const t=document.querySelector('#deckTabs [data-pg="'+i+'"]');if(t)t.click();
   if(scrollY>160)scrollTo({top:0,behavior:'smooth'});
  }
  side.addEventListener('click',e=>{
@@ -4136,7 +4132,6 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
 
  /* ---------- buka / tutup halaman ---------- */
  function open(t){
-  if(window.ofaRole==='staf'){if(window.ofaToast)window.ofaToast('Kelola Katalog khusus pemilik toko');if(location.hash==='#katalog')history.replaceState(null,'',location.pathname+location.search);return}
   page.classList.add('open');document.body.classList.add('kt-on');
   if(location.hash!=='#katalog')history.pushState({kt:1},'','#katalog');
   show(t||tab);loadOv(false);
