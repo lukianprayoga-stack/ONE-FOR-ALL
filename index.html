@@ -1950,7 +1950,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(configured()&&!localStorage.getItem('salesTrackingPin')&&localStorage.getItem('ofa_akun_on')!=='1'){const p=prompt('Masukkan PIN ONE FOR ALL Hub:');if(p&&p.trim())localStorage.setItem('salesTrackingPin',p.trim());else return}
   load(true);
  };
- $id('slOpen').onclick=()=>{if(configured())window.open(HUB_API_URL,'_blank','noopener');else alert('Alamat dashboard sales belum diatur.')};
+ $id('slOpen').onclick=()=>{const k=localStorage.getItem('salesTrackingPin')||'';if(configured())window.open(HUB_API_URL+(/^s1\./.test(k)?'?sesi='+encodeURIComponent(k):''),'_blank','noopener');else alert('Alamat dashboard sales belum diatur.')};
 
  /* ---- briefing ---- */
  function focusLines(d){
