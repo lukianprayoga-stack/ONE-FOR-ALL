@@ -842,6 +842,7 @@ body.kt-on{overflow:hidden}
 .ak-pw{display:grid;gap:8px;margin-top:12px}
 @media(max-width:560px){.ak-wait{flex-wrap:wrap}.ak-btns{width:100%;padding-left:48px}.ak-btns .btn{flex:1}}
 @media(max-width:760px){.on-chip{padding:7px 10px;font-size:11px}.on-chip span{display:none}.me-btn{width:36px;height:36px;font-size:12px}}
+.role-staf #shPlan{display:none!important}
 </style>
 </head>
 <body>
@@ -1484,6 +1485,7 @@ renderTeam();
  function shiftInfo(){try{if(window.ofaShiftInfo)return window.ofaShiftInfo(new Date())}catch(e){}return {ty:{},groups:{}}}
  const label=(s,ty)=>s==='U'?'Umum':((ty[s]&&ty[s].n)||NM[s]);
  const color=(s,ty)=>s==='U'?CL.U:((ty[s]&&ty[s].c)||CL[s]);
+ const canManage=()=>window.ofaRole==='pemilik'||(!window.ofaRole&&isHead());
  const isHead=()=>{if(window.ofaRole==='pemilik')return true;const h=meta.__headPin;if(!h)return false;try{if(sessionStorage.getItem('ofa_head_ok')===h)return true}catch(e){}return headMem===h};
 
  function items(){
@@ -1510,7 +1512,7 @@ renderTeam();
   return (all()[dkey(d)]||[]).filter(x=>x&&x.t&&!x.rid&&!x.del&&!x.done&&!have.has((x.s||'U')+'|'+x.t.toLowerCase()));
  }
  function row(x,done,ty){
-  const can=!x.r||isHead();
+  const can=canManage()&&(!x.r||isHead());
   return `<li class="dl-item" data-id="${esc(x.id)}"><button class="dl-chk" type="button" data-act="${done?'undo':'check'}" aria-label="${done?'Batalkan selesai':'Tandai selesai'}">✓</button><span>${esc(x.t)}${x.r?'<i class="dl-rt" title="Tugas rutin">↻ rutin</i>':''}${done?`<i class="dl-tag">${esc(label(x.s,ty))}</i>`:''}</span>${can?`<button class="dl-del" type="button" data-act="${x.r?'skip':'del'}" aria-label="${x.r?'Lewati hari ini':'Hapus tugas'}" title="${x.r?'Lewati hari ini':'Hapus tugas'}">✕</button>`:''}</li>`;
  }
  window.renderDaily=function(){
@@ -1527,13 +1529,14 @@ renderTeam();
   SH.forEach(s=>{const g=open.filter(x=>x.s===s);if(!g.length)return;
    const t=ty[s]||{},names=(groups[s]||[]).map(m=>first(m.n));
    html+=`<div class="dl-grp"><div class="dl-gh"><span class="dl-sk" style="background:${color(s,ty)}">${esc(label(s,ty))}</span>${s!=='U'&&t.s?`<small>${esc(t.s)}–${esc(t.e)}</small>`:''}<em>${s==='U'?'siapa saja':names.length?'👤 '+esc(names.join(', ')):'belum ada jadwal'}</em></div><ul class="dl-list">${g.map(x=>row(x,0,ty)).join('')}</ul></div>`});
-  $('#dlList').innerHTML=html||`<p class="dl-empty">${total?'Tidak ada tugas tersisa. Kerja bagus!':'Tambahkan tugas harian di atas'+(routines().length?'.':', atau minta Store Head mengatur tugas rutin.')}</p>`;
+  $('#dlList').innerHTML=html||`<p class="dl-empty">${total?'Tidak ada tugas tersisa. Kerja bagus!':(canManage()?'Tambahkan tugas harian di atas'+(routines().length?'.':', atau atur tugas rutin.'):'Belum ada tugas dari Store Head hari ini.')}</p>`;
   const left=yesterdayLeft();
-  $('#dlCarry').innerHTML=left.length?`<button class="dl-carry" type="button" id="dlCarryBtn">↻ Bawa ${left.length} tugas kemarin yang belum selesai</button>`:'';
+  const mg=canManage();$('#dlSeg').style.display=$('#dlForm').style.display=mg?'':'none';
+  $('#dlCarry').innerHTML=mg&&left.length?`<button class="dl-carry" type="button" id="dlCarryBtn">↻ Bawa ${left.length} tugas kemarin yang belum selesai</button>`:'';
   const tg=$('#dlToggle'),dl=$('#dlDone');
   tg.hidden=!fin.length;tg.textContent=(showDone?'Sembunyikan':'Lihat')+' tugas selesai ('+fin.length+')';
   dl.hidden=!showDone||!fin.length;dl.innerHTML=showDone?fin.map(x=>row(x,1,ty)).join(''):'';
-  const ad=$('#dlAdmin');ad.classList.toggle('on',isHead());ad.textContent=isHead()?'⚙ Atur tugas rutin · mode Store Head aktif':'⚙ Atur tugas rutin (Store Head)';
+  const ad=$('#dlAdmin');ad.style.display=window.ofaRole==='staf'?'none':'';ad.classList.toggle('on',isHead());ad.textContent=isHead()?'⚙ Atur tugas rutin · mode Store Head aktif':'⚙ Masuk mode Store Head untuk mengatur tugas';
  };
  window.ofaTodayTasks=function(){
   const {ty,groups}=shiftInfo(),open=items().filter(x=>!x.done);
@@ -1552,7 +1555,7 @@ renderTeam();
  };
 
  $('#dlForm').onsubmit=e=>{
-  e.preventDefault();const inp=$('#dlIn'),t=inp.value.trim();if(!t)return;
+  e.preventDefault();if(!canManage())return;const inp=$('#dlIn'),t=inp.value.trim();if(!t)return;
   const list=raw().slice(),now=Date.now();list.push({id:uid('d'),t,s:$('#dlShift').value||'U',done:0,at:now,u:now});
   saveDay(list);inp.value='';renderDaily();inp.focus();
  };
@@ -1560,8 +1563,8 @@ renderTeam();
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.ds){$('#dlShift').value=b.dataset.ds;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#dlIn').focus();return}
   if(b.id==='dlToggle'){showDone=!showDone;return renderDaily()}
-  if(b.id==='dlAdmin'){editRid=null;formShift='P';formDays=[];return headGate(routineEditor)}
-  if(b.id==='dlCarryBtn'){
+  if(b.id==='dlAdmin'){if(window.ofaRole==='staf')return toast('Tugas hanya diatur oleh Store Head');editRid=null;formShift='P';formDays=[];return headGate(routineEditor)}
+  if(b.id==='dlCarryBtn'){if(!canManage())return;
    const now=Date.now(),add=yesterdayLeft().map(x=>({id:uid('d'),t:x.t,s:x.s||'U',done:0,at:now,u:now}));
    saveDay(raw().concat(add));return renderDaily();
   }
@@ -1570,6 +1573,7 @@ renderTeam();
    li.classList.add('leaving');setTimeout(()=>li.classList.add('gone'),260);
    setTimeout(()=>{setDone(id,1);toast('Tugas selesai ✓',()=>setDone(id,0))},620);
   }else if(act==='undo')setDone(id,0);
+  else if((act==='del'||act==='skip')&&!canManage())return;
   else if(act==='del'){upsert(id,{del:1});renderDaily();toast('Tugas dihapus',()=>{upsert(id,{del:0});renderDaily()})}
   else if(act==='skip'){const rid=id.slice(2);upsert(id,{rid,skip:1});renderDaily();toast('Dilewati untuk hari ini',()=>{upsert(id,{rid,skip:0});renderDaily()})}
  };
@@ -2043,7 +2047,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const off=[...(groups.L||[]),...(groups.C||[]).map(m=>Object.assign({},m,{n:m.n+' (cuti)'}))];
   if(off.length)rows.push(`<div class="sh-g"><b>Libur/Cuti</b><div class="sh-people">${off.map(chip).join('')}</div></div>`);
   if(unset.length&&unset.length<ppl.length)rows.push(`<div class="sh-g"><b>Belum dijadwalkan</b><div class="sh-people">${unset.map(chip).join('')}</div></div>`);
-  $id('shGroups').innerHTML=rows.length?rows.join(''):'<div class="sh-none">Jadwal hari ini belum diatur. Ketuk <b>Atur Jadwal</b> untuk mengisi shift tim minggu ini.</div>';
+  $id('shGroups').innerHTML=rows.length?rows.join(''):(window.ofaRole==='staf'?'<div class="sh-none">Jadwal hari ini belum diatur Store Head.</div>':'<div class="sh-none">Jadwal hari ini belum diatur. Ketuk <b>Atur Jadwal</b> untuk mengisi shift tim minggu ini.</div>');
   const pk=peakWindow(),onPeak=ppl.filter(m=>covers((plan()[dk(now)]||{})[m.id],pk,ty)),al=$id('shAlert');
   if(!rows.length||unset.length===ppl.length){al.innerHTML='';return}
   const share=pk.share?' · '+(pk.share*100).toFixed(0)+'% sales':'';
@@ -2074,7 +2078,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    <div class="row"><button class="btn" type="button" id="plDone">Selesai</button></div>`;
  }
  function openPlan(){openModal('Jadwal Shift Mingguan','');drawPlan();renderShift()}
- $id('shPlan').onclick=openPlan;
+ $id('shPlan').onclick=()=>{if(window.ofaRole==='staf'){if(window.ofaToast)window.ofaToast('Jadwal hanya diatur oleh Store Head');return}if(window.ofaRole==='pemilik')return openPlan();(window.ofaHeadGate||(f=>f()))(openPlan)};
  document.getElementById('pb').addEventListener('click',e=>{
   if(!document.querySelector('.plan-nav'))return;
   const b=e.target.closest('button');if(!b)return;
