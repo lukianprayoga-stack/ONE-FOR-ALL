@@ -742,7 +742,7 @@ body.kt-on{overflow:hidden}
  .bar{display:none}
  .hero{display:block;max-width:1640px;margin:0 auto;padding:26px clamp(20px,3vw,40px) 6px}
  .hero h1,.hero .lead,.hero>div>.btn,.hero .cluster{display:none}
- .hero>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hello stats" "ck ck" "deck deck";column-gap:24px;align-items:end}
+ .hero>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hello stats" "ck ck" "pg pg" "deck deck";column-gap:24px;align-items:end}
  .hello{display:block;grid-area:hello;margin:0}
  .hello small{display:block;color:var(--mut);font-size:14px;font-weight:600}
  .hello b{display:block;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.8px;line-height:1.15;margin-top:2px}
@@ -750,6 +750,7 @@ body.kt-on{overflow:hidden}
  .stats>div{background:var(--card);border-radius:16px;padding:10px 16px}
  .stats b{font-size:24px;letter-spacing:-1px}
  .stats span{font-size:12px}
+ #pgAlert{grid-area:pg}
  .ck-bar{grid-area:ck;max-width:none;margin-top:18px}
  .deck{grid-area:deck;max-width:none;margin-top:18px}
  .deck-tabs{max-width:640px}
@@ -879,6 +880,39 @@ body.kt-on{overflow:hidden}
 .ss-bars i.p{background:color-mix(in srgb,var(--ink) 10%,transparent)}
 .ss-cfg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ss-cfg span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
 @media(max-width:560px){.ss-k b{font-size:26px}}
+/* ====== PENGINGAT DATA ====== */
+.pg-alert{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 14px;border-radius:16px;background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-bd)}
+.pg-alert[hidden]{display:none}
+.pg-ic{font-size:22px;line-height:1}
+.pg-alert>div{flex:1;min-width:0}
+.pg-alert b{display:block;font-size:14px}
+.pg-alert small{display:block;font-size:12px;line-height:1.45;opacity:.9;margin-top:2px}
+.pg-alert .btn{padding:8px 16px;font-size:13px;flex:none}
+.pg-x{flex:none;border:0;background:none;color:inherit;font-size:15px;opacity:.6;padding:6px}
+.pg-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.pg-row>i{flex:none;width:10px;height:10px;border-radius:50%;background:#16a34a}
+.pg-row.bad>i{background:#f59e0b;box-shadow:0 0 0 4px color-mix(in srgb,#f59e0b 22%,transparent)}
+.pg-row.skip>i{background:var(--mut)}
+.pg-row>div{flex:1;min-width:0}
+.pg-row b{display:block;font-size:14px}
+.pg-row small{display:block;font-size:12px;color:var(--mut);margin-top:1px}
+.pg-row em{font-style:normal;font-size:12.5px;font-weight:800;text-align:right;color:#16a34a;white-space:nowrap}
+.pg-row.bad em{color:var(--amber)}.pg-row.skip em{color:var(--mut)}
+.pg-row em small{font-weight:500}
+.pg-sch{margin-top:12px;padding:12px;border-radius:14px;background:var(--bg)}
+.pg-sch>p{font-size:13px;margin:0}
+.pg-sch .hint{margin-top:6px;font-size:12px}
+.pg-on{color:#16a34a;font-weight:700}.pg-off{color:var(--amber);font-weight:700}
+.pg-form{display:grid;gap:12px}
+.pg-form label>span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
+.pg-form label>span i{font-style:normal;font-weight:500}
+.pg-sw{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.pg-sw input{width:18px;height:18px;accent-color:var(--acc)}
+.pg-h{font-size:12px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:4px 0 -4px}
+.pg-lim{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.pg-n{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut);white-space:nowrap}
+.pg-n input{width:64px;padding:6px 8px;text-align:center}
+@media(max-width:760px){.pg-alert{flex-wrap:wrap}.pg-alert>div{flex-basis:calc(100% - 80px)}}
 /* ====== LAPORAN BULANAN & PICA ====== */
 .panel.wide{width:min(860px,100%)}
 .mb-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 10px}
@@ -1108,6 +1142,7 @@ html.scrolled header{border-bottom-color:var(--line)}
     <a class="btn" href="#tools">Jelajahi tools</a>
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
     <button type="button" class="ck-bar" id="ckOpen"><span>🔍</span><div><b>Cek stok produk</b><small>Cari nama, warna, kode, atau scan barcode</small></div><i>📷</i></button>
+    <div class="pg-alert" id="pgAlert" role="status" hidden></div>
     <div class="deck" id="deck">
       <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
@@ -1219,6 +1254,10 @@ html.scrolled header{border-bottom-color:var(--line)}
           <input type="file" id="bcFile" accept=".xlsx,.xls,.csv" hidden>
           <div id="bcBody"></div>
           <div class="iv-status" id="bcStatus"></div>
+        </section>
+        <section class="rs" id="pgCard" aria-label="Pengingat data">
+          <div class="sh-head"><div><h3>Pengingat Data</h3><p id="pgSub">Inventory by bin, by SKU &amp; SKU transaction history</p></div></div>
+          <div id="pgBody"></div>
         </section>
       </div>
       </div>
@@ -3084,7 +3123,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    try{done.push(await (p.kind==='bin'?upBin:p.kind==='tx'?upTx:upSku)(p.rows,p.hi,p.f))}
    catch(err){const m=err&&err.message||String(err);done.push(({bin:'Inventory by bin',sku:'Inventory by SKU',tx:'Riwayat transaksi SKU'})[p.kind]+' gagal: '+(/tidak dikenal/i.test(m)?'perbarui '+(p.kind==='tx'?'Performa.gs':'Inventory.gs')+' di Apps Script':m));bad=true}
   }
-  status(done.join(' · '),bad);busy=false;$id('ivUp').disabled=false;
+  status(done.join(' · '),bad);busy=false;$id('ivUp').disabled=false;window.ofaPgRefresh&&window.ofaPgRefresh();
  };
 
  async function refresh(force){
@@ -4388,6 +4427,123 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   else if(e.key==='/'){e.preventDefault();window.ofaOpenStock&&window.ofaOpenStock()}
  });
 })();
+/* ====== PENGINGAT DATA (inventory by bin, by SKU, SKU transaction history) ====== */
+(function(){
+ const box=document.getElementById('pgCard'),bar=document.getElementById('pgAlert');if(!box||!bar)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_pg',JAM=[[8,30],[18,0]];
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const umur=x=>x.date?(x.age===0?'hari ini':x.age===1?'kemarin':x.age+' hari lalu'):'belum pernah diupload';
+ const pemilik=()=>window.ofaRole==='pemilik'||!window.ofaRole;
+ let st=null,busy=false;
+ try{st=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){st=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ function keep(r){st=Object.assign(r,{at:Date.now()});try{localStorage.setItem(CK,JSON.stringify(st))}catch(e){}}
+ async function load(){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  busy=true;
+  try{keep(await api('pengingatStatus',{hubUrl:location.href}))}
+  catch(e){if(missing(e))st={missing:1,at:Date.now()}}
+  finally{busy=false;render()}
+ }
+ const stale=()=>st&&st.items?st.items.filter(x=>x.stale):[];
+ // slot pengingat yang sedang berlaku: '2026-10-26 08' atau '... 18'
+ function slot(){const d=new Date(),m=d.getHours()*60+d.getMinutes();let s='';JAM.forEach(j=>{if(m>=j[0]*60+j[1])s=String(j[0])});
+  if(!s)return '';const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+s}
+ function goUpload(){close&&$id('ov').classList.contains('open')&&close();window.ofaDeckShow&&window.ofaDeckShow('inv');setTimeout(()=>{const el=$id('inv');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350)}
+
+ function renderBar(){
+  const L=stale();
+  if(!L.length||!st||st.missing){bar.hidden=true;return}
+  let hid='';try{hid=sessionStorage.getItem('ofa_pg_hide')||''}catch(e){}
+  if(hid&&hid===slot()+'|'+L.map(x=>x.k).join()){bar.hidden=true;return}
+  bar.hidden=false;
+  bar.innerHTML=`<span class="pg-ic">⏰</span><div><b>${L.length} data stok perlu diperbarui</b><small>${L.map(x=>esc(x.label)+' · '+umur(x)).join('<br>')}</small></div>
+   <button type="button" class="btn" data-pgx="up">Upload</button><button type="button" class="pg-x" data-pgx="hide" aria-label="Sembunyikan sampai pengingat berikutnya">✕</button>`;
+ }
+ window.renderPengingat=function(){
+  const b=$id('pgBody');if(!b)return;
+  if(st&&st.missing){b.innerHTML='<p class="dp-empty">Pasang file <b>Pengingat.gs</b> di Apps Script (di atas Akun.gs), jalankan <b>pengingatSetup</b> sekali, lalu Deploy → New version.</p>';return}
+  if(!st||!st.items){b.innerHTML='<p class="dp-empty">'+(busy?'Memeriksa data…':'Status data muncul setelah Hub terhubung ke Apps Script.')+'</p>';return}
+  const L=stale(),jd=st.jadwal;
+  $id('pgSub').textContent=L.length?L.length+' data perlu diperbarui':'Semua data stok terbaru';
+  const notif='Notification' in window?Notification.permission:'na';
+  b.innerHTML=`${st.items.map(x=>`<div class="pg-row ${x.skip?'skip':x.stale?'bad':'ok'}"><i></i><div><b>${esc(x.label)}</b><small>${x.date?'data '+tgl(x.date)+' · '+umur(x):'belum pernah diupload'}${x.uploadedAt?' · diupload '+esc(tgl(x.uploadedAt))+' '+esc(String(x.uploadedAt).slice(11,16)):''}</small></div><em>${x.skip?'tidak dipantau':x.stale?'perbarui':'OK'}<small>maks. ${x.max} hari</small></em></div>`).join('')}
+   ${L.length?'<div class="row" style="margin-top:10px"><button type="button" class="btn" data-pgx="up">Upload sekarang</button></div>':''}
+   <div class="pg-sch">
+    <p><b>Email otomatis</b> jam ${st.jam.join(' & ')} WIB · ${!st.on?'<span class="pg-off">dimatikan</span>':jd>0?'<span class="pg-on">aktif</span>':jd===0?'<span class="pg-off">jadwal belum dipasang</span>':'<span class="pg-off">izin jadwal belum diberikan</span>'}</p>
+    ${jd<=0&&st.on?'<p class="hint">Jalankan fungsi <b>pengingatSetup</b> sekali dari editor Apps Script untuk memasang jadwal 08.30 & 18.00.</p>':''}
+    ${pemilik()&&st.penerima&&st.penerima.length?'<p class="hint">Penerima: '+st.penerima.map(esc).join(', ')+'</p>':''}
+    ${st.log&&st.log.at?'<p class="hint">Pemeriksaan terakhir '+new Date(st.log.at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' · '+(st.log.err?'gagal: '+esc(st.log.err):st.log.kirim?'email terkirim':'tidak ada yang terlambat, email tidak dikirim')+'</p>':''}
+    <p class="hint">Hub yang sedang terbuka juga mengingatkan di jam yang sama.${notif==='granted'?' Notifikasi perangkat ini aktif.':''}</p>
+    <div class="row" style="margin-top:6px">${notif==='default'?'<button type="button" class="btn ghost" data-pgx="notif">🔔 Aktifkan notifikasi di perangkat ini</button>':''}${pemilik()?'<button type="button" class="btn ghost" data-pgx="cfg">⚙ Pengaturan</button>':''}</div>
+   </div>`;
+ };
+ function render(){renderBar();window.renderPengingat()}
+
+ function cfgForm(){
+  const it=st.items||[];
+  openModal('Pengaturan Pengingat Data',`<form id="pgF" class="pg-form" autocomplete="off">
+   <label class="pg-sw"><input type="checkbox" name="on"${st.on?' checked':''}> Kirim email jam 08.30 & 18.00 WIB bila ada data yang terlambat</label>
+   <label><span>Email penerima <i>(pisahkan dengan koma; kosongkan untuk memakai ${esc(st.pemilikEmail||'email pemilik Apps Script')})</i></span><input class="in" name="emails" value="${esc((st.emails||[]).join(', '))}" placeholder="${esc(st.pemilikEmail||'nama@gmail.com')}"></label>
+   <p class="pg-h">Batas umur data</p>
+   ${it.map(x=>`<div class="pg-lim"><label class="pg-sw"><input type="checkbox" name="mon_${x.k}"${x.skip?'':' checked'}> ${esc(x.label)}</label><label class="pg-n">maks. <input class="in" type="number" min="0" max="60" name="max_${x.k}" value="${x.max}"> hari</label></div>`).join('')}
+   <p class="hint">Contoh: maks. 1 hari berarti data kemarin masih dianggap OK, data 2 hari lalu akan diingatkan.</p>
+   <p class="hint" id="pgErr" style="color:#e5484d;min-height:1em"></p>
+   <div class="row"><button class="btn" type="submit">Simpan</button><button class="btn ghost" type="button" id="pgTes">Kirim email uji</button></div>
+  </form>`);
+  const f=$id('pgF'),err=$id('pgErr');
+  f.onsubmit=async e=>{
+   e.preventDefault();const btn=f.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Menyimpan…';
+   const cfg={on:f.on.checked,emails:f.emails.value,max:{},skip:[]};
+   it.forEach(x=>{cfg.max[x.k]=Number(f['max_'+x.k].value);if(!f['mon_'+x.k].checked)cfg.skip.push(x.k)});
+   try{keep(await api('pengingatAtur',{cfg,hubUrl:location.href}));close();render();window.ofaToast&&window.ofaToast('Pengaturan pengingat disimpan')}
+   catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent='Simpan'}
+  };
+  $id('pgTes').onclick=async()=>{const b=$id('pgTes');b.disabled=true;b.textContent='Mengirim…';
+   try{const r=await api('pengingatTes',{});err.style.color='var(--ok-fg)';err.textContent='Email uji terkirim ke '+r.ke.join(', ')+'. Cek kotak masuk (atau folder spam).'}
+   catch(x){err.style.color='#e5484d';err.textContent=/permission|izin|authoriz/i.test(x.message)?'Apps Script belum diberi izin mengirim email. Jalankan pengingatSetup dari editor dulu.':x.message}
+   finally{b.disabled=false;b.textContent='Kirim email uji'}};
+ }
+ async function notifOn(){
+  try{const p=await Notification.requestPermission();window.ofaToast&&window.ofaToast(p==='granted'?'Notifikasi aktif di perangkat ini':'Notifikasi tidak diizinkan')}catch(e){}
+  render();
+ }
+ async function notify(L){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  const body=L.map(x=>x.label+' · '+umur(x)).join('\n');
+  try{const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+   if(reg&&reg.showNotification)reg.showNotification('Data stok perlu diperbarui',{body,icon:'icons/icon-192.png',tag:'ofa-pengingat'});
+   else new Notification('Data stok perlu diperbarui',{body,icon:'icons/icon-192.png',tag:'ofa-pengingat'})}catch(e){}
+ }
+ // Hub yang terbuka: cek ulang tepat di jam 08.30 & 18.00
+ let lastSlot=slot();
+ setInterval(async()=>{
+  const s=slot();if(!s||s===lastSlot)return;lastSlot=s;
+  await load();const L=stale();
+  if(L.length){window.ofaToast&&window.ofaToast('⏰ '+L.length+' data stok perlu diperbarui');notify(L)}
+ },30000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&(!st||Date.now()-(st.at||0)>15*60e3))load()});
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pgx]');if(!b||!(bar.contains(b)||box.contains(b)))return;
+  const k=b.dataset.pgx;
+  if(k==='up')return goUpload();
+  if(k==='hide'){try{sessionStorage.setItem('ofa_pg_hide',slot()+'|'+stale().map(x=>x.k).join())}catch(x){}bar.hidden=true;return}
+  if(k==='notif')return notifOn();
+  if(k==='cfg'&&st&&st.items)return cfgForm();
+ });
+ window.ofaPgRefresh=()=>setTimeout(load,800);
+ render();
+ setTimeout(load,3000);
+})();
+
 /* ====== LAPORAN BULANAN & PICA (Problem Identification & Corrective Action) ====== */
 (function(){
  const box=document.getElementById('mb');if(!box)return;
