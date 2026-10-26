@@ -646,6 +646,14 @@ body.kt-on{overflow:hidden}
 .ck-chip b{display:inline;font-size:12px;color:#1a8a49;margin-left:3px}
 .ck-chip.off{background:var(--bg);color:var(--mut);text-decoration:line-through}
 .ck-chip.hit{outline:2px solid #2f80ed}
+.ck-perf{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:6px}
+.ck-pt{--pt:#9ca3af;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;border-radius:7px;padding:2px 8px;color:color-mix(in srgb,var(--pt) 72%,var(--fg));background:color-mix(in srgb,var(--pt) 14%,transparent);border:1px solid color-mix(in srgb,var(--pt) 35%,transparent);white-space:nowrap}
+.ck-pt::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pt)}
+.ck-pt.na{color:var(--mut);background:var(--card);border-color:var(--line)}
+.ck-pt.na::before{background:var(--mut)}
+.ck-perf em{font-style:normal;font-size:11.5px;color:var(--mut);line-height:1.4}
+.ck-psum{font-size:12px;color:var(--mut);margin:10px 0 0;padding:8px 10px;border-radius:10px;background:var(--card)}
+.ck-psum b{color:var(--fg)}
 .ck-loc{margin-top:6px;font-size:12px;line-height:1.45}
 .ck-loc div{padding:2px 0}
 .ck-loc em{font-style:normal;font-weight:700}
@@ -2621,8 +2629,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const P=plc&&plc.items?plc:null,map={};
   if(P){const F=P.fields;P.items.forEach(a=>{const o={};F.forEach((f,i)=>o[f]=a[i]);map[o.k]=o})}
   const ref=(data&&data.meta&&data.meta.date)||(P&&P.salesEnd)||new Date().toISOString().slice(0,10);
-  R.forEach(o=>{
-   let x=map[o.k];
+  R.forEach(o=>plcOne(o,map[o.k],P,ref));
+ }
+ function plcOne(o,x,P,ref){
    if(x||P&&P.txFrom){
     x=x||{};
     const c=[x.f1,x.fi,x.ft,x.fs&&!x.awal?x.fs:''].filter(Boolean).sort();
@@ -2638,7 +2647,6 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     o.plc=P?mdiff(P.salesStart||ref,ref):null;o.plcKira=true;o.tq=Math.max(0,o.q90||0);o.q4=o.q90||0;o.noSale=!(o.q90>0);o.since='';
    }
    o.stL=(o.tq+o.stock)>0?o.tq/(o.tq+o.stock):0;
-  });
  }
  async function loadPlc(force){
   if(!configured()||!localStorage.getItem('salesTrackingPin'))return;
@@ -2667,6 +2675,28 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const c=cfg(),cnt={};TIERS.forEach(t=>cnt[t[0]]=0);R.forEach(o=>{const t=tier(o,c);if(t)cnt[t]++});
   const s=data.summary;
   return {date:data.meta&&data.meta.date,gp:s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp:s.colorTotal?s.colorDisplayed/s.colorTotal:0,todo:todo().length,cnt,restock:restock().length};
+ };
+ // Performa satu produk (generic|warna) untuk Cek Stok: kategori PLC x sell through + riwayat jual
+ const normC=v=>{v=String(v||'').trim().toUpperCase();return v==='-'?'':v};
+ let pIdx=null;
+ window.ofaPerfOf=function(g,c,stk){
+  if(!data||!R)return null;
+  if(!pIdx||pIdx.R!==R||pIdx.P!==plc){
+   const r={},x={};
+   R.forEach(o=>{r[String(o.g).slice(0,9)+'|'+normC(o.c)]=o});
+   if(plc&&plc.items){const F=plc.fields;plc.items.forEach(a=>{const o={};F.forEach((f,i)=>o[f]=a[i]);const k=String(o.k||''),j=k.indexOf('|');x[k.slice(0,9)+'|'+normC(k.slice(j+1))]=o})}
+   pIdx={R,P:plc,r,x};
+  }
+  const k=String(g||'').slice(0,9)+'|'+normC(c),h=pIdx.x[k]||null,cf=cfg();
+  let o=pIdx.r[k];
+  if((!o||!(o.stock>0))&&stk>0&&plc&&plc.items){o={g,c,k,stock:stk,q90:0};plcOne(o,h,plc,(data.meta&&data.meta.date)||plc.salesEnd)}
+  const q4=o?o.q4||0:h?h.q4||0:0,tq=o?o.tq||0:h?Math.max(0,h.tq||0):0;
+  const out={q4,tq,avg:q4/4,last:h&&h.last||'',first:h&&h.f1||'',masuk:h&&h.fi||'',plcKurang:!plc||!plc.items,cfg:cf};
+  if(o&&o.stock>0){
+   const t=tier(o,cf),T=TIERS.find(z=>z[0]===t);
+   return Object.assign(out,{t,label:T?T[1]:'',color:T?T[2]:'',stock:o.stock,plc:o.plc,kira:o.plcKira,st:o.stL,noSale:o.noSale,cover:q4>0?o.stock/(q4/4):Infinity});
+  }
+  return Object.assign(out,{t:'',stock:0,none:!h&&!o});
  };
  function status(t,err){const n=$id('ivStatus');n.textContent=t||'';n.className='iv-status'+(err?' err':'')}
 
@@ -3116,12 +3146,30 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   return idx.list.filter(o=>toks.every(t=>o.hay.includes(t))).map(o=>({o,hit:o.sizes.filter(z=>toks.includes(z.sz.toLowerCase())).map(z=>z.sku)}))
    .sort((a,b)=>(b.o.stock>0)-(a.o.stock>0)||a.o.n.localeCompare(b.o.n));
  }
+ const dec1=v=>(Math.round(v*10)/10).toLocaleString('id-ID',{maximumFractionDigits:1});
+ function perfTag(o){
+  const P=window.ofaPerfOf?window.ofaPerfOf(o.g,o.c,o.stock):null;
+  if(!P)return `<div class="ck-perf"><span class="ck-pt na">Performa belum ada</span><em>Upload inventory by bin agar performa produk terhitung.</em></div>`;
+  const bits=[];
+  if(P.t){
+   bits.push('PLC '+(P.plc==null?'?':(P.kira?'≥':'')+Math.floor(P.plc))+' bln');
+   bits.push('ST '+dec1(P.st*100)+'%');
+  }
+  bits.push(P.q4>0?'terjual '+nf(P.q4)+' pcs dlm 4 bln (±'+dec1(P.avg)+'/bln)':'tidak terjual 4 bln terakhir');
+  if(P.t&&P.q4>0)bits.push('stok cukup ±'+dec1(P.cover)+' bln');
+  if(P.last)bits.push('terakhir laku '+tgl(P.last));
+  const tag=P.t?`<span class="ck-pt" style="--pt:${P.color}">${esc(P.label)}</span>`
+   :`<span class="ck-pt na">${P.tq>0||P.q4>0?'Stok habis · pernah laku':'Belum pernah ada di toko'}</span>`;
+  if(P.none)return `<div class="ck-perf">${tag}<em>Belum ada stok maupun penjualan di toko ini, jadi performanya belum bisa dinilai.</em></div>`;
+  return `<div class="ck-perf">${tag}<em>${bits.join(' · ')}</em></div>`;
+ }
  function card(r){
   const o=r.o,price=o.promo>0?o.promo:o.price;
   const loc=o.sizes.filter(z=>z.s||z.w).map(z=>`<div><em>${esc(z.sz)}</em> — ${z.s?'Selling area: '+esc(z.bs):''}${z.s&&z.w?' · ':''}${z.w?'Gudang: '+esc(z.bw):''}</div>`).join('');
   return `<div class="ck-it"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.img)}" alt="">`:'🏷️'}</span>
    <div class="ck-tx"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.l4||o.l3||'-')} · ${esc(o.g)}</small>
    ${price?`<small>${rp(price)}${o.promo>0&&o.price>o.promo?` <s>${rp(o.price)}</s>`:''}</small>`:''}
+   ${perfTag(o)}
    <div class="ck-sz">${o.sizes.map(z=>`<span class="ck-chip${z.av>0?'':' off'}${r.hit.includes(z.sku)?' hit':''}" title="${esc(z.sku)}">${esc(z.sz)}${z.av>0?`<b>${nf(z.av)}</b>`:''}</span>`).join('')}</div>
    ${loc?`<div class="ck-loc">${loc}</div>`:(o.stock>0?'<div class="ck-loc">Lokasi bin belum ada di data inventory by bin.</div>':'<div class="ck-loc">Stok habis di toko.</div>')}</div></div>`;
  }
@@ -3131,7 +3179,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!idx||!idx.list){box.innerHTML='<p class="dp-empty">'+(loading?'Memuat data stok…':'Data stok belum ada. Upload inventory by SKU & by bin di kartu Kepatuhan Display.')+'</p>';return}
   if(!q.trim()){box.innerHTML='<p class="dp-empty">Ketik nama produk (contoh: <b>pinch blk 42</b>), kode SKU/generic, atau tekan <b>📷 Scan</b> untuk membaca barcode label.</p>';return}
   const R=find(q);
-  box.innerHTML=R.length?R.slice(0,30).map(card).join('')+(R.length>30?`<p class="hint">${nf(R.length-30)} produk lain cocok. Perjelas pencarian.</p>`:''):`<p class="dp-empty">Tidak ada produk yang cocok dengan "<b>${esc(q)}</b>".</p>`;
+  const sum=(()=>{if(R.length<2||!window.ofaPerfOf)return '';const c={};let n=0;R.forEach(r=>{const P=window.ofaPerfOf(r.o.g,r.o.c,r.o.stock);if(P&&P.t){c[P.label]=(c[P.label]||0)+1;n++}});
+   return n?'<p class="ck-psum">'+['Laku Sekali','Laku','Cukup Laku','Slow','Dead Stock'].filter(k=>c[k]).map(k=>esc(k)+' <b>'+c[k]+'</b>').join(' · ')+'</p>':''})();
+  box.innerHTML=R.length?sum+R.slice(0,30).map(card).join('')+(R.length>30?`<p class="hint">${nf(R.length-30)} produk lain cocok. Perjelas pencarian.</p>`:''):`<p class="dp-empty">Tidak ada produk yang cocok dengan "<b>${esc(q)}</b>".</p>`;
  }
  function stopCam(){
   clearInterval(timer);timer=0;
