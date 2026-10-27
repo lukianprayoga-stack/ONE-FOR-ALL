@@ -1089,6 +1089,31 @@ span.ipm-rem{flex:none;border-radius:6px;padding:2px 7px;white-space:nowrap}
 @media(max-width:560px){.ipm-in{grid-template-columns:1fr 1fr}.ipm-pa{grid-template-columns:1fr}.ipm-trow{grid-template-columns:1fr 1fr}.ipm-top em b{font-size:22px}}
 #wkPrint .ipm-tbl{min-width:0;font-size:9.5px}#wkPrint .ipm-tbl td.ipm-k{min-width:150px}#wkPrint .ipm-tbl td.ipm-rem{width:64px}#wkPrint .ipm-tbl td.ipm-t{min-width:0;font-size:9px}#wkPrint .ipm-tbl th{font-size:9px;padding:5px 3px}
 @media print{.ipm-tbl tr{break-inside:avoid}.ipm-tbl th,.ipm-tbl td.ipm-rem,.ipm-tbl td.ipm-a,.ipm-tbl tfoot td{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+/* ====== RA TELADAN ====== */
+#tl[hidden]{display:none!important}
+.tl-card{background:linear-gradient(135deg,color-mix(in srgb,#f59e0b 16%,var(--card)),var(--card) 60%)}
+.tl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.tl-grid.one{grid-template-columns:1fr}
+.tl-w{background:var(--bg);border-radius:16px;padding:12px 14px;border:1.5px solid color-mix(in srgb,#f59e0b 45%,transparent);min-width:0}
+.tl-w.up{border-color:color-mix(in srgb,#16a34a 40%,transparent)}
+.tl-wh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#b45309}
+.tl-w.up .tl-wh{color:#15803d}.tl-wh em{font-style:normal;font-weight:600;letter-spacing:0;text-transform:none;color:var(--mut)}
+:root[data-theme=dark] .tl-wh{color:#fbbf24}:root[data-theme=dark] .tl-w.up .tl-wh{color:#4ade80}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .tl-wh{color:#fbbf24}:root:not([data-theme=light]) .tl-w.up .tl-wh{color:#4ade80}}
+.tl-w>b{display:block;font-size:20px;letter-spacing:-.3px;margin-top:4px;line-height:1.2}
+.tl-me{margin:4px 0 0;font-size:13px;font-weight:700;color:#15803d}
+.tl-al{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tl-al span{font-size:12px;background:var(--card);border-radius:999px;padding:3px 9px}
+.tl-uc{margin:8px 0 0;font-size:13px;line-height:1.5;font-style:italic;color:var(--mut)}
+.tl-badge{display:inline-block;margin-left:8px;font-style:normal;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 8px;background:#fef3c7;color:#92400e;vertical-align:1px}
+.tl-badge.up{background:var(--ok-bg);color:var(--ok-fg)}
+:root[data-theme=dark] .tl-badge:not(.up){background:#451a03;color:#fcd34d}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .tl-badge:not(.up){background:#451a03;color:#fcd34d}}
+.tl-open{background:color-mix(in srgb,#f59e0b 14%,transparent)}
+.tl-ed{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tl-sec{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:grid;gap:8px;align-content:start}.tl-sec .mb-h5{margin:0}
+.tl-sec textarea.in{min-height:0;height:auto;font:inherit;font-size:13.5px}
+.tl-done{color:var(--ok-fg)}
+.tl-hist>div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.tl-hist span{color:var(--mut);text-align:right}
+@media(max-width:560px){.tl-grid,.tl-ed{grid-template-columns:1fr}.tl-w>b{font-size:18px}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1137,6 +1162,8 @@ html.scrolled header{border-bottom-color:var(--line)}
 .rr-t:hover{outline:1px solid var(--line)}
 .rr-t i{display:inline-flex;align-items:center;gap:4px;font-style:normal;font-size:11.5px;font-weight:700}
 .rr-t.up i{color:#16a34a}.rr-t.dn i{color:#e5484d}
+.rr-t.me{cursor:default;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,#2f80ed 45%,transparent)}.rr-t.me:hover{outline:0}.rr-t.me i{color:#2f80ed}
+.role-staf .rr-t.up{cursor:default}.role-staf .rr-t.up:hover{outline:0}
 :root[data-theme=dark] .rr-t.up i{color:#4ade80}:root[data-theme=dark] .rr-t.dn i{color:#ff8a8a}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rr-t.up i{color:#4ade80}:root:not([data-theme=light]) .rr-t.dn i{color:#ff8a8a}}
 .rr-t b{display:block;font-size:15px;line-height:1.25;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1267,6 +1294,7 @@ html.scrolled header{border-bottom-color:var(--line)}
       <div class="deck-track" id="deckTrack">
       <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
         <div class="pg-col">
+        <section class="rs tl-card" id="tl" aria-label="RA Teladan" hidden></section>
         <section class="sales loading" id="sales" aria-label="Sales bulan ini">
           <div class="sl-top"><div><h3 id="slTitle">Sales Bulan Ini</h3><small id="slPeriod">Memuat data sales…</small></div><span class="sl-badge" id="slBadge">…</span></div>
           <div id="slBody">
@@ -2373,27 +2401,49 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!r)return '';
   return `<button type="button" class="rr-t ${up?'up':'dn'}" data-rr="${k}"><i>${up?'▲ Tertinggi':'▼ Terendah'}</i><b>${esc(nama(r.name))}</b><span><strong>${RRM[k].f(r).split(' · ')[0]}</strong>${RRM[k].f(r).split(' · ').slice(1).map(x=>' · '+x).join('')}</span>${note?`<u>${note}</u>`:''}</button>`;
  }
+ // Staf hanya melihat yang tertinggi dan posisinya sendiri; urutan lengkap & yang terendah hanya untuk Store Head.
+ const rrKey=v=>String(v||'').toUpperCase().replace(/\s+/g,' ').trim();
+ function rrSaya(L){
+  if(window.ofaRole!=='staf')return null;
+  let ra='';try{const x=JSON.parse(localStorage.getItem('ofa_rapor_saya')||'null');ra=x&&x.saya&&x.saya.ra||''}catch(e){}
+  if(ra){const f=L.find(r=>rrKey(r.name)===rrKey(ra));if(f)return f}
+  const n=rrKey(window.ofaAkun&&window.ofaAkun.nama),t=n.split(' ').filter(w=>w.length>2);if(!t.length)return null;
+  return L.find(r=>rrKey(r.name)===n)||L.find(r=>rrKey(r.name).split(' ').filter(w=>t.includes(w)).length>=Math.min(2,t.length))||null;
+ }
+ function rrMe(k,me,pool,st){
+  const v=RRM[k].v(me),inPool=pool.includes(me),rank=inPool?pool.slice().sort((a,b)=>RRM[k].v(b)-RRM[k].v(a)).indexOf(me)+1:0;
+  let gap='';
+  if(k==='sales'&&me.target)gap=me.grossSales>=me.target?'target tercapai':'kurang '+jt(me.target-me.grossSales)+' ke target';
+  if(k==='ea'&&me.endlessTarget)gap=(me.endlessGrossSales||0)>=me.endlessTarget?'target tercapai':'kurang '+jt(me.endlessTarget-(me.endlessGrossSales||0));
+  if(k==='upt'&&st.uptTarget)gap=v>=st.uptTarget?'target tercapai':'kurang '+dec2(st.uptTarget-v)+' ke target';
+  if(k==='eac'&&st.eacTarget)gap=v>=st.eacTarget?'target tercapai':'kurang '+((st.eacTarget-v)*100).toFixed(1).replace('.',',')+' poin ke target';
+  return `<div class="rr-t me"><i>● Posisimu${rank?' · #'+rank+' dari '+pool.length:''}</i><b>${esc(nama(me.name))}</b><span><strong>${RRM[k].f(me).split(' · ')[0]}</strong>${gap?' · '+gap:!inPool&&k!=='sales'&&k!=='ea'?' · transaksi masih sedikit':''}</span></div>`;
+ }
  function renderRank(d){
   const b=$id('rrBody');if(!b)return;
-  const L=rrList(d);
+  const L=rrList(d),staf=window.ofaRole==='staf',me=rrSaya(L);
+  const all=$id('rrAll');if(all)all.hidden=staf;
   if(!d||!L.length){b.innerHTML='<p class="hint" style="margin-top:12px">Peringkat muncul setelah data sales per RA tersedia.</p>';$id('rrSub').textContent='Belum ada data RA';return}
   const minT=rrMin(L),E=L.filter(r=>(r.transactions||0)>=minT),st=d.settings||{};
   const best=(k,arr)=>arr.slice().sort((a,b)=>RRM[k].v(b)-RRM[k].v(a))[0];
   const worst=(k,arr)=>arr.slice().sort((a,b)=>RRM[k].v(a)-RRM[k].v(b))[0];
   const pair=(k,label,extra)=>{
    const pool=k==='sales'?L:E,hi=best(k,pool),lo=pool.length>1?worst(k,pool):null;
+   if(staf){const right=me&&me!==hi?rrMe(k,me,pool,st):'';return `<div class="rr-m"><small>${label}${extra?`<em>${extra}</em>`:''}</small><div class="rr-pair${right?'':' one'}">${rrTile(k,hi,true,me===hi?'kamu':'')}${right}</div></div>`}
    return `<div class="rr-m"><small>${label}${extra?`<em>${extra}</em>`:''}</small><div class="rr-pair${lo&&lo!==hi?'':' one'}">${rrTile(k,hi,true)}${lo&&lo!==hi?rrTile(k,lo,false):''}</div></div>`;
   };
   const hasEa=L.some(r=>r.endlessGrossSales!=null),eaTop=best('ea',L);
   const ea=!hasEa?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Ketuk ↻ Perbarui di kartu sales untuk memuat data EA.</p></div>`
    :!(eaTop&&eaTop.endlessGrossSales>0)?`<div class="rr-m"><small>Sales EA</small><p class="hint" style="margin:0">Belum ada penjualan Endless Aisle periode ini.</p></div>`
+   :staf?(()=>{const right=me&&me!==eaTop?rrMe('ea',me,L,st):'';return `<div class="rr-m"><small>Sales EA${d.endless&&d.endless.grossSales?`<em>toko ${jt(d.endless.grossSales)}</em>`:''}</small><div class="rr-pair${right?'':' one'}">${rrTile('ea',eaTop,true,me===eaTop?'kamu':'')}${right}</div></div>`})()
    :(()=>{const lo=L.length>1?worst('ea',L):null;
      const two=lo&&lo!==eaTop;
      return `<div class="rr-m"><small>Sales EA${d.endless&&d.endless.grossSales?`<em>toko ${jt(d.endless.grossSales)}</em>`:''}</small><div class="rr-pair${two?'':' one'}">${rrTile('ea',eaTop,true)}${two?rrTile('ea',lo,false,RRM.ea.v(lo)>0?'':'belum ada EA'):''}</div></div>`})();
   b.innerHTML=pair('sales','Sales RA',d.store&&d.store.grossSales?'toko '+jt(d.store.grossSales):'')+ea
    +pair('upt','UPT',st.uptTarget?'target '+String(st.uptTarget).replace('.',','):'')
    +pair('eac','EAC',st.eacTarget?'target '+pct(st.eacTarget):'')
-   +`<p class="rr-note">Terendah UPT &amp; EAC hanya dari RA dengan minimal ${minT} transaksi, agar RA yang baru sedikit masuk tidak terhitung.</p>`;
+   +(staf?`<p class="rr-note">${me?'Kolom kanan adalah posisimu sendiri dan selisih ke target. ':''}Peringkat lengkap hanya dilihat Store Head.</p>`
+     :`<p class="rr-note">Terendah UPT &amp; EAC hanya dari RA dengan minimal ${minT} transaksi, agar RA yang baru sedikit masuk tidak terhitung. Staf hanya melihat yang tertinggi dan posisinya sendiri.</p>`);
   $id('rrSub').textContent=L.length+' RA · '+(d.period&&d.period.end?'s/d '+tgl(d.period.end):'bulan ini');
  }
  function rrModal(sortKey){
@@ -2417,7 +2467,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   draw();
  }
  $id('rrAll').onclick=()=>rrModal('sales');
- $id('rrBody').onclick=e=>{const t=e.target.closest('[data-rr]');if(t)rrModal(t.dataset.rr)};
+ $id('rrBody').onclick=e=>{if(window.ofaRole==='staf')return;const t=e.target.closest('[data-rr]');if(t)rrModal(t.dataset.rr)};
+ window.ofaRrRender=()=>{if(data)renderRank(data)};
  /* ---- briefing ---- */
  function focusLines(d){
   const s=d.store,st=d.settings||{},out=[];
@@ -5118,12 +5169,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const RANKW={sales:40,upt:25,eac:20,cashless:15,cap:120};
  const KOMP=[['sales','Sales vs target'],['upt','UPT vs target'],['eac','EAC (trx member) vs target'],['cashless','Transaksi cashless vs target']];
  function cashlessDari(m){const r=m&&m.rows?m.rows.find(x=>x.k==='cashless'||/cashless/i.test(x.nama||'')):null;if(!r||!isi(r.real)||!Number(r.target))return null;return r.ukur==='min'?(Number(r.real)>0?Number(r.target)/Number(r.real):1):Number(r.real)/Number(r.target)}
+ const bobotOf=d=>Object.assign({},RANKW,(d.ipmTpl&&d.ipmTpl.rank)||{});
+ function skorNilai(k,t,cl,W){
+  const cap=(Number(W.cap)||0)/100,c={sales:k.target?k.sales/k.target:null,upt:t.uptTarget?k.upt/t.uptTarget:null,eac:t.eacTarget?k.eac/t.eacTarget:null,cashless:cl};
+  let sm=0,w=0;Object.keys(c).forEach(n=>{if(c[n]==null||!isFinite(c[n])||!(Number(W[n])>0))return;const v=cap>0?Math.min(cap,Math.max(0,c[n])):Math.max(0,c[n]);sm+=v*W[n];w+=Number(W[n])});
+  return {nilai:w?Math.round(sm/w*10000)/100:0,c};
+ }
  function skorRanks(d,r0,s0){
-  const W=Object.assign({},RANKW,(d.ipmTpl&&d.ipmTpl.rank)||{}),cap=(Number(W.cap)||0)/100,t=d.toko||{},L=[];
+  const W=bobotOf(d),t=d.toko||{},L=[];
   (d.ras||[]).forEach(x=>{const k=x.kpi,it=(d.items||[]).find(y=>y.bulan===d.month&&y.ra===x.ra),m=r0&&s0&&x.ra===r0.ra?s0.ipm:it&&it.ipm;
-   const c={sales:k.target?k.sales/k.target:null,upt:t.uptTarget?k.upt/t.uptTarget:null,eac:t.eacTarget?k.eac/t.eacTarget:null,cashless:cashlessDari(m)};
-   let sm=0,w=0;Object.keys(c).forEach(n=>{if(c[n]==null||!isFinite(c[n])||!(Number(W[n])>0))return;const v=cap>0?Math.min(cap,Math.max(0,c[n])):Math.max(0,c[n]);sm+=v*W[n];w+=Number(W[n])});
-   L.push({ra:x.ra,sales:k.sales,nilai:w?Math.round(sm/w*10000)/100:0,c,w:{sales:W.sales,upt:W.upt,eac:W.eac,cashless:W.cashless},cap:W.cap})});
+   const z=skorNilai(k,t,cashlessDari(m),W);
+   L.push({ra:x.ra,sales:k.sales,nilai:z.nilai,c:z.c,w:{sales:W.sales,upt:W.upt,eac:W.eac,cashless:W.cashless},cap:W.cap})});
   L.sort((a,b)=>(b.nilai-a.nilai)||(b.sales-a.sales));const o={};L.forEach((x,i)=>{x.rank=i+1;x.dari=L.length;o[x.ra]=x});return o;
  }
  function ipmRanks(d,r0,s0){
@@ -5186,7 +5242,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const para=(h,v)=>v?`<h5 class="mb-h5">${h}</h5><p class="rp-txt">${esc(v)}</p>`:'';
   let no=0;const N=()=>++no+'. ';const ipm=ipmDipakai(x.ipm);
   return `<div class="wk-rep rp-view">
-   <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span></div>${K.skor?rankHtml(K.skor,x.ipmRank,x.ipmDari):K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
+   <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span>${tlBadge(x.bulan,x.ra)}</div>${K.skor?rankHtml(K.skor,x.ipmRank,x.ipmDari):K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
    ${ipm?`<h4>${N()}Nilai IPM ${mL(x.bulan)} <small>Monthly Weighted <b class="ipm-big">${f2(x.ipm.total)}</b></small></h4>${ipmView(x,print)}`:''}
    <h4>${N()}Kinerja penjualan ${mL(x.bulan)} <small>dari DSR</small></h4>
    ${skorHtml(K.skor)}
@@ -5255,7 +5311,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   sayaBusy=true;
   try{saya=Object.assign(await api('raporSaya',{}),{at:Date.now()});keepSaya()}
   catch(e){if(missing(e))saya={missing:1,items:[],at:Date.now()}}
-  finally{sayaBusy=false;renderSaya()}
+  finally{sayaBusy=false;renderSaya();window.ofaRrRender&&window.ofaRrRender();renderTl()}
  }
  function renderSaya(){
   $id('rpTitle').textContent='Rapor Saya';
@@ -5320,7 +5376,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   busy=true;renderHead();
   try{await fetchMonth('');C.err='';C.missing=0;C.deny=0}
   catch(e){if(missing(e))C.missing=1;else if(/Store Head|pemilik/i.test(e.message))C.deny=1;else C.err=e.message}
-  finally{busy=false;keep();renderHead()}
+  finally{busy=false;keep();renderHead();renderTl()}
  }
  const itemOf=(d,m,n)=>(d.items||[]).find(x=>x.bulan===m&&x.ra===n);
  function renderHead(){
@@ -5335,6 +5391,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const chips=`<div class="dp-chips rp-mc">${(d0.months||[d0.month]).map(m=>mChip(m,m===d.month,'data-rpcm')).join('')}</div>`;
   if(cardBusy){b.innerHTML=chips+'<p class="dp-empty">Menyiapkan data '+mL(cardBusy)+'… (10–30 detik)</p>';return}
   b.innerHTML=chips+`<p class="rp-mon"><b>${mL(d.month)}</b>${d.period.complete?' · data lengkap':' · bulan berjalan, data s/d '+tgl(d.period.dataEnd)}</p><div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
+   <button type="button" class="iv-todo ct-btn tl-open" data-tlo="1"><b>🏆</b><span>RA Teladan &amp; Paling Meningkat<small>${(()=>{const t=tlList().find(y=>y.bulan===d.month);return t?'Diumumkan: '+esc(nama(t.teladan.ra))+(t.meningkat?' · '+esc(nama(t.meningkat.ra)):''):d.period.complete?'Belum diumumkan untuk '+mL(d.month)+' →':'Diumumkan setelah bulan selesai'})()}</small></span></button>
    <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk" title="Peringkat skor gabungan">${SK[r.ra]?SK[r.ra].rank:r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${SK[r.ra]?'<b class="rp-ipmv">Skor '+f2(SK[r.ra].nilai)+'</b> · ':''}${ipmDipakai(x&&x.ipm)?'<b class="rp-ipmv">IPM '+f2(x.ipm.total)+'</b> · ':''}${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
  }
  /* --- saran otomatis dari KPI --- */
@@ -5595,6 +5652,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const gate=fn=>window.ofaRole==='pemilik'||!window.ofaHeadGate?fn():window.ofaHeadGate(fn);
  box.addEventListener('click',e=>{
   const o=e.target.closest('[data-rpo]');if(o)return openSaya(o.dataset.rpo);
+  if(e.target.closest('[data-tlo]'))return gate(()=>openTl());
   const cm=e.target.closest('[data-rpcm]');if(cm)return gate(()=>pilihBulan(cm.dataset.rpcm));
   const r=e.target.closest('[data-rpe]');if(r)return gate(()=>openEditor(r.dataset.rpe));
  });
@@ -5631,6 +5689,121 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(k==='wa')return window.open('https://wa.me/?text='+encodeURIComponent(waText(it)),'_blank','noopener');
   if(k==='hapus'){if(confirmDel(a))hapus();return}
  });
+ /* =================== RA Teladan & RA Paling Meningkat =================== */
+ const TK='ofa_teladan',tlBox=$id('tl');
+ let TL=null,tlM='',tlS={};
+ try{TL=JSON.parse(localStorage.getItem(TK)||'null')}catch(e){TL=null}
+ function tlList(){return (TL&&TL.list)||[]}
+ function tlBadge(m,ra){const x=tlList().find(y=>y.bulan===m);if(!x)return '';return x.teladan&&x.teladan.ra===ra?'<i class="tl-badge">🏆 RA Teladan</i>':x.meningkat&&x.meningkat.ra===ra?'<i class="tl-badge up">📈 Paling Meningkat</i>':''}
+ const keyN=v=>String(v||'').toUpperCase().replace(/\s+/g,' ').trim();
+ function akuRa(ra){
+  if(!staf())return false;const sr=saya&&saya.saya&&saya.saya.ra;if(sr)return keyN(sr)===keyN(ra);
+  const n=keyN(window.ofaAkun&&window.ofaAkun.nama),t=n.split(' ').filter(w=>w.length>2);if(!t.length)return false;
+  return keyN(ra)===n||keyN(ra).split(' ').filter(w=>t.includes(w)).length>=Math.min(2,t.length);
+ }
+ async function loadTl(){
+  if(!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  try{TL=Object.assign(await api('raporTeladan',{}),{at:Date.now()});try{localStorage.setItem(TK,JSON.stringify(TL))}catch(e){}}
+  catch(e){if(missing(e))TL={list:[],missing:1}}
+  renderTl();if(!staf())renderHead();
+ }
+ const umurBln=m=>{const n=new Date();return n.getFullYear()*12+n.getMonth()-(+m.slice(0,4)*12+(+m.slice(5,7))-1)};
+ function pemenangHtml(w,jenis){
+  if(!w)return '';const me=akuRa(w.ra),up=jenis==='meningkat';
+  return `<div class="tl-w ${up?'up':''}"><div class="tl-wh"><span>${up?'📈 RA Paling Meningkat':'🏆 RA Teladan'}</span>${w.skor!=null?`<em>${up&&w.naik!=null?(w.naik>=0?'skor naik +':'perubahan skor ')+dec(w.naik,1)+(w.skorLalu!=null?' ('+dec(w.skorLalu,1)+' → '+dec(w.skor,1)+')':''):'skor '+dec(w.skor,1)}</em>`:''}</div>
+   <b>${esc(nama(w.nama||w.ra))}</b>${me?'<p class="tl-me">🎉 Selamat, ini kamu!</p>':''}
+   ${w.alasan&&w.alasan.length?`<div class="tl-al">${w.alasan.map(a=>`<span>${esc(a)}</span>`).join('')}</div>`:''}
+   ${w.ucapan?`<p class="tl-uc">“${esc(w.ucapan)}”</p>`:''}</div>`;
+ }
+ function renderTl(){
+  if(!tlBox)return;
+  const L=tlList(),x=L[0],own=!staf(),d0=own?def():null;
+  const belum=own&&d0&&d0.period&&d0.period.complete&&!L.find(y=>y.bulan===d0.month)?d0.month:'';
+  if(!(x&&umurBln(x.bulan)<=2)&&!belum){tlBox.hidden=true;return}
+  tlBox.hidden=false;
+  tlBox.innerHTML=`<div class="sh-head"><div><h3>${x&&umurBln(x.bulan)<=2?'RA Teladan '+esc(mL(x.bulan)):'RA Teladan'}</h3><p>${x&&umurBln(x.bulan)<=2?'Diumumkan Store Head'+(x.diumumkan?' · '+jam(x.diumumkan):''):'Penghargaan bulanan untuk RA'}</p></div></div>
+   ${x&&umurBln(x.bulan)<=2?`<div class="tl-grid${x.meningkat?'':' one'}">${pemenangHtml(x.teladan,'teladan')}${pemenangHtml(x.meningkat,'meningkat')}</div>`:''}
+   ${belum?`<button type="button" class="iv-todo ct-btn tl-open" data-tlo="1"><b>🏆</b><span>Umumkan RA Teladan ${esc(mL(belum))}<small>Hub sudah menyiapkan usulan pemenang dari skor peringkat →</small></span></button>`:''}`;
+ }
+ if(tlBox)tlBox.addEventListener('click',e=>{if(e.target.closest('[data-tlo]'))gate(()=>openTl())});
+ // usulan dari skor peringkat bulan d (dan skor bulan lalu untuk "Paling Meningkat")
+ function usulan(d){
+  const SK=skorRanks(d),W=bobotOf(d),ras=(d.ras||[]).slice().sort((a,b)=>SK[a.ra].rank-SK[b.ra].rank);
+  const naik={};ras.forEach(r=>{if(!r.prev)return;const it=(d.items||[]).find(y=>y.bulan===d.prevMonth&&y.ra===r.ra),p=skorNilai(r.prev,d.toko||{},cashlessDari(it&&it.ipm),W);
+   naik[r.ra]={lalu:p.nilai,kini:SK[r.ra].nilai,naik:Math.round((SK[r.ra].nilai-p.nilai)*100)/100,pc:p.c}});
+  return {SK,ras,naik};
+ }
+ function alasanTeladan(d,r,sk){
+  const k=r.kpi,F={sales:()=>'Sales '+pc(k.ach)+' dari target ('+jt(k.sales)+')',upt:()=>'UPT '+dec(k.upt)+' ('+dec(sk.c.upt*100,0)+'% dari target)',eac:()=>'EAC '+pc(k.eac)+' transaksi member',cashless:()=>'Cashless '+dec(sk.c.cashless*100,1)+'% dari target'};
+  return Object.keys(F).filter(n=>sk.c[n]!=null).sort((a,b)=>sk.c[b]-sk.c[a]).slice(0,3).map(n=>F[n]());
+ }
+ function alasanNaik(d,r,u,sk){
+  if(!u||!r.prev)return [];const k=r.kpi,p=r.prev,o=[];
+  const add=(n,dl,t)=>{if(dl>0)o.push([dl,t])};
+  if(u.pc.sales!=null&&sk.c.sales!=null)add('sales',sk.c.sales-u.pc.sales,'Sales '+dec(u.pc.sales*100,0)+'% → '+dec(sk.c.sales*100,0)+'% dari target');
+  add('upt',(k.upt-p.upt)/2,'UPT '+dec(p.upt)+' → '+dec(k.upt));
+  add('eac',k.eac-p.eac,'EAC '+pc(p.eac)+' → '+pc(k.eac));
+  if(u.pc.cashless!=null&&sk.c.cashless!=null)add('cashless',sk.c.cashless-u.pc.cashless,'Cashless '+dec(u.pc.cashless*100,0)+'% → '+dec(sk.c.cashless*100,0)+'% dari target');
+  return o.sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1]);
+ }
+ function tlData(){const d0=def();if(!d0)return null;return (tlM&&C[tlM]&&C[tlM].d)||((cardM&&C[cardM]&&C[cardM].d)||d0)}
+ function openTl(){
+  const d=tlData();if(!d)return;
+  tlM=d.period&&d.period.complete?d.month:(def()&&def().month)||d.month;
+  openModal('RA Teladan & Paling Meningkat','<div class="dp-chips" id="tlMonths"></div><div id="tlEd"></div>');wide();
+  drawTl();
+  const c=C[tlM];if(!c||!c.d.ipmTpl)tlFetch(tlM);
+ }
+ async function tlFetch(m){try{await fetchMonth(m);if(tlM===m&&$id('tlEd'))drawTl()}catch(e){if($id('tlEd'))$id('tlEd').innerHTML='<p class="dp-empty">Gagal memuat: '+esc(e.message)+'</p>'}}
+ function drawTl(){
+  const ed=$id('tlEd');if(!ed)return;const d0=def();
+  $id('tlMonths').innerHTML=((d0&&d0.months)||[]).filter(m=>!jalan(m)).map(m=>`<button type="button" data-tlm="${m}" class="${m===tlM?'on':''}">${mS(m)}${tlList().find(y=>y.bulan===m)?' 🏆':''}</button>`).join('');
+  const e=C[tlM],d=e&&e.d;
+  if(!d){ed.innerHTML='<p class="dp-empty">Menyiapkan data '+mL(tlM)+'… (10–30 detik)</p>';return}
+  if(!d.ras||!d.ras.length){ed.innerHTML='<p class="dp-empty">Belum ada data RA di '+mL(tlM)+'.</p>';return}
+  const U=usulan(d),ada=tlList().find(y=>y.bulan===tlM);
+  const st=tlS[tlM]||(tlS[tlM]={teladan:{ra:ada?ada.teladan.ra:U.ras[0].ra,ucapan:ada?ada.teladan.ucapan:''},
+   meningkat:{ra:ada?(ada.meningkat?ada.meningkat.ra:''):(()=>{const c=U.ras.filter(r=>U.naik[r.ra]&&U.naik[r.ra].naik>0&&r.ra!==U.ras[0].ra).sort((a,b)=>U.naik[b.ra].naik-U.naik[a.ra].naik)[0];return c?c.ra:''})(),ucapan:ada&&ada.meningkat?ada.meningkat.ucapan:''}});
+  const rT=d.ras.find(r=>r.ra===st.teladan.ra),rM=d.ras.find(r=>r.ra===st.meningkat.ra);
+  const aT=rT?alasanTeladan(d,rT,U.SK[rT.ra]):[],aM=rM?alasanNaik(d,rM,U.naik[rM.ra],U.SK[rM.ra]):[];
+  const opsiN=U.ras.filter(r=>r.ra!==st.teladan.ra&&U.naik[r.ra]).sort((a,b)=>U.naik[b.ra].naik-U.naik[a.ra].naik);
+  ed.innerHTML=`${ada?`<p class="hint tl-done">✓ Sudah diumumkan ${jam(ada.diumumkan)} oleh ${esc(ada.oleh||'Store Head')}. Ubah lalu tekan Perbarui, atau batalkan pengumuman.</p>`:'<p class="hint">Usulan dari skor peringkat '+mL(tlM)+'. Store Head bisa mengganti pemenang sebelum mengumumkan. Yang tampil ke semua akun hanya nama pemenang, alasan, dan ucapan.</p>'}
+   <div class="tl-ed">
+    <div class="tl-sec"><h5 class="mb-h5">🏆 RA Teladan <small>skor peringkat tertinggi</small></h5>
+     <select class="in" data-tls="teladan">${U.ras.map(r=>`<option value="${esc(r.ra)}"${r.ra===st.teladan.ra?' selected':''}>#${U.SK[r.ra].rank} ${esc(nama(r.ra))} · skor ${dec(U.SK[r.ra].nilai,1)}</option>`).join('')}</select>
+     ${aT.length?`<div class="tl-al">${aT.map(a=>`<span>${esc(a)}</span>`).join('')}</div>`:''}
+     <label><span class="rp-lb">Ucapan Store Head <i>opsional</i></span><textarea class="in" rows="2" maxlength="400" data-tlu="teladan" placeholder="mis. Terima kasih atas konsistensinya menawarkan member di setiap transaksi.">${esc(st.teladan.ucapan||'')}</textarea></label></div>
+    <div class="tl-sec"><h5 class="mb-h5">📈 RA Paling Meningkat <small>kenaikan skor terbesar dibanding ${d.prevMonth?mL(d.prevMonth):'bulan lalu'}</small></h5>
+     <select class="in" data-tls="meningkat"><option value="">— tidak diumumkan —</option>${opsiN.map(r=>{const u=U.naik[r.ra];return `<option value="${esc(r.ra)}"${r.ra===st.meningkat.ra?' selected':''}>${esc(nama(r.ra))} · ${u.naik>=0?'+':''}${dec(u.naik,1)} poin (${dec(u.lalu,1)} → ${dec(u.kini,1)})</option>`}).join('')}</select>
+     ${!opsiN.length?'<p class="hint">Belum ada data bulan lalu untuk dibandingkan.</p>':rM&&U.naik[rM.ra]&&U.naik[rM.ra].naik<=0?'<p class="hint rp-warn">Skor RA ini tidak naik dibanding bulan lalu.</p>':''}
+     ${aM.length?`<div class="tl-al">${aM.map(a=>`<span>${esc(a)}</span>`).join('')}</div>`:''}
+     ${st.meningkat.ra?`<label><span class="rp-lb">Ucapan Store Head <i>opsional</i></span><textarea class="in" rows="2" maxlength="400" data-tlu="meningkat" placeholder="mis. Peningkatan UPT-nya luar biasa, pertahankan!">${esc(st.meningkat.ucapan||'')}</textarea></label>`:''}</div>
+   </div>
+   <p class="hint" id="tlErr" style="color:#e5484d;min-height:1em"></p>
+   <div class="row rp-btns" style="margin-top:0"><button type="button" class="btn" data-tla="umumkan">${ada?'Perbarui pengumuman':'Umumkan ke tim'}</button>${ada?'<button type="button" class="btn danger" data-tla="batal">Batalkan pengumuman</button>':''}</div>
+   ${tlList().length?`<h5 class="mb-h5">Riwayat</h5><div class="tl-hist">${tlList().map(y=>`<div><b>${esc(mL(y.bulan))}</b><span>🏆 ${esc(nama(y.teladan.nama||y.teladan.ra))}${y.meningkat?' · 📈 '+esc(nama(y.meningkat.nama||y.meningkat.ra)):''}</span></div>`).join('')}</div>`:''}`;
+  ed.oninput=ev=>{const u=ev.target.dataset.tlu;if(u)st[u].ucapan=ev.target.value};
+  ed.onchange=ev=>{const k=ev.target.dataset.tls;if(!k)return;st[k].ra=ev.target.value;if(k==='teladan'&&st.meningkat.ra===st.teladan.ra)st.meningkat.ra='';drawTl()};
+  ed.onclick=async ev=>{
+   const b=ev.target.closest('[data-tla]');if(!b)return;const err=$id('tlErr'),txt=b.textContent;
+   if(b.dataset.tla==='batal'&&!confirmDel(b))return;
+   b.disabled=true;b.textContent='Menyimpan…';
+   try{
+    let res;
+    if(b.dataset.tla==='batal')res=await api('raporTeladanHapus',{bulan:tlM});
+    else{
+     const pack=(r,a,u,extra)=>r?Object.assign({ra:r.ra,nama:nama(r.ra),skor:U.SK[r.ra].nilai,alasan:a,ucapan:u||''},extra||{}):null;
+     const n=rM&&U.naik[rM.ra];
+     res=await api('raporTeladanSimpan',{bulan:tlM,teladan:pack(rT,aT,st.teladan.ucapan),meningkat:pack(rM,aM,st.meningkat.ucapan,n?{naik:n.naik,skorLalu:n.lalu}:{})});
+    }
+    TL={list:res.list,at:Date.now()};try{localStorage.setItem(TK,JSON.stringify(TL))}catch(e){}
+    delete tlS[tlM];drawTl();renderTl();renderHead();toast(b.dataset.tla==='batal'?'Pengumuman dibatalkan':'RA Teladan diumumkan ke tim');
+   }catch(e){err.textContent=missing(e)?'Pasang Rapor.gs versi terbaru dulu.':e.message;b.disabled=false;b.textContent=txt}
+  };
+ }
+ $('#pb').addEventListener('click',e=>{const m=e.target.closest('[data-tlm]');if(!m||!$id('tlEd'))return;tlM=m.dataset.tlm;drawTl();const c=C[tlM];if(!c||!c.d.ipmTpl)tlFetch(tlM)});
+ renderTl();setTimeout(loadTl,3000);
+
  window.ofaRaporReload=()=>staf()?loadSaya():load(true);
 
  if(staf()){renderSaya();setTimeout(loadSaya,2500);setInterval(()=>{if(!document.hidden)loadSaya()},10*60e3)}
