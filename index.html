@@ -742,7 +742,7 @@ body.kt-on{overflow:hidden}
  .bar{display:none}
  .hero{display:block;max-width:1640px;margin:0 auto;padding:26px clamp(20px,3vw,40px) 6px}
  .hero h1,.hero .lead,.hero>div>.btn,.hero .cluster{display:none}
- .hero>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hello stats" "ck ck" "pg pg" "deck deck";column-gap:24px;align-items:end}
+ .hero>div:first-child{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hello stats" "ck ck" "pg pg" "rp rp" "deck deck";column-gap:24px;align-items:end}
  .hello{display:block;grid-area:hello;margin:0}
  .hello small{display:block;color:var(--mut);font-size:14px;font-weight:600}
  .hello b{display:block;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.8px;line-height:1.15;margin-top:2px}
@@ -751,6 +751,7 @@ body.kt-on{overflow:hidden}
  .stats b{font-size:24px;letter-spacing:-1px}
  .stats span{font-size:12px}
  #pgAlert{grid-area:pg}
+ #rpAlert{grid-area:rp}
  .ck-bar{grid-area:ck;max-width:none;margin-top:18px}
  .deck{grid-area:deck;max-width:none;margin-top:18px}
  .deck-tabs{max-width:640px}
@@ -971,6 +972,48 @@ body.kt-on{overflow:hidden}
 .mb-hr small{color:var(--mut);width:56px;text-align:right}
 body.wk-printing #wkPrint{--bg:#fff;--fg:#111;--mut:#555;--card:#f3f4f6;--line:#ddd;--panel:#fff;--ok-bg:#e3f4e8;--ok-fg:#14642f;--bad-bg:#fde8e8;--bad-fg:#b42318;--warn-bg:#fff4e5;--warn-fg:#8a4b00;--amber:#b45309;color-scheme:light}
 @media print{.mb-pica,.mb-prob,.wk-tbl tr{break-inside:avoid}}
+/* ====== RAPOR PENGEMBANGAN RA ====== */
+.rp-alert{background:color-mix(in srgb,#2f80ed 12%,var(--card));color:var(--fg);border-color:color-mix(in srgb,#2f80ed 40%,transparent)}
+.rp-list{display:grid;gap:6px;margin-top:10px}
+.rp-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:9px 12px;font:inherit}
+.rp-row>div{flex:1;min-width:0}
+.rp-row b{display:block;font-size:14px;line-height:1.3}
+.rp-row small{display:block;font-size:12px;color:var(--mut);margin-top:1px}
+.rp-rk{flex:none;font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:800}
+.rp-pill{flex:none;font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.rp-s0{background:var(--card);color:var(--mut)}.rp-s1{background:var(--warn-bg);color:var(--warn-fg)}.rp-s2{background:#dbeafe;color:#1d4ed8}.rp-s3{background:#ede9fe;color:#6d28d9}.rp-s4{background:var(--ok-bg);color:var(--ok-fg)}
+:root[data-theme=dark] .rp-s2{background:#172554;color:#93c5fd}:root[data-theme=dark] .rp-s3{background:#2e1065;color:#c4b5fd}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rp-s2{background:#172554;color:#93c5fd}:root:not([data-theme=light]) .rp-s3{background:#2e1065;color:#c4b5fd}}
+.rp-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.rp-dot.rp-s0{background:#9ca3af}.rp-dot.rp-s1{background:#f59e0b}.rp-dot.rp-s2{background:#2f80ed}.rp-dot.rp-s3{background:#7c3aed}.rp-dot.rp-s4{background:#16a34a}
+.rp-ras{margin-top:8px}.rp-ras button{display:inline-flex;align-items:center}
+.rp-warn{color:var(--amber);font-weight:700}
+.rp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:16px;background:var(--card);margin:10px 0 12px}
+.rp-head small{display:block;font-size:12px;color:var(--mut)}
+.rp-head b{display:block;font-size:22px;letter-spacing:-.4px;line-height:1.2;margin:2px 0 4px}
+.rp-head span{font-size:12.5px;color:var(--mut)}
+.rp-head em{flex:none;font-style:normal;text-align:center;font-size:11.5px;color:var(--mut);line-height:1.2}
+.rp-head em b{font-size:28px;color:var(--fg);margin:0}
+.rp-txt{font-size:13.5px;line-height:1.55;white-space:pre-wrap;margin:0 0 6px}
+.rp-txt small{display:block;font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
+.rp-sk>div{display:grid;grid-template-columns:minmax(0,1fr) auto 96px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rp-sk i{display:flex;gap:4px}.rp-sk u{display:block;width:14px;height:14px;border-radius:4px;background:var(--line)}.rp-sk u.on{background:#2f80ed}
+.rp-sk b{font-size:12px;text-align:right}
+.rp-lb{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}.rp-lb i{font-style:normal;font-weight:500}
+.rp-sc>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rp-seg{display:flex;gap:4px;flex:none}
+.rp-seg button{width:34px;height:32px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font-weight:700;font-size:13px}
+.rp-seg button.on{background:var(--ink);border-color:var(--ink);color:var(--inkfg)}
+.rp-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.rp-g4 label>span{font-size:11.5px}
+.rp-resp{border-left:4px solid #16a34a;background:color-mix(in srgb,#16a34a 9%,transparent);border-radius:12px;padding:4px 12px 6px;margin-top:12px}
+.rp-ck span{font-weight:700;white-space:nowrap}
+.rp-btns{flex-wrap:wrap;gap:8px}
+.rp-foot{margin-top:14px}
+.rp-sign{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:36px}
+.rp-sign span{font-size:12px;color:var(--mut)}.rp-sign i{display:block;height:60px;border-bottom:1px solid var(--fg)}.rp-sign small{display:block;font-size:12px;margin-top:4px}
+@media(max-width:560px){.rp-g4{grid-template-columns:1fr 1fr}.rp-sc>div{flex-wrap:wrap;gap:4px}.rp-sk>div{grid-template-columns:minmax(0,1fr) auto}.rp-sk b{display:none}.rp-head b{font-size:19px}}
+@media print{.rp-sk>div,.rp-resp,.rp-head,.rp-sign{break-inside:avoid}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1143,6 +1186,7 @@ html.scrolled header{border-bottom-color:var(--line)}
     <div class="stats"><div><b id="st1">0</b><span>tool terpasang</span></div><div><b id="st2">0</b><span>kategori</span></div><div><b id="st3">0</b><span>kali dibuka</span></div></div>
     <button type="button" class="ck-bar" id="ckOpen"><span>🔍</span><div><b>Cek stok produk</b><small>Cari nama, warna, kode, atau scan barcode</small></div><i>📷</i></button>
     <div class="pg-alert" id="pgAlert" role="status" hidden></div>
+    <div class="pg-alert rp-alert" id="rpAlert" role="status" hidden></div>
     <div class="deck" id="deck">
       <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
@@ -1208,6 +1252,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="mb" aria-label="Laporan bulanan dan PICA">
           <div class="sh-head"><div><h3>Laporan Bulanan &amp; PICA</h3><p id="mbSub">Evaluasi bulan ini dan rencana perbaikan bulan depan</p></div></div>
           <div id="mbBody"></div>
+        </section>
+        <section class="rs" id="rp" aria-label="Rapor pengembangan RA">
+          <div class="sh-head"><div><h3 id="rpTitle">Rapor Pengembangan RA</h3><p id="rpSub">Evaluasi bulanan yang dikirim ke akun masing-masing RA</p></div></div>
+          <div id="rpBody"></div>
         </section>
         <section class="rs" id="ls" aria-label="Lost sales dan retur">
           <div class="sh-head"><div><h3>Lost Sales &amp; Retur</h3><p id="lsSub">Permintaan Endless Aisle dan barang yang diretur</p></div></div>
@@ -4955,6 +5003,373 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  window.ofaMonthReload=()=>load(true);
  renderMonth();
  setTimeout(()=>load(false),4200);
+})();
+
+/* ====== RAPOR PENGEMBANGAN RA: Store Head menyusun & mengirim, RA membaca & menanggapi ====== */
+(function(){
+ const box=document.getElementById('rp'),bar=document.getElementById('rpAlert');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const STORE='EIGER Store Soekarno SoloBaru (7014)',CK='ofa_rapor',SK='ofa_rapor_saya',TTL=30*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const staf=()=>window.ofaRole==='staf';
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const jt=v=>{v=Number(v)||0;const a=Math.abs(v),s=v<0?'-':'';return a>=1e6?s+'Rp'+(a/1e6).toFixed(1).replace('.',',')+' jt':a>=1e3?s+'Rp'+Math.round(a/1e3)+' rb':s+rp(a)};
+ const dec=(v,d)=>(Number(v)||0).toFixed(d==null?2:d).replace('.',',');
+ const pc=v=>dec((Number(v)||0)*100,1)+'%';
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const BLNL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const mL=m=>m?BLNL[+m.slice(5,7)-1]+' '+m.slice(0,4):'';
+ const mS=m=>m?BLN[+m.slice(5,7)-1]+' '+m.slice(2,4):'';
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const jam=t=>{if(!t)return '';const d=new Date(t);return d.getDate()+' '+BLN[d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+'.'+String(d.getMinutes()).padStart(2,'0')};
+ const nama=n=>String(n||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const depan=n=>nama(String(n||'').split(' ')[0]);
+ const r1=v=>Math.round(v*10)/10;
+ const dTxt=(a,b)=>{if(!b)return '';const x=(a-b)/Math.abs(b);return (x>=0?'▲ ':'▼ ')+dec(Math.abs(x)*100,1)+'%'};
+ const ud=(a,b)=>b?(a>=b?'wk-up':'wk-down'):'';
+ const ASPEK=[['disiplin','Kedisiplinan & kehadiran'],['pelayanan','Pelayanan customer'],['produk','Product knowledge'],['display','Display & kerapian area'],['tim','Kerja tim & komunikasi']];
+ const SKOR=['','Perlu perhatian','Kurang','Cukup','Baik','Sangat baik'];
+ const ST={baru:['Belum dibuat','rp-s0'],draft:['Draft','rp-s1'],terkirim:['Terkirim','rp-s2'],diperbarui:['Terkirim ulang','rp-s2'],dibaca:['Dibaca','rp-s3'],ditanggapi:['Ditanggapi','rp-s4']};
+ const pill=s=>{const x=ST[s]||ST.baru;return `<span class="rp-pill ${x[1]}">${x[0]}</span>`};
+ const unread=x=>x.status==='terkirim'||x.status==='diperbarui';
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+
+ /* ---------- tampilan rapor (dipakai RA, pratinjau Store Head, dan PDF) ---------- */
+ function tile(l,v,s,cls){return `<div class="wk-k"><small>${l}</small><b>${v}</b>${s?`<em class="${cls||''}">${s}</em>`:''}</div>`}
+ function cekRows(k,ct){
+  if(!ct||!ct.target)return [];
+  const T=ct.target,R=[];
+  if(T.sales)R.push(['Sales',jt(T.sales),jt(k.sales),k.sales>=T.sales]);
+  if(T.upt)R.push(['UPT',dec(T.upt),dec(k.upt),k.upt>=T.upt]);
+  if(T.eac)R.push(['EAC',dec(T.eac,0)+'%',pc(k.eac),k.eac*100>=T.eac]);
+  if(T.ea)R.push(['Endless Aisle',jt(T.ea),jt(k.ea),k.ea>=T.ea]);
+  return R;
+ }
+ function view(x,mode){
+  const K=x.kpi||{},k=K.saya||{},l=K.lalu,t=K.toko||{},P=K.period||{},print=mode==='print';
+  const ut=t.uptTarget||2,et=t.eacTarget||.5,nilai=x.nilai||{},T=x.target||{},cek=cekRows(k,K.cekTarget);
+  const sc=ASPEK.filter(a=>nilai[a[0]]),avg=sc.length?sc.reduce((s,a)=>s+nilai[a[0]],0)/sc.length:0;
+  const para=(h,v)=>v?`<h5 class="mb-h5">${h}</h5><p class="rp-txt">${esc(v)}</p>`:'';
+  return `<div class="wk-rep rp-view">
+   <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span></div>${K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
+   <h4>1. Kinerja ${mL(x.bulan)}</h4>
+   <div class="wk-kpis">
+    ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari target '+jt(k.target):'target belum diisi',k.target?(k.ach>=(P.complete===false?P.days/P.daysInMonth:1)?'wk-up':'wk-down'):'')}
+    ${tile('Kontribusi toko',pc(k.kontribusi),l?'bulan lalu '+pc(l.kontribusi):'',l?ud(k.kontribusi,l.kontribusi):'')}
+    ${tile('Transaksi',nf(k.trx),l?'bulan lalu '+nf(l.trx):'')}
+    ${tile('UPT',dec(k.upt),'target '+dec(ut,1)+' · toko '+dec(t.upt),k.upt>=ut?'wk-up':'wk-down')}
+    ${tile('EAC',pc(k.eac),'target '+pc(et)+' · toko '+pc(t.eac),k.eac>=et?'wk-up':'wk-down')}
+    ${tile('ATV',jt(k.atv),'toko '+jt(t.atv),ud(k.atv,t.atv))}
+    ${tile('Endless Aisle',jt(k.ea),k.eaT?pc(k.eaAch)+' dari '+jt(k.eaT):nf(k.eaTrx)+' trx',k.eaT?(k.eaAch>=1?'wk-up':'wk-down'):'')}
+    ${tile('vs bulan lalu',l?dTxt(k.sales,l.sales):'–',l?'sales '+jt(l.sales):'belum ada data',l?ud(k.sales,l.sales):'')}
+   </div>
+   ${l?`<div class="wk-tbl"><table><thead><tr><th>KPI</th><th>${mS(x.bulan)}</th><th>Bulan lalu</th><th>Rata-rata RA</th></tr></thead><tbody>
+    <tr><td>UPT</td><td class="${ud(k.upt,l.upt)}">${dec(k.upt)}</td><td>${dec(l.upt)}</td><td>${dec(t.upt)}</td></tr>
+    <tr><td>EAC</td><td class="${ud(k.eac,l.eac)}">${pc(k.eac)}</td><td>${pc(l.eac)}</td><td>${pc(t.eac)}</td></tr>
+    <tr><td>ATV</td><td class="${ud(k.atv,l.atv)}">${jt(k.atv)}</td><td>${jt(l.atv)}</td><td>${jt(t.atv)}</td></tr>
+    <tr><td>Transaksi</td><td class="${ud(k.trx,l.trx)}">${nf(k.trx)}</td><td>${nf(l.trx)}</td><td>${nf(t.trx/Math.max(1,t.raCount||1))}</td></tr>
+   </tbody></table></div>`:''}
+   ${cek.length?`<h4>2. Cek target dari rapor ${mL(K.cekTarget.bulan)}</h4>
+    <p class="wk-p">${cek.filter(r=>r[3]).length} dari ${cek.length} target tercapai${P.complete===false?' (bulan belum selesai, data s/d '+tgl(P.dataEnd)+')':''}</p>
+    <div class="wk-tbl"><table><thead><tr><th>Target</th><th>Rencana</th><th>Aktual</th><th></th></tr></thead><tbody>${cek.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="${r[3]?'wk-up':'wk-down'}">${r[3]?'✓ tercapai':'✗ belum'}</td></tr>`).join('')}</tbody></table></div>`:''}
+   <h4>${cek.length?3:2}. Sikap kerja ${sc.length?`<small>rata-rata ${dec(avg,1)} dari 5</small>`:''}</h4>
+   ${sc.length?`<div class="rp-sk">${ASPEK.map(a=>{const v=nilai[a[0]]||0;return `<div><span>${a[1]}</span><i>${[1,2,3,4,5].map(n=>`<u class="${n<=v?'on':''}"></u>`).join('')}</i><b>${v?SKOR[v]:'–'}</b></div>`}).join('')}</div>`:'<p class="dp-empty">Belum dinilai.</p>'}
+   <h4>${cek.length?4:3}. Evaluasi & rencana</h4>
+   ${para('💪 Kekuatan yang perlu dipertahankan',x.kekuatan)}
+   ${para('🎯 Area yang perlu ditingkatkan',x.perbaikan)}
+   ${T.sales||T.upt||T.eac||T.ea?`<h5 class="mb-h5">Target ${mL(K.next||'')}</h5><div class="wk-kpis rp-tg">${T.sales?tile('Sales',jt(T.sales)):''}${T.upt?tile('UPT',dec(T.upt)):''}${T.eac?tile('EAC',dec(T.eac,0)+'%'):''}${T.ea?tile('Endless Aisle',jt(T.ea)):''}</div>`:''}
+   ${para('🧭 Rencana coaching',x.rencana)}
+   ${para('📝 Catatan Store Head',x.catatan)}
+   ${x.tanggapan||x.komitmen?`<div class="rp-resp"><h5 class="mb-h5">Tanggapan ${esc(depan(x.ra))} <small>${jam(x.ditanggapi)}</small></h5>${x.tanggapan?`<p class="rp-txt">${esc(x.tanggapan)}</p>`:''}${x.komitmen?`<p class="rp-txt"><small>Komitmen bulan depan</small>${esc(x.komitmen)}</p>`:''}</div>`:''}
+   <p class="ct-meta rp-foot">Disusun oleh ${esc(x.oleh||'Store Head')}${x.dikirim?' · dikirim '+jam(x.dikirim):''}${x.dibaca?' · dibaca '+jam(x.dibaca):''}</p>
+   ${print?'<div class="rp-sign"><div><span>Store Head</span><i></i></div><div><span>RA</span><i></i><small>'+esc(nama(x.ra))+'</small></div></div>':''}
+  </div>`;
+ }
+ function waText(x){
+  const K=x.kpi||{},k=K.saya||{},T=x.target||{},L=[];
+  L.push('*RAPOR PENGEMBANGAN RA*',STORE,nama(x.ra)+' · '+mL(x.bulan),'');
+  L.push('*Kinerja*','Sales '+jt(k.sales)+(k.target?' ('+pc(k.ach)+' dari target)':'')+(K.rank?' · peringkat '+K.rank+' dari '+K.dari:''));
+  L.push('Transaksi '+nf(k.trx)+' · UPT '+dec(k.upt)+' · EAC '+pc(k.eac)+' · ATV '+jt(k.atv)+' · EA '+jt(k.ea),'');
+  if(x.kekuatan)L.push('*Kekuatan*',x.kekuatan,'');
+  if(x.perbaikan)L.push('*Area perbaikan*',x.perbaikan,'');
+  const t=[T.sales?'Sales '+jt(T.sales):'',T.upt?'UPT '+dec(T.upt):'',T.eac?'EAC '+dec(T.eac,0)+'%':'',T.ea?'EA '+jt(T.ea):''].filter(Boolean);
+  if(t.length)L.push('*Target '+mL(K.next||'')+'*',t.join(' · '),'');
+  if(x.rencana)L.push('*Rencana coaching*',x.rencana,'');
+  L.push('Rapor lengkap & kolom tanggapan: buka ONE FOR ALL Hub → Laporan → Rapor Saya.');
+  return L.join('\n');
+ }
+ function printPdf(x){
+  let a=$id('wkPrint');if(!a){a=document.createElement('div');a.id='wkPrint';document.body.appendChild(a)}
+  a.innerHTML=view(x,'print');
+  document.body.classList.add('wk-printing');
+  const done=()=>{document.body.classList.remove('wk-printing');window.removeEventListener('afterprint',done)};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{window.print();setTimeout(done,1500)},60);
+ }
+ function wide(){const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>pn.classList.remove('wide')}}
+
+ /* =================== RA (akun staf): Rapor Saya =================== */
+ let saya=null,sayaBusy=false,lihat=null;
+ try{saya=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){saya=null}
+ const keepSaya=()=>{try{localStorage.setItem(SK,JSON.stringify(saya))}catch(e){}};
+ async function loadSaya(){
+  if(sayaBusy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  sayaBusy=true;
+  try{saya=Object.assign(await api('raporSaya',{}),{at:Date.now()});keepSaya()}
+  catch(e){if(missing(e))saya={missing:1,items:[],at:Date.now()}}
+  finally{sayaBusy=false;renderSaya()}
+ }
+ function renderSaya(){
+  $id('rpTitle').textContent='Rapor Saya';
+  const L=(saya&&saya.items)||[],b=$id('rpBody'),nw=L.filter(unread);
+  $id('rpSub').textContent='Rapor pengembangan dari Store Head setiap bulan';
+  if(bar){
+   if(!nw.length)bar.hidden=true;
+   else{bar.hidden=false;bar.innerHTML=`<span class="pg-ic">📬</span><div><b>Rapor ${esc(mL(nw[0].bulan))} dari Store Head${nw[0].status==='diperbarui'?' (diperbarui)':''}</b><small>Baca evaluasi, target bulan depan, dan tulis tanggapanmu.</small></div><button type="button" class="btn" data-rpo="${esc(nw[0].id)}">Baca</button>`}
+  }
+  if(!saya){b.innerHTML='<p class="dp-empty">'+(sayaBusy?'Memuat rapor…':'Rapor muncul setelah Store Head mengirimkannya.')+'</p>';return}
+  if(saya.missing){b.innerHTML='<p class="dp-empty">Fitur rapor belum dipasang di Apps Script. Hubungi Store Head.</p>';return}
+  if(!L.length){b.innerHTML='<p class="dp-empty">Belum ada rapor. Store Head mengirim rapor setiap akhir bulan.</p>';return}
+  const x=L[0],k=(x.kpi&&x.kpi.saya)||{};
+  b.innerHTML=`<div class="wk-hero"><div><b>${esc(mL(x.bulan))}</b><span>${x.kpi&&x.kpi.rank?'Peringkat '+x.kpi.rank+' dari '+x.kpi.dari+' RA · ':''}sales ${jt(k.sales)}${k.target?' ('+pc(k.ach)+')':''}</span></div>${pill(x.status)}</div>
+   <button type="button" class="iv-todo ct-btn rp-open" data-rpo="${esc(x.id)}"><b>${unread(x)?'📬':'📄'}</b><span>${unread(x)?'Baca rapor baru':'Buka rapor'}<small>${x.perbaikan?'Fokus: '+esc(x.perbaikan.split('\n')[0].replace(/^[•\-\s]+/,'').slice(0,90)):'Evaluasi, target, dan rencana coaching'} →</small></span></button>
+   ${L.length>1?`<div class="rp-list">${L.slice(1,7).map(y=>`<button type="button" class="rp-row" data-rpo="${esc(y.id)}"><div><b>${esc(mL(y.bulan))}</b><small>${y.kpi&&y.kpi.rank?'#'+y.kpi.rank+' · ':''}sales ${jt(y.kpi&&y.kpi.saya&&y.kpi.saya.sales)}</small></div>${pill(y.status)}</button>`).join('')}</div>`:''}`;
+ }
+ function openSaya(id){
+  const x=((saya&&saya.items)||[]).find(y=>y.id===id);if(!x)return;
+  lihat=x;
+  openModal('Rapor '+mL(x.bulan),'<div id="rpView"></div>');wide();
+  drawSaya(false);
+  if(unread(x))api('raporBaca',{id}).then(r=>{Object.assign(x,r.item);keepSaya();renderSaya();if(lihat===x&&$id('rpView'))drawSaya(false)}).catch(()=>{});
+ }
+ function drawSaya(form){
+  const x=lihat,v=$id('rpView');if(!x||!v)return;
+  const done=x.tanggapan||x.komitmen;
+  v.innerHTML=`<div class="wk-act"><button class="btn ghost" type="button" data-rpa="pdf">Simpan PDF</button></div>`+view(x,'ra')+
+   (form||!done?`<form class="mb-form" id="rpRes" autocomplete="off"><h5 class="mb-h5" style="margin:0">Tanggapan & komitmen</h5>
+    <label><span>Tanggapan untuk Store Head <i>apa yang kamu setujui, kendala, atau bantuan yang dibutuhkan</i></span><textarea class="in" name="tanggapan" rows="3" maxlength="1500">${esc(x.tanggapan||'')}</textarea></label>
+    <label><span>Komitmen bulan depan <i>langkah konkret yang akan kamu lakukan</i></span><textarea class="in" name="komitmen" rows="3" maxlength="1500" placeholder="mis. tawarkan kaos kaki di setiap pembelian sepatu, minta nomor HP di setiap transaksi">${esc(x.komitmen||'')}</textarea></label>
+    <p class="hint" id="rpErr" style="color:#e5484d;min-height:1em"></p>
+    <div class="row" style="margin-top:0"><button class="btn" type="submit">Kirim tanggapan</button>${done?'<button class="btn ghost" type="button" data-rpa="batal">Batal</button>':''}</div></form>`
+   :`<div class="wk-act"><button class="btn ghost" type="button" data-rpa="ubah">Ubah tanggapan</button></div>`);
+  const f=$id('rpRes');
+  if(f)f.onsubmit=async e=>{
+   e.preventDefault();const btn=f.querySelector('[type=submit]'),err=$id('rpErr');
+   if(!f.tanggapan.value.trim()&&!f.komitmen.value.trim()){err.textContent='Tulis tanggapan atau komitmen dulu.';return}
+   btn.disabled=true;btn.textContent='Mengirim…';
+   try{const r=await api('raporTanggapi',{id:x.id,tanggapan:f.tanggapan.value,komitmen:f.komitmen.value});Object.assign(x,r.item);keepSaya();renderSaya();drawSaya(false);toast('Tanggapan terkirim ke Store Head')}
+   catch(er){err.textContent=er.message;btn.disabled=false;btn.textContent='Kirim tanggapan'}
+  };
+ }
+
+ /* =================== Store Head: susun & kirim =================== */
+ let C={},cur='',ra='',busy=false,E={},prevw=false;
+ try{C=JSON.parse(localStorage.getItem(CK)||'{}')||{}}catch(e){C={}}
+ function keep(){const o={def:C.def};Object.keys(C).filter(k=>/^\d{4}-\d{2}$/.test(k)).sort().slice(-3).forEach(k=>o[k]=C[k]);C=o;try{localStorage.setItem(CK,JSON.stringify(C))}catch(e){}}
+ const def=()=>{const e=C.def&&C[C.def];return e?e.d:null};
+ async function fetchMonth(m){
+  const d=await api('raporData',m?{month:m}:{});
+  if(d.month){C[d.month]={d,at:Date.now()};if(!m)C.def=d.month}
+  keep();return d;
+ }
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  const d=def();if(!force&&d&&Date.now()-C[C.def].at<TTL){renderHead();return}
+  busy=true;renderHead();
+  try{await fetchMonth('');C.err='';C.missing=0;C.deny=0}
+  catch(e){if(missing(e))C.missing=1;else if(/Store Head|pemilik/i.test(e.message))C.deny=1;else C.err=e.message}
+  finally{busy=false;keep();renderHead()}
+ }
+ const itemOf=(d,m,n)=>(d.items||[]).find(x=>x.bulan===m&&x.ra===n);
+ function renderHead(){
+  const b=$id('rpBody');
+  if(C.missing){b.innerHTML='<p class="dp-empty">Pasang file <b>Rapor.gs</b> di Apps Script (di atas Akun.gs), jalankan <b>raporSetup</b>, lalu Deploy → New version.</p>';return}
+  if(C.deny){b.innerHTML='<p class="dp-empty">Rapor disusun oleh Store Head. Masuk dengan akun pemilik untuk membuka.</p>';return}
+  const d=def();
+  if(!d){b.innerHTML='<p class="dp-empty">'+(busy?'Menyiapkan data RA…':C.err?'Gagal memuat: '+esc(C.err):'Rapor muncul setelah data DSR tersedia.')+'</p>';return}
+  if(d.message&&!d.ras){b.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
+  const R=d.ras||[],L=R.map(r=>itemOf(d,d.month,r.ra)),sent=L.filter(x=>x&&x.status!=='draft').length,resp=L.filter(x=>x&&x.status==='ditanggapi').length;
+  $id('rpSub').textContent=mL(d.month)+(d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd))+' · dikirim ke akun masing-masing RA';
+  b.innerHTML=`<div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
+   <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk">${r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
+ }
+ /* --- saran otomatis dari KPI --- */
+ function saran(d,r){
+  const k=r.kpi,l=r.prev,t=d.toko,P=d.period,exp=P.complete?1:P.days/P.daysInMonth,S={kekuatan:[],perbaikan:[],rencana:[]};
+  const K=S.kekuatan,B=S.perbaikan,C2=S.rencana;
+  if(r.rank===1&&d.ras.length>1)K.push('Sales tertinggi di toko ('+jt(k.sales)+', '+pc(k.kontribusi)+' dari total toko)');
+  if(k.target&&k.ach>=exp)K.push('Sales '+pc(k.ach)+' dari target'+(P.complete?', target tercapai':', di atas laju target'));
+  if(k.upt>=t.uptTarget)K.push('UPT '+dec(k.upt)+' sudah mencapai target '+dec(t.uptTarget,1));
+  else if(k.upt>t.upt)K.push('UPT '+dec(k.upt)+' di atas rata-rata toko '+dec(t.upt));
+  if(k.eac>=t.eacTarget)K.push('EAC '+pc(k.eac)+' sudah mencapai target '+pc(t.eacTarget));
+  else if(k.eac>t.eac+.005)K.push('EAC '+pc(k.eac)+' di atas rata-rata toko '+pc(t.eac));
+  if(k.atv>t.atv*1.05)K.push('Nilai belanja per transaksi '+jt(k.atv)+' di atas rata-rata toko '+jt(t.atv));
+  if(k.eaT&&k.eaAch>=exp)K.push('Endless Aisle '+pc(k.eaAch)+' dari target');
+  if(l&&k.upt>=l.upt+.05)K.push('UPT naik dari '+dec(l.upt)+' ke '+dec(k.upt));
+  if(l&&k.eac>=l.eac+.02)K.push('EAC naik dari '+pc(l.eac)+' ke '+pc(k.eac));
+  if(k.target&&k.ach<exp*.95){B.push('Sales '+pc(k.ach)+' dari target'+(P.complete?'':' (laju seharusnya '+pc(exp)+' per '+tgl(P.dataEnd)+')'));C2.push('Pantau sales harian vs target di Hub setiap akhir shift')}
+  if(k.upt<t.uptTarget){B.push('UPT '+dec(k.upt)+' di bawah target '+dec(t.uptTarget,1));C2.push('Tawarkan kaos kaki, aksesoris, atau produk pelengkap di setiap pembelian sepatu dan tas')}
+  if(k.eac<t.eacTarget){B.push('EAC '+pc(k.eac)+' di bawah target '+pc(t.eacTarget));C2.push('Minta nomor HP customer sebelum struk dicetak, tawarkan daftar member')}
+  if(k.eaT&&k.eaAch<exp*.8){B.push('Endless Aisle baru '+pc(k.eaAch)+' dari target ('+jt(k.ea)+')');C2.push('Tawarkan Endless Aisle setiap ukuran atau warna tidak tersedia di toko')}
+  if(l&&l.sales&&P.complete&&k.sales<l.sales*.9)B.push('Sales turun '+dec((1-k.sales/l.sales)*100,1)+'% dari bulan lalu');
+  if(k.atv<t.atv*.9){B.push('Nilai belanja per transaksi '+jt(k.atv)+' di bawah rata-rata toko '+jt(t.atv));C2.push('Kenalkan produk utama dan bundling sebelum menawarkan promo')}
+  C2.push('Role play penawaran 10 menit saat briefing pagi','Shadowing Store Head di jam ramai','Review progres bersama Store Head setiap 2 minggu');
+  return S;
+ }
+ function stateOf(d,r){
+  const key=d.month+'|'+r.ra;if(E[key])return E[key];
+  const x=itemOf(d,d.month,r.ra),k=r.kpi,t=d.toko;
+  if(x)return E[key]={id:x.id,diubah:x.diubah,username:x.username||r.username||'',nilai:Object.assign({},x.nilai),kekuatan:x.kekuatan,perbaikan:x.perbaikan,target:Object.assign({},x.target),rencana:x.rencana,catatan:x.catatan};
+  const uT=k.upt>=t.uptTarget?r1(k.upt):Math.min(t.uptTarget,r1(Math.max(k.upt,1)+.1));
+  return E[key]={id:'',diubah:0,username:r.username||'',nilai:{},kekuatan:'',perbaikan:'',rencana:'',catatan:'',
+   target:{sales:(r.targetNext&&r.targetNext.sales)||k.target||0,upt:uT,eac:k.eac>=t.eacTarget?Math.round(k.eac*100):Math.round(t.eacTarget*100),ea:(r.targetNext&&r.targetNext.ea)||k.eaT||0}};
+ }
+ function asItem(d,r,s){
+  const x=itemOf(d,d.month,r.ra)||{},lalu=(d.items||[]).find(y=>y.bulan===d.prevMonth&&y.ra===r.ra&&y.status!=='draft');
+  return Object.assign({},x,s,{bulan:d.month,ra:r.ra,oleh:x.oleh||(window.ofaAkun&&window.ofaAkun.nama)||'Store Head',
+   kpi:{saya:r.kpi,lalu:r.prev,rank:r.rank,dari:d.ras.length,toko:d.toko,period:d.period,next:d.next,cekTarget:lalu?{bulan:lalu.bulan,target:lalu.target}:null}});
+ }
+ function openEditor(name){
+  const d=def();if(!d)return;
+  cur=d.month;ra=name||((d.ras||[])[0]||{}).ra||'';prevw=false;
+  openModal('Rapor Pengembangan RA','<div class="dp-chips" id="rpMonths"></div><div class="dp-chips rp-ras" id="rpRas"></div><div id="rpEd"></div>');wide();
+  drawEd();
+  const e=C[cur];if(!e||Date.now()-e.at>5*60e3)refreshMonth(cur);
+ }
+ async function refreshMonth(m){
+  try{await fetchMonth(m);if(cur===m&&$id('rpEd'))drawEd(true);if(m===C.def)renderHead()}
+  catch(err){if(cur===m&&$id('rpEd')&&!C[m])$id('rpEd').innerHTML='<p class="dp-empty">Gagal memuat: '+esc(err.message)+'</p>'}
+ }
+ function drawEd(keepScroll){
+  const ed=$id('rpEd');if(!ed)return;
+  const d0=def(),e=C[cur],d=e&&e.d;
+  $id('rpMonths').innerHTML=((d0&&d0.months)||[cur]).slice(0,6).map(m=>`<button type="button" data-rpm="${m}" class="${m===cur?'on':''}">${mS(m)}</button>`).join('');
+  if(!d){$id('rpRas').innerHTML='';ed.innerHTML='<p class="dp-empty">Menyiapkan data '+mL(cur)+'… (10–30 detik)</p>';return}
+  if(d.message&&!d.ras){$id('rpRas').innerHTML='';ed.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
+  if(!d.ras.find(r=>r.ra===ra))ra=(d.ras[0]||{}).ra||'';
+  $id('rpRas').innerHTML=d.ras.map(r=>{const x=itemOf(d,cur,r.ra);return `<button type="button" data-rpr="${esc(r.ra)}" class="${r.ra===ra?'on':''}"><i class="rp-dot ${(ST[x?x.status:'baru']||ST.baru)[1]}"></i>${esc(depan(r.ra))}</button>`}).join('');
+  const r=d.ras.find(y=>y.ra===ra);if(!r){ed.innerHTML='<p class="dp-empty">Belum ada penjualan RA di bulan ini.</p>';return}
+  const sc=document.querySelector('#ov .panel'),top=sc?sc.scrollTop:0;
+  const s=stateOf(d,r),x=itemOf(d,cur,r.ra),it=asItem(d,r,s);
+  if(prevw){ed.innerHTML=`<div class="wk-act"><button class="btn" type="button" data-rpa="tutupPrev">← Kembali ke editor</button><button class="btn ghost" type="button" data-rpa="pdf">Simpan PDF</button></div><p class="hint">Pratinjau: begini rapor terlihat di akun ${esc(depan(r.ra))}.</p>`+view(it,'ra');if(keepScroll&&sc)sc.scrollTop=top;return}
+  const S=saran(d,r),k=r.kpi,t=d.toko,ck=cekRows(k,it.kpi.cekTarget);
+  const ak=d.akun||[];
+  const chips=(list,key)=>list.length?`<div class="mb-sug">${list.map((v,i)=>`<button type="button" data-rps="${key}" data-i="${i}"${String(s[key]||'').indexOf(v)>=0?' disabled':''}>+ ${esc(v)}</button>`).join('')}</div>`:'';
+  ed.innerHTML=`<div class="rp-head"><div><small>${mL(cur)}${d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd)}</small><b>${esc(nama(r.ra))}</b><span>${x?pill(x.status)+(x.dikirim?' · dikirim '+jam(x.dikirim):'')+(x.dibaca?' · dibaca '+jam(x.dibaca):''):pill('baru')}</span></div><em><b>#${r.rank}</b>dari ${d.ras.length} RA</em></div>
+   <div class="wk-kpis">
+    ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari '+jt(k.target):'target belum diisi',k.target?(k.ach>=(d.period.complete?1:d.period.days/d.period.daysInMonth)?'wk-up':'wk-down'):'')}
+    ${tile('UPT',dec(k.upt),'toko '+dec(t.upt)+(r.prev?' · lalu '+dec(r.prev.upt):''),k.upt>=t.uptTarget?'wk-up':'wk-down')}
+    ${tile('EAC',pc(k.eac),'toko '+pc(t.eac)+(r.prev?' · lalu '+pc(r.prev.eac):''),k.eac>=t.eacTarget?'wk-up':'wk-down')}
+    ${tile('Endless Aisle',jt(k.ea),k.eaT?pc(k.eaAch)+' dari '+jt(k.eaT):nf(k.eaTrx)+' trx',k.eaT?(k.eaAch>=1?'wk-up':'wk-down'):'')}
+   </div>
+   ${ck.length?`<p class="wk-p rp-ck">Target dari rapor ${mS(it.kpi.cekTarget.bulan)}: ${ck.map(c=>`<span class="${c[3]?'wk-up':'wk-down'}">${c[0]} ${c[3]?'✓':'✗'} ${c[2]}/${c[1]}</span>`).join(' · ')}</p>`:''}
+   <form class="mb-form rp-form" id="rpF" autocomplete="off">
+    <label><span>Akun Hub RA <i>rapor dikirim ke akun ini</i></span><select class="in" name="username"><option value="">— pilih akun —</option>${ak.map(a=>`<option value="${esc(a.username)}"${a.username===s.username?' selected':''}>${esc(a.nama)} (@${esc(a.username)})${a.jabatan?' · '+esc(a.jabatan):''}</option>`).join('')}</select></label>
+    ${!ak.length?'<p class="hint rp-warn">Belum ada akun aktif. Minta RA mendaftar akun di Hub, lalu setujui di menu Akun.</p>':!s.username?'<p class="hint rp-warn">Nama di DSR belum cocok dengan akun mana pun. Pilih akunnya sekali, Hub akan mengingatnya.</p>':''}
+    <div><span class="rp-lb">Sikap kerja <i>1 perlu perhatian · 5 sangat baik</i></span>
+     <div class="rp-sc">${ASPEK.map(a=>`<div><span>${a[1]}</span><div class="rp-seg" data-asp="${a[0]}">${[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" class="${s.nilai[a[0]]===n?'on':''}" title="${SKOR[n]}">${n}</button>`).join('')}</div></div>`).join('')}</div></div>
+    <label><span>💪 Kekuatan yang perlu dipertahankan</span><textarea class="in" name="kekuatan" rows="3" maxlength="1500">${esc(s.kekuatan)}</textarea></label>
+    ${chips(S.kekuatan,'kekuatan')}
+    <label><span>🎯 Area yang perlu ditingkatkan</span><textarea class="in" name="perbaikan" rows="3" maxlength="1500">${esc(s.perbaikan)}</textarea></label>
+    ${chips(S.perbaikan,'perbaikan')}
+    <div><span class="rp-lb">Target ${mL(d.next)}</span>
+     <div class="rp-g4">
+      <label><span>Sales (Rp)</span><input class="in" type="number" name="t_sales" min="0" step="100000" value="${s.target.sales||''}"></label>
+      <label><span>UPT</span><input class="in" type="number" name="t_upt" min="0" step="0.1" value="${s.target.upt||''}"></label>
+      <label><span>EAC (%)</span><input class="in" type="number" name="t_eac" min="0" max="100" step="1" value="${s.target.eac||''}"></label>
+      <label><span>Endless Aisle (Rp)</span><input class="in" type="number" name="t_ea" min="0" step="100000" value="${s.target.ea||''}"></label>
+     </div>
+     <p class="hint">${r.targetNext?'Sales & EA diisi dari Target Bulanan '+mS(d.next)+'.':'Target bulanan '+mS(d.next)+' belum diisi; sementara memakai target bulan ini.'}</p></div>
+    <label><span>🧭 Rencana coaching</span><textarea class="in" name="rencana" rows="3" maxlength="1500">${esc(s.rencana)}</textarea></label>
+    ${chips(S.rencana,'rencana')}
+    <label><span>📝 Catatan <i>opsional</i></span><textarea class="in" name="catatan" rows="2" maxlength="1500">${esc(s.catatan)}</textarea></label>
+    ${x&&(x.tanggapan||x.komitmen)?`<div class="rp-resp"><h5 class="mb-h5">Tanggapan ${esc(depan(r.ra))} <small>${jam(x.ditanggapi)}</small></h5>${x.tanggapan?`<p class="rp-txt">${esc(x.tanggapan)}</p>`:''}${x.komitmen?`<p class="rp-txt"><small>Komitmen</small>${esc(x.komitmen)}</p>`:''}</div>`:''}
+    <p class="hint" id="rpErr" style="color:#e5484d;min-height:1em"></p>
+    <div class="row rp-btns" style="margin-top:0">
+     <button class="btn" type="button" data-rpa="kirim">${x&&x.dikirim?'Kirim ulang ke RA':'Kirim ke '+esc(depan(r.ra))}</button>
+     <button class="btn ghost" type="button" data-rpa="draft">Simpan draft</button>
+     <button class="btn ghost" type="button" data-rpa="prev">Pratinjau</button>
+     <button class="btn ghost" type="button" data-rpa="pdf">PDF</button>
+     <button class="btn ghost" type="button" data-rpa="wa">WA</button>
+     ${x?'<button class="btn danger" type="button" data-rpa="hapus">Hapus</button>':''}
+    </div>
+   </form>`;
+  if(keepScroll&&sc)sc.scrollTop=top;
+  const f=$id('rpF');
+  f.oninput=()=>readForm(f,s);
+  f.onchange=()=>readForm(f,s);
+ }
+ function readForm(f,s){
+  if(!f)return;
+  s.username=f.username.value;['kekuatan','perbaikan','rencana','catatan'].forEach(k=>s[k]=f[k].value);
+  s.target={sales:+f.t_sales.value||0,upt:+f.t_upt.value||0,eac:+f.t_eac.value||0,ea:+f.t_ea.value||0};
+ }
+ function confirmDel(b){if(b.dataset.sure)return true;b.dataset.sure=1;b.textContent='Ketuk lagi untuk hapus';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Hapus'}},3000);return false}
+ async function simpan(kirim,btn){
+  const e=C[cur],d=e&&e.d,r=d&&d.ras.find(y=>y.ra===ra);if(!r)return;
+  const s=stateOf(d,r),err=$id('rpErr');readForm($id('rpF'),s);
+  if(kirim&&!s.username){err.textContent='Pilih akun Hub '+depan(r.ra)+' dulu.';return}
+  if(kirim&&!s.kekuatan.trim()&&!s.perbaikan.trim()){err.textContent='Isi kekuatan atau area perbaikan sebelum dikirim.';return}
+  const txt=btn.textContent;btn.disabled=true;btn.textContent=kirim?'Mengirim…':'Menyimpan…';
+  try{
+   if(s.username&&(s.username!==r.username||!r.dipetakan)){const p={};p[r.ra]=s.username;await api('raporPetakan',{peta:p});Object.keys(C).forEach(m=>{const dd=C[m]&&C[m].d;if(dd&&dd.ras)dd.ras.forEach(y=>{if(y.ra===r.ra){y.username=s.username;y.dipetakan=true}})})}
+   const res=await api('raporSimpan',{item:Object.assign({bulan:cur,ra:r.ra},s),kirim});
+   d.items=(d.items||[]).filter(y=>y.id!==res.item.id).concat([res.item]);
+   s.id=res.item.id;s.diubah=res.item.diubah;keep();drawEd(true);renderHead();
+   toast(kirim?'Rapor terkirim ke akun '+depan(r.ra):'Draft tersimpan');
+  }catch(er){err.textContent=missing(er)?'Pasang Rapor.gs di Apps Script dulu.':er.message;btn.disabled=false;btn.textContent=txt}
+ }
+ async function hapus(){
+  const e=C[cur],d=e&&e.d,x=d&&itemOf(d,cur,ra);if(!x)return;
+  try{await api('raporHapus',{id:x.id});d.items=d.items.filter(y=>y.id!==x.id);delete E[cur+'|'+ra];keep();drawEd(true);renderHead();toast('Rapor dihapus')}
+  catch(er){$id('rpErr').textContent=er.message}
+ }
+
+ /* ---------- event ---------- */
+ const gate=fn=>window.ofaRole==='pemilik'||!window.ofaHeadGate?fn():window.ofaHeadGate(fn);
+ box.addEventListener('click',e=>{
+  const o=e.target.closest('[data-rpo]');if(o)return openSaya(o.dataset.rpo);
+  const r=e.target.closest('[data-rpe]');if(r)return gate(()=>openEditor(r.dataset.rpe));
+ });
+ if(bar)bar.addEventListener('click',e=>{const o=e.target.closest('[data-rpo]');if(o)openSaya(o.dataset.rpo)});
+ $('#pb').addEventListener('click',e=>{
+  if($id('rpView')){
+   const a=e.target.closest('[data-rpa]');if(!a||!lihat)return;
+   if(a.dataset.rpa==='pdf')return printPdf(lihat);
+   if(a.dataset.rpa==='ubah')return drawSaya(true);
+   if(a.dataset.rpa==='batal')return drawSaya(false);
+   return;
+  }
+  if(!$id('rpEd'))return;
+  const m=e.target.closest('[data-rpm]');if(m){readForm($id('rpF'),C[cur]&&C[cur].d&&(C[cur].d.ras||[]).find(y=>y.ra===ra)?stateOf(C[cur].d,C[cur].d.ras.find(y=>y.ra===ra)):{});cur=m.dataset.rpm;prevw=false;drawEd();const c=C[cur];if(!c||Date.now()-c.at>5*60e3)refreshMonth(cur);return}
+  const rr=e.target.closest('[data-rpr]');if(rr){ra=rr.dataset.rpr;prevw=false;drawEd();const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return}
+  const d=C[cur]&&C[cur].d,r=d&&(d.ras||[]).find(y=>y.ra===ra);if(!r)return;
+  const s=stateOf(d,r);
+  const sg=e.target.closest('[data-rpsg],.rp-seg button');
+  if(sg){const asp=sg.parentNode.dataset.asp,n=+sg.dataset.n;s.nilai[asp]=s.nilai[asp]===n?0:n;if(!s.nilai[asp])delete s.nilai[asp];sg.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===s.nilai[asp]));return}
+  const ch=e.target.closest('[data-rps]');
+  if(ch){const key=ch.dataset.rps,L=saran(d,r)[key],t=L[+ch.dataset.i],ta=$id('rpF')[key];ta.value=(ta.value.trim()?ta.value.trim()+'\n':'')+'• '+t;s[key]=ta.value;ch.disabled=true;return}
+  const a=e.target.closest('[data-rpa]');if(!a)return;
+  readForm($id('rpF'),s);
+  const k=a.dataset.rpa,it=asItem(d,r,s);
+  if(k==='kirim')return simpan(true,a);
+  if(k==='draft')return simpan(false,a);
+  if(k==='prev'){prevw=true;drawEd();const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return}
+  if(k==='tutupPrev'){prevw=false;drawEd();return}
+  if(k==='pdf')return printPdf(it);
+  if(k==='wa')return window.open('https://wa.me/?text='+encodeURIComponent(waText(it)),'_blank','noopener');
+  if(k==='hapus'){if(confirmDel(a))hapus();return}
+ });
+ window.ofaRaporReload=()=>staf()?loadSaya():load(true);
+
+ if(staf()){renderSaya();setTimeout(loadSaya,2500);setInterval(()=>{if(!document.hidden)loadSaya()},10*60e3)}
+ else{$id('rpTitle').textContent='Rapor Pengembangan RA';if(bar)bar.hidden=true;renderHead();setTimeout(()=>load(false),5200)}
 })();
 
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
