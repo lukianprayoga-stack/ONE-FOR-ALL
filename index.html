@@ -995,6 +995,18 @@ body.wk-printing #wkPrint{--bg:#fff;--fg:#111;--mut:#555;--card:#f3f4f6;--line:#
 .rp-head span{font-size:12.5px;color:var(--mut)}
 .rp-head em{flex:none;font-style:normal;text-align:center;font-size:11.5px;color:var(--mut);line-height:1.2}
 .rp-head em b{font-size:28px;color:var(--fg);margin:0}
+.rp-rks{display:flex;gap:16px;flex:none}.rp-rks em{display:block;min-width:64px}
+.rp-skor{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0 12px}
+.rp-skh b{display:block;font-size:14.5px}.rp-skh small{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
+.rp-skc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+.rp-skc>div{background:var(--card);border-radius:10px;padding:8px 10px;min-width:0}.rp-skc>div.na{opacity:.6}
+.rp-skc small{display:block;font-size:11px;color:var(--mut);line-height:1.25}.rp-skc b{display:block;font-size:17px;margin-top:2px}.rp-skc em{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:1px}
+.rp-skor .hint{margin:8px 0 0;font-size:12px}
+.ipm-rw{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;display:grid;gap:8px}.ipm-rw>small{font-size:12px;color:var(--mut);margin-top:-6px}
+.ipm-rw label>span{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin-bottom:3px}
+@media(max-width:560px){.rp-rks{flex-direction:column;gap:6px}.rp-rks em b{font-size:22px}.rp-skc{grid-template-columns:1fr 1fr}}
+.rp-rks{display:flex;gap:16px;flex:none}.rp-rks em{display:block;min-width:64px}
+@media(max-width:560px){.rp-rks{flex-direction:column;gap:6px}.rp-rks em b{font-size:22px}}
 .rp-txt{font-size:13.5px;line-height:1.55;white-space:pre-wrap;margin:0 0 6px}
 .rp-txt small{display:block;font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
 .rp-sk>div{display:grid;grid-template-columns:minmax(0,1fr) auto 96px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
@@ -5102,6 +5114,29 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const autoVal=(k,a)=>AUTO[a]&&k?AUTO[a][1](k):null;
  const achCls=a=>a<80?'ipm-r':a<100?'ipm-y':'ipm-o';
  const isi=v=>v!==''&&v!=null&&isFinite(Number(v));
+ /* --- skor peringkat: % target sales, UPT, EAC, cashless (bobot dari template) --- */
+ const RANKW={sales:40,upt:25,eac:20,cashless:15,cap:120};
+ const KOMP=[['sales','Sales vs target'],['upt','UPT vs target'],['eac','EAC (trx member) vs target'],['cashless','Transaksi cashless vs target']];
+ function cashlessDari(m){const r=m&&m.rows?m.rows.find(x=>x.k==='cashless'||/cashless/i.test(x.nama||'')):null;if(!r||!isi(r.real)||!Number(r.target))return null;return r.ukur==='min'?(Number(r.real)>0?Number(r.target)/Number(r.real):1):Number(r.real)/Number(r.target)}
+ function skorRanks(d,r0,s0){
+  const W=Object.assign({},RANKW,(d.ipmTpl&&d.ipmTpl.rank)||{}),cap=(Number(W.cap)||0)/100,t=d.toko||{},L=[];
+  (d.ras||[]).forEach(x=>{const k=x.kpi,it=(d.items||[]).find(y=>y.bulan===d.month&&y.ra===x.ra),m=r0&&s0&&x.ra===r0.ra?s0.ipm:it&&it.ipm;
+   const c={sales:k.target?k.sales/k.target:null,upt:t.uptTarget?k.upt/t.uptTarget:null,eac:t.eacTarget?k.eac/t.eacTarget:null,cashless:cashlessDari(m)};
+   let sm=0,w=0;Object.keys(c).forEach(n=>{if(c[n]==null||!isFinite(c[n])||!(Number(W[n])>0))return;const v=cap>0?Math.min(cap,Math.max(0,c[n])):Math.max(0,c[n]);sm+=v*W[n];w+=Number(W[n])});
+   L.push({ra:x.ra,sales:k.sales,nilai:w?Math.round(sm/w*10000)/100:0,c,w:{sales:W.sales,upt:W.upt,eac:W.eac,cashless:W.cashless},cap:W.cap})});
+  L.sort((a,b)=>(b.nilai-a.nilai)||(b.sales-a.sales));const o={};L.forEach((x,i)=>{x.rank=i+1;x.dari=L.length;o[x.ra]=x});return o;
+ }
+ function ipmRanks(d,r0,s0){
+  const L=[];(d.ras||[]).forEach(r=>{const x=(d.items||[]).find(y=>y.bulan===d.month&&y.ra===r.ra),m=r0&&s0&&r.ra===r0.ra?s0.ipm:x&&x.ipm;if(m&&m.verified&&ipmDipakai(m))L.push([r.ra,m.total])});
+  L.sort((a,b)=>b[1]-a[1]);const o={};L.forEach((v,i)=>o[v[0]]={rank:i+1,dari:L.length});return o;
+ }
+ const rankHtml=(sk,ir,idr)=>sk||ir?`<div class="rp-rks">${sk?`<em title="Peringkat skor gabungan: % target sales, UPT, EAC, cashless"><b>#${sk.rank}</b>skor ${f2(sk.nilai)} · dari ${sk.dari}</em>`:''}${ir?`<em title="Peringkat Nilai IPM di antara RA yang IPM-nya sudah diverifikasi"><b>#${ir}</b>IPM · dari ${idr}</em>`:''}</div>`:'';
+ function skorHtml(sk){
+  if(!sk||!sk.c)return '';const tw=KOMP.reduce((a,k)=>a+(sk.c[k[0]]!=null?Number(sk.w[k[0]])||0:0),0);
+  return `<div class="rp-skor"><div class="rp-skh"><div><b>Skor peringkat ${f2(sk.nilai)}</b><small>Peringkat ${sk.rank} dari ${sk.dari} RA · tiap komponen dibatasi ${fv(sk.cap)}%</small></div></div>
+   <div class="rp-skc">${KOMP.map(([k,l])=>{const v=sk.c[k],w=Number(sk.w[k])||0;return `<div class="${v==null?'na':''}"><small>${l}</small><b class="${v==null?'':v>=1?'wk-up':'wk-down'}">${v==null?'–':dec(v*100,1)+'%'}</b><em>bobot ${fv(w)}${v==null?' · belum ada data':tw?' · '+dec(Math.min(sk.cap/100||9,Math.max(0,v))*w/tw*100,1)+' poin':''}</em></div>`}).join('')}</div>
+   ${sk.c.cashless==null?'<p class="hint">Cashless diambil dari baris <b>Cashless</b> di Nilai IPM. Selama belum diisi, skor dihitung dari komponen lain.</p>':''}</div>`;
+ }
  const ipmDipakai=m=>!!(m&&m.rows&&m.rows.some(r=>isi(r.real)&&Number(r.target)));
  function hitungIpm(m){
   if(!m||!m.rows)return m;let t=0,b=0;const cap=Number(m.cap)||0;
@@ -5151,9 +5186,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const para=(h,v)=>v?`<h5 class="mb-h5">${h}</h5><p class="rp-txt">${esc(v)}</p>`:'';
   let no=0;const N=()=>++no+'. ';const ipm=ipmDipakai(x.ipm);
   return `<div class="wk-rep rp-view">
-   <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span></div>${K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
+   <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span></div>${K.skor?rankHtml(K.skor,x.ipmRank,x.ipmDari):K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
    ${ipm?`<h4>${N()}Nilai IPM ${mL(x.bulan)} <small>Monthly Weighted <b class="ipm-big">${f2(x.ipm.total)}</b></small></h4>${ipmView(x,print)}`:''}
    <h4>${N()}Kinerja penjualan ${mL(x.bulan)} <small>dari DSR</small></h4>
+   ${skorHtml(K.skor)}
    <div class="wk-kpis">
     ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari target '+jt(k.target):'target belum diisi',k.target?(k.ach>=(P.complete===false?P.days/P.daysInMonth:1)?'wk-up':'wk-down'):'')}
     ${tile('Kontribusi toko',pc(k.kontribusi),l?'bulan lalu '+pc(l.kontribusi):'',l?ud(k.kontribusi,l.kontribusi):'')}
@@ -5189,7 +5225,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function waText(x){
   const K=x.kpi||{},k=K.saya||{},T=x.target||{},L=[];
   L.push('*RAPOR PENGEMBANGAN RA*',STORE,nama(x.ra)+' · '+mL(x.bulan),'');
-  L.push('*Kinerja*','Sales '+jt(k.sales)+(k.target?' ('+pc(k.ach)+' dari target)':'')+(K.rank?' · peringkat '+K.rank+' dari '+K.dari:''));
+  L.push('*Kinerja*','Sales '+jt(k.sales)+(k.target?' ('+pc(k.ach)+' dari target)':'')+(K.skor?' · peringkat '+K.skor.rank+' dari '+K.skor.dari+' (skor '+f2(K.skor.nilai)+')':K.rank?' · peringkat '+K.rank+' dari '+K.dari:''));
   L.push('Transaksi '+nf(k.trx)+' · UPT '+dec(k.upt)+' · EAC '+pc(k.eac)+' · ATV '+jt(k.atv)+' · EA '+jt(k.ea),'');
   if(ipmDipakai(x.ipm)){L.push('*Nilai IPM: '+f2(x.ipm.total)+'*');x.ipm.rows.forEach(r=>L.push('• '+r.nama+': '+(isi(r.real)?fv(r.real)+' / '+fv(r.target)+' = '+f2(r.ach)+'% → '+f2(r.w):'belum diisi')));L.push('')}
   if(x.kekuatan)L.push('*Kekuatan*',x.kekuatan,'');
@@ -5233,9 +5269,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(saya.missing){b.innerHTML='<p class="dp-empty">Fitur rapor belum dipasang di Apps Script. Hubungi Store Head.</p>';return}
   if(!L.length){b.innerHTML='<p class="dp-empty">Belum ada rapor. Store Head mengirim rapor setiap akhir bulan.</p>';return}
   const x=L[0],k=(x.kpi&&x.kpi.saya)||{};
-  b.innerHTML=`<div class="wk-hero"><div><b>${esc(mL(x.bulan))}</b><span>${ipmDipakai(x.ipm)?'IPM '+f2(x.ipm.total)+' · ':''}${x.kpi&&x.kpi.rank?'Peringkat '+x.kpi.rank+' dari '+x.kpi.dari+' RA · ':''}sales ${jt(k.sales)}${k.target?' ('+pc(k.ach)+')':''}</span></div>${pill(x.status)}</div>
+  b.innerHTML=`<div class="wk-hero"><div><b>${esc(mL(x.bulan))}</b><span>${ipmDipakai(x.ipm)?'IPM '+f2(x.ipm.total)+' · ':''}${x.kpi&&x.kpi.skor?'Peringkat '+x.kpi.skor.rank+' dari '+x.kpi.skor.dari+' · ':''}sales ${jt(k.sales)}${k.target?' ('+pc(k.ach)+')':''}</span></div>${pill(x.status)}</div>
    <button type="button" class="iv-todo ct-btn rp-open" data-rpo="${esc(x.id)}"><b>${unread(x)?'📬':'📄'}</b><span>${unread(x)?'Baca rapor baru':'Buka rapor'}<small>${x.perbaikan?'Fokus: '+esc(x.perbaikan.split('\n')[0].replace(/^[•\-\s]+/,'').slice(0,90)):'Evaluasi, target, dan rencana coaching'} →</small></span></button>
-   ${L.length>1?`<div class="rp-list">${L.slice(1,7).map(y=>`<button type="button" class="rp-row" data-rpo="${esc(y.id)}"><div><b>${esc(mL(y.bulan))}</b><small>${ipmDipakai(y.ipm)?'IPM '+f2(y.ipm.total)+' · ':''}${y.kpi&&y.kpi.rank?'#'+y.kpi.rank+' · ':''}sales ${jt(y.kpi&&y.kpi.saya&&y.kpi.saya.sales)}</small></div>${pill(y.status)}</button>`).join('')}</div>`:''}`;
+   ${L.length>1?`<div class="rp-list">${L.slice(1,7).map(y=>`<button type="button" class="rp-row" data-rpo="${esc(y.id)}"><div><b>${esc(mL(y.bulan))}</b><small>${ipmDipakai(y.ipm)?'IPM '+f2(y.ipm.total)+' · ':''}${y.kpi&&y.kpi.skor?'#'+y.kpi.skor.rank+' · ':''}sales ${jt(y.kpi&&y.kpi.saya&&y.kpi.saya.sales)}</small></div>${pill(y.status)}</button>`).join('')}</div>`:''}`;
  }
  function openSaya(id){
   const x=((saya&&saya.items)||[]).find(y=>y.id===id);if(!x)return;
@@ -5294,12 +5330,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const d0=def(),d=(cardM&&C[cardM]&&C[cardM].d)||d0;
   if(!d){b.innerHTML='<p class="dp-empty">'+(busy?'Menyiapkan data RA…':C.err?'Gagal memuat: '+esc(C.err):'Rapor muncul setelah data DSR tersedia.')+'</p>';return}
   if(d.message&&!d.ras){b.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
-  const R=d.ras||[],L=R.map(r=>itemOf(d,d.month,r.ra)),sent=L.filter(x=>x&&x.status!=='draft').length,resp=L.filter(x=>x&&x.status==='ditanggapi').length;
+  const SK=skorRanks(d),IR=ipmRanks(d),R=(d.ras||[]).slice().sort((a,b)=>(SK[a.ra]?SK[a.ra].rank:99)-(SK[b.ra]?SK[b.ra].rank:99)),L=R.map(r=>itemOf(d,d.month,r.ra)),sent=L.filter(x=>x&&x.status!=='draft').length,resp=L.filter(x=>x&&x.status==='ditanggapi').length;
   $id('rpSub').textContent='Rapor bulanan · dikirim ke akun masing-masing RA';
   const chips=`<div class="dp-chips rp-mc">${(d0.months||[d0.month]).map(m=>mChip(m,m===d.month,'data-rpcm')).join('')}</div>`;
   if(cardBusy){b.innerHTML=chips+'<p class="dp-empty">Menyiapkan data '+mL(cardBusy)+'… (10–30 detik)</p>';return}
   b.innerHTML=chips+`<p class="rp-mon"><b>${mL(d.month)}</b>${d.period.complete?' · data lengkap':' · bulan berjalan, data s/d '+tgl(d.period.dataEnd)}</p><div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
-   <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk">${r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${ipmDipakai(x&&x.ipm)?'<b class="rp-ipmv">IPM '+f2(x.ipm.total)+'</b> · ':''}${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
+   <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk" title="Peringkat skor gabungan">${SK[r.ra]?SK[r.ra].rank:r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${SK[r.ra]?'<b class="rp-ipmv">Skor '+f2(SK[r.ra].nilai)+'</b> · ':''}${ipmDipakai(x&&x.ipm)?'<b class="rp-ipmv">IPM '+f2(x.ipm.total)+'</b> · ':''}${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
  }
  /* --- saran otomatis dari KPI --- */
  function saran(d,r){
@@ -5348,7 +5384,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function asItem(d,r,s){
   const x=itemOf(d,d.month,r.ra)||{},lalu=(d.items||[]).find(y=>y.bulan===d.prevMonth&&y.ra===r.ra&&y.status!=='draft');
   return Object.assign({},x,s,{bulan:d.month,ra:r.ra,oleh:x.oleh||(window.ofaAkun&&window.ofaAkun.nama)||'Store Head',
-   kpi:{saya:r.kpi,lalu:r.prev,rank:r.rank,dari:d.ras.length,toko:d.toko,period:d.period,next:d.next,cekTarget:lalu?{bulan:lalu.bulan,target:lalu.target}:null}});
+   ipmRank:(ipmRanks(d,r,s)[r.ra]||{}).rank,ipmDari:(ipmRanks(d,r,s)[r.ra]||{}).dari,
+   kpi:{saya:r.kpi,lalu:r.prev,rank:r.rank,skor:skorRanks(d,r,s)[r.ra],dari:d.ras.length,toko:d.toko,period:d.period,next:d.next,cekTarget:lalu?{bulan:lalu.bulan,target:lalu.target}:null}});
  }
  function openEditor(name){
   const d0=def();if(!d0)return;const d=(cardM&&C[cardM]&&C[cardM].d)||d0;
@@ -5377,7 +5414,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const S=saran(d,r),k=r.kpi,t=d.toko,ck=cekRows(k,it.kpi.cekTarget);
   const ak=d.akun||[];
   const chips=(list,key)=>list.length?`<div class="mb-sug">${list.map((v,i)=>`<button type="button" data-rps="${key}" data-i="${i}"${String(s[key]||'').indexOf(v)>=0?' disabled':''}>+ ${esc(v)}</button>`).join('')}</div>`:'';
-  ed.innerHTML=`<div class="rp-head"><div><small>${mL(cur)}${d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd)}</small><b>${esc(nama(r.ra))}</b><span>${x?pill(x.status)+(x.dikirim?' · dikirim '+jam(x.dikirim):'')+(x.dibaca?' · dibaca '+jam(x.dibaca):''):pill('baru')}</span></div><em><b>#${r.rank}</b>dari ${d.ras.length} RA</em></div>
+  ed.innerHTML=`<div class="rp-head"><div><small>${mL(cur)}${d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd)}</small><b>${esc(nama(r.ra))}</b><span>${x?pill(x.status)+(x.dikirim?' · dikirim '+jam(x.dikirim):'')+(x.dibaca?' · dibaca '+jam(x.dibaca):''):pill('baru')}</span></div><span id="rpRks">${rankHtml(skorRanks(d,r,s)[r.ra],(ipmRanks(d,r,s)[r.ra]||{}).rank,(ipmRanks(d,r,s)[r.ra]||{}).dari)}</span></div>
    ${d.period.complete?'':`<p class="hint rp-warn rp-jalan">${mL(cur)} belum selesai (data s/d ${tgl(d.period.dataEnd)}). Rapor bulanan sebaiknya dikirim setelah akhir bulan; pilih bulan yang sudah lengkap di atas.</p>`}
    <div class="wk-kpis">
     ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari '+jt(k.target):'target belum diisi',k.target?(k.ach>=(d.period.complete?1:d.period.days/d.period.daysInMonth)?'wk-up':'wk-down'):'')}
@@ -5386,6 +5423,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     ${tile('Endless Aisle',jt(k.ea),k.eaT?pc(k.eaAch)+' dari '+jt(k.eaT):nf(k.eaTrx)+' trx',k.eaT?(k.eaAch>=1?'wk-up':'wk-down'):'')}
    </div>
    ${ck.length?`<p class="wk-p rp-ck">Target dari rapor ${mS(it.kpi.cekTarget.bulan)}: ${ck.map(c=>`<span class="${c[3]?'wk-up':'wk-down'}">${c[0]} ${c[3]?'✓':'✗'} ${c[2]}/${c[1]}</span>`).join(' · ')}</p>`:''}
+   <div id="rpSkor">${skorHtml(skorRanks(d,r,s)[r.ra])}</div>
    ${ipmEd(d,r,s)}
    <form class="mb-form rp-form" id="rpF" autocomplete="off">
     <label><span>Akun Hub RA <i>rapor dikirim ke akun ini</i></span><select class="in" name="username"><option value="">— pilih akun —</option>${ak.map(a=>`<option value="${esc(a.username)}"${a.username===s.username?' selected':''}>${esc(a.nama)} (@${esc(a.username)})${a.jabatan?' · '+esc(a.jabatan):''}</option>`).join('')}</select></label>
@@ -5467,11 +5505,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    const x=s.ipm.rows[+row.dataset.ipr];
    if(f==='target'||f==='real'){x[f]=el.value===''?'':Number(el.value);hitungIpm(s.ipm);
     if(s.ipm.verified){s.ipm.verified=false;s.ipm.verifiedAt=0;const v=$id('ipmVer');if(v)v.checked=false}
-    box.querySelectorAll('[data-ipr]').forEach(upd);$id('ipmTot').textContent=f2(s.ipm.total)}
+    box.querySelectorAll('[data-ipr]').forEach(upd);$id('ipmTot').textContent=f2(s.ipm.total);skorLive(d,r,s)}
    else x[f]=el.value;
   };
-  box.onchange=e=>{if(e.target.id==='ipmVer'){s.ipm.verified=e.target.checked;s.ipm.verifiedAt=e.target.checked?Date.now():0}};
+  box.onchange=e=>{if(e.target.id==='ipmVer'){s.ipm.verified=e.target.checked;s.ipm.verifiedAt=e.target.checked?Date.now():0;skorLive(d,r,s)}};
  }
+ function skorLive(d,r,s){const a=$id('rpSkor'),b=$id('rpRks'),sk=skorRanks(d,r,s)[r.ra],ir=ipmRanks(d,r,s)[r.ra]||{};if(a)a.innerHTML=skorHtml(sk);if(b)b.innerHTML=rankHtml(sk,ir.rank,ir.dari)}
  function tplEd(d){
   const T=tplDraft,tot=T.rows.reduce((a,x)=>a+(Number(x.bobot)||0),0),A=Object.keys(AUTO);
   return `<div class="ipm-ed" id="rpTpl"><div class="ipm-top"><div><b>⚙ Atur KPI IPM</b><small>Berlaku untuk semua RA. Target di sini menjadi nilai awal; per RA tetap bisa diubah.</small></div><em><small>Total bobot</small><b class="${Math.abs(tot-100)>.01?'wk-down':''}">${fv(tot)}%</b></em></div>
@@ -5486,6 +5525,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <button type="button" class="btn danger ipm-tdel" data-tdel="${i}" aria-label="Hapus KPI">Hapus</button>
    </div>`).join('')}
    <div class="ipm-foot"><label class="ipm-cap"><span>ACH maksimum (%)</span><input class="in" type="number" step="any" data-cap="1" value="${T.cap||''}" placeholder="tanpa batas"></label><span><button type="button" class="btn ghost" data-ipx="tadd">+ Tambah KPI</button></span></div>
+   <div class="ipm-rw"><b>Bobot skor peringkat RA</b><small>Peringkat = rata-rata tertimbang pencapaian tiap komponen terhadap targetnya. Bobot terbesar untuk % target sales.</small>
+    <div class="rp-g4">${KOMP.map(([k,l])=>`<label><span>${l}</span><input class="in" type="number" step="any" min="0" data-rw="${k}" value="${(T.rank||RANKW)[k]}"></label>`).join('')}</div>
+    <label class="ipm-cap"><span>Batas pencapaian per komponen (%)</span><input class="in" type="number" step="any" data-rw="cap" value="${(T.rank||RANKW).cap}"></label></div>
    <p class="hint" id="tplErr" style="color:#e5484d;min-height:1em"></p>
    <div class="row rp-btns" style="margin-top:0"><button type="button" class="btn" data-ipx="tsave">Simpan template</button><button type="button" class="btn ghost" data-ipx="tback">Batal</button><button type="button" class="btn ghost" data-ipx="treset">Kembalikan bawaan</button></div>
   </div>`;
@@ -5493,6 +5535,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function tplLive(){
   const box=$id('rpTpl');if(!box)return;
   box.oninput=box.onchange=e=>{const el=e.target;if(el.dataset.cap){tplDraft.cap=el.value===''?0:Number(el.value);return}
+   if(el.dataset.rw){tplDraft.rank=Object.assign({},RANKW,tplDraft.rank||{});tplDraft.rank[el.dataset.rw]=el.value===''?0:Number(el.value);return}
    const row=el.closest('[data-t]'),f=el.dataset.f;if(!row||!f)return;const x=tplDraft.rows[+row.dataset.t];
    x[f]=f==='bobot'||f==='target'?(el.value===''?0:Number(el.value)):el.value;
    if(f==='bobot'){const tot=tplDraft.rows.reduce((a,y)=>a+(Number(y.bobot)||0),0),b=box.querySelector('.ipm-top em b');b.textContent=fv(tot)+'%';b.className=Math.abs(tot-100)>.01?'wk-down':''}};
