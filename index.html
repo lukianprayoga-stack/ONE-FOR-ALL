@@ -988,6 +988,7 @@ body.wk-printing #wkPrint{--bg:#fff;--fg:#111;--mut:#555;--card:#f3f4f6;--line:#
 .rp-dot.rp-s0{background:#9ca3af}.rp-dot.rp-s1{background:#f59e0b}.rp-dot.rp-s2{background:#2f80ed}.rp-dot.rp-s3{background:#7c3aed}.rp-dot.rp-s4{background:#16a34a}
 .rp-ras{margin-top:8px}.rp-ras button{display:inline-flex;align-items:center}
 .rp-warn{color:var(--amber);font-weight:700}
+.rp-mc{margin-top:10px}.rp-mon{font-size:13px;color:var(--mut);margin:10px 0 0}.rp-mon b{color:var(--fg)}.rp-jalan{margin:-4px 0 10px}
 .rp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:16px;background:var(--card);margin:10px 0 12px}
 .rp-head small{display:block;font-size:12px;color:var(--mut)}
 .rp-head b{display:block;font-size:22px;letter-spacing:-.4px;line-height:1.2;margin:2px 0 4px}
@@ -5071,7 +5072,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
 (function(){
  const box=document.getElementById('rp'),bar=document.getElementById('rpAlert');if(!box)return;
  const $id=i=>document.getElementById(i);
- const STORE='EIGER Store Soekarno SoloBaru (7014)',CK='ofa_rapor',SK='ofa_rapor_saya',TTL=30*60e3;
+ const STORE='EIGER Store Soekarno SoloBaru (7014)',CK='ofa_rapor2',SK='ofa_rapor_saya',TTL=30*60e3;
  const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
  const staf=()=>window.ofaRole==='staf';
  const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
@@ -5266,7 +5267,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  /* =================== Store Head: susun & kirim =================== */
  let C={},cur='',ra='',busy=false,E={},prevw=false;
  try{C=JSON.parse(localStorage.getItem(CK)||'{}')||{}}catch(e){C={}}
- function keep(){const o={def:C.def};Object.keys(C).filter(k=>/^\d{4}-\d{2}$/.test(k)).sort().slice(-3).forEach(k=>o[k]=C[k]);C=o;try{localStorage.setItem(CK,JSON.stringify(C))}catch(e){}}
+ function keep(){const o={def:C.def};if(C.def&&C[C.def])o[C.def]=C[C.def];Object.keys(C).filter(k=>/^\d{4}-\d{2}$/.test(k)&&k!==C.def).sort((a,b)=>(C[b].at||0)-(C[a].at||0)).slice(0,3).forEach(k=>o[k]=C[k]);C=o;try{localStorage.setItem(CK,JSON.stringify(C))}catch(e){}}
+ let cardM='',cardBusy='';
+ // bulan berjalan = bulan terbaru yang belum lengkap (server memilih bulan lengkap terakhir sebagai bawaan)
+ const jalan=m=>{const d0=def();return !!(d0&&d0.months&&m===d0.months[0]&&m!==d0.month)};
+ const mChip=(m,on,attr)=>`<button type="button" ${attr}="${m}" class="${on?'on':''}">${mS(m)}${jalan(m)?' · berjalan':''}</button>`;
  const def=()=>{const e=C.def&&C[C.def];return e?e.d:null};
  async function fetchMonth(m){
   const d=await api('raporData',m?{month:m}:{});
@@ -5286,12 +5291,14 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const b=$id('rpBody');
   if(C.missing){b.innerHTML='<p class="dp-empty">Pasang file <b>Rapor.gs</b> di Apps Script (di atas Akun.gs), jalankan <b>raporSetup</b>, lalu Deploy → New version.</p>';return}
   if(C.deny){b.innerHTML='<p class="dp-empty">Rapor disusun oleh Store Head. Masuk dengan akun pemilik untuk membuka.</p>';return}
-  const d=def();
+  const d0=def(),d=(cardM&&C[cardM]&&C[cardM].d)||d0;
   if(!d){b.innerHTML='<p class="dp-empty">'+(busy?'Menyiapkan data RA…':C.err?'Gagal memuat: '+esc(C.err):'Rapor muncul setelah data DSR tersedia.')+'</p>';return}
   if(d.message&&!d.ras){b.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
   const R=d.ras||[],L=R.map(r=>itemOf(d,d.month,r.ra)),sent=L.filter(x=>x&&x.status!=='draft').length,resp=L.filter(x=>x&&x.status==='ditanggapi').length;
-  $id('rpSub').textContent=mL(d.month)+(d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd))+' · dikirim ke akun masing-masing RA';
-  b.innerHTML=`<div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
+  $id('rpSub').textContent='Rapor bulanan · dikirim ke akun masing-masing RA';
+  const chips=`<div class="dp-chips rp-mc">${(d0.months||[d0.month]).map(m=>mChip(m,m===d.month,'data-rpcm')).join('')}</div>`;
+  if(cardBusy){b.innerHTML=chips+'<p class="dp-empty">Menyiapkan data '+mL(cardBusy)+'… (10–30 detik)</p>';return}
+  b.innerHTML=chips+`<p class="rp-mon"><b>${mL(d.month)}</b>${d.period.complete?' · data lengkap':' · bulan berjalan, data s/d '+tgl(d.period.dataEnd)}</p><div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
    <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk">${r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${ipmDipakai(x&&x.ipm)?'<b class="rp-ipmv">IPM '+f2(x.ipm.total)+'</b> · ':''}${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
  }
  /* --- saran otomatis dari KPI --- */
@@ -5344,20 +5351,20 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    kpi:{saya:r.kpi,lalu:r.prev,rank:r.rank,dari:d.ras.length,toko:d.toko,period:d.period,next:d.next,cekTarget:lalu?{bulan:lalu.bulan,target:lalu.target}:null}});
  }
  function openEditor(name){
-  const d=def();if(!d)return;
+  const d0=def();if(!d0)return;const d=(cardM&&C[cardM]&&C[cardM].d)||d0;
   cur=d.month;ra=name||((d.ras||[])[0]||{}).ra||'';prevw=false;tplMode=false;
   openModal('Rapor Pengembangan RA','<div class="dp-chips" id="rpMonths"></div><div class="dp-chips rp-ras" id="rpRas"></div><div id="rpEd"></div>');wide();
   drawEd();
   const e=C[cur];if(!e||!e.d.ipmTpl||Date.now()-e.at>5*60e3)refreshMonth(cur);
  }
  async function refreshMonth(m){
-  try{await fetchMonth(m);if(cur===m&&$id('rpEd'))drawEd(true);if(m===C.def)renderHead()}
+  try{await fetchMonth(m);if(cur===m&&$id('rpEd'))drawEd(true);if(m===C.def||m===cardM)renderHead()}
   catch(err){if(cur===m&&$id('rpEd')&&!C[m])$id('rpEd').innerHTML='<p class="dp-empty">Gagal memuat: '+esc(err.message)+'</p>'}
  }
  function drawEd(keepScroll){
   const ed=$id('rpEd');if(!ed)return;
   const d0=def(),e=C[cur],d=e&&e.d;
-  $id('rpMonths').innerHTML=((d0&&d0.months)||[cur]).slice(0,6).map(m=>`<button type="button" data-rpm="${m}" class="${m===cur?'on':''}">${mS(m)}</button>`).join('');
+  $id('rpMonths').innerHTML=((d0&&d0.months)||[cur]).map(m=>mChip(m,m===cur,'data-rpm')).join('');
   if(!d){$id('rpRas').innerHTML='';ed.innerHTML='<p class="dp-empty">Menyiapkan data '+mL(cur)+'… (10–30 detik)</p>';return}
   if(d.message&&!d.ras){$id('rpRas').innerHTML='';ed.innerHTML='<p class="dp-empty">'+esc(d.message)+'</p>';return}
   if(!d.ras.find(r=>r.ra===ra))ra=(d.ras[0]||{}).ra||'';
@@ -5371,6 +5378,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const ak=d.akun||[];
   const chips=(list,key)=>list.length?`<div class="mb-sug">${list.map((v,i)=>`<button type="button" data-rps="${key}" data-i="${i}"${String(s[key]||'').indexOf(v)>=0?' disabled':''}>+ ${esc(v)}</button>`).join('')}</div>`:'';
   ed.innerHTML=`<div class="rp-head"><div><small>${mL(cur)}${d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd)}</small><b>${esc(nama(r.ra))}</b><span>${x?pill(x.status)+(x.dikirim?' · dikirim '+jam(x.dikirim):'')+(x.dibaca?' · dibaca '+jam(x.dibaca):''):pill('baru')}</span></div><em><b>#${r.rank}</b>dari ${d.ras.length} RA</em></div>
+   ${d.period.complete?'':`<p class="hint rp-warn rp-jalan">${mL(cur)} belum selesai (data s/d ${tgl(d.period.dataEnd)}). Rapor bulanan sebaiknya dikirim setelah akhir bulan; pilih bulan yang sudah lengkap di atas.</p>`}
    <div class="wk-kpis">
     ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari '+jt(k.target):'target belum diisi',k.target?(k.ach>=(d.period.complete?1:d.period.days/d.period.daysInMonth)?'wk-up':'wk-down'):'')}
     ${tile('UPT',dec(k.upt),'toko '+dec(t.upt)+(r.prev?' · lalu '+dec(r.prev.upt):''),k.upt>=t.uptTarget?'wk-up':'wk-down')}
@@ -5533,10 +5541,18 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   catch(er){$id('rpErr').textContent=er.message}
  }
 
+ async function pilihBulan(m){
+  cardM=m===C.def?'':m;
+  const c=C[m];if(c&&c.d&&c.d.ipmTpl&&Date.now()-c.at<TTL){renderHead();return}
+  cardBusy=m;renderHead();
+  try{await fetchMonth(m)}catch(e){toast('Gagal memuat '+mL(m)+': '+e.message);cardM=''}
+  finally{if(cardBusy===m)cardBusy='';renderHead()}
+ }
  /* ---------- event ---------- */
  const gate=fn=>window.ofaRole==='pemilik'||!window.ofaHeadGate?fn():window.ofaHeadGate(fn);
  box.addEventListener('click',e=>{
   const o=e.target.closest('[data-rpo]');if(o)return openSaya(o.dataset.rpo);
+  const cm=e.target.closest('[data-rpcm]');if(cm)return gate(()=>pilihBulan(cm.dataset.rpcm));
   const r=e.target.closest('[data-rpe]');if(r)return gate(()=>openEditor(r.dataset.rpe));
  });
  if(bar)bar.addEventListener('click',e=>{const o=e.target.closest('[data-rpo]');if(o)openSaya(o.dataset.rpo)});
