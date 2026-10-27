@@ -1014,6 +1014,68 @@ body.wk-printing #wkPrint{--bg:#fff;--fg:#111;--mut:#555;--card:#f3f4f6;--line:#
 .rp-sign span{font-size:12px;color:var(--mut)}.rp-sign i{display:block;height:60px;border-bottom:1px solid var(--fg)}.rp-sign small{display:block;font-size:12px;margin-top:4px}
 @media(max-width:560px){.rp-g4{grid-template-columns:1fr 1fr}.rp-sc>div{flex-wrap:wrap;gap:4px}.rp-sk>div{grid-template-columns:minmax(0,1fr) auto}.rp-sk b{display:none}.rp-head b{font-size:19px}}
 @media print{.rp-sk>div,.rp-resp,.rp-head,.rp-sign{break-inside:avoid}}
+.rp-ipmv{color:var(--fg);font-weight:800}
+.ipm-ed{border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:0 0 12px;background:var(--bg)}
+.ipm-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.ipm-top b{display:block;font-size:15px}.ipm-top small{display:block;font-size:12px;color:var(--mut);margin-top:2px}
+.ipm-top em{flex:none;font-style:normal;text-align:right}.ipm-top em b{font-size:26px;letter-spacing:-.5px;line-height:1.1}
+.ipm-row{padding:10px 0;border-top:1px solid var(--line)}
+.ipm-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ipm-h b{display:block;font-size:13.5px;line-height:1.3}.ipm-h small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.ipm-rem,td.ipm-rem{background:#dc2626;color:#fff;font-size:11px;font-weight:700}
+span.ipm-rem{flex:none;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.ipm-rem[hidden]{display:none}
+.ipm-in{display:grid;grid-template-columns:1fr 1fr 96px 84px;gap:8px;margin-top:8px;align-items:end}
+.ipm-in label>span{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin-bottom:3px}
+.ipm-in .in{padding:8px 10px}
+.ipm-ach,.ipm-wt{border-radius:10px;padding:5px 8px;text-align:center;background:var(--card);min-height:40px}
+.ipm-ach small,.ipm-wt small{display:block;font-size:10.5px;font-weight:700;opacity:.75}
+.ipm-ach b,.ipm-wt b{display:block;font-size:15px}
+.ipm-r{background:#ef2b2b!important;color:#fff!important}.ipm-y{background:#fde047!important;color:#1a1a1a!important}.ipm-o{background:#f59e0b!important;color:#1a1a1a!important}
+.ipm-auto{margin:6px 0 0;font-size:12px}
+.ipm-use,.ipm-add{border:1px dashed var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600}
+.ipm-add{margin-top:8px}
+.ipm-prev{margin:6px 0 0;font-size:12px;color:var(--mut);line-height:1.45;border-left:3px solid var(--line);padding-left:8px}
+.ipm-pa{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.ipm-pa[hidden]{display:none}
+.ipm-pa label:last-child{grid-column:1/-1}
+.ipm-pa label>span{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin-bottom:3px}.ipm-pa label>span i{font-style:normal;font-weight:500}
+.ipm-pa textarea.in{resize:vertical;font:inherit;font-size:13px;line-height:1.4;min-height:58px;height:auto}
+.ipm-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
+.ipm-foot>span{display:flex;flex-wrap:wrap;gap:6px}.ipm-foot .btn{padding:7px 12px;font-size:12.5px}
+.ipm-ver{font-size:14px}
+.ipm-trow{display:grid;grid-template-columns:1.5fr .6fr .8fr 1.6fr;gap:8px;padding:10px 0;border-top:1px solid var(--line);align-items:end}
+.ipm-trow label>span,.ipm-cap>span{display:block;font-size:11.5px;font-weight:700;color:var(--mut);margin-bottom:3px}
+.ipm-trow .in{padding:8px 10px}
+.ipm-tn{grid-column:1/-1}
+.ipm-trow label:nth-of-type(5),.ipm-trow label:nth-of-type(6){grid-column:span 1}
+.ipm-tdel{padding:8px 12px;font-size:12px}
+.ipm-cap{display:flex;align-items:center;gap:8px}.ipm-cap>span{margin:0}.ipm-cap .in{width:110px;padding:7px 10px}
+.ipm-wrap{overflow-x:auto;margin:4px 0}
+.ipm-tbl{width:100%;min-width:1000px;border-collapse:collapse;font-size:12px}
+.ipm-tbl th{background:#6b7280;color:#fff;font-weight:600;padding:7px 6px;border:1px solid #fff;text-align:center;line-height:1.25}
+.ipm-tbl td{padding:7px 6px;border:1px solid var(--line);text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
+.ipm-tbl td.ipm-k,.ipm-tbl td.ipm-t{text-align:left;white-space:normal}
+.ipm-tbl td.ipm-k{min-width:230px}.ipm-tbl td.ipm-k b{display:block;font-weight:600}.ipm-tbl td small{display:block;font-size:10.5px;color:var(--mut);margin-top:2px}
+.ipm-tbl td.ipm-rem{text-align:left;width:92px;line-height:1.25}
+.ipm-tbl td.ipm-t{min-width:150px;font-size:11.5px;line-height:1.4}
+.ipm-tbl td.ipm-a{font-weight:700;text-align:center}
+.ipm-tbl tfoot td{background:#9ca3af;color:#fff;font-weight:700;border-color:#fff}
+.ipm-tbl tfoot td.ipm-tot{font-size:14px;text-align:center}
+.ipm-big{font-size:15px;color:var(--fg)}
+.ipm-leg{font-size:11.5px;color:var(--mut);margin:6px 0 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ipm-leg i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.ipm-cards{display:none}
+.ipm-card{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--bg)}
+.ipm-badge{flex:none;border-radius:8px;padding:4px 8px;font-weight:800;font-size:14px;background:var(--card)}
+.ipm-nums{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--mut);margin-top:6px}.ipm-nums b{color:var(--fg);font-size:13px}
+.ipm-remc{display:inline-block;border-radius:6px;padding:2px 7px;margin-top:6px}
+.ipm-sum{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-weight:600;background:var(--card)}.ipm-sum b{font-size:20px;margin-left:4px}
+#wkPrint .ipm-cards{display:none!important}#wkPrint .ipm-wrap{display:block!important}
+@media(max-width:560px){.ipm-wrap{display:none}.ipm-cards{display:block}}
+@media(max-width:560px){.ipm-in{grid-template-columns:1fr 1fr}.ipm-pa{grid-template-columns:1fr}.ipm-trow{grid-template-columns:1fr 1fr}.ipm-top em b{font-size:22px}}
+#wkPrint .ipm-tbl{min-width:0;font-size:9.5px}#wkPrint .ipm-tbl td.ipm-k{min-width:150px}#wkPrint .ipm-tbl td.ipm-rem{width:64px}#wkPrint .ipm-tbl td.ipm-t{min-width:0;font-size:9px}#wkPrint .ipm-tbl th{font-size:9px;padding:5px 3px}
+@media print{.ipm-tbl tr{break-inside:avoid}.ipm-tbl th,.ipm-tbl td.ipm-rem,.ipm-tbl td.ipm-a,.ipm-tbl tfoot td{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -5032,6 +5094,36 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const ST={baru:['Belum dibuat','rp-s0'],draft:['Draft','rp-s1'],terkirim:['Terkirim','rp-s2'],diperbarui:['Terkirim ulang','rp-s2'],dibaca:['Dibaca','rp-s3'],ditanggapi:['Ditanggapi','rp-s4']};
  const pill=s=>{const x=ST[s]||ST.baru;return `<span class="rp-pill ${x[1]}">${x[0]}</span>`};
  const unread=x=>x.status==='terkirim'||x.status==='diperbarui';
+ /* --- IPM: nilai KPI bulanan --- */
+ const fv=v=>{if(v===''||v==null||!isFinite(v))return '–';v=Number(v);return Math.abs(v)>=1000?nf(v):String(Math.round(v*100)/100).replace('.',',')};
+ const f2=v=>(Math.round((Number(v)||0)*100)/100).toFixed(2).replace('.',',');
+ const AUTO={sales:['Sales gross RA',k=>k.sales],net:['Net sales RA',k=>k.net],eacNet:['Sales transaksi EAC (net)',k=>k.eacNet],eac:['EAC (%)',k=>Math.round(k.eac*10000)/100],upt:['UPT',k=>k.upt],atv:['ATV',k=>k.atv],ea:['Sales Endless Aisle',k=>k.ea],trx:['Jumlah transaksi',k=>k.trx]};
+ const autoVal=(k,a)=>AUTO[a]&&k?AUTO[a][1](k):null;
+ const achCls=a=>a<80?'ipm-r':a<100?'ipm-y':'ipm-o';
+ const isi=v=>v!==''&&v!=null&&isFinite(Number(v));
+ const ipmDipakai=m=>!!(m&&m.rows&&m.rows.some(r=>isi(r.real)&&Number(r.target)));
+ function hitungIpm(m){
+  if(!m||!m.rows)return m;let t=0,b=0;const cap=Number(m.cap)||0;
+  m.rows.forEach(r=>{const T=Number(r.target)||0,V=Number(r.real)||0;let a=0;
+   if(isi(r.real)){a=r.ukur==='min'?(V<=0?(T>=0?100:0):T/V*100):(T?V/T*100:0);a=Math.max(0,a);if(cap>0)a=Math.min(cap,a);a=Math.round(a*100)/100}
+   r.ach=a;r.w=Math.round(a*(Number(r.bobot)||0))/100;t+=r.w;b+=Number(r.bobot)||0});
+  m.total=Math.round(t*100)/100;m.bobot=Math.round(b*100)/100;return m;
+ }
+ function ipmView(x,print){
+  const m=x.ipm;if(!m||!m.rows||!m.rows.length)return '';
+  return `<div class="ipm-wrap"><table class="ipm-tbl"><thead><tr><th>PICA reminder</th><th>Key Performance Indicator (KPI)</th><th>Bobot</th><th>Target</th><th>Realisasi</th><th>ACH (%)</th><th>Weighted (%)</th><th>Problem identification</th><th>Corrective &amp; preventive action</th></tr></thead><tbody>
+   ${m.rows.map(r=>{const done=isi(r.real);return `<tr><td class="${done&&r.ach<100?'ipm-rem':''}">${done&&r.ach<100?'Cek PICA bulan sebelumnya':''}</td>
+    <td class="ipm-k"><b>${esc(r.nama)}</b><small>${r.ukur==='min'?'Minimize':'Maximize'} · ${esc(r.periode||'Monthly')}${r.sumber?' · '+esc(r.sumber):''}${r.when?' · '+esc(r.when):''}</small></td>
+    <td>${fv(r.bobot)}</td><td>${fv(r.target)}</td><td>${done?fv(r.real):'–'}</td><td class="ipm-a ${done?achCls(r.ach):''}">${done?f2(r.ach):'–'}</td><td>${done?f2(r.w):'–'}</td>
+    <td class="ipm-t">${esc(r.problem||'')}</td><td class="ipm-t">${esc(r.action||'')}${r.rencana?`<small>Target: ${esc(r.rencana)}</small>`:''}</td></tr>`}).join('')}
+   </tbody><tfoot><tr><td colspan="5">${m.verified?'✓ Achievement diverifikasi Store Head'+(m.verifiedAt?' · '+jam(m.verifiedAt):''):'Belum diverifikasi'}</td><td>Monthly Weighted</td><td class="ipm-tot">${f2(m.total)}</td><td colspan="2">${Math.abs((m.bobot||0)-100)>.01?'Total bobot '+fv(m.bobot)+'%':''}</td></tr></tfoot></table></div>
+   <div class="ipm-cards">${m.rows.map(r=>{const done=isi(r.real);return `<div class="ipm-card"><div class="ipm-h"><div><b>${esc(r.nama)}</b><small>${r.ukur==='min'?'Minimize':'Maximize'} · bobot ${fv(r.bobot)}%${r.sumber?' · '+esc(r.sumber):''}</small></div><span class="ipm-badge ${done?achCls(r.ach):''}">${done?f2(r.ach)+'%':'–'}</span></div>
+    <div class="ipm-nums"><span>Target <b>${fv(r.target)}</b></span><span>Realisasi <b>${done?fv(r.real):'–'}</b></span><span>Weighted <b>${done?f2(r.w):'–'}</b></span></div>
+    ${done&&r.ach<100?'<span class="ipm-rem ipm-remc">Cek PICA bulan sebelumnya</span>':''}
+    ${r.problem?`<p class="rp-txt"><small>Problem identification</small>${esc(r.problem)}</p>`:''}${r.action?`<p class="rp-txt"><small>Corrective &amp; preventive action</small>${esc(r.action)}</p>`:''}${r.rencana?`<p class="rp-txt"><small>Target perbaikan</small>${esc(r.rencana)}</p>`:''}</div>`}).join('')}
+    <div class="ipm-card ipm-sum"><span>${m.verified?'✓ Diverifikasi Store Head'+(m.verifiedAt?' · '+jam(m.verifiedAt):''):'Belum diverifikasi'}</span><span>Monthly Weighted <b>${f2(m.total)}</b></span></div></div>
+   <p class="ipm-leg"><i class="ipm-r"></i>&lt; 80% <i class="ipm-y"></i>80–99% <i class="ipm-o"></i>≥ 100%${m.cap?' · ACH maksimum '+fv(m.cap)+'%':''}</p>`;
+ }
  async function api(fn,arg){
   const pin=localStorage.getItem('salesTrackingPin')||'';
   const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
@@ -5056,9 +5148,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const ut=t.uptTarget||2,et=t.eacTarget||.5,nilai=x.nilai||{},T=x.target||{},cek=cekRows(k,K.cekTarget);
   const sc=ASPEK.filter(a=>nilai[a[0]]),avg=sc.length?sc.reduce((s,a)=>s+nilai[a[0]],0)/sc.length:0;
   const para=(h,v)=>v?`<h5 class="mb-h5">${h}</h5><p class="rp-txt">${esc(v)}</p>`:'';
+  let no=0;const N=()=>++no+'. ';const ipm=ipmDipakai(x.ipm);
   return `<div class="wk-rep rp-view">
    <div class="rp-head"><div><small>Rapor Pengembangan RA · ${STORE}</small><b>${esc(nama(x.ra))}</b><span>${mL(x.bulan)}${P.complete===false?' · data s/d '+tgl(P.dataEnd):''}</span></div>${K.rank?`<em><b>#${K.rank}</b>dari ${K.dari} RA</em>`:''}</div>
-   <h4>1. Kinerja ${mL(x.bulan)}</h4>
+   ${ipm?`<h4>${N()}Nilai IPM ${mL(x.bulan)} <small>Monthly Weighted <b class="ipm-big">${f2(x.ipm.total)}</b></small></h4>${ipmView(x,print)}`:''}
+   <h4>${N()}Kinerja penjualan ${mL(x.bulan)} <small>dari DSR</small></h4>
    <div class="wk-kpis">
     ${tile('Sales',jt(k.sales),k.target?pc(k.ach)+' dari target '+jt(k.target):'target belum diisi',k.target?(k.ach>=(P.complete===false?P.days/P.daysInMonth:1)?'wk-up':'wk-down'):'')}
     ${tile('Kontribusi toko',pc(k.kontribusi),l?'bulan lalu '+pc(l.kontribusi):'',l?ud(k.kontribusi,l.kontribusi):'')}
@@ -5075,12 +5169,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <tr><td>ATV</td><td class="${ud(k.atv,l.atv)}">${jt(k.atv)}</td><td>${jt(l.atv)}</td><td>${jt(t.atv)}</td></tr>
     <tr><td>Transaksi</td><td class="${ud(k.trx,l.trx)}">${nf(k.trx)}</td><td>${nf(l.trx)}</td><td>${nf(t.trx/Math.max(1,t.raCount||1))}</td></tr>
    </tbody></table></div>`:''}
-   ${cek.length?`<h4>2. Cek target dari rapor ${mL(K.cekTarget.bulan)}</h4>
+   ${cek.length?`<h4>${N()}Cek target dari rapor ${mL(K.cekTarget.bulan)}</h4>
     <p class="wk-p">${cek.filter(r=>r[3]).length} dari ${cek.length} target tercapai${P.complete===false?' (bulan belum selesai, data s/d '+tgl(P.dataEnd)+')':''}</p>
     <div class="wk-tbl"><table><thead><tr><th>Target</th><th>Rencana</th><th>Aktual</th><th></th></tr></thead><tbody>${cek.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="${r[3]?'wk-up':'wk-down'}">${r[3]?'✓ tercapai':'✗ belum'}</td></tr>`).join('')}</tbody></table></div>`:''}
-   <h4>${cek.length?3:2}. Sikap kerja ${sc.length?`<small>rata-rata ${dec(avg,1)} dari 5</small>`:''}</h4>
+   <h4>${N()}Sikap kerja ${sc.length?`<small>rata-rata ${dec(avg,1)} dari 5</small>`:''}</h4>
    ${sc.length?`<div class="rp-sk">${ASPEK.map(a=>{const v=nilai[a[0]]||0;return `<div><span>${a[1]}</span><i>${[1,2,3,4,5].map(n=>`<u class="${n<=v?'on':''}"></u>`).join('')}</i><b>${v?SKOR[v]:'–'}</b></div>`}).join('')}</div>`:'<p class="dp-empty">Belum dinilai.</p>'}
-   <h4>${cek.length?4:3}. Evaluasi & rencana</h4>
+   <h4>${N()}Evaluasi & rencana</h4>
    ${para('💪 Kekuatan yang perlu dipertahankan',x.kekuatan)}
    ${para('🎯 Area yang perlu ditingkatkan',x.perbaikan)}
    ${T.sales||T.upt||T.eac||T.ea?`<h5 class="mb-h5">Target ${mL(K.next||'')}</h5><div class="wk-kpis rp-tg">${T.sales?tile('Sales',jt(T.sales)):''}${T.upt?tile('UPT',dec(T.upt)):''}${T.eac?tile('EAC',dec(T.eac,0)+'%'):''}${T.ea?tile('Endless Aisle',jt(T.ea)):''}</div>`:''}
@@ -5096,6 +5190,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   L.push('*RAPOR PENGEMBANGAN RA*',STORE,nama(x.ra)+' · '+mL(x.bulan),'');
   L.push('*Kinerja*','Sales '+jt(k.sales)+(k.target?' ('+pc(k.ach)+' dari target)':'')+(K.rank?' · peringkat '+K.rank+' dari '+K.dari:''));
   L.push('Transaksi '+nf(k.trx)+' · UPT '+dec(k.upt)+' · EAC '+pc(k.eac)+' · ATV '+jt(k.atv)+' · EA '+jt(k.ea),'');
+  if(ipmDipakai(x.ipm)){L.push('*Nilai IPM: '+f2(x.ipm.total)+'*');x.ipm.rows.forEach(r=>L.push('• '+r.nama+': '+(isi(r.real)?fv(r.real)+' / '+fv(r.target)+' = '+f2(r.ach)+'% → '+f2(r.w):'belum diisi')));L.push('')}
   if(x.kekuatan)L.push('*Kekuatan*',x.kekuatan,'');
   if(x.perbaikan)L.push('*Area perbaikan*',x.perbaikan,'');
   const t=[T.sales?'Sales '+jt(T.sales):'',T.upt?'UPT '+dec(T.upt):'',T.eac?'EAC '+dec(T.eac,0)+'%':'',T.ea?'EA '+jt(T.ea):''].filter(Boolean);
@@ -5137,9 +5232,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(saya.missing){b.innerHTML='<p class="dp-empty">Fitur rapor belum dipasang di Apps Script. Hubungi Store Head.</p>';return}
   if(!L.length){b.innerHTML='<p class="dp-empty">Belum ada rapor. Store Head mengirim rapor setiap akhir bulan.</p>';return}
   const x=L[0],k=(x.kpi&&x.kpi.saya)||{};
-  b.innerHTML=`<div class="wk-hero"><div><b>${esc(mL(x.bulan))}</b><span>${x.kpi&&x.kpi.rank?'Peringkat '+x.kpi.rank+' dari '+x.kpi.dari+' RA · ':''}sales ${jt(k.sales)}${k.target?' ('+pc(k.ach)+')':''}</span></div>${pill(x.status)}</div>
+  b.innerHTML=`<div class="wk-hero"><div><b>${esc(mL(x.bulan))}</b><span>${ipmDipakai(x.ipm)?'IPM '+f2(x.ipm.total)+' · ':''}${x.kpi&&x.kpi.rank?'Peringkat '+x.kpi.rank+' dari '+x.kpi.dari+' RA · ':''}sales ${jt(k.sales)}${k.target?' ('+pc(k.ach)+')':''}</span></div>${pill(x.status)}</div>
    <button type="button" class="iv-todo ct-btn rp-open" data-rpo="${esc(x.id)}"><b>${unread(x)?'📬':'📄'}</b><span>${unread(x)?'Baca rapor baru':'Buka rapor'}<small>${x.perbaikan?'Fokus: '+esc(x.perbaikan.split('\n')[0].replace(/^[•\-\s]+/,'').slice(0,90)):'Evaluasi, target, dan rencana coaching'} →</small></span></button>
-   ${L.length>1?`<div class="rp-list">${L.slice(1,7).map(y=>`<button type="button" class="rp-row" data-rpo="${esc(y.id)}"><div><b>${esc(mL(y.bulan))}</b><small>${y.kpi&&y.kpi.rank?'#'+y.kpi.rank+' · ':''}sales ${jt(y.kpi&&y.kpi.saya&&y.kpi.saya.sales)}</small></div>${pill(y.status)}</button>`).join('')}</div>`:''}`;
+   ${L.length>1?`<div class="rp-list">${L.slice(1,7).map(y=>`<button type="button" class="rp-row" data-rpo="${esc(y.id)}"><div><b>${esc(mL(y.bulan))}</b><small>${ipmDipakai(y.ipm)?'IPM '+f2(y.ipm.total)+' · ':''}${y.kpi&&y.kpi.rank?'#'+y.kpi.rank+' · ':''}sales ${jt(y.kpi&&y.kpi.saya&&y.kpi.saya.sales)}</small></div>${pill(y.status)}</button>`).join('')}</div>`:''}`;
  }
  function openSaya(id){
   const x=((saya&&saya.items)||[]).find(y=>y.id===id);if(!x)return;
@@ -5180,7 +5275,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  async function load(force){
   if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
-  const d=def();if(!force&&d&&Date.now()-C[C.def].at<TTL){renderHead();return}
+  const d=def();if(!force&&d&&d.ipmTpl&&Date.now()-C[C.def].at<TTL){renderHead();return}
   busy=true;renderHead();
   try{await fetchMonth('');C.err='';C.missing=0;C.deny=0}
   catch(e){if(missing(e))C.missing=1;else if(/Store Head|pemilik/i.test(e.message))C.deny=1;else C.err=e.message}
@@ -5197,7 +5292,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const R=d.ras||[],L=R.map(r=>itemOf(d,d.month,r.ra)),sent=L.filter(x=>x&&x.status!=='draft').length,resp=L.filter(x=>x&&x.status==='ditanggapi').length;
   $id('rpSub').textContent=mL(d.month)+(d.period.complete?'':' · data s/d '+tgl(d.period.dataEnd))+' · dikirim ke akun masing-masing RA';
   b.innerHTML=`<div class="mb-tiles"><div><b>${sent}/${R.length}</b><span>rapor terkirim</span></div><div><b>${L.filter(x=>x&&x.dibaca).length}</b><span>sudah dibaca</span></div><div><b>${resp}</b><span>ditanggapi RA</span></div></div>
-   <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk">${r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
+   <div class="rp-list">${R.map((r,i)=>{const x=L[i],k=r.kpi;return `<button type="button" class="rp-row" data-rpe="${esc(r.ra)}"><i class="rp-rk">${r.rank}</i><div><b>${esc(nama(r.ra))}</b><small>${ipmDipakai(x&&x.ipm)?'<b class="rp-ipmv">IPM '+f2(x.ipm.total)+'</b> · ':''}${k.target?pc(k.ach)+' target':jt(k.sales)} · UPT ${dec(k.upt)} · EAC ${pc(k.eac)}${r.username?'':' · <span class="rp-warn">belum ada akun</span>'}</small></div>${pill(x?x.status:'baru')}</button>`}).join('')}</div>`;
  }
  /* --- saran otomatis dari KPI --- */
  function saran(d,r){
@@ -5223,12 +5318,25 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   return S;
  }
  function stateOf(d,r){
-  const key=d.month+'|'+r.ra;if(E[key])return E[key];
+  const key=d.month+'|'+r.ra;
+  if(E[key]){const z=E[key];if((!z.ipm||!z.ipm.rows||!z.ipm.rows.length)&&d.ipmTpl&&d.ipmTpl.rows.length)z.ipm=ipmBaru(d,r,null);return z}
   const x=itemOf(d,d.month,r.ra),k=r.kpi,t=d.toko;
-  if(x)return E[key]={id:x.id,diubah:x.diubah,username:x.username||r.username||'',nilai:Object.assign({},x.nilai),kekuatan:x.kekuatan,perbaikan:x.perbaikan,target:Object.assign({},x.target),rencana:x.rencana,catatan:x.catatan};
+  if(x)return E[key]={id:x.id,diubah:x.diubah,username:x.username||r.username||'',nilai:Object.assign({},x.nilai),kekuatan:x.kekuatan,perbaikan:x.perbaikan,target:Object.assign({},x.target),rencana:x.rencana,catatan:x.catatan,
+   ipm:x.ipm&&x.ipm.rows&&x.ipm.rows.length?JSON.parse(JSON.stringify(x.ipm)):ipmBaru(d,r,null)};
   const uT=k.upt>=t.uptTarget?r1(k.upt):Math.min(t.uptTarget,r1(Math.max(k.upt,1)+.1));
   return E[key]={id:'',diubah:0,username:r.username||'',nilai:{},kekuatan:'',perbaikan:'',rencana:'',catatan:'',
-   target:{sales:(r.targetNext&&r.targetNext.sales)||k.target||0,upt:uT,eac:k.eac>=t.eacTarget?Math.round(k.eac*100):Math.round(t.eacTarget*100),ea:(r.targetNext&&r.targetNext.ea)||k.eaT||0}};
+   target:{sales:(r.targetNext&&r.targetNext.sales)||k.target||0,upt:uT,eac:k.eac>=t.eacTarget?Math.round(k.eac*100):Math.round(t.eacTarget*100),ea:(r.targetNext&&r.targetNext.ea)||k.eaT||0},
+   ipm:ipmBaru(d,r,null)};
+ }
+ const ipmLalu=(d,r)=>{const y=(d.items||[]).find(z=>z.bulan===d.prevMonth&&z.ra===r.ra&&z.ipm&&z.ipm.rows);return y?y.ipm:null};
+ // baris IPM baru dari template; nilai yang sudah diisi (old) dipertahankan per KPI
+ function ipmBaru(d,r,old){
+  const T=d.ipmTpl||{cap:100,rows:[]},L=ipmLalu(d,r),k=r.kpi,o={};((old&&old.rows)||[]).forEach(x=>o[x.k]=x);
+  const rows=T.rows.map(t=>{const p=o[t.k],l=L&&L.rows.find(z=>z.k===t.k);
+   let tg=t.auto==='sales'?k.target:t.auto==='ea'?k.eaT:'';if(!tg)tg=l&&isi(l.target)&&l.target?l.target:t.target||'';
+   const av=t.auto?autoVal(k,t.auto):null;
+   return Object.assign({},t,{target:p&&isi(p.target)?p.target:tg,real:p&&isi(p.real)?p.real:(av!=null?av:''),problem:p?p.problem:'',action:p?p.action:'',rencana:p?p.rencana:''})});
+  return hitungIpm({cap:T.cap,rows,verified:false,verifiedAt:0});
  }
  function asItem(d,r,s){
   const x=itemOf(d,d.month,r.ra)||{},lalu=(d.items||[]).find(y=>y.bulan===d.prevMonth&&y.ra===r.ra&&y.status!=='draft');
@@ -5237,10 +5345,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  function openEditor(name){
   const d=def();if(!d)return;
-  cur=d.month;ra=name||((d.ras||[])[0]||{}).ra||'';prevw=false;
+  cur=d.month;ra=name||((d.ras||[])[0]||{}).ra||'';prevw=false;tplMode=false;
   openModal('Rapor Pengembangan RA','<div class="dp-chips" id="rpMonths"></div><div class="dp-chips rp-ras" id="rpRas"></div><div id="rpEd"></div>');wide();
   drawEd();
-  const e=C[cur];if(!e||Date.now()-e.at>5*60e3)refreshMonth(cur);
+  const e=C[cur];if(!e||!e.d.ipmTpl||Date.now()-e.at>5*60e3)refreshMonth(cur);
  }
  async function refreshMonth(m){
   try{await fetchMonth(m);if(cur===m&&$id('rpEd'))drawEd(true);if(m===C.def)renderHead()}
@@ -5258,6 +5366,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const sc=document.querySelector('#ov .panel'),top=sc?sc.scrollTop:0;
   const s=stateOf(d,r),x=itemOf(d,cur,r.ra),it=asItem(d,r,s);
   if(prevw){ed.innerHTML=`<div class="wk-act"><button class="btn" type="button" data-rpa="tutupPrev">← Kembali ke editor</button><button class="btn ghost" type="button" data-rpa="pdf">Simpan PDF</button></div><p class="hint">Pratinjau: begini rapor terlihat di akun ${esc(depan(r.ra))}.</p>`+view(it,'ra');if(keepScroll&&sc)sc.scrollTop=top;return}
+  if(tplMode){ed.innerHTML=tplEd(d);tplLive();if(keepScroll&&sc)sc.scrollTop=top;return}
   const S=saran(d,r),k=r.kpi,t=d.toko,ck=cekRows(k,it.kpi.cekTarget);
   const ak=d.akun||[];
   const chips=(list,key)=>list.length?`<div class="mb-sug">${list.map((v,i)=>`<button type="button" data-rps="${key}" data-i="${i}"${String(s[key]||'').indexOf(v)>=0?' disabled':''}>+ ${esc(v)}</button>`).join('')}</div>`:'';
@@ -5269,6 +5378,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     ${tile('Endless Aisle',jt(k.ea),k.eaT?pc(k.eaAch)+' dari '+jt(k.eaT):nf(k.eaTrx)+' trx',k.eaT?(k.eaAch>=1?'wk-up':'wk-down'):'')}
    </div>
    ${ck.length?`<p class="wk-p rp-ck">Target dari rapor ${mS(it.kpi.cekTarget.bulan)}: ${ck.map(c=>`<span class="${c[3]?'wk-up':'wk-down'}">${c[0]} ${c[3]?'✓':'✗'} ${c[2]}/${c[1]}</span>`).join(' · ')}</p>`:''}
+   ${ipmEd(d,r,s)}
    <form class="mb-form rp-form" id="rpF" autocomplete="off">
     <label><span>Akun Hub RA <i>rapor dikirim ke akun ini</i></span><select class="in" name="username"><option value="">— pilih akun —</option>${ak.map(a=>`<option value="${esc(a.username)}"${a.username===s.username?' selected':''}>${esc(a.nama)} (@${esc(a.username)})${a.jabatan?' · '+esc(a.jabatan):''}</option>`).join('')}</select></label>
     ${!ak.length?'<p class="hint rp-warn">Belum ada akun aktif. Minta RA mendaftar akun di Hub, lalu setujui di menu Akun.</p>':!s.username?'<p class="hint rp-warn">Nama di DSR belum cocok dengan akun mana pun. Pilih akunnya sekali, Hub akan mengingatnya.</p>':''}
@@ -5304,6 +5414,97 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const f=$id('rpF');
   f.oninput=()=>readForm(f,s);
   f.onchange=()=>readForm(f,s);
+  ipmLive(d,r,s);
+ }
+ /* --- editor IPM --- */
+ let tplMode=false,tplDraft=null;
+ function ipmRowEd(d,r,s,i){
+  const x=s.ipm.rows[i],L=ipmLalu(d,r),l=L&&L.rows.find(z=>z.k===x.k),av=x.auto?autoVal(r.kpi,x.auto):null,done=isi(x.real),open=(done&&x.ach<100)||x.problem||x.action;
+  return `<div class="ipm-row" data-ipr="${i}">
+   <div class="ipm-h"><div><b>${esc(x.nama)}</b><small>${x.ukur==='min'?'Minimize':'Maximize'} · ${esc(x.periode||'Monthly')} · ${esc(x.sumber||'-')} · bobot ${fv(x.bobot)}%</small></div><span class="ipm-rem"${done&&x.ach<100?'':' hidden'}>Cek PICA bulan sebelumnya</span></div>
+   <div class="ipm-in">
+    <label><span>Target</span><input class="in" type="number" step="any" inputmode="decimal" data-f="target" value="${isi(x.target)?x.target:''}"></label>
+    <label><span>Realisasi</span><input class="in" type="number" step="any" inputmode="decimal" data-f="real" value="${isi(x.real)?x.real:''}" placeholder="isi"></label>
+    <div class="ipm-ach ${done?achCls(x.ach):''}"><small>ACH</small><b>${done?f2(x.ach)+'%':'–'}</b></div>
+    <div class="ipm-wt"><small>Weighted</small><b>${done?f2(x.w):'–'}</b></div>
+   </div>
+   ${av!=null?`<p class="hint ipm-auto">Otomatis dari DSR (${AUTO[x.auto][0]}): <b>${fv(av)}</b>${Number(x.real)!==av||!done?` <button type="button" class="ipm-use" data-ipu="${i}">pakai angka ini</button>`:''}</p>`:''}
+   ${l?`<p class="ipm-prev"><b>${mS(d.prevMonth)}</b> ${isi(l.real)?'ACH '+f2(l.ach)+'%':'belum diisi'}${l.problem?' · Problem: '+esc(l.problem):''}${l.action?' · Action: '+esc(l.action):''}</p>`:''}
+   <div class="ipm-pa"${open?'':' hidden'}>
+    <label><span>Problem identification</span><textarea class="in" rows="2" data-f="problem" maxlength="600">${esc(x.problem||'')}</textarea></label>
+    <label><span>Corrective &amp; preventive action</span><textarea class="in" rows="2" data-f="action" maxlength="600">${esc(x.action||'')}</textarea></label>
+    <label><span>Target perbaikan <i>opsional</i></span><input class="in" data-f="rencana" maxlength="300" value="${esc(x.rencana||'')}" placeholder="mis. ACH ≥ 100% di ${mL(d.next)}"></label>
+   </div>
+   ${open?'':`<button type="button" class="ipm-add" data-ipo="${i}">+ Problem &amp; action</button>`}
+  </div>`;
+ }
+ function ipmEd(d,r,s){
+  const m=s.ipm;
+  if(!m||!m.rows||!m.rows.length)return `<div class="ipm-ed" id="rpIpm"><div class="ipm-top"><div><b>📊 Nilai IPM ${mL(d.month)}</b><small>Belum ada KPI di template.</small></div></div><div class="ipm-foot"><span></span><span><button type="button" class="btn ghost" data-ipx="tpl">⚙ Atur KPI</button></span></div></div>`;
+  return `<div class="ipm-ed" id="rpIpm">
+   <div class="ipm-top"><div><b>📊 Nilai IPM ${mL(d.month)}</b><small>Isi target & realisasi. ACH & weighted dihitung otomatis.</small></div><em><small>Monthly Weighted</small><b id="ipmTot">${f2(m.total)}</b></em></div>
+   ${Math.abs(m.bobot-100)>.01?`<p class="hint rp-warn">Total bobot ${fv(m.bobot)}%, seharusnya 100%. Ubah di ⚙ Atur KPI.</p>`:''}
+   ${m.rows.map((x,i)=>ipmRowEd(d,r,s,i)).join('')}
+   <div class="ipm-foot"><label class="pg-sw ipm-ver"><input type="checkbox" id="ipmVer"${m.verified?' checked':''}> Verify Achievement</label><span><button type="button" class="btn ghost" data-ipx="sync" title="Samakan daftar KPI dengan template terbaru; angka yang sudah diisi tetap">↺ Template</button><button type="button" class="btn ghost" data-ipx="tpl">⚙ Atur KPI</button></span></div>
+  </div>`;
+ }
+ function ipmLive(d,r,s){
+  const box=$id('rpIpm');if(!box||!s.ipm)return;
+  const upd=row=>{const i=+row.dataset.ipr,x=s.ipm.rows[i],done=isi(x.real),a=row.querySelector('.ipm-ach');
+   a.className='ipm-ach '+(done?achCls(x.ach):'');a.querySelector('b').textContent=done?f2(x.ach)+'%':'–';
+   row.querySelector('.ipm-wt b').textContent=done?f2(x.w):'–';row.querySelector('.ipm-rem').hidden=!(done&&x.ach<100);
+   if(done&&x.ach<100){row.querySelector('.ipm-pa').hidden=false;const ad=row.querySelector('.ipm-add');if(ad)ad.remove()}};
+  box.oninput=e=>{
+   const el=e.target,f=el.dataset.f,row=el.closest('[data-ipr]');if(!f||!row)return;
+   const x=s.ipm.rows[+row.dataset.ipr];
+   if(f==='target'||f==='real'){x[f]=el.value===''?'':Number(el.value);hitungIpm(s.ipm);
+    if(s.ipm.verified){s.ipm.verified=false;s.ipm.verifiedAt=0;const v=$id('ipmVer');if(v)v.checked=false}
+    box.querySelectorAll('[data-ipr]').forEach(upd);$id('ipmTot').textContent=f2(s.ipm.total)}
+   else x[f]=el.value;
+  };
+  box.onchange=e=>{if(e.target.id==='ipmVer'){s.ipm.verified=e.target.checked;s.ipm.verifiedAt=e.target.checked?Date.now():0}};
+ }
+ function tplEd(d){
+  const T=tplDraft,tot=T.rows.reduce((a,x)=>a+(Number(x.bobot)||0),0),A=Object.keys(AUTO);
+  return `<div class="ipm-ed" id="rpTpl"><div class="ipm-top"><div><b>⚙ Atur KPI IPM</b><small>Berlaku untuk semua RA. Target di sini menjadi nilai awal; per RA tetap bisa diubah.</small></div><em><small>Total bobot</small><b class="${Math.abs(tot-100)>.01?'wk-down':''}">${fv(tot)}%</b></em></div>
+   ${T.rows.map((x,i)=>`<div class="ipm-trow" data-t="${i}">
+    <label class="ipm-tn"><span>KPI ${i+1}</span><input class="in" data-f="nama" maxlength="200" value="${esc(x.nama)}"></label>
+    <label><span>Pengukuran</span><select class="in" data-f="ukur"><option value="max"${x.ukur!=='min'?' selected':''}>Maximize (makin tinggi makin baik)</option><option value="min"${x.ukur==='min'?' selected':''}>Minimize (makin rendah makin baik)</option></select></label>
+    <label><span>Bobot (%)</span><input class="in" type="number" step="any" data-f="bobot" value="${x.bobot}"></label>
+    <label><span>Target awal</span><input class="in" type="number" step="any" data-f="target" value="${x.target||''}"></label>
+    <label><span>Sumber data</span><input class="in" data-f="sumber" maxlength="120" value="${esc(x.sumber||'')}"></label>
+    <label><span>Periode berlaku</span><input class="in" data-f="when" maxlength="60" value="${esc(x.when||'')}"></label>
+    <label><span>Realisasi otomatis</span><select class="in" data-f="auto"><option value="">Diisi manual</option>${A.map(a=>`<option value="${a}"${x.auto===a?' selected':''}>${AUTO[a][0]} (DSR)</option>`).join('')}</select></label>
+    <button type="button" class="btn danger ipm-tdel" data-tdel="${i}" aria-label="Hapus KPI">Hapus</button>
+   </div>`).join('')}
+   <div class="ipm-foot"><label class="ipm-cap"><span>ACH maksimum (%)</span><input class="in" type="number" step="any" data-cap="1" value="${T.cap||''}" placeholder="tanpa batas"></label><span><button type="button" class="btn ghost" data-ipx="tadd">+ Tambah KPI</button></span></div>
+   <p class="hint" id="tplErr" style="color:#e5484d;min-height:1em"></p>
+   <div class="row rp-btns" style="margin-top:0"><button type="button" class="btn" data-ipx="tsave">Simpan template</button><button type="button" class="btn ghost" data-ipx="tback">Batal</button><button type="button" class="btn ghost" data-ipx="treset">Kembalikan bawaan</button></div>
+  </div>`;
+ }
+ function tplLive(){
+  const box=$id('rpTpl');if(!box)return;
+  box.oninput=box.onchange=e=>{const el=e.target;if(el.dataset.cap){tplDraft.cap=el.value===''?0:Number(el.value);return}
+   const row=el.closest('[data-t]'),f=el.dataset.f;if(!row||!f)return;const x=tplDraft.rows[+row.dataset.t];
+   x[f]=f==='bobot'||f==='target'?(el.value===''?0:Number(el.value)):el.value;
+   if(f==='bobot'){const tot=tplDraft.rows.reduce((a,y)=>a+(Number(y.bobot)||0),0),b=box.querySelector('.ipm-top em b');b.textContent=fv(tot)+'%';b.className=Math.abs(tot-100)>.01?'wk-down':''}};
+ }
+ async function tplAksi(k,btn,d,r,s){
+  if(k==='tpl'){tplDraft=JSON.parse(JSON.stringify(d.ipmTpl||{cap:100,rows:[]}));tplMode=true;drawEd();const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return}
+  if(k==='sync'){s.ipm=ipmBaru(d,r,s.ipm);drawEd(true);toast('Daftar KPI disamakan dengan template');return}
+  if(k==='tadd'){tplDraft.rows.push({k:'k'+Date.now().toString(36),nama:'',ukur:'max',periode:'Monthly',cek:'-',sumber:'',when:'',bobot:0,target:0,auto:''});drawEd(true);return}
+  if(k==='tback'){tplMode=false;drawEd();return}
+  const err=$id('tplErr');
+  if(k==='treset'||k==='tsave'){
+   if(k==='tsave'&&tplDraft.rows.some(x=>!String(x.nama||'').trim())){err.textContent='Nama KPI tidak boleh kosong (hapus baris yang tidak dipakai).';return}
+   const txt=btn.textContent;btn.disabled=true;btn.textContent='Menyimpan…';
+   try{const res=await api('raporIpmTpl',k==='tsave'?{tpl:tplDraft}:{reset:1});
+    Object.keys(C).forEach(m=>{if(C[m]&&C[m].d)C[m].d.ipmTpl=res.tpl});
+    Object.keys(E).forEach(key=>{if(!E[key].id)delete E[key]});
+    const s2=stateOf(d,r);s2.ipm=ipmBaru(d,r,s2.ipm);
+    tplMode=false;keep();drawEd();toast(k==='tsave'?'Template KPI tersimpan':'Template bawaan dipakai lagi')}
+   catch(e){err.textContent=missing(e)?'Pasang Rapor.gs versi terbaru dulu.':e.message;btn.disabled=false;btn.textContent=txt}
+  }
  }
  function readForm(f,s){
   if(!f)return;
@@ -5316,6 +5517,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const s=stateOf(d,r),err=$id('rpErr');readForm($id('rpF'),s);
   if(kirim&&!s.username){err.textContent='Pilih akun Hub '+depan(r.ra)+' dulu.';return}
   if(kirim&&!s.kekuatan.trim()&&!s.perbaikan.trim()){err.textContent='Isi kekuatan atau area perbaikan sebelum dikirim.';return}
+  if(kirim&&ipmDipakai(s.ipm)&&!s.ipm.verified){err.textContent='Centang "Verify Achievement" pada nilai IPM dulu.';const v=$id('ipmVer');if(v)v.closest('.ipm-foot').scrollIntoView({block:'center',behavior:'smooth'});return}
   const txt=btn.textContent;btn.disabled=true;btn.textContent=kirim?'Mengirim…':'Menyimpan…';
   try{
    if(s.username&&(s.username!==r.username||!r.dipetakan)){const p={};p[r.ra]=s.username;await api('raporPetakan',{peta:p});Object.keys(C).forEach(m=>{const dd=C[m]&&C[m].d;if(dd&&dd.ras)dd.ras.forEach(y=>{if(y.ra===r.ra){y.username=s.username;y.dipetakan=true}})})}
@@ -5347,10 +5549,14 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    return;
   }
   if(!$id('rpEd'))return;
-  const m=e.target.closest('[data-rpm]');if(m){readForm($id('rpF'),C[cur]&&C[cur].d&&(C[cur].d.ras||[]).find(y=>y.ra===ra)?stateOf(C[cur].d,C[cur].d.ras.find(y=>y.ra===ra)):{});cur=m.dataset.rpm;prevw=false;drawEd();const c=C[cur];if(!c||Date.now()-c.at>5*60e3)refreshMonth(cur);return}
-  const rr=e.target.closest('[data-rpr]');if(rr){ra=rr.dataset.rpr;prevw=false;drawEd();const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return}
+  const m=e.target.closest('[data-rpm]');if(m){readForm($id('rpF'),C[cur]&&C[cur].d&&(C[cur].d.ras||[]).find(y=>y.ra===ra)?stateOf(C[cur].d,C[cur].d.ras.find(y=>y.ra===ra)):{});cur=m.dataset.rpm;prevw=false;tplMode=false;drawEd();const c=C[cur];if(!c||Date.now()-c.at>5*60e3)refreshMonth(cur);return}
+  const rr=e.target.closest('[data-rpr]');if(rr){ra=rr.dataset.rpr;prevw=false;tplMode=false;drawEd();const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return}
   const d=C[cur]&&C[cur].d,r=d&&(d.ras||[]).find(y=>y.ra===ra);if(!r)return;
   const s=stateOf(d,r);
+  const ix=e.target.closest('[data-ipx]');if(ix)return tplAksi(ix.dataset.ipx,ix,d,r,s);
+  const td=e.target.closest('[data-tdel]');if(td){tplDraft.rows.splice(+td.dataset.tdel,1);drawEd(true);return}
+  const iu=e.target.closest('[data-ipu]');if(iu){const i=+iu.dataset.ipu,x=s.ipm.rows[i];x.real=autoVal(r.kpi,x.auto);hitungIpm(s.ipm);s.ipm.verified=false;drawEd(true);return}
+  const io=e.target.closest('[data-ipo]');if(io){const row=io.closest('.ipm-row');row.querySelector('.ipm-pa').hidden=false;io.remove();row.querySelector('[data-f=problem]').focus();return}
   const sg=e.target.closest('[data-rpsg],.rp-seg button');
   if(sg){const asp=sg.parentNode.dataset.asp,n=+sg.dataset.n;s.nilai[asp]=s.nilai[asp]===n?0:n;if(!s.nilai[asp])delete s.nilai[asp];sg.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===s.nilai[asp]));return}
   const ch=e.target.closest('[data-rps]');
