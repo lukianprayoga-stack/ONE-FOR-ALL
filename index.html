@@ -1143,6 +1143,31 @@ span.ipm-rem{flex:none;border-radius:6px;padding:2px 7px;white-space:nowrap}
 .ps-ok{color:#16a34a}.ps-no{color:#dc2626}
 .ps-foot p{margin:0 0 8px;font-size:13px}
 @media(max-width:560px){.ps-tbl table{font-size:12px}.ps-tbl td small{font-size:10.5px}.ps-tbl th,.ps-tbl td{padding:6px 3px}.ps-tiles b{font-size:19px}}.ps-foot>div{display:flex;gap:8px;flex-wrap:wrap}.ps-foot .btn{flex:1;min-width:180px;width:auto}
+/* ====== SSR DETAIL ====== */
+.ssd-go{cursor:pointer}.ssd-go:hover td{background:color-mix(in srgb,var(--fg) 4%,transparent)}
+.ssd-ar{color:var(--mut);font-weight:700}
+.ssd-all{background:color-mix(in srgb,#2f80ed 10%,transparent)}
+.ssd-bc{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--mut);margin-bottom:10px}
+.ssd-bc button{border:0;background:var(--bg);color:var(--fg);font:inherit;font-weight:700;border-radius:999px;padding:4px 10px;cursor:pointer}.ssd-bc button.on{background:var(--ink);color:var(--inkfg)}
+.ssd-bc span{font-weight:700;color:var(--fg)}
+.ssd-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.ssd-sum>div{background:var(--bg);border-radius:12px;padding:8px 10px;min-width:0}
+.ssd-sum small{display:block;font-size:11px;color:var(--mut);font-weight:700}.ssd-sum>div>b{display:block;font-size:20px;letter-spacing:-.4px}
+.ssd-sum span{display:block;font-size:11px;color:var(--mut)}
+.ssd-sum>div>b.ss-ok,.ssd-sum>div>b.ss-lo,.ssd-sum>div>b.ss-hi,.ssd-sum>div>b.ss-na{display:inline-block;color:#fff;border-radius:8px;padding:0 8px;margin-top:2px}
+.ssd-tbl td:first-child{white-space:normal}
+.ssd-n{display:block;font-weight:700;color:var(--fg)!important;background:none!important;padding:0!important;text-align:left!important;font-size:13px!important}
+.ssd-mix{display:flex;height:6px;border-radius:99px;overflow:hidden;margin:4px 0 2px;max-width:220px;background:var(--line)}.ssd-mix i{display:block;min-width:2px}
+.ssd-tbl td small{display:block;font-size:10.5px;color:var(--mut);white-space:normal}
+.ssd-f button i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0}
+.ssd-tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.ssd-tools .in{flex:1;min-width:140px}.ssd-tools select.in{flex:0 0 auto;width:auto}
+.ssd-p{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.ssd-p .iv-img{width:48px;height:48px}
+.ssd-pi{flex:1;min-width:0}.ssd-pi b{display:block;font-size:13.5px;line-height:1.3}.ssd-pi small{display:block;font-size:11.5px;color:var(--mut);line-height:1.35}
+.ssd-pv{flex:none;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.ssd-pv b{display:inline-block;min-width:44px;border-radius:7px;padding:2px 7px;color:#fff;text-align:center;font-size:13px}
+.ssd-pv em{font-style:normal;font-size:10.5px;font-weight:700;border-radius:6px;padding:1px 6px;color:#fff}
+@media(max-width:560px){.ssd-sum>div>b{font-size:17px}.ssd-pv em{display:none}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -3238,10 +3263,83 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    <div class="ss-scale"><span>0</span><span>ideal ${String(c.lo).replace('.',',')}–${String(c.hi).replace('.',',')}</span><span>${mx}</span></div>
    <p class="hint" style="margin-top:6px"><span style="color:var(--fg)">▮ current</span> · <span style="color:#2f80ed">▮ next</span> · SSR ${dec1(cur||0)} berarti stok cukup untuk ±${dec1(cur||0)} bulan penjualan.</p>
    <table class="ss-tbl"><thead><tr><th>Kategori</th><th>Stok</th><th>Sales/bln</th><th>SSR</th></tr></thead><tbody>
-    ${rows.map(r=>{const [kk]=sstat(r.v===Infinity?99:r.v,c);return `<tr><td>${esc(cap3(r.k))}</td><td>${nf(r.s)}</td><td>${nf(r.a)}</td><td><b class="${r.v===Infinity?'ss-hi':kk}">${r.v===Infinity?'∞':dec1(r.v)}</b></td></tr>`}).join('')}</tbody></table>
+    ${rows.map(r=>{const [kk]=sstat(r.v===Infinity?99:r.v,c);return `<tr class="ssd-go" data-ssl3="${esc(r.k)}"><td>${esc(cap3(r.k))} <span class="ssd-ar">›</span></td><td>${nf(r.s)}</td><td>${nf(r.a)}</td><td><b class="${r.v===Infinity?'ss-hi':kk}">${r.v===Infinity?'∞':dec1(r.v)}</b></td></tr>`}).join('')}</tbody></table>
+   <button type="button" class="iv-todo ct-btn ssd-all" data-ssopen="1"><b>🔎</b><span>SSR per MC Level 4 &amp; per produk<small>Ketuk kategori di tabel, atau buka rincian lengkap →</small></span></button>
    <div class="ss-bars">${mm.map(x=>{const part=x.m===String(ssr.end).slice(0,7);return `<div><span>${nf(x.q)}</span><i class="${part?'p':''}" style="height:${Math.max(4,x.q/mq*46)}px"></i>${BLN3[+x.m.slice(5,7)-1]}${part?'*':''}</div>`}).join('')}</div>
    <p class="hint">Sales per bulan (pcs)${mm.some(x=>x.m===String(ssr.end).slice(0,7))?' · * bulan berjalan s/d '+tgl(ssr.end):''}. Stok dari inventory by bin ${tgl(data.meta&&data.meta.date)}, tanpa paper bag/packing.</p>`;
  };
+ /* --- SSR detail: MC Level 3 > MC Level 4 > produk (generic-warna) --- */
+ let ssd=null;
+ const gcKey=o=>String(o.g)+'|'+String(o.c||'').toUpperCase();
+ const s4=o=>ssr&&ssr.byGc?(ssr.byGc[gcKey(o)]||0):(o.q4||0);
+ const ssv=(stock,q4)=>q4>0?stock/(q4/4):(stock>0?Infinity:0);
+ function pstat(o,c){const q=s4(o);if(o.stock<=0)return 'kosong';if(q<=0)return 'mati';const v=ssv(o.stock,q);return v<c.lo?'kurang':v>c.hi?'lebih':'ideal'}
+ const PST={kurang:['Kurang stok','ss-lo'],ideal:['Ideal','ss-ok'],lebih:['Kelebihan','ss-hi'],mati:['Tidak terjual 4 bln','ss-na'],kosong:['Stok 0, masih laku','ss-lo']};
+ const ORD=['kurang','kosong','ideal','lebih','mati'];
+ function ssPool(){return R.filter(o=>!nonMerch(o)&&(o.stock>0||s4(o)>0))}
+ function chip(v,c){if(v===Infinity)return '<b class="ss-hi">∞</b>';if(!(v>0))return '<b class="ss-na">0</b>';const [k]=sstat(v,c);return `<b class="${k}">${dec1(v)}</b>`}
+ function grpRows(list,key,salesOf,c){
+  const G={};list.forEach(o=>{const k=key(o),g=G[k]||(G[k]={k,s:0,n:0,cnt:{},q:0});g.s+=o.stock;g.n++;g.q+=s4(o);const t=pstat(o,c);g.cnt[t]=(g.cnt[t]||0)+1});
+  return Object.keys(G).map(k=>{const g=G[k],q=salesOf?salesOf(k,g):g.q;return Object.assign(g,{q,v:ssv(g.s,q)})}).sort((a,b)=>(b.v===Infinity?1e9:b.v)-(a.v===Infinity?1e9:a.v));
+ }
+ const mix=cnt=>{const t=ORD.reduce((a,k)=>a+(cnt[k]||0),0)||1;return `<span class="ssd-mix">${ORD.map(k=>cnt[k]?`<i class="${PST[k][1]}" style="flex:${cnt[k]}" title="${PST[k][0]}: ${cnt[k]}"></i>`:'').join('')}</span><small>${ORD.filter(k=>cnt[k]).map(k=>nf(cnt[k])+' '+PST[k][0].toLowerCase()).join(' · ')}</small>`};
+ function openSSD(l3,l4){
+  if(!ssr||!data)return;
+  ssd={l3:l3||'',l4:l4||'',q:'',f:'',sort:'ssr'};
+  openModal('SSR per Kategori & Produk','<div id="ssD"></div>');
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>pn.classList.remove('wide')}
+  drawSSD();
+ }
+ function drawSSD(keepFocus){
+  const el=$id('ssD');if(!el)return;const c=scfg(),P=ssPool(),st=ssd,old=!ssr.byGc;
+  const L3=o=>String(o.l3||'-').toUpperCase(),L4=o=>String(o.l4||'-').toUpperCase();
+  const bc=`<div class="ssd-bc"><button type="button" data-ssb="0" class="${!st.l3?'on':''}">Semua kategori</button>${st.l3?` › <button type="button" data-ssb="1" class="${st.l3&&!st.l4?'on':''}">${esc(cap3(st.l3))}</button>`:''}${st.l4?` › <span>${esc(st.l4==='*'?'Semua produk':cap3(st.l4))}</span>`:''}</div>`;
+  const head=(stock,q,n)=>{const v=ssv(stock,q);return `<div class="ssd-sum"><div><small>Stok</small><b>${nf(stock)}</b><span>${nf(n)} produk</span></div><div><small>Sales/bln</small><b>${nf(q/4)}</b><span>rata-rata 4 bulan</span></div><div><small>SSR</small>${chip(v,c)}<span>ideal ${String(c.lo).replace('.',',')}–${String(c.hi).replace('.',',')}</span></div></div>`};
+  const note=old?'<p class="hint" style="color:var(--amber)">Sales per MC Level 4 & produk masih perkiraan dari data performa. Tempel <b>Performa.gs</b> versi terbaru agar dihitung langsung dari DSR 4 bulan.</p>':'';
+  if(!st.l4){
+   const lvl1=!!st.l3,list=lvl1?P.filter(o=>L3(o)===st.l3):P;
+   const rows=lvl1?grpRows(list,L4,ssr.byL4?(k=>ssr.byL4[st.l3+'|'+k]||0):null,c):grpRows(list,L3,ssr.byCat?(k=>(ssr.byCat[k]||{}).q4||0):null,c);
+   const tq=rows.reduce((a,r)=>a+r.q,0),ts=rows.reduce((a,r)=>a+r.s,0);
+   el.innerHTML=bc+head(ts,tq,list.length)+note+`<table class="ss-tbl ssd-tbl"><thead><tr><th>${lvl1?'MC Level 4':'MC Level 3'}</th><th>Stok</th><th>Sales/bln</th><th>SSR</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="ssd-go" data-ssg="${esc(r.k)}"><td><b class="ssd-n">${esc(cap3(r.k))} ›</b>${mix(r.cnt)}</td><td>${nf(r.s)}</td><td>${nf(r.q/4)}</td><td>${chip(r.v,c)}</td></tr>`).join('')}</tbody></table>
+    <button type="button" class="iv-todo ct-btn ssd-all" data-ssg="*"><b>📋</b><span>Lihat semua produk${lvl1?' '+esc(cap3(st.l3)):''}<small>${nf(list.length)} produk · urutkan & saring per status →</small></span></button>`;
+   return;
+  }
+  // daftar produk
+  const base=P.filter(o=>L3(o)===st.l3||!st.l3).filter(o=>st.l4==='*'||L4(o)===st.l4);
+  const cnt={};base.forEach(o=>{const t=pstat(o,c);cnt[t]=(cnt[t]||0)+1});
+  const q=st.q.toLowerCase();
+  let list=base.filter(o=>(!st.f||pstat(o,c)===st.f)&&(!q||(o.n+' '+o.c+' '+o.g).toLowerCase().includes(q)));
+  const V=o=>{const v=ssv(o.stock,s4(o));return v===Infinity?1e9:v};
+  const S={ssr:(a,b)=>V(b)-V(a),low:(a,b)=>V(a)-V(b),stok:(a,b)=>b.stock-a.stock,jual:(a,b)=>s4(b)-s4(a)}[st.sort];list=list.slice().sort(S);
+  const ts=base.reduce((a,o)=>a+o.stock,0),tq=st.l4==='*'?(st.l3?((ssr.byCat||{})[st.l3]||{}).q4||base.reduce((a,o)=>a+s4(o),0):ssr.q4):(ssr.byL4?ssr.byL4[st.l3+'|'+st.l4]||0:base.reduce((a,o)=>a+s4(o),0));
+  el.innerHTML=bc+head(ts,tq,base.length)+note+`
+   <div class="dp-chips ssd-f"><button type="button" data-ssf="" class="${!st.f?'on':''}">Semua ${nf(base.length)}</button>${ORD.filter(k=>cnt[k]).map(k=>`<button type="button" data-ssf="${k}" class="${st.f===k?'on':''}"><i class="${PST[k][1]}"></i>${PST[k][0]} ${nf(cnt[k])}</button>`).join('')}</div>
+   <div class="iv-tools ssd-tools"><input class="in" id="ssdQ" type="search" placeholder="Cari nama, warna, kode…" value="${esc(st.q)}"><select class="in" id="ssdS"><option value="ssr"${st.sort==='ssr'?' selected':''}>SSR tertinggi</option><option value="low"${st.sort==='low'?' selected':''}>SSR terendah</option><option value="stok"${st.sort==='stok'?' selected':''}>Stok terbanyak</option><option value="jual"${st.sort==='jual'?' selected':''}>Terjual terbanyak</option></select><button type="button" class="btn ghost" data-ssx="csv">Unduh CSV</button></div>
+   <div class="ssd-list">${list.slice(0,150).map(o=>{const qq=s4(o),v=ssv(o.stock,qq),t=pstat(o,c);return `<div class="ssd-p"><span class="iv-img">${o.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(o.img)}" alt="">`:'🏷️'}</span>
+    <div class="ssd-pi"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.g)}${st.l4==='*'?' · '+esc(cap3(o.l4)):''}</small><small>stok ${nf(o.stock)} (toko ${nf(o.s||0)} · gudang ${nf(o.w||0)}) · terjual 4 bln ${nf(qq)}</small></div>
+    <div class="ssd-pv">${chip(v,c)}<em class="${PST[t][1]}">${PST[t][0]}</em></div></div>`}).join('')||'<p class="dp-empty">Tidak ada produk.</p>'}
+   ${list.length>150?`<p class="hint">${nf(list.length-150)} produk lain. Perjelas pencarian, saring status, atau unduh CSV.</p>`:''}</div>`;
+  const qi=$id('ssdQ');qi.oninput=()=>{st.q=qi.value;drawSSD(true)};if(keepFocus){qi.focus();qi.setSelectionRange(qi.value.length,qi.value.length)}
+  $id('ssdS').onchange=e=>{st.sort=e.target.value;drawSSD()};
+  ssd.list=list;
+ }
+ function ssdCsv(){
+  const c=scfg(),L=ssd&&ssd.list||[];if(!L.length)return;
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[['Generic','Warna','Nama','MC Level 3','MC Level 4','Stok toko','Stok gudang','Stok total','Terjual 4 bulan','Sales per bulan','SSR','Status']]
+   .concat(L.map(o=>{const qq=s4(o),v=ssv(o.stock,qq);return [o.g,o.c,o.n,o.l3,o.l4,o.s||0,o.w||0,o.stock,qq,Math.round(qq/4*10)/10,v===Infinity?'tidak terjual':Math.round(v*10)/10,PST[pstat(o,c)][0]]}));
+  const csv=rows.map(r=>r.map(q).join(',')).join('\n'),url=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'})),a=document.createElement('a');
+  a.href=url;a.download='SSR '+(ssd.l3?cap3(ssd.l3)+' ':'')+(ssd.l4&&ssd.l4!=='*'?cap3(ssd.l4)+' ':'')+(data.meta&&data.meta.date||'')+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ }
+ $('#pb').addEventListener('click',e=>{
+  if(!$id('ssD'))return;
+  const b=e.target.closest('[data-ssb]');if(b){if(b.dataset.ssb==='0'){ssd.l3='';ssd.l4=''}else ssd.l4='';ssd.f='';ssd.q='';return drawSSD()}
+  const g=e.target.closest('[data-ssg]');if(g){const k=g.dataset.ssg;if(k==='*')ssd.l4='*';else if(!ssd.l3)ssd.l3=k;else ssd.l4=k;ssd.f='';ssd.q='';const sc=document.querySelector('#ov .panel');if(sc)sc.scrollTop=0;return drawSSD()}
+  const f=e.target.closest('[data-ssf]');if(f){ssd.f=f.dataset.ssf;return drawSSD()}
+  if(e.target.closest('[data-ssx=csv]'))return ssdCsv();
+ });
+ $id('ssBody').addEventListener('click',e=>{const r=e.target.closest('[data-ssl3]');if(r)return openSSD(r.dataset.ssl3);if(e.target.closest('[data-ssopen]'))openSSD()});
  const cap3=v=>String(v||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
  $id('ssCfg').onclick=()=>{
   const open=()=>{
