@@ -1232,6 +1232,29 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
  .mas-measure .mcol>section:last-child{flex:none}
  .deck-pg.cur.mas>.span-all{flex:0 0 100%}
 }
+/* ====== STATUS SISTEM ====== */
+.sys-dot{position:relative}.sys-dot::after{content:'';position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:#e5484d;box-shadow:0 0 0 2px var(--panel)}
+.sys-sum{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid var(--line)}
+.sys-sum b{display:block;font-size:14px}.sys-sum span{display:block;font-size:12px;color:var(--mut);margin-top:2px}
+.sys-sum.ok{background:var(--ok-bg)}.sys-sum.ok b{color:var(--ok-fg)}.sys-sum.bad{background:var(--bad-bg)}.sys-sum.bad b{color:var(--bad-fg)}
+.sys-files{display:grid;gap:4px}
+.sys-f{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:12px;background:var(--bg)}
+.sys-f>i{flex:none;font-style:normal;width:22px;height:22px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--mut)}
+.sys-f>div{flex:1;min-width:0}.sys-f b{display:block;font-size:13.5px}.sys-f b small{font-weight:500;color:var(--mut)}
+.sys-f>div>small{display:block;font-size:11.5px;color:var(--mut)}
+.sys-f em{display:block;font-style:normal;font-size:12px;margin-top:3px;color:var(--bad-fg)}.sys-f.lama em{color:var(--warn-fg)}
+.sys-f em a{color:inherit;font-weight:700}
+.sys-st{flex:none;font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.sys-f.ok .sys-st{background:var(--ok-bg);color:var(--ok-fg)}.sys-f.lama .sys-st{background:var(--warn-bg);color:var(--warn-fg)}.sys-f.hilang .sys-st{background:var(--bad-bg);color:var(--bad-fg)}
+.sys-f.hilang{box-shadow:inset 3px 0 0 #dc2626}.sys-f.lama{box-shadow:inset 3px 0 0 #d97706}
+.sys-data{display:grid;gap:4px}
+.sys-d{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--bg)}
+.sys-d>i{flex:none;width:10px;height:10px;border-radius:50%;background:#16a34a}.sys-d.bad>i{background:#f59e0b;box-shadow:0 0 0 4px color-mix(in srgb,#f59e0b 22%,transparent)}.sys-d.skip>i{background:var(--mut)}
+.sys-d>div{flex:1;min-width:0}.sys-d b{display:block;font-size:13.5px}.sys-d small{display:block;font-size:11.5px;color:var(--mut)}
+.sys-d .btn{padding:6px 12px;font-size:12px}
+.sys-more{margin-top:10px}.sys-more summary{font-size:12px;color:var(--mut);cursor:pointer}
+.sys-sh{display:flex;flex-wrap:wrap;gap:6px}.sys-sh span{font-size:11.5px;background:var(--bg);border-radius:8px;padding:3px 8px;color:var(--mut)}.sys-sh b{color:var(--fg)}
+.sys-ol{margin:0;padding-left:22px;font-size:13px;line-height:1.7}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1524,6 +1547,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Admin">
+        <section class="rs" id="sys" aria-label="Status sistem">
+          <div class="sh-head"><div><h3>Status Sistem</h3><p id="sysSub">File Apps Script & kesegaran data</p></div></div>
+          <div id="sysBody"></div>
+        </section>
         <section class="rs" id="kas" aria-label="Rekap kas">
           <div class="sh-head"><div><h3>Rekap Kas</h3><p id="ksSub">Laporan pengeluaran kas bulanan siap tanda tangan</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="ksCfg" aria-label="Pengaturan rekap kas (Store Head)">⚙</button><button class="btn ghost" type="button" id="ksUp">⇪ Upload</button></div></div>
           <input type="file" id="ksFile" accept=".xlsx,.xls,.csv" hidden>
@@ -5283,7 +5310,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  // slot pengingat yang sedang berlaku: '2026-10-26 08' atau '... 18'
  function slot(){const d=new Date(),m=d.getHours()*60+d.getMinutes();let s='';JAM.forEach(j=>{if(m>=j[0]*60+j[1])s=String(j[0])});
   if(!s)return '';const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+s}
- function goUpload(){close&&$id('ov').classList.contains('open')&&close();window.ofaDeckShow&&window.ofaDeckShow('inv');setTimeout(()=>{const el=$id('inv');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350)}
+ function goUpload(){close&&$id('ov').classList.contains('open')&&close();const L=stale(),k=L.length&&L.every(x=>x.k==='dsr')?'dsr':L.length&&L.every(x=>x.k==='pusat'||x.k==='dsr')?'ps':'inv';
+  if(k==='dsr'){const o=$id('slOpen');if(o)o.click();return}
+  window.ofaDeckShow&&window.ofaDeckShow(k);setTimeout(()=>{const el=$id(k);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350)}
 
  function renderBar(){
   const L=stale();
@@ -5291,7 +5320,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   let hid='';try{hid=sessionStorage.getItem('ofa_pg_hide')||''}catch(e){}
   if(hid&&hid===slot()+'|'+L.map(x=>x.k).join()){bar.hidden=true;return}
   bar.hidden=false;
-  bar.innerHTML=`<span class="pg-ic">⏰</span><div><b>${L.length} data stok perlu diperbarui</b><small>${L.map(x=>esc(x.label)+' · '+umur(x)).join('<br>')}</small></div>
+  bar.innerHTML=`<span class="pg-ic">⏰</span><div><b>${L.length} data perlu diperbarui</b><small>${L.map(x=>esc(x.label)+' · '+umur(x)).join('<br>')}</small></div>
    <button type="button" class="btn" data-pgx="up">Upload</button><button type="button" class="pg-x" data-pgx="hide" aria-label="Sembunyikan sampai pengingat berikutnya">✕</button>`;
  }
  window.renderPengingat=function(){
@@ -5354,7 +5383,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  setInterval(async()=>{
   const s=slot();if(!s||s===lastSlot)return;lastSlot=s;
   await load();const L=stale();
-  if(L.length){window.ofaToast&&window.ofaToast('⏰ '+L.length+' data stok perlu diperbarui');notify(L)}
+  if(L.length){window.ofaToast&&window.ofaToast('⏰ '+L.length+' data perlu diperbarui');notify(L)}
  },30000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&(!st||Date.now()-(st.at||0)>15*60e3))load()});
  document.addEventListener('click',e=>{
@@ -6499,6 +6528,91 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  new MutationObserver(all).observe(document.getElementById('deckTrack')||document.body,{attributes:true,attributeFilter:['class','hidden'],subtree:true});
  addEventListener('resize',all);
  all();
+})();
+/* ====== STATUS SISTEM: file Apps Script terpasang & kesegaran data ====== */
+(function(){
+ const box=document.getElementById('sys');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_sys',TTL=20*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{if(!k)return '';const p=String(k).slice(0,10).split('-');return +p[2]+' '+BLN[+p[1]-1]+' '+p[0]};
+ const umur=x=>!x.date?'belum pernah diupload':x.age===0?'hari ini':x.age===1?'kemarin':x.age+' hari lalu';
+ // Urutan file di Apps Script (atas ke bawah) dan fungsi yang dibutuhkan Hub versi ini
+ const DOC={Performa:'https://claude.ai/artifact/PEG5eX8vVAph7tsq7s8Fsz',Bulanan:'https://claude.ai/artifact/Fddbj76q5RrzveYyi6GvcE',Pengingat:'https://claude.ai/artifact/T5bQKQEmysKsU2Ag1eNK9A',Rapor:'https://claude.ai/artifact/S4Dh8wz3mGZgrJCszbhrZo',Pusat:'https://claude.ai/artifact/QPQeGxNRyexPFj1QLsFn9s'};
+ const FILES=[
+  {n:'Kode',f:'Code.gs',need:['getDashboardData','hubLoad','hubSave'],latest:[],peran:'Dasar: DSR, target, data Hub'},
+  {n:'Inventory',need:['uploadInventory','getInventoryAnalysis'],latest:['uploadInventoryBySku','getRestockData','getLostSalesData','getWeeklyReport','getStockIndex'],peran:'Inventory, restock, lost sales, laporan mingguan'},
+  {n:'Katalog',need:['katalogOverview'],latest:['katalogMasterApply','katalogVisitors'],peran:'Website katalog'},
+  {n:'Akurasi',need:[],latest:[],flag:'akurasi',peran:'Perhitungan sales, UPT, EAC yang akurat'},
+  {n:'Performa',need:['getProductPLC'],latest:['getSSR','getBarangMasuk'],flag:'ssrDetail',peran:'Performa produk, SSR, barang masuk'},
+  {n:'Tinggalan',need:['tinggalanList'],latest:['tinggalanHp'],peran:'Tinggalan & serah terima'},
+  {n:'Bulanan',need:['getMonthlyReport'],latest:['picaHapus'],peran:'Laporan bulanan & PICA'},
+  {n:'Pengingat',need:['pengingatStatus'],latest:['statusSistem'],peran:'Pengingat data & status sistem'},
+  {n:'Rapor',need:['raporData'],latest:['raporIpmTpl','raporTeladan'],flag:'rankSkor',peran:'Rapor RA, IPM, RA Teladan'},
+  {n:'Pusat',need:['uploadStokPusat'],latest:['getArusBarang'],peran:'Stok pusat, order repeat, arus barang'},
+  {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
+ ];
+ const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
+ let data=null,busy=false,err='',ver='';
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ try{caches.keys().then(k=>{ver=(k.filter(x=>/^ofa-v\d+/.test(x)).sort((a,b)=>parseInt(b.slice(5))-parseInt(a.slice(5)))[0]||'');render()}).catch(()=>{})}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&data&&Date.now()-(data.at||0)<TTL)return render();
+  busy=true;render();
+  try{data=Object.assign(await api('statusSistem',{}),{at:Date.now()});err='';try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;render()}
+ }
+ function cek(){
+  const A=new Set((data&&data.apis)||[]),F=(data&&data.flags)||{};
+  return FILES.map(x=>{
+   const kurang=x.need.filter(n=>!A.has(n)),lama=x.latest.filter(n=>!A.has(n)),flag=x.flag?!!F[x.flag]:true;
+   let st='ok',ket='';
+   if(x.need.length&&kurang.length){st='hilang';ket='Belum terpasang, atau letaknya di atas Kode (fungsi tidak terdaftar).'}
+   else if(x.n==='Akurasi'&&!flag){st='hilang';ket='Belum terpasang, atau letaknya di atas Kode.'}
+   else if(x.n==='Akun'&&!flag){st='lama';ket='Login akun belum aktif. Pastikan Akun paling bawah.'}
+   else if(lama.length||!flag){st='lama';ket='Versi lama. Tempel ulang kode terbaru lalu Deploy → New version.'}
+   return Object.assign({},x,{st,ket,kurang,lama})});
+ }
+ function dot(){const R=data&&data.apis?cek():[],bad=R.some(r=>r.st!=='ok')||((data&&data.data)||[]).some(x=>x.stale);document.querySelectorAll('.side [data-pg="4"],#deckTabs [data-pg="4"]').forEach(b=>b.classList.toggle('sys-dot',!!bad&&window.ofaRole!=='staf'))}
+ function render(){
+  const b=$id('sysBody');if(!b)return;
+  if(err==='missing'){
+   b.innerHTML=`<p class="ps-old">Server belum punya fungsi Status Sistem. Tempel <b>Pengingat.gs</b> versi terbaru${DOC.Pengingat?` (<a href="${DOC.Pengingat}" target="_blank" rel="noopener">kode</a>)`:''}, lalu Deploy → New version.</p>${urutan()}`;return}
+  if(!data||!data.apis){b.innerHTML='<p class="dp-empty">'+(busy?'Memeriksa server…':err?'Gagal memeriksa: '+esc(err):'Status muncul setelah Hub terhubung ke server.')+'</p>';return}
+  const R=cek(),bad=R.filter(r=>r.st!=='ok'),D=data.data||[],stale=D.filter(x=>x.stale);
+  $id('sysSub').textContent='Diperiksa '+new Date(data.waktu).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(ver?' · Hub '+ver.replace('ofa-',''):'');
+  b.innerHTML=`<div class="sys-sum ${bad.length?'bad':'ok'}"><b>${bad.length?bad.length+' file perlu perhatian':'Semua file Apps Script terbaru'}</b><span>${R.length-bad.length} dari ${R.length} file sesuai versi Hub · ${stale.length?stale.length+' data perlu diperbarui':'semua data terbaru'}</span></div>
+   <h5 class="mb-h5">File Apps Script <small>urutan dari atas ke bawah</small></h5>
+   <div class="sys-files">${R.map((r,i)=>`<div class="sys-f ${r.st}"><i>${i+1}</i><div><b>${esc(r.n)}${r.f?' <small>('+esc(r.f)+')</small>':''}</b><small>${esc(r.peran)}</small>${r.ket?`<em>${esc(r.ket)}${DOC[r.n]?` <a href="${DOC[r.n]}" target="_blank" rel="noopener">Buka kode →</a>`:''}</em>`:''}</div><span class="sys-st">${r.st==='ok'?'✓ Terbaru':r.st==='lama'?'Versi lama':'Tidak terdeteksi'}</span></div>`).join('')}</div>
+   ${bad.length?'<p class="hint">Setelah menempel kode: Deploy → Manage deployments → Edit → Version: New version → Deploy, lalu ketuk ↻ Periksa ulang.</p>':''}
+   <h5 class="mb-h5">Kesegaran data</h5>
+   <div class="sys-data">${D.map(x=>`<div class="sys-d ${x.skip?'skip':x.stale?'bad':'ok'}"><i></i><div><b>${esc(x.label)}</b><small>${x.date?'data '+tgl(x.date)+' · ':''}${umur(x)}${x.skip?' · tidak dipantau':' · maks. '+x.max+' hari'}</small></div>${x.stale&&GO[x.k]?`<button type="button" class="btn ghost" data-sysgo="${GO[x.k]}">Upload</button>`:x.stale&&x.k==='dsr'?'<button type="button" class="btn ghost" data-sysgo="dsr">Buka</button>':''}</div>`).join('')}</div>
+   <p class="hint">Pengingat otomatis ${data.jadwal>0?'aktif (08.30 & 18.00)':data.jadwal===0?'<b>belum dijadwalkan</b>: jalankan pengingatSetup sekali dari editor Apps Script':'belum diizinkan: jalankan pengingatSetup dari editor'}.</p>
+   <details class="sys-more"><summary>Rincian teknis</summary><p class="hint">${nf(data.apis.length)} fungsi API terdaftar · zona waktu ${esc(data.tz||'-')} · ${nf((data.sheets||[]).length)} sheet</p>
+    <div class="sys-sh">${(data.sheets||[]).map(s=>`<span>${esc(s[0])} <b>${nf(s[1])}</b></span>`).join('')}</div></details>
+   <div class="ps-act"><button type="button" class="btn ghost" data-sys="reload">↻ Periksa ulang</button></div>`;
+  dot();
+ }
+ function urutan(){return `<h5 class="mb-h5">Urutan file yang benar</h5><ol class="sys-ol">${FILES.map(x=>`<li><b>${esc(x.n)}</b> · ${esc(x.peran)}</li>`).join('')}</ol>`}
+ box.addEventListener('click',e=>{
+  if(e.target.closest('[data-sys=reload]'))return load(true);
+  const g=e.target.closest('[data-sysgo]');if(!g)return;
+  if(g.dataset.sysgo==='dsr'){const o=$id('slOpen');if(o)o.click();return}
+  window.ofaDeckShow&&window.ofaDeckShow(g.dataset.sysgo);setTimeout(()=>{const el=$id(g.dataset.sysgo);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350);
+ });
+ window.ofaSysReload=()=>load(true);
+ render();
+ setTimeout(()=>{if(window.ofaRole!=='staf')load(false)},7000);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
