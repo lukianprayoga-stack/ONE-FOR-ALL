@@ -1131,6 +1131,18 @@ span.ipm-rem{flex:none;border-radius:6px;padding:2px 7px;white-space:nowrap}
 .tl-done{color:var(--ok-fg)}
 .tl-hist>div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.tl-hist span{color:var(--mut);text-align:right}
 @media(max-width:560px){.tl-grid,.tl-ed{grid-template-columns:1fr}.tl-w>b{font-size:18px}}
+/* ====== STOK PUSAT ====== */
+.ps-old{font-size:12.5px;margin:10px 0 0;padding:8px 10px;border-radius:10px;background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-bd)}
+.ps-tiles .ok b{color:#16a34a}.ps-tiles .bad b{color:#dc2626}
+.ps-go{background:color-mix(in srgb,#16a34a 12%,transparent)}
+.ps-tbl td small{color:var(--mut);font-weight:500}
+.ps-tbl .ps-hi{color:var(--amber)!important}
+.ps-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ps-up{cursor:pointer}.ps-up.busy{opacity:.6;pointer-events:none}
+.ps-info{margin:4px 0 6px;font-size:12px}
+.ps-ok{color:#16a34a}.ps-no{color:#dc2626}
+.ps-foot p{margin:0 0 8px;font-size:13px}
+@media(max-width:560px){.ps-tbl table{font-size:12px}.ps-tbl td small{font-size:10.5px}.ps-tbl th,.ps-tbl td{padding:6px 3px}.ps-tiles b{font-size:19px}}.ps-foot>div{display:flex;gap:8px;flex-wrap:wrap}.ps-foot .btn{flex:1;min-width:180px;width:auto}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1402,6 +1414,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="rs" aria-label="Permintaan restock">
           <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
           <div id="rsBody"></div>
+        </section>
+        <section class="rs" id="ps" aria-label="Stok pusat">
+          <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
+          <div id="psBody"></div>
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Display">
@@ -3554,7 +3570,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const groups=[],gi={};
   L.forEach(r=>{const key=r.k.slice(0,9)+'|'+r.c;if(gi[key]==null){gi[key]=groups.length;groups.push({r,items:[]})}groups[gi[key]].items.push(r)});
   $id('rsList').innerHTML=groups.length?groups.slice(0,80).map(g=>`<div class="rs-grp"><div class="rs-gh"><span class="iv-img">${g.r.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(g.r.img)}" alt="">`:'🏷️'}</span><div><b>${esc(g.r.n)}</b><small>${esc(g.r.c)} · ${esc(g.r.l4||g.r.l3||'-')}${g.r.price?' · '+rp(g.r.price):''}</small></div></div>
-   ${g.items.map(r=>`<label class="rs-row${sel[r.k]?'':' off'}"><input type="checkbox" data-ck="${r.k}" ${sel[r.k]?'checked':''}><span>Ukuran <b>${esc(r.z)}</b><small>terjual 30h ${nf(r.q30)} · stok ${nf(r.av)}${r.last?' · terakhir '+tgl(r.last):''}</small></span><input class="in" type="number" min="1" inputmode="numeric" data-q="${r.k}" value="${sel[r.k]||r.need}"></label>`).join('')}</div>`).join('')
+   ${g.items.map(r=>`<label class="rs-row${sel[r.k]?'':' off'}"><input type="checkbox" data-ck="${r.k}" ${sel[r.k]?'checked':''}><span>Ukuran <b>${esc(r.z)}</b><small>terjual 30h ${nf(r.q30)} · stok ${nf(r.av)}${r.last?' · terakhir '+tgl(r.last):''}${(()=>{const q=window.ofaPusatQty&&window.ofaPusatQty(r.k);return q==null?'':' · pusat '+(q>0?nf(q):'kosong')})()}</small></span><input class="in" type="number" min="1" inputmode="numeric" data-q="${r.k}" value="${sel[r.k]||r.need}"></label>`).join('')}</div>`).join('')
    +(groups.length>80?`<p class="hint">${groups.length-80} produk lain. Perjelas pencarian.</p>`:''):'<p class="dp-empty">Tidak ada saran.</p>';
   foot();
  }
@@ -3646,6 +3662,191 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  renderRestock();
  const baseRender=render;render=async function(){await baseRender();renderRestock()};
  setTimeout(()=>load(false),4200);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
+})();
+/* ====== STOK PUSAT (GUDANG HEAD OFFICE): stok toko x stok pusat x produk repeat ====== */
+(function(){
+ const box=document.getElementById('ps');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_pusat',TTL=60*60e3,STORE_NO='7014';
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]:''};
+ const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+ const nama=n=>String(n||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+ let data=null,busy=false,upBusy=false,err='',sel={},view=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ const rcfg=()=>Object.assign({cover:30,minSold:2},meta.__restockCfg||{});
+ function keep(){try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){try{localStorage.removeItem(CK)}catch(x){}}}
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  const c=rcfg();
+  if(!force&&data&&data.meta&&Date.now()-(data.at||0)<TTL&&data.cover===c.cover&&data.minSold===c.minSold)return;
+  busy=true;render();
+  try{data=Object.assign(await api('getStokPusat',{cover:c.cover,minSold:c.minSold}),{at:Date.now()});err='';keep()}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;render()}
+ }
+ /* --- baris data --- */
+ const REP=a=>({k:a[0],n:a[1],c:a[2],z:a[3],l3:a[4],q30:a[5],q90:a[6],av:a[7],need:a[8],ho:a[9],pack:a[10]||1,price:a[11],last:a[12],jenis:a[9]>0?'repeat':'kosong'});
+ const GAP=a=>({k:a[0],n:a[1],c:a[2],z:a[3],l3:a[4],ho:a[5],price:a[6],jenis:a[7],laku:a[8],pack:a[9]||1,av:0,need:0});
+ const reps=()=>data&&data.repeat?data.repeat.map(REP):[];
+ const gaps=()=>data&&data.gaps?data.gaps.map(GAP):[];
+ const packUp=(q,p)=>p>1?Math.ceil(q/p)*p:q;
+ const saran=r=>Math.max(1,Math.min(packUp(r.need,r.pack),r.ho));
+ // dipakai kartu Permintaan Restock: stok pusat per SKU toko
+ window.ofaPusatQty=k=>{if(!data||!data.repeat)return null;const r=data.repeat.find(a=>a[0]===k);return r?r[9]:null};
+ window.ofaPusatMeta=()=>data&&data.meta||null;
+ // foto produk dari data restock (bila ada) per generic-warna
+ function imgMap(){const m={};try{const d=JSON.parse(localStorage.getItem('ofa_restock')||'null');(d&&d.items||[]).forEach(a=>{if(a[11])m[String(a[0]).slice(0,9)+'|'+a[2]]=a[11]})}catch(e){}return m}
+
+ /* --- kartu --- */
+ function render(){
+  const b=$id('psBody');if(!b)return;
+  const up=`<label class="btn ghost ps-up${upBusy?' busy':''}"><input type="file" accept=".xlsx,.xls" id="psFile" hidden>${upBusy?'Mengupload…':'⇪ Upload data pusat'}</label>`;
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Pasang file <b>Pusat.gs</b> di Apps Script (di atas Akun.gs), lalu Deploy → New version.</p>';return}
+  if(!data||!data.meta){b.innerHTML=`<p class="dp-empty">${busy?'Memuat data stok pusat…':err?'Gagal memuat: '+esc(err):'Belum ada data stok pusat. Upload file <b>Data Stock (Pagi/Sore)</b> dari Head Office setiap hari.'}</p><div class="ps-act">${up}</div><p class="hint" id="psMsg"></p>`;return}
+  const m=data.meta,R=reps(),G=gaps(),ok=R.filter(r=>r.ho>0),no=R.filter(r=>r.ho<=0),gs=G.filter(g=>g.jenis==='ukuran'),gw=G.filter(g=>g.jenis==='warna');
+  const lama=m.date<today();
+  $id('psSub').textContent='Data '+tgl(m.date)+(m.sesi?' · '+m.sesi:'')+' · '+nf(m.art)+' artikel · '+nf(m.pcs)+' pcs';
+  const cov=c=>c[3]>0?Math.round(c[1]/(c[3]/30)):null;
+  b.innerHTML=`${lama?`<p class="ps-old">⏰ Data pusat terakhir ${tgl(m.date)}${m.sesi?' ('+m.sesi+')':''}. Upload data hari ini agar order repeat sesuai stok pusat terbaru.</p>`:''}
+   ${data.tokoAda?'':'<p class="ps-old">Stok toko belum ada. Upload <b>inventory by SKU</b> di kartu Kepatuhan Display agar analisis repeat akurat.</p>'}
+   <div class="mb-tiles ps-tiles">
+    <div class="ok"><b>${nf(ok.length)}</b><span>SKU repeat tersedia di pusat · ${nf(ok.reduce((t,r)=>t+saran(r),0))} pcs</span></div>
+    <div class="${no.length?'bad':''}"><b>${nf(no.length)}</b><span>SKU laku, stok pusat kosong</span></div>
+    <div><b>${nf(G.length)}</b><span>ukuran/warna laku belum ada di toko</span></div>
+   </div>
+   <button type="button" class="iv-todo ct-btn ps-go" data-ps="repeat"><b>🔁</b><span>Buat order repeat dari pusat<small>${ok.length?nf(ok.length)+' SKU siap diorder'+(gs.length||gw.length?' · '+nf(gs.length)+' ukuran & '+nf(gw.length)+' warna baru':''):'Belum ada SKU repeat yang tersedia di pusat'} →</small></span></button>
+   <h5 class="mb-h5">Stok toko vs stok pusat <small>per kategori</small></h5>
+   <div class="wk-tbl ps-tbl"><table><thead><tr><th>Kategori</th><th>Stok toko</th><th>Terjual 30h</th><th>Cover</th><th>Stok pusat</th><th>SKU laku ada di pusat</th></tr></thead><tbody>
+    ${(data.cats||[]).map(c=>{const v=cov(c);return `<tr><td>${esc(nama(c[0]))}<small>${nf(c[2])} SKU di toko</small></td><td>${nf(c[1])}</td><td>${nf(c[3])}</td><td class="${v==null?'':v<30?'wk-down':v>120?'ps-hi':''}">${v==null?'–':nf(v)+' hr'}</td><td>${nf(c[4])}<small>${nf(c[5])} artikel</small></td><td>${c[6]?Math.round(c[7]/c[6]*100)+'%':'–'}<small>${nf(c[7])}/${nf(c[6])}</small></td></tr>`}).join('')}
+   </tbody></table></div>
+   <p class="hint">Cover = stok toko ÷ rata-rata terjual per hari (30 hari). Repeat = SKU terjual 30 hari terakhir yang stoknya kurang dari kebutuhan ${data.cover} hari (aturan Permintaan Restock). Stok toko ${data.stockDate?tgl(data.stockDate):'-'} · sales s/d ${tgl(data.salesEnd)}.</p>
+   <div class="ps-act">${up}<button type="button" class="btn ghost" data-ps="reload">↻ Muat ulang</button></div><p class="hint" id="psMsg"></p>`;
+ }
+
+ /* --- upload --- */
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ async function upload(f){
+  if(!f||upBusy)return;
+  upBusy=true;render();const msg=t=>{const e=$id('psMsg');if(e)e.textContent=t};msg('Membaca '+f.name+'…');
+  try{
+   await loadXlsx();
+   const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:false});
+   let rows=null;
+   for(const n of wb.SheetNames){
+    const r=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:''});
+    const hi=r.slice(0,10).findIndex(x=>{const h=(x||[]).map(v=>String(v).toLowerCase().replace(/[^a-z0-9]/g,''));return h.includes('articlenumber')&&h.some(v=>v.startsWith('whavailability'))});
+    if(hi>=0){rows=r.slice(hi);break}
+   }
+   if(!rows)throw new Error('Sheet dengan kolom "Article Number" dan "W/H Availability" tidak ditemukan.');
+   const iA=rows[0].map(v=>String(v).toLowerCase().replace(/[^a-z0-9]/g,'')).indexOf('articlenumber');
+   rows=[rows[0]].concat(rows.slice(1).filter(r=>String(r[iA]||'').trim()));
+   msg('Mengirim '+nf(rows.length-1)+' artikel…');
+   const m=await api('uploadStokPusat',{rows,fileName:f.name});
+   toast('Stok pusat '+tgl(m.date)+(m.sesi?' '+m.sesi:'')+' tersimpan · '+nf(m.art)+' artikel');
+   upBusy=false;await load(true);
+   if(m.tebak){const e=$id('psMsg');if(e)e.textContent='Tanggal tidak terbaca dari nama file, dipakai tanggal upload. Nama file yang disarankan: "Data Stock 28 Oktober 2026 - Pagi".'}
+  }catch(e){upBusy=false;render();const x=$id('psMsg');if(x){x.textContent='Upload gagal: '+(missing(e)?'pasang Pusat.gs dulu.':e.message);x.style.color='#e5484d'}}
+  finally{upBusy=false}
+ }
+
+ /* --- order repeat --- */
+ const TABS=[['repeat','Repeat'],['ukuran','Ukuran baru'],['warna','Warna baru'],['kosong','Pusat kosong']];
+ function openOrder(tab){
+  const R=reps(),G=gaps();
+  if(!Object.keys(sel).length)R.filter(r=>r.ho>0).forEach(r=>sel[r.k]=saran(r));
+  view={tab:tab||'repeat',q:'',cat:'',img:imgMap(),all:R.concat(G)};
+  openModal('Order Repeat dari Pusat',`<div class="iv-list ps-ord"><p class="hint" style="margin:0 0 8px">Data pusat ${tgl(data.meta.date)}${data.meta.sesi?' ('+data.meta.sesi+')':''}. Jumlah saran = kebutuhan ${data.cover} hari dikurangi stok toko, dibatasi stok pusat dan kelipatan pack.</p>
+   <div class="dp-chips" id="psTabs"></div>
+   <div class="iv-tools"><input class="in" id="psQ" type="search" placeholder="Cari nama, warna, kode…"></div>
+   <div class="dp-chips" id="psCats"></div>
+   <div id="psList"></div>
+   <div class="rs-foot ps-foot"><p id="psTot"></p><div><button class="btn" type="button" data-pso="xlsx">Unduh Order STO (Excel)</button><button class="btn ghost" type="button" data-pso="req">Simpan ke Permintaan Restock</button></div></div></div>`);
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>pn.classList.remove('wide')}
+  $id('psQ').addEventListener('input',e=>{view.q=e.target.value.trim().toLowerCase();drawList()});
+  drawList();
+ }
+ const inTab=r=>view.tab==='repeat'?r.jenis==='repeat':r.jenis===view.tab;
+ function drawList(){
+  const A=view.all.filter(inTab);
+  $id('psTabs').innerHTML=TABS.map(([k,l])=>`<button type="button" data-pst="${k}" class="${k===view.tab?'on':''}">${l} ${nf(view.all.filter(r=>k==='repeat'?r.jenis==='repeat':r.jenis===k).length)}</button>`).join('');
+  const cats=['',...new Set(A.map(r=>r.l3).filter(Boolean))];if(!cats.includes(view.cat))view.cat='';
+  $id('psCats').innerHTML=cats.map(x=>`<button type="button" data-psc="${esc(x)}" class="${x===view.cat?'on':''}">${esc(x?nama(x):'Semua')}</button>`).join('');
+  const L=A.filter(r=>(!view.cat||r.l3===view.cat)&&(!view.q||(r.n+' '+r.c+' '+r.k+' '+r.z).toLowerCase().includes(view.q)));
+  const groups=[],gi={};
+  L.forEach(r=>{const key=r.k.slice(0,9)+'|'+r.c;if(gi[key]==null){gi[key]=groups.length;groups.push({r,items:[]})}groups[gi[key]].items.push(r)});
+  const info={repeat:'SKU laku di toko yang stoknya menipis dan tersedia di pusat.',ukuran:'Ukuran yang belum ada di toko, padahal warna ini laku (terjual ≥2 dalam 90 hari). Tersedia di pusat.',warna:'Warna yang belum pernah ada di toko, padahal modelnya laku (terjual ≥3 dalam 90 hari). Tersedia di pusat.',kosong:'SKU laku dan stoknya menipis, tetapi tidak ada di data stok pusat. Cari lewat transfer antar toko atau Endless Aisle.'}[view.tab];
+  $id('psList').innerHTML=`<p class="hint ps-info">${info}</p>`+(groups.length?groups.slice(0,80).map(g=>{const img=view.img[g.r.k.slice(0,9)+'|'+g.r.c];
+   return `<div class="rs-grp"><div class="rs-gh"><span class="iv-img">${img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(img)}" alt="">`:'🏷️'}</span><div><b>${esc(g.r.n)}</b><small>${esc(g.r.c)} · ${esc(nama(g.r.l3))}${g.r.price?' · '+rp(g.r.price):''}${g.r.laku?' · '+(g.r.jenis==='warna'?'model':'warna ini')+' terjual '+nf(g.r.laku)+' (90h)':''}</small></div></div>
+   ${g.items.map(r=>{const can=r.ho>0,v=sel[r.k]||0;
+    const sub=r.jenis==='repeat'||r.jenis==='kosong'?`terjual 30h ${nf(r.q30)} · stok toko ${nf(r.av)} · butuh ${nf(r.need)} · <b class="${can?'ps-ok':'ps-no'}">pusat ${can?nf(r.ho):'kosong'}</b>`:`stok toko 0 · <b class="ps-ok">pusat ${nf(r.ho)}</b>`;
+    return can?`<label class="rs-row${v?'':' off'}"><input type="checkbox" data-psk="${r.k}" ${v?'checked':''}><span>Ukuran <b>${esc(r.z)}</b><small>${sub}${r.pack>1?' · pack '+r.pack:''}</small></span><input class="in" type="number" min="0" max="${r.ho}" inputmode="numeric" data-psq="${r.k}" value="${v||(r.jenis==='repeat'?saran(r):Math.max(1,r.pack))}"></label>`
+     :`<div class="rs-row off"><span>Ukuran <b>${esc(r.z)}</b><small>${sub}</small></span></div>`}).join('')}</div>`}).join('')
+   +(groups.length>80?`<p class="hint">${groups.length-80} produk lain. Perjelas pencarian atau pilih kategori.</p>`:''):'<p class="dp-empty">Tidak ada data.</p>');
+  foot();
+ }
+ function picked(){const m={};view.all.forEach(r=>{if(sel[r.k]>0&&r.ho>0&&!m[r.k])m[r.k]=r});return Object.keys(m).map(k=>m[k])}
+ function foot(){
+  const P=picked(),pcs=P.reduce((t,r)=>t+sel[r.k],0),t=$id('psTot');
+  if(t)t.innerHTML=P.length?`<b>${nf(P.length)} SKU · ${nf(pcs)} pcs</b> dipilih · ${nf(P.filter(r=>r.jenis==='repeat').length)} repeat, ${nf(P.filter(r=>r.jenis!=='repeat').length)} ukuran/warna baru`:'Belum ada SKU yang dipilih';
+  document.querySelectorAll('[data-pso]').forEach(b=>b.disabled=!P.length);
+ }
+ async function exportXlsx(btn){
+  const P=picked();if(!P.length)return;
+  const txt=btn.textContent;btn.disabled=true;btn.textContent='Menyiapkan…';
+  try{
+   await loadXlsx();
+   const rem=r=>r.jenis==='repeat'?'Repeat '+STORE_NO+' · terjual 30h '+r.q30+' · stok '+r.av:r.jenis==='ukuran'?'Lengkapi ukuran '+STORE_NO:'Warna baru '+STORE_NO;
+   const x=await api('pusatExport',{items:P.map(r=>({a:r.k,q:sel[r.k],remark:rem(r)}))});
+   const ws=XLSX.utils.aoa_to_sheet([x.header].concat(x.rows));
+   ws['!cols']=x.header.map((h,i)=>({wch:i===5?34:i===14?36:Math.max(10,String(h).length+2)}));
+   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Order STO '+STORE_NO);
+   const d=new Date(),nm='Order STO '+STORE_NO+' - '+d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear()+'.xlsx';
+   XLSX.writeFile(wb,nm);toast('Order STO diunduh · '+x.rows.length+' SKU');
+  }catch(e){toast('Gagal: '+(missing(e)?'pasang Pusat.gs dulu':e.message))}
+  finally{btn.disabled=false;btn.textContent=txt}
+ }
+ function toRequest(){
+  const P=picked();if(!P.length||!window.ofaRestockCreate)return;
+  window.ofaRestockCreate(P.map(r=>({k:r.k,n:r.n,c:r.c,z:r.z,q:sel[r.k],a0:r.av||0})),'pusat');
+ }
+
+ /* --- event --- */
+ box.addEventListener('click',e=>{
+  const a=e.target.closest('[data-ps]');if(!a)return;
+  if(a.dataset.ps==='repeat'&&data&&data.meta)return openOrder('repeat');
+  if(a.dataset.ps==='reload')return load(true);
+ });
+ box.addEventListener('change',e=>{if(e.target.id==='psFile'){const f=e.target.files[0];e.target.value='';upload(f)}});
+ $('#pb').addEventListener('click',e=>{
+  if(!$id('psList'))return;
+  const t=e.target.closest('[data-pst]');if(t){view.tab=t.dataset.pst;view.cat='';return drawList()}
+  const c=e.target.closest('[data-psc]');if(c){view.cat=c.dataset.psc;return drawList()}
+  const o=e.target.closest('[data-pso]');if(o){if(o.dataset.pso==='xlsx')return exportXlsx(o);if(o.dataset.pso==='req')return toRequest()}
+ });
+ $('#pb').addEventListener('change',e=>{
+  if(!$id('psList'))return;
+  const ck=e.target.closest('[data-psk]'),q=e.target.closest('[data-psq]');
+  const r=k=>view.all.find(x=>x.k===k);
+  if(ck){const k=ck.dataset.psk,inp=document.querySelector('[data-psq="'+k+'"]'),x=r(k);sel[k]=ck.checked?Math.min(x?x.ho:1e9,Math.max(1,Number(inp.value)||1)):0;ck.closest('.rs-row').classList.toggle('off',!ck.checked);foot()}
+  if(q){const k=q.dataset.psq,x=r(k),v=Math.min(x?x.ho:1e9,Math.max(0,Math.round(Number(q.value)||0)));q.value=v;sel[k]=v;const c=document.querySelector('[data-psk="'+k+'"]');if(c){c.checked=v>0;c.closest('.rs-row').classList.toggle('off',!v)}foot()}
+ });
+ window.ofaPusatReload=()=>load(true);
+ render();
+ setTimeout(()=>load(false),5600);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load(false)});
 })();
 /* ====== LOST SALES (ENDLESS AISLE) & RETUR ====== */
