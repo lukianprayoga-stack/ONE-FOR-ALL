@@ -1186,6 +1186,41 @@ span.ipm-rem{flex:none;border-radius:6px;padding:2px 7px;white-space:nowrap}
 .bm-it:last-child{border-bottom:0}.bm-it span{flex:1;min-width:0}.bm-it b{display:block;font-weight:600;line-height:1.3}.bm-it small{display:block;font-size:11.5px;color:var(--mut)}
 .bm-sr{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0;background:var(--bg)}
 .bm-srh b{display:block;font-size:14px}.bm-srh small{display:block;font-size:11.5px;color:var(--mut);margin-bottom:4px}
+/* ====== ARUS BARANG ====== */
+:root{--ab-in:#2f80ed;--ab-out:#d97706}
+:root[data-theme=dark]{--ab-in:#3b82f6;--ab-out:#d97706}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ab-in:#3b82f6;--ab-out:#d97706}}
+.ab-per{margin-top:10px}
+.ab-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.ab-tiles>div{background:var(--bg);border-radius:14px;padding:10px 12px;min-width:0}
+.ab-tiles small{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--mut);font-weight:700}.ab-tiles b{display:block;font-size:22px;letter-spacing:-.5px;margin-top:2px}.ab-tiles span{display:block;font-size:11px;color:var(--mut)}
+i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.ab-leg{display:flex;gap:14px;font-size:12px;color:var(--mut);margin:-2px 0 6px}.ab-leg span{display:inline-flex;align-items:center;gap:6px}
+.ab-in{background:var(--ab-in)}.ab-out{background:var(--ab-out)}
+.ab-chart{display:flex;align-items:stretch;gap:10px;height:150px;padding:6px 2px 0;border-bottom:1px solid var(--line)}
+.ab-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;cursor:default;outline:none;border-radius:8px}
+.ab-col:hover,.ab-col:focus{background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.ab-bars{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:2px}
+.ab-bars i{display:block;width:min(18px,40%);border-radius:4px 4px 0 0}
+.ab-bars i.na{background:var(--line)}
+.ab-col span{font-size:11px;color:var(--mut);padding-bottom:4px}
+.ab-tip{position:absolute;z-index:200;background:var(--ink);color:var(--inkfg);font-size:12px;padding:6px 9px;border-radius:8px;pointer-events:none;max-width:260px;box-shadow:var(--shadow)}
+.ab-tip[hidden]{display:none}
+.ab-num{margin-top:6px}.ab-num summary{font-size:12px;color:var(--mut);cursor:pointer}
+.ab-acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ab-act{display:flex;gap:10px;align-items:flex-start;text-align:left;border:0;border-radius:14px;padding:10px 12px;font:inherit;color:var(--fg);cursor:pointer;background:var(--bg);border-left:4px solid var(--line)}
+.ab-act b{font-size:22px;line-height:1.1}.ab-act span{font-size:13px;font-weight:700;line-height:1.3}.ab-act small{display:block;font-size:11px;font-weight:500;color:var(--mut);margin-top:2px}
+.ab-act.ab-k1{border-left-color:#16a34a}.ab-act.ab-k2{border-left-color:#dc2626}.ab-act.ab-k3{border-left-color:#d97706}
+.ab-tag{font-style:normal;font-size:10.5px;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:4px;white-space:nowrap}
+.ab-tag.ab-k1{background:var(--ok-bg);color:var(--ok-fg)}.ab-tag.ab-k2{background:var(--bad-bg);color:var(--bad-fg)}.ab-tag.ab-k3{background:var(--warn-bg);color:var(--warn-fg)}.ab-tag.ab-k4{background:var(--card);color:var(--mut)}
+.ab-p{padding:9px 0;border-bottom:1px solid var(--line)}
+.ab-pi b{display:block;font-size:13.5px}.ab-pi small{display:block;font-size:11.5px;color:var(--mut);margin-top:1px}
+.ab-pn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:6px}
+.ab-pn span{background:var(--bg);border-radius:10px;padding:5px 8px;min-width:0}
+.ab-pn small{display:block;font-size:10.5px;color:var(--mut);font-weight:700}.ab-pn b{display:block;font-size:15px}.ab-pn em{display:block;font-style:normal;font-size:10.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-no{color:#dc2626}
+@media(max-width:760px){.ab-tiles{grid-template-columns:1fr 1fr}.ab-acts{grid-template-columns:1fr}}
+@media(max-width:420px){.ab-pn{grid-template-columns:1fr 1fr}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1461,6 +1496,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="bm" aria-label="Barang masuk">
           <div class="sh-head"><div><h3>Barang Masuk</h3><p id="bmSub">Riwayat setiap barang datang ke toko</p></div></div>
           <div id="bmBody"></div>
+        </section>
+        <section class="rs ab-card" id="ab" aria-label="Arus barang">
+          <div class="sh-head"><div><h3>Arus Barang: Masuk · Terjual · Pusat</h3><p id="abSub">Perbandingan barang masuk, terjual, stok toko, dan stok pusat</p></div></div>
+          <div id="abBody"></div>
         </section>
         <section class="rs" id="ps" aria-label="Stok pusat">
           <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
@@ -3444,7 +3483,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const items=Object.keys(G).map(k=>[k,G[k].fi,G[k].ft,G[k].li]);
   status('Mengunggah riwayat transaksi SKU ('+nf(n)+' baris, '+nf(items.length)+' produk)…');
   const res=await api('uploadSkuTransactions',{items,from,to,rows:n,fileName:f.name,masuk});
-  await loadPlc(true);if(window.ofaMasukReload)window.ofaMasukReload();
+  await loadPlc(true);if(window.ofaMasukReload)window.ofaMasukReload();if(window.ofaArusReload)window.ofaArusReload();
   return 'Riwayat transaksi SKU ✓ '+tgl(res.from)+' – '+tgl(res.to)+' ('+nf(res.masuk)+' produk ada barang masuk'+(res.masukBaris!=null?' · '+nf(res.masukBaris)+' baris barang masuk baru tersimpan':'')+')';
  }
  $id('ivFile').onchange=async e=>{
@@ -3879,7 +3918,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    msg('Mengirim '+nf(rows.length-1)+' artikel…');
    const m=await api('uploadStokPusat',{rows,fileName:f.name});
    toast('Stok pusat '+tgl(m.date)+(m.sesi?' '+m.sesi:'')+' tersimpan · '+nf(m.art)+' artikel');
-   upBusy=false;await load(true);
+   upBusy=false;await load(true);if(window.ofaArusReload)window.ofaArusReload();
    if(m.tebak){const e=$id('psMsg');if(e)e.textContent='Tanggal tidak terbaca dari nama file, dipakai tanggal upload. Nama file yang disarankan: "Data Stock 28 Oktober 2026 - Pagi".'}
   }catch(e){upBusy=false;render();const x=$id('psMsg');if(x){x.textContent='Upload gagal: '+(missing(e)?'pasang Pusat.gs dulu.':e.message);x.style.color='#e5484d'}}
   finally{upBusy=false}
@@ -4084,6 +4123,131 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  render();
  setTimeout(()=>load(false),6000);
+})();
+/* ====== ARUS BARANG: barang masuk vs terjual vs stok toko vs stok pusat ====== */
+(function(){
+ const box=document.getElementById('ab');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_arus',TTL=30*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const pc=v=>isFinite(v)?Math.round(v*100)+'%':'–';
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{if(!k)return '';const p=String(k).split('-');return +p[2]+' '+BLN[+p[1]-1]+(p[0]!==String(new Date().getFullYear())?' '+p[0]:'')};
+ const cap=v=>String(v||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ let data=null,busy=false,err='',days=90,view=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null');if(data&&data.days)days=data.days}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return;
+  if(!force&&data&&data.days===days&&Date.now()-(data.at||0)<TTL)return render();
+  busy=true;render();
+  try{data=Object.assign(await api('getArusBarang',{days}),{at:Date.now()});err='';try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;render()}
+ }
+ window.ofaArusReload=()=>load(true);
+ const rows=()=>{if(!data||!data.prods)return [];const F=data.fields;return data.prods.map(a=>{const o={};F.forEach((f,i)=>o[f]=a[i]);const p=o.g.split('|');o.gen=p[0];o.c=p[1];return o})};
+ // klasifikasi per produk dalam periode
+ function kelas(o){
+  const perHari=o.jual/data.days,cover=perHari>0?o.tk/perHari:Infinity;
+  if(o.jual>=2&&cover<30)return o.ho>0?'repeat':'kosong';
+  if(o.masuk>=3&&o.jual<o.masuk*0.3&&o.lastIn&&o.lastIn<=geser(data.to,-14))return 'lambat';
+  return 'seimbang';
+ }
+ const geser=(k,n)=>{const p=k.split('-').map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2]+n)).toISOString().slice(0,10)};
+ const KL={repeat:['Laku & ada di pusat','Terjual ≥2, stok toko < 30 hari, stok pusat tersedia: siap di-repeat.','ab-k1'],
+  kosong:['Laku, pusat kosong','Terjual ≥2, stok toko < 30 hari, tidak ada di stok pusat: cari lewat transfer atau Endless Aisle.','ab-k2'],
+  lambat:['Masuk, lambat terjual','Masuk ≥3 pcs lebih dari 14 hari lalu, terjual < 30% dari yang masuk: perkuat display atau tahan kiriman.','ab-k3'],
+  seimbang:['Seimbang','Arus masuk dan terjual masih wajar.','ab-k4']};
+ function render(){
+  const b=$id('abBody');if(!b)return;
+  const chips=`<div class="dp-chips ab-per">${[30,60,90,180].map(d=>`<button type="button" data-abd="${d}" class="${d===days?'on':''}">${d} hari</button>`).join('')}</div>`;
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Tempel <b>Pusat.gs</b> versi terbaru di Apps Script lalu Deploy → New version.</p>';return}
+  if(!data||!data.prods){b.innerHTML=chips+'<p class="dp-empty">'+(busy?'Menghitung arus barang…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const R=rows(),S=k=>R.reduce((t,o)=>t+o[k],0),inP=S('masuk'),outP=S('jual'),hoP=R.filter(o=>o.jual>0).reduce((t,o)=>t+o.ho,0);
+  const K={};R.forEach(o=>{const k=kelas(o);(K[k]=K[k]||[]).push(o)});
+  $id('abSub').textContent=tgl(data.from)+' – '+tgl(data.to)+(data.pusat?' · stok pusat '+tgl(data.pusat.date)+(data.pusat.sesi?' '+data.pusat.sesi:''):'');
+  const M=(data.months||[]),mx=Math.max(1,...M.map(m=>Math.max(m[1]||0,m[2]||0)));
+  const warn=[!data.masukAda||!data.masukFrom?'Data barang masuk belum ada. Tempel Performa.gs terbaru lalu upload ulang SKU Transaction History.':data.masukFrom>data.from?'Data barang masuk baru mulai '+tgl(data.masukFrom)+', jadi periode ini belum lengkap.':'',
+   !data.pusat?'Stok pusat belum diupload (kartu Stok Pusat).':'',!data.tokoAda?'Stok toko belum ada (inventory by SKU).':''].filter(Boolean);
+  // kategori
+  const C={};R.forEach(o=>{const x=C[o.l3]||(C[o.l3]={k:o.l3,masuk:0,jual:0,tk:0,ho:0});x.masuk+=o.masuk;x.jual+=o.jual;x.tk+=o.tk;x.ho+=o.ho});
+  const cats=Object.keys(C).map(k=>C[k]).sort((a,b)=>b.masuk+b.jual-a.masuk-a.jual);
+  b.innerHTML=chips+(warn.length?`<p class="ps-old">${warn.map(esc).join('<br>')}</p>`:'')+`
+   <div class="ab-tiles"><div><small><i class="ab-in"></i>Barang masuk</small><b>${nf(inP)}</b><span>pcs · ${days} hari</span></div><div><small><i class="ab-out"></i>Terjual</small><b>${nf(outP)}</b><span>pcs · ${days} hari</span></div>
+    <div><small>Terjual ÷ masuk</small><b class="${outP>=inP?'wk-up':'wk-down'}">${inP?pc(outP/inP):'–'}</b><span>${outP>=inP?'stok toko berkurang':'stok toko bertambah'}</span></div><div><small>Stok pusat</small><b>${nf(hoP)}</b><span>pcs untuk produk yang terjual</span></div></div>
+   <h5 class="mb-h5">Masuk vs terjual per bulan <small>pcs</small></h5>
+   <div class="ab-leg"><span><i class="ab-in"></i>Barang masuk</span><span><i class="ab-out"></i>Terjual</span></div>
+   <div class="ab-chart" role="img" aria-label="Barang masuk dan terjual per bulan">${M.map(m=>{const part=m[0]===String(data.to).slice(0,7);return `<div class="ab-col" tabindex="0" data-tip="${BLN[+m[0].slice(5,7)-1]} ${m[0].slice(0,4)}${part?' (s/d '+tgl(data.to)+')':''}: masuk ${m[1]==null?'belum ada data':nf(m[1])+' pcs'} · terjual ${nf(m[2])} pcs"><div class="ab-bars"><i class="ab-in${m[1]==null?' na':''}" style="height:${m[1]==null?2:Math.max(2,m[1]/mx*100)}%"></i><i class="ab-out" style="height:${Math.max(2,m[2]/mx*100)}%"></i></div><span>${BLN[+m[0].slice(5,7)-1]}${part?'*':''}</span></div>`}).join('')}</div>
+   <details class="ab-num"><summary>Lihat angka</summary><table class="ss-tbl"><thead><tr><th>Bulan</th><th>Masuk</th><th>Terjual</th><th>Terjual ÷ masuk</th></tr></thead><tbody>${M.map(m=>`<tr><td>${BLN[+m[0].slice(5,7)-1]} ${m[0].slice(0,4)}</td><td>${m[1]==null?'–':nf(m[1])}</td><td>${nf(m[2])}</td><td>${m[1]?pc(m[2]/m[1]):'–'}</td></tr>`).join('')}</tbody></table></details>
+   <h5 class="mb-h5">Per kategori <small>${days} hari terakhir</small></h5>
+   <div class="wk-tbl"><table><thead><tr><th>Kategori</th><th>Masuk</th><th>Terjual</th><th>Terjual ÷ masuk</th><th>Stok toko</th><th>Stok pusat</th></tr></thead><tbody>
+    ${cats.map(c=>`<tr class="ssd-go" data-abc="${esc(c.k)}"><td>${esc(cap(c.k))} <span class="ssd-ar">›</span></td><td>${nf(c.masuk)}</td><td>${nf(c.jual)}</td><td class="${c.masuk?(c.jual>=c.masuk?'wk-up':'wk-down'):''}">${c.masuk?pc(c.jual/c.masuk):'–'}</td><td>${nf(c.tk)}</td><td>${nf(c.ho)}</td></tr>`).join('')}</tbody></table></div>
+   <h5 class="mb-h5">Yang perlu ditindaklanjuti</h5>
+   <div class="ab-acts">${['repeat','kosong','lambat'].map(k=>`<button type="button" class="ab-act ${KL[k][2]}" data-abk="${k}"><b>${nf((K[k]||[]).length)}</b><span>${KL[k][0]}<small>${esc(KL[k][1])}</small></span></button>`).join('')}</div>
+   <p class="hint">Barang masuk = STO Inbound (SKU Transaction History). Terjual = Database DSR. Stok toko = inventory by SKU. Stok pusat = upload data pusat. Dihitung per produk (generic-warna), tanpa paper bag & voucher.</p>`;
+ }
+ /* --- modal daftar produk --- */
+ function openList(k,l3){
+  view={k:k||'',l3:l3||'',q:'',sort:k==='lambat'?'masuk':'jual'};
+  openModal('Arus Barang per Produk','<div id="abM"></div>');
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>pn.classList.remove('wide')}
+  drawList();
+ }
+ function drawList(keep){
+  const el=$id('abM');if(!el)return;
+  const all=rows(),K={};all.forEach(o=>{o.kl=kelas(o);K[o.kl]=(K[o.kl]||0)+1});
+  const base=all.filter(o=>!view.l3||o.l3===view.l3),q=view.q.toLowerCase();
+  let L=base.filter(o=>(!view.k||o.kl===view.k)&&(!q||(o.n+' '+o.c+' '+o.gen+' '+o.l4).toLowerCase().includes(q)));
+  const S={jual:(a,b)=>b.jual-a.jual,masuk:(a,b)=>b.masuk-a.masuk,rasio:(a,b)=>(a.masuk?a.jual/a.masuk:9)-(b.masuk?b.jual/b.masuk:9),pusat:(a,b)=>b.ho-a.ho}[view.sort];L=L.slice().sort(S);
+  const l3s=['',...new Set(all.map(o=>o.l3))];
+  el.innerHTML=`<div class="dp-chips">${['',...Object.keys(KL)].map(k=>`<button type="button" data-abk2="${k}" class="${view.k===k?'on':''}">${k?KL[k][0]:'Semua'} ${nf(k?all.filter(o=>o.kl===k&&(!view.l3||o.l3===view.l3)).length:base.length)}</button>`).join('')}</div>
+   <div class="dp-chips">${l3s.map(x=>`<button type="button" data-abl3="${esc(x)}" class="${view.l3===x?'on':''}">${esc(x?cap(x):'Semua kategori')}</button>`).join('')}</div>
+   ${view.k?`<p class="hint">${esc(KL[view.k][1])}</p>`:''}
+   <div class="iv-tools ssd-tools"><input class="in" id="abQ" type="search" placeholder="Cari nama, warna, kode…" value="${esc(view.q)}"><select class="in" id="abS"><option value="jual"${view.sort==='jual'?' selected':''}>Terjual terbanyak</option><option value="masuk"${view.sort==='masuk'?' selected':''}>Masuk terbanyak</option><option value="rasio"${view.sort==='rasio'?' selected':''}>Terjual ÷ masuk terendah</option><option value="pusat"${view.sort==='pusat'?' selected':''}>Stok pusat terbanyak</option></select><button type="button" class="btn ghost" data-abx="csv">Unduh CSV</button></div>
+   <div>${L.slice(0,150).map(o=>`<div class="ab-p"><div class="ab-pi"><b>${esc(o.n)}</b><small>${esc(o.c)} · ${esc(o.gen)} · ${esc(cap(o.l4))} <i class="ab-tag ${KL[o.kl][2]}">${KL[o.kl][0]}</i></small></div>
+    <div class="ab-pn"><span><small>Masuk</small><b>${nf(o.masuk)}</b><em>${o.masuk?nf(o.kali)+'× · '+tgl(o.lastIn):'–'}</em></span><span><small>Terjual</small><b>${nf(o.jual)}</b><em>${o.lastOut?'terakhir '+tgl(o.lastOut):'–'}</em></span><span><small>Stok toko</small><b>${nf(o.tk)}</b><em>${o.jual>0?nf(Math.round(o.tk/(o.jual/data.days)))+' hari':'–'}</em></span><span><small>Pusat</small><b class="${o.ho>0?'':'ab-no'}">${o.ho>0?nf(o.ho):'kosong'}</b><em>${o.hoArt?nf(o.hoArt)+' ukuran':''}</em></span></div></div>`).join('')||'<p class="dp-empty">Tidak ada produk.</p>'}
+   ${L.length>150?`<p class="hint">${nf(L.length-150)} produk lain. Perjelas pencarian atau unduh CSV.</p>`:''}</div>`;
+  const qi=$id('abQ');qi.oninput=()=>{view.q=qi.value;drawList(true)};if(keep){qi.focus();qi.setSelectionRange(qi.value.length,qi.value.length)}
+  $id('abS').onchange=e=>{view.sort=e.target.value;drawList()};
+  view.list=L;
+ }
+ function csv(){
+  const L=view&&view.list||[];if(!L.length)return;
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const out=[['Generic','Warna','Nama','MC Level 3','MC Level 4','Masuk (pcs)','Kali datang','Masuk terakhir','Terjual (pcs)','Terjual terakhir','Terjual / masuk','Stok toko','Cover (hari)','Stok pusat','Ukuran di pusat','Status']]
+   .concat(L.map(o=>[o.gen,o.c,o.n,o.l3,o.l4,o.masuk,o.kali,o.lastIn,o.jual,o.lastOut,o.masuk?Math.round(o.jual/o.masuk*100)+'%':'',o.tk,o.jual>0?Math.round(o.tk/(o.jual/data.days)):'',o.ho,o.hoArt,KL[o.kl][0]]));
+  const url=URL.createObjectURL(new Blob(['﻿'+out.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv'})),a=document.createElement('a');
+  a.href=url;a.download='Arus Barang '+data.from+' sd '+data.to+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ }
+ // tooltip grafik
+ let tip=null;
+ function showTip(el){if(!tip){tip=document.createElement('div');tip.className='ab-tip';document.body.appendChild(tip)}tip.textContent=el.dataset.tip;tip.hidden=false;const r=el.getBoundingClientRect();tip.style.left=Math.min(window.innerWidth-tip.offsetWidth-8,Math.max(8,r.left+r.width/2-tip.offsetWidth/2))+'px';tip.style.top=(r.top+window.scrollY-tip.offsetHeight-8)+'px'}
+ const hideTip=()=>{if(tip)tip.hidden=true};
+ box.addEventListener('mouseover',e=>{const c=e.target.closest('.ab-col');if(c)showTip(c)});
+ box.addEventListener('mouseout',e=>{if(e.target.closest('.ab-col'))hideTip()});
+ box.addEventListener('focusin',e=>{const c=e.target.closest('.ab-col');if(c)showTip(c)});
+ box.addEventListener('focusout',hideTip);
+ box.addEventListener('click',e=>{
+  const d=e.target.closest('[data-abd]');if(d){days=+d.dataset.abd;return load(true)}
+  const c=e.target.closest('.ab-col');if(c){showTip(c);setTimeout(hideTip,2500);return}
+  const k=e.target.closest('[data-abk]');if(k&&data)return openList(k.dataset.abk);
+  const l=e.target.closest('[data-abc]');if(l&&data)return openList('',l.dataset.abc);
+ });
+ $('#pb').addEventListener('click',e=>{
+  if(!$id('abM'))return;
+  const k=e.target.closest('[data-abk2]');if(k){view.k=k.dataset.abk2;return drawList()}
+  const l=e.target.closest('[data-abl3]');if(l){view.l3=l.dataset.abl3;return drawList()}
+  if(e.target.closest('[data-abx=csv]'))return csv();
+ });
+ render();
+ setTimeout(()=>load(false),6400);
 })();
 /* ====== LOST SALES (ENDLESS AISLE) & RETUR ====== */
 (function(){
