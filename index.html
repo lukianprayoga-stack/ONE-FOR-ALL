@@ -592,6 +592,23 @@ body.kt-on{overflow:hidden}
 .ct-slot input{display:none}
 .ct-form label.ct-l{display:block;font-size:13px;font-weight:700;margin:6px 0 4px}
 .ct-meta{font-size:13px;color:var(--mut);margin:0 0 10px;line-height:1.4}
+.pf-health{display:flex;align-items:center;gap:16px;margin-top:12px;padding:12px;border-radius:16px;background:var(--bg)}
+.pf-donut{position:relative;flex:none;width:118px;height:118px}.pf-donut svg{display:block;width:100%;height:100%}
+.pf-dc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.pf-dc b{font-size:20px;letter-spacing:-.4px}.pf-dc span{font-size:11px;color:var(--mut);font-weight:600}
+.pf-hl{flex:1;min-width:0;display:grid;gap:8px}
+.pf-seg{display:inline-flex;justify-self:start;background:var(--card);border-radius:999px;padding:3px;gap:2px}
+.pf-seg button{border:0;background:none;color:var(--mut);font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;cursor:pointer}
+.pf-seg button.on{background:var(--ink);color:var(--inkfg)}
+.pf-hg{display:flex;gap:8px;align-items:flex-start}.pf-hg>i{flex:none;width:12px;height:12px;border-radius:3px;margin-top:4px}
+.pf-hg.ok>i{background:#16a34a}.pf-hg.bad>i{background:#dc2626}
+.pf-hg b{display:block;font-size:14px}.pf-hg b em{font-style:normal;margin-left:4px;white-space:nowrap}.pf-hg.ok b em{color:#16a34a}.pf-hg.bad b em{color:#dc2626}
+.pf-hg small{display:block;font-size:12px;color:var(--mut);margin-top:1px}
+.pf-gh{margin:10px 0 2px;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}.pf-gh.ok{color:#16a34a}.pf-gh.bad{color:#dc2626}
+.pf-rows .pf-gh:first-child{margin-top:2px}
+.pf-row em{font-style:normal;font-size:12px;font-weight:700;color:var(--mut);width:48px;text-align:right}
+.pf-bn{margin:6px 0 0;font-size:11.5px}
+@media(max-width:380px){.pf-donut{width:100px;height:100px}.pf-health{gap:12px}}
 .pf-stack{display:flex;height:12px;border-radius:99px;overflow:hidden;margin-top:12px;background:var(--line)}
 .pf-stack i{display:block;min-width:2px}
 .pf-rows{display:grid;gap:4px;margin-top:10px}
@@ -2808,7 +2825,16 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const box=document.getElementById('inv');if(!box)return;
  const $id=i=>document.getElementById(i);
  const CACHE='ofa_inv',TARGET=.95,PAGE=40;
- const TIERS=[['ls','Laku Sekali','#15803d'],['l','Laku','#22c55e'],['cl','Cukup Laku','#eab308'],['sw','Slow','#f97316'],['ds','Dead Stock','#dc2626']];
+ // Barang Sehat = Sangat Laku, Laku, Cukup Laku; Barang Tidak Sehat = Slow, Dead Stock
+ const SEHAT=['ls','l','cl'],SAKIT=['sw','ds'];
+ const pfBasis=()=>{try{return localStorage.getItem('ofa_pf_basis')==='art'?'art':'pcs'}catch(e){return 'pcs'}};
+ function donut(a,b){
+  const t=a+b,r=40,C=2*Math.PI*r,pa=t?a/t:0,la=C*pa;
+  const seg=(len,off,col)=>len>0?`<circle cx="50" cy="50" r="${r}" fill="none" stroke="${col}" stroke-width="16" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 50 50)"/>`:'';
+  const gap=a>0&&b>0?1.2:0;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="Barang sehat ${Math.round(pa*100)} persen"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--line)" stroke-width="16"/>${seg(la-gap,gap/2,'#16a34a')}${seg(C-la-gap,la+gap/2,'#dc2626')}</svg>`;
+ }
+ const TIERS=[['ls','Sangat Laku','#15803d'],['l','Laku','#22c55e'],['cl','Cukup Laku','#eab308'],['sw','Slow','#f97316'],['ds','Dead Stock','#dc2626']];
  const DEF={b1:70,b2:50,b3:30,plc:4};
  const PK='ofa_plc';let plc=null;try{plc=JSON.parse(localStorage.getItem(PK)||'null')}catch(e){plc=null}
  const NEED=['SKU Name','SKU Code','Generic Code','Bin Code','Zone Code','MC LV 2','MC LV 3','MC LV 4','Brand','Bin Category','Total Qty'];
@@ -2885,9 +2911,9 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const restock=()=>R.filter(o=>o.stock<=0&&o.q30>0).sort((a,b)=>b.q30-a.q30);
  window.ofaPerfSnap=function(){
   if(!data||!data.summary||!R)return null;
-  const c=cfg(),cnt={};TIERS.forEach(t=>cnt[t[0]]=0);R.forEach(o=>{const t=tier(o,c);if(t)cnt[t]++});
-  const s=data.summary;
-  return {date:data.meta&&data.meta.date,gp:s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp:s.colorTotal?s.colorDisplayed/s.colorTotal:0,todo:todo().length,cnt,restock:restock().length};
+  const c=cfg(),cnt={},pcs={};TIERS.forEach(t=>{cnt[t[0]]=0;pcs[t[0]]=0});R.forEach(o=>{const t=tier(o,c);if(t){cnt[t]++;pcs[t]+=o.stock}});
+  const s=data.summary,sm=(ks,o)=>ks.reduce((x,k)=>x+o[k],0),tp=sm(SEHAT,pcs)+sm(SAKIT,pcs),ta=sm(SEHAT,cnt)+sm(SAKIT,cnt);
+  return {date:data.meta&&data.meta.date,pcs,sehatPcs:tp?sm(SEHAT,pcs)/tp:0,sehatArt:ta?sm(SEHAT,cnt)/ta:0,gp:s.genericTotal?s.genericDisplayed/s.genericTotal:0,cp:s.colorTotal?s.colorDisplayed/s.colorTotal:0,todo:todo().length,cnt,restock:restock().length};
  };
  // Performa satu produk (generic|warna) untuk Cek Stok: kategori PLC x sell through + riwayat jual
  const normC=v=>{v=String(v||'').trim().toUpperCase();return v==='-'?'':v};
@@ -3045,8 +3071,19 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   $id('pfSub').textContent=nf(tot)+' generic-warna · PLC × sell through';
   if(window.renderSSR)window.renderSSR();
   const kira=R.filter(o=>o.stock>0&&o.plcKira).length,miss=!plc||!plc.items,tx=plc&&plc.txFrom;
-  $id('pfBody').innerHTML=`<div class="pf-stack">${TIERS.map(t=>cnt[t[0]]?`<i style="flex:${cnt[t[0]]};background:${t[2]}" title="${t[1]}"></i>`:'').join('')}</div>
-   <div class="pf-rows">${TIERS.map(t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`).join('')}
+  const B=pfBasis(),V=B==='pcs'?pcs:cnt,sm=(ks,o)=>ks.reduce((x,k)=>x+o[k],0),vS=sm(SEHAT,V),vT=sm(SAKIT,V),vA=vS+vT,sh=vA?vS/vA:0;
+  const pc0=v=>(v*100).toFixed(1).replace('.',',')+'%',share=k=>vA?pc0(V[k]/vA):'0%';
+  const row=t=>`<button type="button" class="pf-row" data-list="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span><em>${share(t[0])}</em><b>${nf(cnt[t[0]])}</b><small>${nf(pcs[t[0]])} pcs</small></button>`;
+  $id('pfBody').innerHTML=`<div class="pf-health">
+    <div class="pf-donut">${donut(vS,vT)}<div class="pf-dc"><b>${pc0(sh)}</b><span>sehat</span></div></div>
+    <div class="pf-hl">
+     <div class="pf-seg" role="group" aria-label="Dasar persentase"><button type="button" data-pfb="pcs" class="${B==='pcs'?'on':''}">Pcs stok</button><button type="button" data-pfb="art" class="${B==='art'?'on':''}">Artikel</button></div>
+     <div class="pf-hg ok"><i></i><div><b>Barang Sehat <em>${pc0(sh)}</em></b><small>${nf(sm(SEHAT,pcs))} pcs · ${nf(sm(SEHAT,cnt))} artikel</small></div></div>
+     <div class="pf-hg bad"><i></i><div><b>Barang Tidak Sehat <em>${pc0(vA?1-sh:0)}</em></b><small>${nf(sm(SAKIT,pcs))} pcs · ${nf(sm(SAKIT,cnt))} artikel</small></div></div>
+    </div>
+   </div>
+   <div class="pf-rows"><p class="pf-gh ok">Barang Sehat</p>${TIERS.filter(t=>SEHAT.includes(t[0])).map(row).join('')}<p class="pf-gh bad">Barang Tidak Sehat</p>${TIERS.filter(t=>SAKIT.includes(t[0])).map(row).join('')}
+   <p class="hint pf-bn">Persentase dihitung dari ${B==='pcs'?'jumlah pcs stok':'jumlah artikel (generic-warna)'}; artikel = generic-warna, pcs = stok toko + gudang.</p>
    <button type="button" class="pf-row restock" data-list="rs"><i style="background:#2f80ed"></i><span>Laku tapi stok habis</span><b>${nf(rs.length)}</b><small>perlu restock</small></button></div>
    <p class="hint">PLC = umur produk di toko sejak pertama masuk. Sell through = terjual sejak masuk ÷ (terjual + stok). Dead Stock = PLC lebih dari ${c.plc} bulan dan tidak terjual 4 bulan terakhir. <button type="button" class="pf-lnk" id="pfRule">Lihat aturan</button></p>
    ${miss?`<p class="hint" style="color:var(--amber)">Masih perkiraan dari penjualan 90 hari terakhir. Pasang <b>Performa.gs</b> di Apps Script agar PLC & sell through dihitung sejak barang masuk.</p>`:kira?`<p class="hint">${tx?`Barang masuk dari SKU transaction history ${tgl(plc.txFrom)} ${String(plc.txFrom).slice(0,4)} – ${tgl(plc.txTo)}. `:''}${kira?nf(kira)+' produk ditandai ≥ karena sudah ada sebelum '+(tx?'awal data transaksi':'data penjualan '+tgl(plc.salesStart))+'.':''}</p>`:''}
@@ -3106,7 +3143,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(b.dataset.more){list.n+=PAGE;return drawList()}
   if(b.dataset.mv){const k=b.dataset.mv,on=!moved().includes(k);setMoved(k,on);b.closest('.iv-it').classList.toggle('done',on);$id('ivCnt').textContent=$id('ivCnt').textContent.replace(/\d+ ditandai/,moved().length+' ditandai');renderInv()}
  });
- [box,$id('perf')].forEach(el=>el.addEventListener('click',e=>{const b=e.target.closest('[data-list]');if(b&&data)openList(b.dataset.list)}));
+ [box,$id('perf')].forEach(el=>el.addEventListener('click',e=>{const f=e.target.closest('[data-pfb]');if(f){try{localStorage.setItem('ofa_pf_basis',f.dataset.pfb)}catch(x){}renderInv();return}const b=e.target.closest('[data-list]');if(b&&data)openList(b.dataset.list)}));
 
  /* --- batas performa (Store Head) --- */
  function aturan(c){
@@ -3116,12 +3153,12 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    ${r('> '+c.plc+' bln','≥ '+c.b1+'%','ls')}${r('> '+c.plc+' bln','≥ '+c.b2+'% & < '+c.b1+'%','l')}${r('> '+c.plc+' bln','> '+c.b3+'% & < '+c.b2+'%','cl')}${r('> '+c.plc+' bln','≤ '+c.b3+'%','sw')}
    ${r('> '+c.plc+' bln','No sale 4 bulan terakhir','ds')}</tbody></table>`;
  }
- document.addEventListener('click',e=>{if(e.target.closest('#pfRule'))openModal('Parameter Performance',`${aturan(cfg())}<p class="hint">Contoh: produk masuk 9 bulan lalu, terjual 81 dari 100 pcs (ST 81%) → <b>Laku Sekali</b>. Produk masuk 20 bulan lalu, ST 21%, tidak terjual 4 bulan terakhir → <b>Dead Stock</b>.</p>`)});
+ document.addEventListener('click',e=>{if(e.target.closest('#pfRule'))openModal('Parameter Performance',`${aturan(cfg())}<p class="hint">Contoh: produk masuk 9 bulan lalu, terjual 81 dari 100 pcs (ST 81%) → <b>Sangat Laku</b>. Produk masuk 20 bulan lalu, ST 21%, tidak terjual 4 bulan terakhir → <b>Dead Stock</b>.</p>`)});
  $id('pfCfg').onclick=()=>{
   const open=()=>{
    const c=cfg(),f=(k,l)=>`<label class="pf-cf"><span>${l}</span><input class="in" type="number" min="0" max="100" step="1" data-cfg="${k}" value="${c[k]}"></label>`;
    openModal('Parameter Performance',`<p class="hint" style="margin:0 0 10px">Kategori dari PLC (bulan sejak masuk toko) dan sell through sejak masuk.</p>
-    <div class="pf-cfg2">${f('plc','Batas PLC produk baru (bulan)')}${f('b1','Laku Sekali, ST ≥ (%)')}${f('b2','Laku, ST ≥ (%)')}${f('b3','Slow/Cukup Laku, ST ≤ (%)')}</div>
+    <div class="pf-cfg2">${f('plc','Batas PLC produk baru (bulan)')}${f('b1','Sangat Laku, ST ≥ (%)')}${f('b2','Laku, ST ≥ (%)')}${f('b3','Slow/Cukup Laku, ST ≤ (%)')}</div>
     <div id="pfPrev">${aturan(c)}</div>
     <p class="hint" id="pfErr" style="color:#e5484d;min-height:1em"></p>
     <div class="row"><button class="btn" type="button" id="pfSave">Simpan</button><button class="btn ghost" type="button" id="pfReset">Pakai parameter awal</button></div>`);
@@ -3129,7 +3166,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    document.querySelectorAll('[data-cfg]').forEach(i=>i.addEventListener('input',()=>{const v=Object.assign({},c,read());$id('pfPrev').innerHTML=aturan(v)}));
    $id('pfSave').onclick=()=>{
     const v=read();
-    if(!(v.plc>=1&&v.plc<=36)||[v.b1,v.b2,v.b3].some(x=>!isFinite(x)||x<0||x>100)||!(v.b1>v.b2&&v.b2>v.b3)){$id('pfErr').textContent='PLC 1–36 bulan; persen 0–100 dan Laku Sekali > Laku > Cukup Laku.';return}
+    if(!(v.plc>=1&&v.plc<=36)||[v.b1,v.b2,v.b3].some(x=>!isFinite(x)||x<0||x>100)||!(v.b1>v.b2&&v.b2>v.b3)){$id('pfErr').textContent='PLC 1–36 bulan; persen 0–100 dan Sangat Laku > Laku > Cukup Laku.';return}
     meta.__perfCfg2=v;ls.set('ofa_meta',meta);close();renderInv();
    };
    $id('pfReset').onclick=()=>{delete meta.__perfCfg2;ls.set('ofa_meta',meta);close();renderInv()};
@@ -3393,7 +3430,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!q.trim()){box.innerHTML='<p class="dp-empty">Ketik nama produk (contoh: <b>pinch blk 42</b>), kode SKU/generic, atau tekan <b>📷 Scan</b> untuk membaca barcode label.</p>';return}
   const R=find(q);
   const sum=(()=>{if(R.length<2||!window.ofaPerfOf)return '';const c={};let n=0;R.forEach(r=>{const P=window.ofaPerfOf(r.o.g,r.o.c,r.o.stock);if(P&&P.t){c[P.label]=(c[P.label]||0)+1;n++}});
-   return n?'<p class="ck-psum">'+['Laku Sekali','Laku','Cukup Laku','Slow','Dead Stock'].filter(k=>c[k]).map(k=>esc(k)+' <b>'+c[k]+'</b>').join(' · ')+'</p>':''})();
+   return n?'<p class="ck-psum">'+['Sangat Laku','Laku','Cukup Laku','Slow','Dead Stock'].filter(k=>c[k]).map(k=>esc(k)+' <b>'+c[k]+'</b>').join(' · ')+'</p>':''})();
   box.innerHTML=R.length?sum+R.slice(0,30).map(card).join('')+(R.length>30?`<p class="hint">${nf(R.length-30)} produk lain cocok. Perjelas pencarian.</p>`:''):`<p class="dp-empty">Tidak ada produk yang cocok dengan "<b>${esc(q)}</b>".</p>`;
  }
  function stopCam(){
@@ -4996,7 +5033,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  function stockHtml(){
   const P=snapPerf(),S=snapSsr(),L=[];
-  if(P){L.push('Display by generic <b>'+pc(P.gp)+'</b> · by color <b>'+pc(P.cp)+'</b> (target 95%)');if(P.cnt)L.push('Performa: '+nf((P.cnt.ls||0)+(P.cnt.l||0))+' laku · '+nf(P.cnt.cl||0)+' cukup laku · '+nf(P.cnt.sw||0)+' slow · <b>'+nf(P.cnt.ds||0)+'</b> dead stock')}
+  if(P){L.push('Display by generic <b>'+pc(P.gp)+'</b> · by color <b>'+pc(P.cp)+'</b> (target 95%)');if(P.cnt)L.push((P.sehatPcs!=null?'Barang sehat <b>'+pc(P.sehatPcs)+'</b> dari pcs stok · ':'')+'Performa: '+nf((P.cnt.ls||0)+(P.cnt.l||0))+' laku · '+nf(P.cnt.cl||0)+' cukup laku · '+nf(P.cnt.sw||0)+' slow · <b>'+nf(P.cnt.ds||0)+'</b> dead stock')}
   if(S&&S.cur>0)L.push('SSR <b>'+dec(S.cur,1)+'</b> (ideal '+dec(S.lo,1)+'–'+dec(S.hi,1)+') · stok '+nf(S.stock)+' pcs');
   return L.length?'<h5 class="mb-h5">Stok & display <small>kondisi saat ini</small></h5><ul class="wk-ul">'+L.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'';
  }
