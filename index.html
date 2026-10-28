@@ -1219,8 +1219,19 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .ab-pn span{background:var(--bg);border-radius:10px;padding:5px 8px;min-width:0}
 .ab-pn small{display:block;font-size:10.5px;color:var(--mut);font-weight:700}.ab-pn b{display:block;font-size:15px}.ab-pn em{display:block;font-style:normal;font-size:10.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ab-no{color:#dc2626}
+@media(min-width:1100px){.ab-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px;align-items:start}}
+.ab-g>div>.mb-h5:first-child{margin-top:16px}
 @media(max-width:760px){.ab-tiles{grid-template-columns:1fr 1fr}.ab-acts{grid-template-columns:1fr}}
 @media(max-width:420px){.ab-pn{grid-template-columns:1fr 1fr}}
+/* ====== TATA LETAK DESKTOP: kolom rapat (masonry), kartu terakhir tiap kolom memanjang agar tidak ada celah ====== */
+@media(min-width:761px){
+ .deck-pg.cur.mas{display:flex;flex-wrap:wrap;gap:18px;align-items:stretch}
+ .mcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:18px}
+ .mcol>section,.deck-pg.cur.mas>section{margin:0!important;max-width:none!important;min-width:0}
+ .mcol>section:last-child{flex:1 1 auto}
+ .mas-measure .mcol>section:last-child{flex:none}
+ .deck-pg.cur.mas>.span-all{flex:0 0 100%}
+}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1497,13 +1508,13 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="sh-head"><div><h3>Barang Masuk</h3><p id="bmSub">Riwayat setiap barang datang ke toko</p></div></div>
           <div id="bmBody"></div>
         </section>
-        <section class="rs ab-card" id="ab" aria-label="Arus barang">
-          <div class="sh-head"><div><h3>Arus Barang: Masuk · Terjual · Pusat</h3><p id="abSub">Perbandingan barang masuk, terjual, stok toko, dan stok pusat</p></div></div>
-          <div id="abBody"></div>
-        </section>
         <section class="rs" id="ps" aria-label="Stok pusat">
           <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
           <div id="psBody"></div>
+        </section>
+        <section class="rs ab-card span-all" id="ab" aria-label="Arus barang">
+          <div class="sh-head"><div><h3>Arus Barang: Masuk · Terjual · Pusat</h3><p id="abSub">Perbandingan barang masuk, terjual, stok toko, dan stok pusat</p></div></div>
+          <div id="abBody"></div>
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Display">
@@ -4182,13 +4193,16 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   b.innerHTML=chips+(warn.length?`<p class="ps-old">${warn.map(esc).join('<br>')}</p>`:'')+`
    <div class="ab-tiles"><div><small><i class="ab-in"></i>Barang masuk</small><b>${nf(inP)}</b><span>pcs · ${days} hari</span></div><div><small><i class="ab-out"></i>Terjual</small><b>${nf(outP)}</b><span>pcs · ${days} hari</span></div>
     <div><small>Terjual ÷ masuk</small><b class="${outP>=inP?'wk-up':'wk-down'}">${inP?pc(outP/inP):'–'}</b><span>${outP>=inP?'stok toko berkurang':'stok toko bertambah'}</span></div><div><small>Stok pusat</small><b>${nf(hoP)}</b><span>pcs untuk produk yang terjual</span></div></div>
+   <div class="ab-g"><div>
    <h5 class="mb-h5">Masuk vs terjual per bulan <small>pcs</small></h5>
    <div class="ab-leg"><span><i class="ab-in"></i>Barang masuk</span><span><i class="ab-out"></i>Terjual</span></div>
    <div class="ab-chart" role="img" aria-label="Barang masuk dan terjual per bulan">${M.map(m=>{const part=m[0]===String(data.to).slice(0,7);return `<div class="ab-col" tabindex="0" data-tip="${BLN[+m[0].slice(5,7)-1]} ${m[0].slice(0,4)}${part?' (s/d '+tgl(data.to)+')':''}: masuk ${m[1]==null?'belum ada data':nf(m[1])+' pcs'} · terjual ${nf(m[2])} pcs"><div class="ab-bars"><i class="ab-in${m[1]==null?' na':''}" style="height:${m[1]==null?2:Math.max(2,m[1]/mx*100)}%"></i><i class="ab-out" style="height:${Math.max(2,m[2]/mx*100)}%"></i></div><span>${BLN[+m[0].slice(5,7)-1]}${part?'*':''}</span></div>`}).join('')}</div>
    <details class="ab-num"><summary>Lihat angka</summary><table class="ss-tbl"><thead><tr><th>Bulan</th><th>Masuk</th><th>Terjual</th><th>Terjual ÷ masuk</th></tr></thead><tbody>${M.map(m=>`<tr><td>${BLN[+m[0].slice(5,7)-1]} ${m[0].slice(0,4)}</td><td>${m[1]==null?'–':nf(m[1])}</td><td>${nf(m[2])}</td><td>${m[1]?pc(m[2]/m[1]):'–'}</td></tr>`).join('')}</tbody></table></details>
+   </div><div>
    <h5 class="mb-h5">Per kategori <small>${days} hari terakhir</small></h5>
    <div class="wk-tbl"><table><thead><tr><th>Kategori</th><th>Masuk</th><th>Terjual</th><th>Terjual ÷ masuk</th><th>Stok toko</th><th>Stok pusat</th></tr></thead><tbody>
     ${cats.map(c=>`<tr class="ssd-go" data-abc="${esc(c.k)}"><td>${esc(cap(c.k))} <span class="ssd-ar">›</span></td><td>${nf(c.masuk)}</td><td>${nf(c.jual)}</td><td class="${c.masuk?(c.jual>=c.masuk?'wk-up':'wk-down'):''}">${c.masuk?pc(c.jual/c.masuk):'–'}</td><td>${nf(c.tk)}</td><td>${nf(c.ho)}</td></tr>`).join('')}</tbody></table></div>
+   </div></div>
    <h5 class="mb-h5">Yang perlu ditindaklanjuti</h5>
    <div class="ab-acts">${['repeat','kosong','lambat'].map(k=>`<button type="button" class="ab-act ${KL[k][2]}" data-abk="${k}"><b>${nf((K[k]||[]).length)}</b><span>${KL[k][0]}<small>${esc(KL[k][1])}</small></span></button>`).join('')}</div>
    <p class="hint">Barang masuk = STO Inbound (SKU Transaction History). Terjual = Database DSR. Stok toko = inventory by SKU. Stok pusat = upload data pusat. Dihitung per produk (generic-warna), tanpa paper bag & voucher.</p>`;
@@ -6448,6 +6462,44 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  else{$id('rpTitle').textContent='Rapor Pengembangan RA';if(bar)bar.hidden=true;renderHead();setTimeout(()=>load(false),5200)}
 })();
 
+/* ====== TATA LETAK DESKTOP (masonry) ====== */
+(function(){
+ const pages=[...document.querySelectorAll('.deck-pg')].filter(pg=>!pg.querySelector(':scope>.pg-col'));
+ if(!pages.length)return;
+ const desk=()=>matchMedia('(min-width:761px)').matches;
+ const orig=new Map();pages.forEach(pg=>orig.set(pg,[...pg.querySelectorAll(':scope>section')]));
+ const secs=pg=>orig.get(pg).filter(s=>s.isConnected);
+ function unwrap(pg){if(!pg.classList.contains('mas'))return;secs(pg).forEach(s=>pg.appendChild(s));pg.querySelectorAll(':scope>.mcol').forEach(c=>c.remove());pg.classList.remove('mas')}
+ function layout(pg){
+  if(!desk()){unwrap(pg);return}
+  if(!pg.classList.contains('cur')||!pg.offsetWidth)return;
+  const all=secs(pg),wide=all.filter(s=>s.classList.contains('span-all')),L=all.filter(s=>!s.classList.contains('span-all')&&!s.hidden&&getComputedStyle(s).display!=='none');
+  const W=pg.clientWidth,n=Math.max(1,Math.min(3,Math.floor((W+18)/(340+18)),L.length));
+  pg.classList.add('mas-measure');
+  const h=L.map(s=>s.getBoundingClientRect().height);
+  pg.classList.remove('mas-measure');
+  // urutan tetap, setiap kartu ke kolom terpendek
+  const col=Array.from({length:n},()=>({h:0,s:[]}));
+  L.forEach((s,i)=>{const c=col.reduce((a,b)=>b.h<a.h-1?b:a);c.s.push(s);c.h+=h[i]+18});
+  const sig=col.map(c=>c.s.map(s=>s.id).join(',')).join('|')+'#'+n;
+  if(pg.dataset.mas===sig&&pg.classList.contains('mas'))return;
+  pg.dataset.mas=sig;
+  const ae=document.activeElement,keep=ae&&pg.contains(ae)?ae:null;
+  pg.querySelectorAll(':scope>.mcol').forEach(c=>c.remove());
+  const frag=document.createDocumentFragment();
+  col.forEach(c=>{const d=document.createElement('div');d.className='mcol';c.s.forEach(s=>d.appendChild(s));frag.appendChild(d)});
+  pg.classList.add('mas');pg.insertBefore(frag,pg.firstChild);
+  all.filter(s=>s.hidden||getComputedStyle(s).display==='none').forEach(s=>{if(!s.classList.contains('span-all'))pg.appendChild(s)});
+  wide.forEach(s=>pg.appendChild(s));
+  if(keep&&document.activeElement!==keep)try{keep.focus({preventScroll:true})}catch(e){}
+ }
+ let t=null;const all=()=>{clearTimeout(t);t=setTimeout(()=>pages.forEach(layout),120)};
+ const ro=new ResizeObserver(all);
+ pages.forEach(pg=>{ro.observe(pg);orig.get(pg).forEach(s=>ro.observe(s))});
+ new MutationObserver(all).observe(document.getElementById('deckTrack')||document.body,{attributes:true,attributeFilter:['class','hidden'],subtree:true});
+ addEventListener('resize',all);
+ all();
+})();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
  const box=document.getElementById('wk');if(!box)return;
