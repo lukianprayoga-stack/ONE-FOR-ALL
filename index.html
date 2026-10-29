@@ -6777,7 +6777,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    ${f&&f.size>500*1048576?'<p class="hint">File besar — upload bisa lama. Pastikan pakai Wi-Fi.</p>':''}
    ${up.run||up.pct!=null?`<div class="vd-prog"><div><i style="width:${Math.round((up.pct||0)*100)}%"></i></div><small>${esc(up.stage||'')} · ${Math.round((up.pct||0)*100)}%</small></div>`:''}
    ${msg||''}
-   <p class="hint">Nama file otomatis: <b>${data.site} ${up.j==='open'?'OPEN':'CLOSE'} ${up.tgl.slice(8,10)}.${up.tgl.slice(5,7)}.${up.tgl.slice(2,4)}</b>. Link langsung ditulis ke kolom tanggal ${d} di sheet ${J[up.j]} ${esc(BLNL[+up.tgl.slice(5,7)-1])}.</p>
+   <p class="hint">Nama file otomatis: <b>${up.j==='open'?'OPENING':'CLOSING'}_${up.tgl.slice(8,10)}-${up.tgl.slice(5,7)}-${up.tgl.slice(0,4)}</b>. Link langsung ditulis ke kolom tanggal ${d} di sheet ${J[up.j]} ${esc(BLNL[+up.tgl.slice(5,7)-1])}.</p>
    <div class="vd-act"><button type="button" class="btn" id="vdGo" ${!f||up.run||(ada&&!ada.hub&&!up.timpa)?'disabled':''}>${up.run?'Mengupload… jangan tutup aplikasi':'Upload & kirim ke spreadsheet'}</button></div>`;
   const v=el.querySelector('video');if(v)v.onloadedmetadata=()=>{const s=Math.round(v.duration||0);if(s&&!up.dur){up.dur=Math.floor(s/60)+':'+pad(s%60);const sm=el.querySelector('.vd-pick small');if(sm)sm.textContent=mb(f.size)+' · '+up.dur}};
  }
