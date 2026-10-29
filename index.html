@@ -1322,6 +1322,8 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .co-sub{padding-top:4px}.co-sub span small{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-left:4px}.co-sub b{font-variant-numeric:tabular-nums}
 .co-rows .co-in2 span{padding-left:16px;color:var(--mut)}
 .co-flex{font-style:italic;color:var(--mut);font-size:11.5px}
+.co-auto{font-variant-numeric:tabular-nums;font-size:14px}
+.co-kp tr.co-kpm td{font-weight:800}.co-kp tr.co-kps td{color:var(--mut);font-size:11.5px;border-top:0;padding-top:1px}.co-kp tr.co-kps td:first-child{padding-left:12px}
 .co-sumrow{padding-top:8px;margin-top:2px;border-top:1px solid var(--line);font-weight:700}.co-sumrow b{font-size:16px;font-variant-numeric:tabular-nums}
 .co-sumrow.hl b{background:#fef08a;color:#111;border-radius:8px;padding:2px 8px}
 .co-colsel{display:none}
@@ -7012,14 +7014,24 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function hitung(){
   const c=[0,0,0,0];
   PEC.forEach(p=>{const r=F.lembar[key(p)]||[];for(let j=0;j<4;j++)c[j]+=num(r[j])*p[0]});
-  // Float @ Till & Modal besar tetap (total modal); Setoran & Kas fleksibel kecuali angka bukunya diisi
+  // Yang dicocokkan hanya MODAL (Float @ Till + Modal besar). Setoran & Kas fleksibel, mengikuti hitungan.
   const ada=v=>v!=null&&String(v).trim()!=='',cf=data&&data.cfg||{},B=F.buku;
   if(!B||B.modal!=null&&B.float==null)F.buku={penjualan:B&&B.penjualan||'',float:'',modalBesar:'',kas:B&&B.kas||''};
   const fisik=c[0]+c[1]+c[2]+c[3],lain=num(F.lain),kartu=num(F.kartu),palsu=num(F.palsu),rusak=num(F.rusak),grand=fisik+lain+kartu+palsu+rusak;
-  const fS=c[0]+kartu+palsu+rusak,fK=c[3]+lain,cek={jual:ada(F.buku.penjualan),kas:ada(F.buku.kas)};
-  const b={penjualan:cek.jual?num(F.buku.penjualan):fS,float:ada(F.buku.float)?num(F.buku.float):(cf.float!=null?cf.float:1000000),modalBesar:ada(F.buku.modalBesar)?num(F.buku.modalBesar):(cf.modalBesar!=null?cf.modalBesar:2000000),kas:cek.kas?num(F.buku.kas):fK};
-  const jb=b.penjualan+b.float+b.modalBesar+b.kas,sel=grand-jb;
-  return{c,b,cek,fS,fK,fisik,lain,kartu,palsu,rusak,grand,jb,sel,status:sel===0?'SESUAI':sel>0?'KELEBIHAN':'KEKURANGAN',komp:[fS-b.penjualan,c[1]-b.float,c[2]-b.modalBesar,fK-b.kas],isi:fisik>0};
+  const fS=c[0]+kartu+palsu+rusak,fK=c[3]+lain,cek={jual:false,kas:false};
+  const b={penjualan:fS,float:ada(F.buku.float)?num(F.buku.float):(cf.float!=null?cf.float:1000000),modalBesar:ada(F.buku.modalBesar)?num(F.buku.modalBesar):(cf.modalBesar!=null?cf.modalBesar:2000000),kas:fK};
+  const modal=b.float+b.modalBesar,fisModal=c[1]+c[2],sel=fisModal-modal,jb=b.penjualan+modal+b.kas;
+  return{c,b,cek,fS,fK,fisik,lain,kartu,palsu,rusak,grand,jb,sel,modal,fisModal,status:sel===0?'SESUAI':sel>0?'KELEBIHAN':'KEKURANGAN',komp:[0,c[1]-b.float,c[2]-b.modalBesar,0],isi:fisik>0};
+ }
+ // tabel rincian: hanya baris Modal yang menentukan selisih
+ function kpTable(m){
+  const geser=v=>!v?'':m.sel===0?'<i class="co-flex">bergeser, total klop</i>':(v>0?'+':'')+nf(v);
+  return `<table class="co-kp"><tr><th>Rincian</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>
+   <tr class="co-kpm"><td>Modal</td><td>${nf(m.modal)}</td><td>${m.isi?nf(m.fisModal):'—'}</td><td class="${m.isi&&m.sel?'co-red':''}">${m.isi?(m.sel>0?'+':'')+nf(m.sel):'—'}</td></tr>
+   <tr class="co-kps"><td>Float @ Till</td><td>${nf(m.float)}</td><td>${m.isi?nf(m.c1):'—'}</td><td>${m.isi?geser(m.dF):''}</td></tr>
+   <tr class="co-kps"><td>Modal besar</td><td>${nf(m.modalBesar)}</td><td>${m.isi?nf(m.c2):'—'}</td><td>${m.isi?geser(m.dM):''}</td></tr>
+   <tr><td>Setoran</td><td><i class="co-flex">fleksibel</i></td><td>${m.isi?nf(m.fS):'—'}</td><td><i class="co-flex">tidak dihitung</i></td></tr>
+   <tr><td>Kas dompet</td><td><i class="co-flex">fleksibel</i></td><td>${m.isi?nf(m.fK):'—'}</td><td><i class="co-flex">tidak dihitung</i></td></tr></table>`;
  }
  /* ---------- kartu ringkas di halaman Laporan ---------- */
  function renderCard(){
@@ -7030,7 +7042,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const L=data.last,m0=now().t.slice(0,7),M=(data.months||[]).find(x=>x.m===m0)||{n:0,selisih:0,bad:0};
   const umur=L?Math.round((new Date(now().t)-new Date(L.d))/864e5):null;
   b.innerHTML=(data.err?`<div class="co-warn">${esc(data.err)}</div>`:'')+
-   (L?`<div class="co-last ${L.status==='SESUAI'?'ok':'bad'}"><div><small>Opname terakhir · ${esc(tglS(L.d))} ${esc(L.jam)}${umur!=null?' · '+(umur===0?'hari ini':umur+' hari lalu'):''}</small><b>${L.status==='SESUAI'?'✓ Sesuai buku':(L.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(L.selisih))}</b><small>Diperiksa ${esc(L.oleh)} · Kasir ${esc(L.kasir)}</small></div>${L.pdf?`<a class="btn ghost" href="${esc(L.pdf)}" target="_blank" rel="noopener">PDF ↗</a>`:''}</div>`:'<p class="hint">Belum ada cash opname. Mulai yang pertama untuk mencatat berita acara pemeriksaan kas.</p>')+
+   (L?`<div class="co-last ${L.status==='SESUAI'?'ok':'bad'}"><div><small>Opname terakhir · ${esc(tglS(L.d))} ${esc(L.jam)}${umur!=null?' · '+(umur===0?'hari ini':umur+' hari lalu'):''}</small><b>${L.status==='SESUAI'?'✓ Modal klop':(L.selisih>0?'Modal kelebihan ':'Modal kekurangan ')+rp(Math.abs(L.selisih))}</b><small>Diperiksa ${esc(L.oleh)} · Kasir ${esc(L.kasir)}</small></div>${L.pdf?`<a class="btn ghost" href="${esc(L.pdf)}" target="_blank" rel="noopener">PDF ↗</a>`:''}</div>`:'<p class="hint">Belum ada cash opname. Mulai yang pertama untuk mencatat berita acara pemeriksaan kas.</p>')+
    `<div class="mb-tiles co-tiles"><div><b>${nf(M.n)}</b><span>opname ${esc(BLNL[+m0.slice(5,7)-1])}</span></div><div><b class="${M.bad?'co-red':''}">${nf(M.bad)}</b><span>ada selisih</span></div><div><b class="co-sm ${M.selisih?'co-red':''}">${M.selisih?rp(M.selisih):'Rp 0'}</b><span>total selisih</span></div></div>`+btns();
  }
  const btns=()=>`<div class="co-acts"><button type="button" class="btn" data-co="baru">＋ Opname baru</button><button type="button" class="btn ghost" data-co="riwayat">Riwayat</button></div>`;
@@ -7061,11 +7073,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <label>Kasir / PIC kas<input class="in" data-cox="kasir" value="${esc(F.kasir)}" placeholder="Nama kasir yang bertugas"></label>
     <label class="span2">Mengetahui (Store Head)<input class="in" data-cox="sh" value="${esc(F.sh)}" placeholder="Opsional"></label></div></section>
    <section class="co-sec"><h4>A. Sisa uang kas menurut buku kas</h4>
-    <div class="co-rows"><label><span>1. Sisa menurut penjualan kas<small>Fleksibel (keuntungan hari ini). Isi bila ingin dicocokkan dengan laporan penjualan.</small></span>${inp('buku.penjualan',F.buku.penjualan,'','Fleksibel')}</label>
+    <div class="co-rows"><div><span>1. Sisa menurut penjualan kas<small>Fleksibel (keuntungan hari ini), mengikuti hitungan setoran.</small></span><b class="co-auto" id="coBs">${rp(h.b.penjualan)}</b></div>
     <div class="co-sub"><span>2. Modal <small>tetap</small></span><b id="coMd">${rp(h.b.float+h.b.modalBesar)}</b></div>
     <label class="co-in2"><span>a. Float @ Till</span>${inp('buku.float',F.buku.float,'',flPh)}</label>
     <label class="co-in2"><span>b. Modal besar</span>${inp('buku.modalBesar',F.buku.modalBesar,'',mbPh)}</label>
-    <label><span>3. Uang kas<small>Fleksibel (isi dompet toko). Isi bila ingin dicocokkan dengan buku kas.</small></span>${inp('buku.kas',F.buku.kas,'','Fleksibel')}</label>
+    <div><span>3. Uang kas<small>Fleksibel (isi dompet toko), mengikuti hitungan kas.</small></span><b class="co-auto" id="coBk">${rp(h.b.kas)}</b></div>
     <div class="co-sumrow"><span>Jumlah sisa uang menurut buku</span><b id="coJb">${rp(h.jb)}</b></div></div></section>
    <section class="co-sec"><h4>B. Uang dalam kas</h4><p class="hint">1. Isi <b>jumlah lembar / keping</b> per pecahan.</p>
     <div class="dp-chips co-colsel">${KOL.map((k,j)=>`<button type="button" data-cocol="${j}" class="${col===j?'on':''}">${k}<small data-cocs="${j}">${h.c[j]?nf(h.c[j]):''}</small></button>`).join('')}</div>
@@ -7085,11 +7097,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const cls=!h.isi?'':h.sel===0?'ok':'bad',need=h.isi&&h.sel!==0;
   el.className='co-sec co-res '+cls;
   el.innerHTML=`<h4>C. Selisih uang kas</h4>
-   <div class="co-big"><small>${!h.isi?'Isi angka untuk melihat selisih':h.sel===0?'Sesuai buku':h.sel>0?'Kelebihan':'Kekurangan'}</small><b>${h.isi?(h.sel===0?'Rp 0':rp(Math.abs(h.sel))):'—'}</b></div>
+   <div class="co-big"><small>${!h.isi?'Isi angka untuk melihat selisih':h.sel===0?'Modal '+rp(h.modal)+' klop':h.sel>0?'Modal kelebihan':'Modal kekurangan'}</small><b>${h.isi?(h.sel===0?'Tidak ada selisih':rp(Math.abs(h.sel))):'—'}</b></div>
    <div class="co-cmp"><div><span>Menurut buku</span><b>${rp(h.jb)}</b></div><div><span>Grand total fisik</span><b>${rp(h.grand)}</b></div></div>
-   <table class="co-kp"><tr><th>Rincian</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>
-    ${[['Setoran',h.cek.jual,h.b.penjualan,h.fS,h.komp[0]],['Float @ Till',1,h.b.float,h.c[1],h.komp[1]],['Modal besar',1,h.b.modalBesar,h.c[2],h.komp[2]],['Kas dompet',h.cek.kas,h.b.kas,h.fK,h.komp[3]]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]?nf(r[2]):'<i class="co-flex">fleksibel</i>'}</td><td>${nf(r[3])}</td><td class="${h.isi&&r[4]?'co-red':''}">${h.isi&&r[1]?(r[4]>0?'+':'')+nf(r[4]):'—'}</td></tr>`).join('')}</table>
-   <p class="hint co-note">Setoran dihitung bersama slip kartu, uang palsu & rusak; kas dompet bersama bon. Float @ Till dan Modal besar selalu dicocokkan dengan modal tetap.</p>
+   ${kpTable({modal:h.modal,fisModal:h.fisModal,sel:h.sel,float:h.b.float,modalBesar:h.b.modalBesar,c1:h.c[1],c2:h.c[2],dF:h.komp[1],dM:h.komp[2],fS:h.fS,fK:h.fK,isi:h.isi})}
+   <p class="hint co-note">Selisih hanya dihitung dari modal (Float @ Till + Modal besar). Isi float & modal besar boleh bergeser selama totalnya klop. Setoran (+ kartu, uang palsu & rusak) dan kas dompet (+ bon) dicatat apa adanya.</p>
    <label class="co-cat">Catatan / penjelasan selisih${need?' <em>wajib</em>':''}<textarea class="in" data-cox="catatan" rows="3" placeholder="${need?'Jelaskan penyebab selisih…':'Opsional'}">${esc(F.catatan)}</textarea></label>
    <div class="co-acts"><button type="button" class="btn" id="coSave" ${saving?'disabled':''}>${saving?'Menyimpan & membuat PDF…':'Simpan berita acara'}</button><button type="button" class="btn ghost" data-co="reset">Kosongkan</button></div>
    <p class="hint">Disimpan ke database & PDF di folder <a href="${esc(data&&data.cfg?data.cfg.folderUrl:'#')}" target="_blank" rel="noopener">CASH OPNAME INTERNAL ↗</a>. Draf tersimpan otomatis di perangkat ini.</p>`;
@@ -7100,7 +7111,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   PEC.forEach(p=>{const k=key(p),r=F.lembar[k]||[],t=[0,1,2,3].reduce((a,j)=>a+num(r[j]),0),a=pg.querySelector('[data-cotl="'+k+'"]'),b=pg.querySelector('[data-corp="'+k+'"]');if(a)a.textContent=t||'';if(b)b.textContent=t?nf(t*p[0]):''});
   [0,1,2,3].forEach(j=>{const a=pg.querySelector('[data-coc="'+j+'"]'),b=pg.querySelector('[data-cocs="'+j+'"]');if(a)a.textContent=nf(h.c[j]);if(b)b.textContent=h.c[j]?nf(h.c[j]):''});
   const f=pg.querySelector('[data-cof2="fisik"]');if(f)f.textContent=nf(h.fisik);
-  if($id('coJb'))$id('coJb').textContent=rp(h.jb);if($id('coMd'))$id('coMd').textContent=rp(h.b.float+h.b.modalBesar);if($id('coGt'))$id('coGt').textContent=rp(h.grand);
+  if($id('coJb'))$id('coJb').textContent=rp(h.jb);if($id('coBs'))$id('coBs').textContent=rp(h.b.penjualan);if($id('coBk'))$id('coBk').textContent=rp(h.b.kas);if($id('coMd'))$id('coMd').textContent=rp(h.b.float+h.b.modalBesar);if($id('coGt'))$id('coGt').textContent=rp(h.grand);
   const ta=pg.querySelector('#coRes textarea'),focus=document.activeElement===ta,pos=focus?ta.selectionStart:0;
   drawRes(h);
   if(focus){const t=pg.querySelector('#coRes textarea');t.focus();t.setSelectionRange(pos,pos)}
@@ -7109,7 +7120,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(saving)return;const h=hitung();
   if(!h.isi)return toast('Isi angka opname terlebih dahulu');
   if(!F.oleh.trim()||!F.kasir.trim())return toast('Isi nama pemeriksa dan kasir');
-  if(h.sel!==0&&F.catatan.trim().length<5){toast('Ada selisih — tulis penjelasan di catatan');const t=pg.querySelector('#coRes textarea');if(t)t.focus();return}
+  if(h.sel!==0&&F.catatan.trim().length<5){toast('Modal tidak klop — tulis penjelasan di catatan');const t=pg.querySelector('#coRes textarea');if(t)t.focus();return}
   saving=true;drawRes(h);
   try{
    const d=JSON.parse(JSON.stringify(F));
@@ -7118,7 +7129,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    F=baru();try{localStorage.removeItem(DK)}catch(e){}
    saving=false;tab='riwayat';renderAll();
    const H=r.hasil;
-   openModal('Berita acara tersimpan',`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Kas sesuai buku':(H.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(r.id)} · grand total ${rp(H.grand)} · buku ${rp(H.jBuku)}</span></div>
+   openModal('Berita acara tersimpan',`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Modal klop, tidak ada selisih':(H.selisih>0?'Modal kelebihan ':'Modal kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(r.id)} · grand total ${rp(H.grand)} · buku ${rp(H.jBuku)}</span></div>
     ${r.pdf?`<a class="btn" style="width:100%;margin-top:12px" href="${esc(r.pdf)}" target="_blank" rel="noopener">Buka PDF berita acara ↗</a>`:`<p class="co-warn">Data tersimpan, tetapi PDF gagal dibuat: ${esc(r.pdfErr||'')}</p>`}`);
   }catch(e){saving=false;drawRes(h);toast(missing(e)?'Kas.gs belum terpasang di Apps Script':e.message)}
  }
@@ -7136,11 +7147,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   try{
    const d=await api('kasDetail',{id}),H=d.hasil,el=$id('coDet');if(!el)return;
    const rows=PEC.map(p=>{const r=H.lembar[key(p)];if(!r)return '';const t=r[0]+r[1]+r[2]+r[3];return `<tr><th>${nf(p[0])} <small>${p[1]}</small></th>${r.map(x=>`<td>${x||''}</td>`).join('')}<td><b>${t}</b></td><td>${nf(t*p[0])}</td></tr>`}).join('');
-   el.innerHTML=`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Sesuai buku':(H.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(tglP(d.tanggal))} · ${esc(d.jam)} · ${esc(d.id)}</span><span>Diperiksa ${esc(d.oleh)} · Kasir ${esc(d.kasir)}${d.sh?' · Mengetahui '+esc(d.sh):''}</span></div>
+   el.innerHTML=`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Modal klop, tidak ada selisih':(H.selisih>0?'Modal kelebihan ':'Modal kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(tglP(d.tanggal))} · ${esc(d.jam)} · ${esc(d.id)}</span><span>Diperiksa ${esc(d.oleh)} · Kasir ${esc(d.kasir)}${d.sh?' · Mengetahui '+esc(d.sh):''}</span></div>
     <div class="co-cmp" style="margin-top:10px"><div><span>Menurut buku</span><b>${rp(H.jBuku)}</b></div><div><span>Grand total fisik</span><b>${rp(H.grand)}</b></div></div>
     <div class="co-tw"><table class="co-t co-tro"><thead><tr><th>Pecahan</th>${KOL.map(k=>`<th>${k}</th>`).join('')}<th>Total</th><th>Nilai</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th>Jumlah</th>${H.col.map(v=>`<td>${nf(v)}</td>`).join('')}<td></td><td>${nf(H.fisik)}</td></tr></tfoot></table></div>
     <div class="co-rows ro"><div><span>Bon diperhitungkan</span><b>${rp(H.lain)}</b></div><div><span>Credit / debit card</span><b>${rp(H.kartu)}</b></div><div><span>Uang palsu</span><b>${rp(H.palsu)}</b></div><div><span>Uang rusak</span><b>${rp(H.rusak)}</b></div></div>
-    <table class="co-kp"><tr><th>Rincian selisih</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>${[['Setoran',H.cek&&H.cek.jual,H.buku.penjualan,H.fisSetor,H.komp.setoran],['Float @ Till',1,H.buku.float,H.col[1],H.komp.float],['Modal besar',1,H.buku.modalBesar,H.col[2],H.komp.modalBesar],['Kas dompet',H.cek&&H.cek.kas,H.buku.kas,H.fisKas,H.komp.kas]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]?nf(r[2]):'<i class="co-flex">fleksibel</i>'}</td><td>${nf(r[3])}</td><td class="${r[4]?'co-red':''}">${r[1]?(r[4]>0?'+':'')+nf(r[4]):'—'}</td></tr>`).join('')}</table>
+    ${kpTable({modal:H.modal!=null?H.modal:H.buku.float+H.buku.modalBesar,fisModal:H.col[1]+H.col[2],sel:H.selisih,float:H.buku.float,modalBesar:H.buku.modalBesar,c1:H.col[1],c2:H.col[2],dF:H.komp.float,dM:H.komp.modalBesar,fS:H.fisSetor,fK:H.fisKas,isi:true})}
     ${d.catatan?`<p class="co-catv"><b>Catatan:</b> ${esc(d.catatan)}</p>`:''}
     <div class="co-acts">${d.pdf?`<a class="btn" href="${esc(d.pdf)}" target="_blank" rel="noopener">PDF berita acara ↗</a>`:''}${isOwner()?`<button type="button" class="btn ghost co-del" data-codel="${esc(d.id)}">Hapus</button>`:''}</div>`;
   }catch(e){const el=$id('coDet');if(el)el.innerHTML='<p class="co-warn">'+esc(e.message)+'</p>'}
