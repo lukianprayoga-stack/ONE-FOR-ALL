@@ -1297,6 +1297,76 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .vd-raw{font-size:11px;opacity:.75;word-break:break-word}
 .vd-act.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:380px){.vd-tiles{grid-template-columns:1fr}}
+/* ====== CASH OPNAME INTERNAL ====== */
+.co-last{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--bg)}
+.co-last.ok{background:var(--ok-bg);border-color:transparent}.co-last.bad{background:var(--bad-bg);border-color:transparent}
+.co-last>div{flex:1;min-width:0}.co-last b{display:block;font-size:16px;margin:2px 0}.co-last.ok b{color:var(--ok-fg)}.co-last.bad b{color:var(--bad-fg)}
+.co-last small{display:block;font-size:11.5px;color:var(--mut)}.co-last .btn{padding:7px 12px;font-size:12.5px;flex:none}
+.co-tiles{margin-top:10px}.co-red{color:var(--bad-fg)!important}
+.co-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.co-acts .btn{flex:1;min-width:130px}
+.co-warn{margin:8px 0;padding:8px 12px;border-radius:12px;background:var(--bad-bg);color:var(--bad-fg);font-size:12.5px}
+.co-pg .kt-tabs{max-width:420px;position:static}
+.co-res .co-acts{flex-direction:column}.co-res .co-acts .btn{width:100%}
+.co-tiles b.co-sm{font-size:17px;line-height:1.2}
+.co-body{max-width:1180px}
+.co-grid{display:grid;gap:14px}
+@media(min-width:1000px){.co-grid{grid-template-columns:minmax(0,1fr) 340px;align-items:start}.co-side{position:sticky;top:124px}}
+.co-sec{border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--card);margin-bottom:14px}.co-side .co-sec{margin-bottom:0}
+.co-sec h4{margin:0 0 10px;font-size:14px;letter-spacing:.01em}
+.co-f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.co-f2 label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--mut);min-width:0}.co-f2 .in{color:var(--fg);font-weight:500;min-width:0}
+.co-f2 .span2{grid-column:1/-1}
+.co-rows{display:grid;gap:6px}.co-rows label,.co-rows>div{display:flex;align-items:center;gap:10px;font-size:13.5px}
+.co-rows label span,.co-rows>div span{flex:1;min-width:0}.co-rows .in{width:150px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+.co-rows.ro>div{padding:5px 0;border-bottom:1px dashed var(--line)}.co-rows.ro b{font-variant-numeric:tabular-nums}
+.co-sumrow{padding-top:8px;margin-top:2px;border-top:1px solid var(--line);font-weight:700}.co-sumrow b{font-size:16px;font-variant-numeric:tabular-nums}
+.co-sumrow.hl b{background:#fef08a;color:#111;border-radius:8px;padding:2px 8px}
+.co-colsel{display:none}
+.co-tw{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.co-t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-variant-numeric:tabular-nums}
+.co-t th,.co-t td{padding:4px;text-align:right;white-space:nowrap}
+.co-t thead th{font-size:11px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.03em;padding-bottom:6px}
+.co-t tbody th{text-align:left}.co-t tbody th b{display:block;font-size:13.5px}.co-t tbody th small{display:block;font-size:10.5px;color:var(--mut);font-weight:500}
+.co-t thead th:first-child{text-align:left}
+.co-l{width:100%;min-width:52px;max-width:84px;text-align:center;padding:7px 4px;font-variant-numeric:tabular-nums}
+.co-tl{font-weight:700;color:var(--mut)}.co-rp{font-weight:700;min-width:84px}
+.co-t tfoot td,.co-t tfoot th{border-top:1.5px solid var(--fg);padding-top:7px;font-weight:800}
+.co-t tbody tr:nth-child(8) td,.co-t tbody tr:nth-child(8) th{border-bottom:1px dashed var(--line);padding-bottom:7px}
+.co-t tbody tr:nth-child(9) td,.co-t tbody tr:nth-child(9) th{padding-top:7px}
+.co-res .co-big{border-radius:14px;padding:12px;background:var(--bg);text-align:center}
+.co-big small{display:block;font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.co-big b{display:block;font-size:28px;letter-spacing:-.6px;margin-top:2px;font-variant-numeric:tabular-nums}
+.co-res.ok .co-big{background:var(--ok-bg)}.co-res.ok .co-big b,.co-res.ok .co-big small{color:var(--ok-fg)}
+.co-res.bad .co-big{background:var(--bad-bg)}.co-res.bad .co-big b,.co-res.bad .co-big small{color:var(--bad-fg)}
+.co-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.co-cmp div{background:var(--bg);border-radius:12px;padding:8px 10px}
+.co-cmp span{display:block;font-size:11.5px;color:var(--mut)}.co-cmp b{font-size:14px;font-variant-numeric:tabular-nums}
+.co-kp{width:100%;margin-top:10px;font-size:12.5px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.co-kp th{font-size:10.5px;color:var(--mut);text-transform:uppercase;font-weight:800;text-align:right;padding:4px}.co-kp th:first-child,.co-kp td:first-child{text-align:left}
+.co-kp td{text-align:right;padding:5px 4px;border-top:1px solid var(--line)}
+.co-note{margin:6px 0 0;font-size:11.5px}
+.co-cat{display:grid;gap:4px;margin-top:10px;font-size:12px;font-weight:700;color:var(--mut)}.co-cat em{font-style:normal;color:var(--bad-fg)}
+.co-cat textarea.in{min-height:72px!important;height:auto;color:var(--fg);font-weight:500;resize:vertical}
+.co-list{display:grid;gap:6px;margin-top:10px}
+.co-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer}
+.co-it.bad{box-shadow:inset 3px 0 0 #dc2626}.co-it.ok{box-shadow:inset 3px 0 0 #16a34a}
+.co-it span{flex:1;min-width:0}.co-it b{display:block;font-size:14px}.co-it small{display:block;font-size:12px;color:var(--mut)}
+.co-it .co-cn{font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co-it em{font-style:normal;text-align:right;font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.co-it em i{display:block;font-style:normal;font-size:11px;font-weight:800;border-radius:6px;padding:1px 7px;margin-bottom:3px;text-align:center}
+.co-it.ok em i{background:var(--ok-bg);color:var(--ok-fg)}.co-it.bad em i{background:var(--bad-bg);color:var(--bad-fg)}.co-it.bad em{color:var(--bad-fg)}
+.co-links{margin-top:14px}
+.co-done{display:grid;gap:3px;padding:12px;border-radius:14px;font-size:13px}.co-done b{font-size:17px}
+.co-done.ok{background:var(--ok-bg);color:var(--ok-fg)}.co-done.bad{background:var(--bad-bg);color:var(--bad-fg)}
+.co-tro{margin-top:10px}.co-tro td,.co-tro th{border-bottom:1px solid var(--line)}
+.co-catv{font-size:13px;margin:10px 0 0}
+.co-del{color:var(--bad-fg)}
+@media(max-width:640px){
+ .co-colsel{display:flex;flex-wrap:wrap}.co-colsel button{display:flex;flex-direction:column;align-items:center;line-height:1.2}.co-colsel small{font-size:10px;font-weight:600;opacity:.8;min-height:12px}
+ .co-t[data-show] .co-c0,.co-t[data-show] .co-c1,.co-t[data-show] .co-c2,.co-t[data-show] .co-c3{display:none}
+ .co-t[data-show="0"] .co-c0,.co-t[data-show="1"] .co-c1,.co-t[data-show="2"] .co-c2,.co-t[data-show="3"] .co-c3{display:table-cell}
+ .co-l{max-width:none;min-width:70px;font-size:16px}
+ .co-rows .in{width:132px}
+ .co-f2{grid-template-columns:1fr 1fr}
+}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1441,6 +1511,7 @@ html.scrolled header{border-bottom-color:var(--line)}
   <p class="side-h">Alat</p>
   <button type="button" data-sd="stok"><span>⌕</span>Cek stok<kbd>/</kbd></button>
   <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
+  <button type="button" data-sd="co"><span style="font-size:10.5px;font-weight:800;letter-spacing:-.3px">Rp</span>Cash Opname</button>
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
   <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
   <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
@@ -1542,6 +1613,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="mb" aria-label="Laporan bulanan dan PICA">
           <div class="sh-head"><div><h3>Laporan Bulanan &amp; PICA</h3><p id="mbSub">Evaluasi bulan ini dan rencana perbaikan bulan depan</p></div></div>
           <div id="mbBody"></div>
+        </section>
+        <section class="rs co-card" id="cop" aria-label="Cash opname internal">
+          <div class="sh-head"><div><h3>Cash Opname Internal</h3><p>Berita acara pemeriksaan kas</p></div></div>
+          <div id="copBody"></div>
         </section>
         <section class="rs" id="rp" aria-label="Rapor pengembangan RA">
           <div class="sh-head"><div><h3 id="rpTitle">Rapor Pengembangan RA</h3><p id="rpSub">Evaluasi bulanan yang dikirim ke akun masing-masing RA</p></div></div>
@@ -1653,6 +1728,11 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
+<div class="kt co-pg" id="coPg" role="dialog" aria-modal="true" aria-label="Cash Opname Internal">
+  <div class="kt-top"><button class="kt-back" id="coBack" type="button" aria-label="Kembali">←</button><div><b>Cash Opname Internal</b><small id="coSub">Berita acara pemeriksaan kas</small></div></div>
+  <div class="kt-tabs co-tabs" role="tablist"><button type="button" data-cot="baru" class="on">Opname baru</button><button type="button" data-cot="riwayat">Riwayat</button></div>
+  <div class="kt-body co-body" id="coBody"></div>
+</div>
 <div class="kt" id="kt" role="dialog" aria-modal="true" aria-label="Kelola Katalog">
   <div class="kt-top"><button class="kt-back" id="ktBack" type="button" aria-label="Kembali">←</button><div><b>Kelola Katalog</b><small id="ktSub">Website katalog toko</small></div><a class="btn ghost kt-web" id="ktWeb" target="_blank" rel="noopener" hidden>Website ↗</a></div>
   <div class="kt-tabs" id="ktTabs" role="tablist"><button type="button" data-kt="produk" class="on">Produk</button><button type="button" data-kt="pesanan">Pesanan<i id="ktBadge" hidden></i></button><button type="button" data-kt="tampilan">Tampilan</button><button type="button" data-kt="pengunjung">Pengunjung</button></div>
@@ -6598,7 +6678,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Pengingat',need:['pengingatStatus'],latest:['statusSistem'],peran:'Pengingat data & status sistem'},
   {n:'Rapor',need:['raporData'],latest:['raporIpmTpl','raporTeladan'],flag:'rankSkor',peran:'Rapor RA, IPM, RA Teladan'},
   {n:'Pusat',need:['uploadStokPusat'],latest:['getArusBarang'],peran:'Stok pusat, order repeat, arus barang'},
-  {n:'Video',need:['videoStatus'],latest:['videoSelesai'],peran:'Video opening & closing ke spreadsheet area'},
+  {n:'Video',need:['videoStatus'],latest:['videoKirim'],peran:'Video opening & closing ke spreadsheet area'},
+  {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
  ];
  const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
@@ -6879,6 +6960,224 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  render();load(false);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!(up&&up.run))load(false)});
+})();
+/* ====== CASH OPNAME INTERNAL (Berita Acara Pemeriksaan Kas) ====== */
+(function(){
+ const pg=document.getElementById('coPg'),card=document.getElementById('cop');if(!pg)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_co',DK='ofa_co_draft',TTL=10*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const BLNL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const KOL=['Setoran','Float @ Till','Modal','Kas'];
+ const PEC=[[100000,'Lembar'],[75000,'Lembar'],[50000,'Lembar'],[20000,'Lembar'],[10000,'Lembar'],[5000,'Lembar'],[2000,'Lembar'],[1000,'Lembar'],[1000,'Logam'],[500,'Logam'],[200,'Logam'],[100,'Logam']];
+ const key=p=>p[1]==='Logam'?'c'+p[0]:String(p[0]);
+ const pad=n=>String(n).padStart(2,'0');
+ const now=()=>{const d=new Date();return{t:d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),j:pad(d.getHours())+':'+pad(d.getMinutes())}};
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>(v<0?'−':'')+'Rp '+nf(Math.abs(v));
+ const num=v=>{const n=Math.round(Number(String(v==null?'':v).replace(/[^\d]/g,''))||0);return n};
+ const tglP=k=>{if(!k)return '';const p=k.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]);return HARI[d.getDay()]+', '+p[2]+' '+BLNL[p[1]-1]+' '+p[0]};
+ const tglS=k=>{if(!k)return '';const p=k.split('-');return +p[2]+' '+BLN[+p[1]-1]+' '+p[0]};
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ const isOwner=()=>window.ofaRole==='pemilik'||!window.ofaRole;
+ const lbl=s=>s==='SESUAI'?'Sesuai':s==='KELEBIHAN'?'Lebih':'Kurang';
+ let data=null,busy=false,err='',tab='baru',month='',col=0,saving=false;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ function simpan(r){data=Object.assign(r,{at:Date.now()});err='';if(!r.month){try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}}
+ async function load(force,m){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return renderAll();
+  if(!force&&data&&!m&&Date.now()-(data.at||0)<TTL)return renderAll();
+  busy=true;renderAll();
+  try{simpan(await api('kasStatus',m?{month:m}:{}))}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;renderAll()}
+ }
+ /* ---------- draf formulir (tersimpan di HP ini sampai disimpan) ---------- */
+ function baru(){const n=now();return{tanggal:n.t,jam:n.j,oleh:(window.ofaAkun&&window.ofaAkun.nama)||'',kasir:'',sh:'',buku:{penjualan:'',modal:'',kas:''},lembar:{},lain:'',kartu:'',palsu:'',rusak:'',catatan:''}}
+ let F=null;try{F=JSON.parse(localStorage.getItem(DK)||'null')}catch(e){F=null}
+ if(!F)F=baru();
+ const simpanDraf=()=>{try{localStorage.setItem(DK,JSON.stringify(F))}catch(e){}};
+ function hitung(){
+  const c=[0,0,0,0];
+  PEC.forEach(p=>{const r=F.lembar[key(p)]||[];for(let j=0;j<4;j++)c[j]+=num(r[j])*p[0]});
+  const b={penjualan:num(F.buku.penjualan),modal:F.buku.modal===''&&data&&data.cfg?data.cfg.modal:num(F.buku.modal),kas:num(F.buku.kas)};
+  const fisik=c[0]+c[1]+c[2]+c[3],lain=num(F.lain),kartu=num(F.kartu),palsu=num(F.palsu),rusak=num(F.rusak),grand=fisik+lain+kartu+palsu+rusak,jb=b.penjualan+b.modal+b.kas,sel=grand-jb;
+  return{c,b,fisik,lain,kartu,palsu,rusak,grand,jb,sel,status:sel===0?'SESUAI':sel>0?'KELEBIHAN':'KEKURANGAN',komp:[c[0]-b.penjualan,c[1]+c[2]-b.modal,c[3]-b.kas],isi:grand>0||num(F.buku.penjualan)>0||num(F.buku.kas)>0};
+ }
+ /* ---------- kartu ringkas di halaman Laporan ---------- */
+ function renderCard(){
+  const b=$id('copBody');if(!b)return;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>';return}
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Tempel <b>Kas.gs</b> di Apps Script (di atas Akun), lalu Deploy → New version.</p>';return}
+  if(!data||!data.cfg){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>'+btns();return}
+  const L=data.last,m0=now().t.slice(0,7),M=(data.months||[]).find(x=>x.m===m0)||{n:0,selisih:0,bad:0};
+  const umur=L?Math.round((new Date(now().t)-new Date(L.d))/864e5):null;
+  b.innerHTML=(data.err?`<div class="co-warn">${esc(data.err)}</div>`:'')+
+   (L?`<div class="co-last ${L.status==='SESUAI'?'ok':'bad'}"><div><small>Opname terakhir · ${esc(tglS(L.d))} ${esc(L.jam)}${umur!=null?' · '+(umur===0?'hari ini':umur+' hari lalu'):''}</small><b>${L.status==='SESUAI'?'✓ Sesuai buku':(L.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(L.selisih))}</b><small>Diperiksa ${esc(L.oleh)} · Kasir ${esc(L.kasir)}</small></div>${L.pdf?`<a class="btn ghost" href="${esc(L.pdf)}" target="_blank" rel="noopener">PDF ↗</a>`:''}</div>`:'<p class="hint">Belum ada cash opname. Mulai yang pertama untuk mencatat berita acara pemeriksaan kas.</p>')+
+   `<div class="mb-tiles co-tiles"><div><b>${nf(M.n)}</b><span>opname ${esc(BLNL[+m0.slice(5,7)-1])}</span></div><div><b class="${M.bad?'co-red':''}">${nf(M.bad)}</b><span>ada selisih</span></div><div><b class="co-sm ${M.selisih?'co-red':''}">${M.selisih?rp(M.selisih):'Rp 0'}</b><span>total selisih</span></div></div>`+btns();
+ }
+ const btns=()=>`<div class="co-acts"><button type="button" class="btn" data-co="baru">＋ Opname baru</button><button type="button" class="btn ghost" data-co="riwayat">Riwayat</button></div>`;
+ /* ---------- halaman penuh ---------- */
+ function buka(t){tab=t||tab;pg.classList.add('open');document.body.classList.add('kt-on');pg.scrollTop=0;sideOn(true);renderPage();load(false)}
+ function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
+ function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="co"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('#kt.open'))}
+ window.ofaOpenKas=buka;
+ function renderAll(){renderCard();if(pg.classList.contains('open'))renderPage()}
+ function renderPage(){
+  $id('coSub').textContent=(data&&data.cfg?data.cfg.store:'Berita acara pemeriksaan kas');
+  pg.querySelectorAll('[data-cot]').forEach(b=>b.classList.toggle('on',b.dataset.cot===tab));
+  const el=$id('coBody');
+  if(err==='missing'){el.innerHTML='<p class="dp-empty">Tempel <b>Kas.gs</b> di Apps Script (di atas Akun), lalu Deploy → New version.</p>';return}
+  if(tab==='riwayat')return drawList(el);
+  drawForm(el);
+ }
+ function inp(path,v,cls,ph){return `<input class="in ${cls||''}" inputmode="numeric" autocomplete="off" data-cof="${path}" value="${v===''||v==null?'':esc(nf(num(v)))}" placeholder="${ph||'0'}">`}
+ function drawForm(el){
+  const h=hitung(),modalPh=data&&data.cfg?nf(data.cfg.modal):'0';
+  const rows=PEC.map(p=>{const k=key(p),r=F.lembar[k]||[],tot=[0,1,2,3].reduce((a,j)=>a+num(r[j]),0);
+   return `<tr><th><b>${nf(p[0])}</b><small>${p[1]}</small></th>${[0,1,2,3].map(j=>`<td class="co-c${j}"><input class="in co-l" inputmode="numeric" autocomplete="off" data-col="${k}.${j}" value="${r[j]?esc(String(num(r[j]))):''}" aria-label="${KOL[j]} ${nf(p[0])} ${p[1]}"></td>`).join('')}<td class="co-tl" data-cotl="${k}">${tot||''}</td><td class="co-rp" data-corp="${k}">${tot?nf(tot*p[0]):''}</td></tr>`}).join('');
+  el.innerHTML=`<div class="co-grid"><div class="co-main">
+   <section class="co-sec"><h4>Data pemeriksaan</h4><div class="co-f2">
+    <label>Tanggal<input class="in" type="date" data-cox="tanggal" value="${esc(F.tanggal)}" max="${now().t}"></label>
+    <label>Jam<input class="in" type="time" data-cox="jam" value="${esc(F.jam)}"></label>
+    <label>Diperiksa oleh<input class="in" data-cox="oleh" value="${esc(F.oleh)}" placeholder="Nama pemeriksa"></label>
+    <label>Kasir / PIC kas<input class="in" data-cox="kasir" value="${esc(F.kasir)}" placeholder="Nama kasir yang bertugas"></label>
+    <label class="span2">Mengetahui (Store Head)<input class="in" data-cox="sh" value="${esc(F.sh)}" placeholder="Opsional"></label></div></section>
+   <section class="co-sec"><h4>A. Sisa uang kas menurut buku kas</h4>
+    <div class="co-rows"><label><span>1. Sisa menurut penjualan kas</span>${inp('buku.penjualan',F.buku.penjualan)}</label>
+    <label><span>2. Modal</span>${inp('buku.modal',F.buku.modal,'',modalPh)}</label>
+    <label><span>3. Uang kas</span>${inp('buku.kas',F.buku.kas)}</label>
+    <div class="co-sumrow"><span>Jumlah sisa uang menurut buku</span><b id="coJb">${rp(h.jb)}</b></div></div></section>
+   <section class="co-sec"><h4>B. Uang dalam kas</h4><p class="hint">1. Isi <b>jumlah lembar / keping</b> per pecahan.</p>
+    <div class="dp-chips co-colsel">${KOL.map((k,j)=>`<button type="button" data-cocol="${j}" class="${col===j?'on':''}">${k}<small data-cocs="${j}">${h.c[j]?nf(h.c[j]):''}</small></button>`).join('')}</div>
+    <div class="co-tw"><table class="co-t" data-show="${col}"><thead><tr><th>Pecahan</th>${KOL.map((k,j)=>`<th class="co-c${j}">${k}</th>`).join('')}<th>Total</th><th>Nilai (Rp)</th></tr></thead><tbody>${rows}</tbody>
+    <tfoot><tr><th>Jumlah</th>${[0,1,2,3].map(j=>`<td class="co-c${j}" data-coc="${j}">${nf(h.c[j])}</td>`).join('')}<td></td><td data-cof2="fisik">${nf(h.fisik)}</td></tr></tfoot></table></div>
+    <div class="co-rows" style="margin-top:10px">
+     <label><span>2. Lain-lain (bon yang diperhitungkan)</span>${inp('lain',F.lain)}</label>
+     <label><span>3. Credit card / debit card</span>${inp('kartu',F.kartu)}</label>
+     <label><span>4. Uang palsu</span>${inp('palsu',F.palsu)}</label>
+     <label><span>5. Uang rusak</span>${inp('rusak',F.rusak)}</label>
+     <div class="co-sumrow hl"><span>Grand total (No. 1 s/d 5)</span><b id="coGt">${rp(h.grand)}</b></div></div></section>
+   </div><aside class="co-side"><section class="co-sec co-res" id="coRes"></section></aside></div>`;
+  drawRes(h);
+ }
+ function drawRes(h){
+  const el=$id('coRes');if(!el)return;h=h||hitung();
+  const cls=!h.isi?'':h.sel===0?'ok':'bad',need=h.isi&&h.sel!==0;
+  el.className='co-sec co-res '+cls;
+  el.innerHTML=`<h4>C. Selisih uang kas</h4>
+   <div class="co-big"><small>${!h.isi?'Isi angka untuk melihat selisih':h.sel===0?'Sesuai buku':h.sel>0?'Kelebihan':'Kekurangan'}</small><b>${h.isi?(h.sel===0?'Rp 0':rp(Math.abs(h.sel))):'—'}</b></div>
+   <div class="co-cmp"><div><span>Menurut buku</span><b>${rp(h.jb)}</b></div><div><span>Grand total fisik</span><b>${rp(h.grand)}</b></div></div>
+   <table class="co-kp"><tr><th>Rincian</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>
+    <tr><td>Setoran</td><td>${nf(h.b.penjualan)}</td><td>${nf(h.c[0])}</td><td class="${h.komp[0]?'co-red':''}">${h.komp[0]>0?'+':''}${nf(h.komp[0])}</td></tr>
+    <tr><td>Float + Modal</td><td>${nf(h.b.modal)}</td><td>${nf(h.c[1]+h.c[2])}</td><td class="${h.komp[1]?'co-red':''}">${h.komp[1]>0?'+':''}${nf(h.komp[1])}</td></tr>
+    <tr><td>Kas</td><td>${nf(h.b.kas)}</td><td>${nf(h.c[3])}</td><td class="${h.komp[2]?'co-red':''}">${h.komp[2]>0?'+':''}${nf(h.komp[2])}</td></tr></table>
+   <p class="hint co-note">Bon, kartu, uang palsu & rusak dihitung di grand total, tidak di rincian.</p>
+   <label class="co-cat">Catatan / penjelasan selisih${need?' <em>wajib</em>':''}<textarea class="in" data-cox="catatan" rows="3" placeholder="${need?'Jelaskan penyebab selisih…':'Opsional'}">${esc(F.catatan)}</textarea></label>
+   <div class="co-acts"><button type="button" class="btn" id="coSave" ${saving?'disabled':''}>${saving?'Menyimpan & membuat PDF…':'Simpan berita acara'}</button><button type="button" class="btn ghost" data-co="reset">Kosongkan</button></div>
+   <p class="hint">Disimpan ke database & PDF di folder <a href="${esc(data&&data.cfg?data.cfg.folderUrl:'#')}" target="_blank" rel="noopener">CASH OPNAME INTERNAL ↗</a>. Draf tersimpan otomatis di perangkat ini.</p>`;
+ }
+ // perbarui angka tanpa menggambar ulang formulir (agar fokus input tidak hilang)
+ function segarkan(){
+  const h=hitung();
+  PEC.forEach(p=>{const k=key(p),r=F.lembar[k]||[],t=[0,1,2,3].reduce((a,j)=>a+num(r[j]),0),a=pg.querySelector('[data-cotl="'+k+'"]'),b=pg.querySelector('[data-corp="'+k+'"]');if(a)a.textContent=t||'';if(b)b.textContent=t?nf(t*p[0]):''});
+  [0,1,2,3].forEach(j=>{const a=pg.querySelector('[data-coc="'+j+'"]'),b=pg.querySelector('[data-cocs="'+j+'"]');if(a)a.textContent=nf(h.c[j]);if(b)b.textContent=h.c[j]?nf(h.c[j]):''});
+  const f=pg.querySelector('[data-cof2="fisik"]');if(f)f.textContent=nf(h.fisik);
+  if($id('coJb'))$id('coJb').textContent=rp(h.jb);if($id('coGt'))$id('coGt').textContent=rp(h.grand);
+  const ta=pg.querySelector('#coRes textarea'),focus=document.activeElement===ta,pos=focus?ta.selectionStart:0;
+  drawRes(h);
+  if(focus){const t=pg.querySelector('#coRes textarea');t.focus();t.setSelectionRange(pos,pos)}
+ }
+ async function simpanOpname(){
+  if(saving)return;const h=hitung();
+  if(!h.isi)return toast('Isi angka opname terlebih dahulu');
+  if(!F.oleh.trim()||!F.kasir.trim())return toast('Isi nama pemeriksa dan kasir');
+  if(h.sel!==0&&F.catatan.trim().length<5){toast('Ada selisih — tulis penjelasan di catatan');const t=pg.querySelector('#coRes textarea');if(t)t.focus();return}
+  saving=true;drawRes(h);
+  try{
+   const d=JSON.parse(JSON.stringify(F));if(d.buku.modal===''&&data&&data.cfg)d.buku.modal=data.cfg.modal;
+   const r=await api('kasSimpan',{data:d});
+   if(r.status)simpan(r.status);
+   F=baru();try{localStorage.removeItem(DK)}catch(e){}
+   saving=false;tab='riwayat';renderAll();
+   const H=r.hasil;
+   openModal('Berita acara tersimpan',`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Kas sesuai buku':(H.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(r.id)} · grand total ${rp(H.grand)} · buku ${rp(H.jBuku)}</span></div>
+    ${r.pdf?`<a class="btn" style="width:100%;margin-top:12px" href="${esc(r.pdf)}" target="_blank" rel="noopener">Buka PDF berita acara ↗</a>`:`<p class="co-warn">Data tersimpan, tetapi PDF gagal dibuat: ${esc(r.pdfErr||'')}</p>`}`);
+  }catch(e){saving=false;drawRes(h);toast(missing(e)?'Kas.gs belum terpasang di Apps Script':e.message)}
+ }
+ /* ---------- riwayat ---------- */
+ function drawList(el){
+  if(!data||!data.cfg){el.innerHTML='<p class="dp-empty">'+(busy?'Memuat riwayat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const L=data.list||[],ms=data.months||[];
+  el.innerHTML=`<div class="dp-chips">${['',...ms.map(x=>x.m)].slice(0,13).map(m=>`<button type="button" data-com="${m}" class="${(data.month||'')===m?'on':''}">${m?BLN[+m.slice(5,7)-1]+' '+m.slice(2,4):'Terbaru'}</button>`).join('')}</div>
+   ${busy?'<p class="hint">Memuat…</p>':''}
+   ${L.length?`<div class="co-list">${L.map(x=>`<button type="button" class="co-it ${x.status==='SESUAI'?'ok':'bad'}" data-coid="${esc(x.id)}"><span><b>${esc(tglP(x.d))} · ${esc(x.jam)}</b><small>Diperiksa ${esc(x.oleh)} · Kasir ${esc(x.kasir)}</small>${x.catatan?`<small class="co-cn">${esc(x.catatan)}</small>`:''}</span><em><i>${lbl(x.status)}</i>${x.selisih?rp(x.selisih):'Rp 0'}</em></button>`).join('')}</div>`:'<p class="dp-empty">Belum ada cash opname di periode ini.</p>'}
+   <div class="vd-links co-links"><a href="${esc(data.cfg.dbUrl)}" target="_blank" rel="noopener">Database ↗</a><a href="${esc(data.cfg.folderUrl)}" target="_blank" rel="noopener">Folder PDF ↗</a>${isOwner()?'<button type="button" data-co="set">Pengaturan</button>':''}</div>`;
+ }
+ async function detail(id){
+  openModal('Cash Opname','<div id="coDet"><p class="hint">Memuat…</p></div>');
+  try{
+   const d=await api('kasDetail',{id}),H=d.hasil,el=$id('coDet');if(!el)return;
+   const rows=PEC.map(p=>{const r=H.lembar[key(p)];if(!r)return '';const t=r[0]+r[1]+r[2]+r[3];return `<tr><th>${nf(p[0])} <small>${p[1]}</small></th>${r.map(x=>`<td>${x||''}</td>`).join('')}<td><b>${t}</b></td><td>${nf(t*p[0])}</td></tr>`}).join('');
+   el.innerHTML=`<div class="co-done ${H.selisih===0?'ok':'bad'}"><b>${H.selisih===0?'✓ Sesuai buku':(H.selisih>0?'Kelebihan ':'Kekurangan ')+rp(Math.abs(H.selisih))}</b><span>${esc(tglP(d.tanggal))} · ${esc(d.jam)} · ${esc(d.id)}</span><span>Diperiksa ${esc(d.oleh)} · Kasir ${esc(d.kasir)}${d.sh?' · Mengetahui '+esc(d.sh):''}</span></div>
+    <div class="co-cmp" style="margin-top:10px"><div><span>Menurut buku</span><b>${rp(H.jBuku)}</b></div><div><span>Grand total fisik</span><b>${rp(H.grand)}</b></div></div>
+    <div class="co-tw"><table class="co-t co-tro"><thead><tr><th>Pecahan</th>${KOL.map(k=>`<th>${k}</th>`).join('')}<th>Total</th><th>Nilai</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th>Jumlah</th>${H.col.map(v=>`<td>${nf(v)}</td>`).join('')}<td></td><td>${nf(H.fisik)}</td></tr></tfoot></table></div>
+    <div class="co-rows ro"><div><span>Bon diperhitungkan</span><b>${rp(H.lain)}</b></div><div><span>Credit / debit card</span><b>${rp(H.kartu)}</b></div><div><span>Uang palsu</span><b>${rp(H.palsu)}</b></div><div><span>Uang rusak</span><b>${rp(H.rusak)}</b></div></div>
+    ${d.catatan?`<p class="co-catv"><b>Catatan:</b> ${esc(d.catatan)}</p>`:''}
+    <div class="co-acts">${d.pdf?`<a class="btn" href="${esc(d.pdf)}" target="_blank" rel="noopener">PDF berita acara ↗</a>`:''}${isOwner()?`<button type="button" class="btn ghost co-del" data-codel="${esc(d.id)}">Hapus</button>`:''}</div>`;
+  }catch(e){const el=$id('coDet');if(el)el.innerHTML='<p class="co-warn">'+esc(e.message)+'</p>'}
+ }
+ function openSet(){
+  const c=data&&data.cfg||{};
+  const go=()=>openModal('Pengaturan Cash Opname',`<div class="vd-set"><label class="vd-lab">Nama store di berita acara<input class="in" id="coStore" value="${esc(c.store||'')}"></label>
+   <label class="vd-lab">Modal standar (Rp)<input class="in" id="coModal" inputmode="numeric" value="${esc(nf(c.modal||0))}"></label>
+   <label class="vd-lab">Link spreadsheet database<input class="in" id="coDb" value="${esc(c.dbUrl||'')}"></label>
+   <label class="vd-lab">Link folder PDF<input class="in" id="coFd" value="${esc(c.folderUrl||'')}"></label>
+   <div class="vd-act"><button type="button" class="btn" id="coSetGo">Simpan</button></div></div>`);
+  window.ofaHeadGate?window.ofaHeadGate(go):go();
+ }
+ /* ---------- event ---------- */
+ document.addEventListener('click',async e=>{
+  const t=e.target.closest('[data-co],[data-cot],[data-cocol],[data-com],[data-coid],[data-codel],#coSave,#coBack,#coSetGo,.side button,.bnav button,#deckTabs button');if(!t)return;
+  if(t.matches('.side button,.bnav button,#deckTabs button')){if(t.dataset.sd==='co'){e.stopPropagation();buka('baru')}else if(pg.classList.contains('open')&&!t.dataset.th)tutup();return}
+  if(t.id==='coBack')return tutup();
+  if(t.id==='coSave')return simpanOpname();
+  if(t.dataset.co){const k=t.dataset.co;
+   if(k==='baru'||k==='riwayat'){if($id('ov').classList.contains('open'))close();return buka(k)}
+   if(k==='reset'){if(!confirmReset())return;F=baru();simpanDraf();return renderPage()}
+   if(k==='set')return openSet();}
+  if(t.dataset.cot){tab=t.dataset.cot;return renderPage()}
+  if(t.dataset.cocol!=null){col=+t.dataset.cocol;pg.querySelectorAll('[data-cocol]').forEach(b=>b.classList.toggle('on',+b.dataset.cocol===col));const tb=pg.querySelector('.co-t');if(tb)tb.dataset.show=col;return}
+  if(t.dataset.com!=null){data.month=t.dataset.com;return load(true,t.dataset.com||undefined)}
+  if(t.dataset.coid)return detail(t.dataset.coid);
+  if(t.dataset.codel){if(t.dataset.ok!=='1'){t.dataset.ok='1';t.textContent='Yakin hapus? Ketuk lagi';return}
+   try{simpan(await api('kasHapus',{id:t.dataset.codel}));close();toast('Data opname dihapus');renderAll()}catch(x){toast(x.message)}return}
+  if(t.id==='coSetGo'){t.disabled=true;try{simpan(await api('kasAtur',{cfg:{store:$id('coStore').value,modal:num($id('coModal').value),dbLink:$id('coDb').value.trim(),folderLink:$id('coFd').value.trim()}}));close();toast('Pengaturan tersimpan');renderAll()}catch(x){t.disabled=false;toast(x.message)}}
+ },true);
+ let resetAt=0;function confirmReset(){if(Date.now()-resetAt<4000)return true;resetAt=Date.now();toast('Ketuk Kosongkan sekali lagi untuk menghapus isian');return false}
+ pg.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.col){const [k,j]=t.dataset.col.split('.');t.value=t.value.replace(/[^\d]/g,'').slice(0,5);const r=F.lembar[k]||(F.lembar[k]=['','','','']);r[+j]=t.value;simpanDraf();return segarkan()}
+  if(t.dataset.cof){const raw=t.value.replace(/[^\d]/g,'').slice(0,12),p=t.dataset.cof.split('.');if(p.length===2)F[p[0]][p[1]]=raw;else F[p[0]]=raw;
+   const end=t.selectionStart===t.value.length;t.value=raw?nf(+raw):'';if(end)t.setSelectionRange(t.value.length,t.value.length);simpanDraf();return segarkan()}
+  if(t.dataset.cox){F[t.dataset.cox]=t.value;simpanDraf();if(t.dataset.cox==='catatan')return;}
+ });
+ // Enter/↓ pindah ke kolom berikutnya agar menghitung cepat
+ pg.addEventListener('keydown',e=>{
+  const t=e.target;if(!t.dataset.col||(e.key!=='Enter'&&e.key!=='ArrowDown'&&e.key!=='ArrowUp'))return;
+  const L=[...pg.querySelectorAll('.co-l')].filter(x=>x.offsetParent),i=L.indexOf(t),[,j]=t.dataset.col.split('.'),same=L.filter(x=>x.dataset.col.split('.')[1]===j),k=same.indexOf(t);
+  const n=same[k+(e.key==='ArrowUp'?-1:1)];if(n){e.preventDefault();n.focus();n.select()}
+ });
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
+ renderCard();load(false);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
