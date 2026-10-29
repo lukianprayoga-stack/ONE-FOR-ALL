@@ -1386,6 +1386,12 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
  .co-rows .in{width:132px}
  .co-f2{grid-template-columns:1fr 1fr}
 }
+/* ====== UPLOAD DSR DARI HUB ====== */
+.sl-actions{flex-wrap:wrap}.sl-actions .btn{min-width:0}
+@media(max-width:520px){.sl-actions .btn.light{flex-basis:100%}}
+.dsr-sum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.dsr-sum div{background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:8px 10px;min-width:0}
+.dsr-sum span{display:block;font-size:11.5px;color:var(--mut)}.dsr-sum b{display:block;font-size:14.5px;color:var(--num,var(--fg));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1624,6 +1630,7 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="sl-msg" id="slMsg" hidden></div>
           <div class="sl-actions">
             <button class="btn light" type="button" id="slBrief">📝 Buat Briefing</button>
+            <button class="btn glass" type="button" id="slUp">⇪ Upload DSR</button>
             <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
           </div>
           <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
@@ -5500,7 +5507,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function slot(){const d=new Date(),m=d.getHours()*60+d.getMinutes();let s='';JAM.forEach(j=>{if(m>=j[0]*60+j[1])s=String(j[0])});
   if(!s)return '';const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+s}
  function goUpload(){close&&$id('ov').classList.contains('open')&&close();const L=stale(),k=L.length&&L.every(x=>x.k==='dsr')?'dsr':L.length&&L.every(x=>x.k==='pusat'||x.k==='dsr')?'ps':'inv';
-  if(k==='dsr'){const o=$id('slOpen');if(o)o.click();return}
+  if(k==='dsr'){if(window.ofaDsrUpload)return window.ofaDsrUpload();const o=$id('slOpen');if(o)o.click();return}
   window.ofaDeckShow&&window.ofaDeckShow(k);setTimeout(()=>{const el=$id(k);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350)}
 
  function renderBar(){
@@ -6798,7 +6805,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  box.addEventListener('click',e=>{
   if(e.target.closest('[data-sys=reload]'))return load(true);
   const g=e.target.closest('[data-sysgo]');if(!g)return;
-  if(g.dataset.sysgo==='dsr'){const o=$id('slOpen');if(o)o.click();return}
+  if(g.dataset.sysgo==='dsr'){if(window.ofaDsrUpload)return window.ofaDsrUpload();const o=$id('slOpen');if(o)o.click();return}
   window.ofaDeckShow&&window.ofaDeckShow(g.dataset.sysgo);setTimeout(()=>{const el=$id(g.dataset.sysgo);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},350);
  });
  window.ofaSysReload=()=>load(true);
@@ -7411,6 +7418,133 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
  renderCard();load(false);
+})();
+/* ====== UPLOAD DSR LANGSUNG DARI HUB (tanpa membuka halaman Sales Tracking) ====== */
+(function(){
+ const $id=i=>document.getElementById(i);
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ const CHUNK=500;
+ // nama kolom di baris 7 file ItemDSRReport (sama dengan halaman Sales Tracking)
+ const ALIAS={invoice:['Invoice No','Invoice Number'],date:['Order Date','Transaction Date'],transactionType:['Transaction Type'],sku:['SKU Code','SKU'],
+  productName:['Sku Name','SKU Name','Product Name'],categoryLevel3:['Category Lv.3','Category Level 3'],categoryLevel4:['Category Lv.4','Category Level 4'],
+  quantity:['Quantity','Qty'],raName:['Sales Person','RA Name'],gross:['Gross Amount','Gross Sales'],phone:['Customer Phone','Phone'],email:['Customer Email','Email'],
+  net:['Net Amount','Net Sales'],customerName:['Customer Name']};
+ let st=null; // {file, rows, info, run, pct, msg, done, err}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal');return j.result;
+ }
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ const norm=v=>String(v==null?'':v).trim().toLowerCase().replace(/[^a-z0-9]+/g,'');
+ const ilmiah=v=>/^\s*-?\d+([.,]\d+)?e[+-]?\d+\s*$/i.test(String(v==null?'':v));
+ function peta(head){
+  const ada={};(head||[]).forEach((h,i)=>{const k=norm(h);if(k&&ada[k]===undefined)ada[k]=i});
+  const out={},hilang=[];
+  Object.keys(ALIAS).forEach(f=>{const a=ALIAS[f].find(n=>ada[norm(n)]!==undefined);if(a)out[f]=ada[norm(a)];else hilang.push(ALIAS[f][0])});
+  if(hilang.length)throw new Error('Kolom ini tidak ditemukan di baris 7: '+hilang.join(', ')+'. Pastikan file adalah ItemDSRReport asli dari sistem.');
+  return out;
+ }
+ // tanggal di file bisa "2026-10-18", "18/10/2026", atau "18-Oct-2026"
+ function tgl(v){
+  const s=String(v||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+  m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/);if(m)return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
+  const d=new Date(s);return isNaN(d)?'':d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+ }
+ const tglS=k=>{if(!k)return '';const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],p=k.split('-');return +p[2]+' '+B[+p[1]-1]+' '+p[0]};
+ async function baca(file){
+  if(!/\.(csv|xlsx)$/i.test(file.name))throw new Error('Format file harus .xlsx atau .csv (ItemDSRReport).');
+  if(file.size>40*1048576)throw new Error('Ukuran file maksimal 40 MB.');
+  await loadXlsx();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false,cellDates:false});
+  // kode SKU & order no panjang jangan sampai jadi 9.10011E+11
+  wb.SheetNames.forEach(n=>{const sh=wb.Sheets[n];Object.keys(sh).forEach(a=>{if(a[0]==='!')return;const c=sh[a];if(c&&c.t==='n'&&Number.isInteger(c.v)&&Math.abs(c.v)>=1e8)c.w=String(c.v)})});
+  const cand=wb.SheetNames.map(n=>{const sh=wb.Sheets[n],r=sh&&sh['!ref']?XLSX.utils.decode_range(sh['!ref']):null;return{n,sh,score:r?(r.e.r-r.s.r+1)*(r.e.c-r.s.c+1):0}}).sort((a,b)=>b.score-a.score);
+  if(!cand.length||!cand[0].score)throw new Error('File tidak berisi data.');
+  let rows=XLSX.utils.sheet_to_json(cand[0].sh,{header:1,raw:false,defval:'',blankrows:true});
+  while(rows.length&&rows[rows.length-1].every(v=>String(v).trim()===''))rows.pop();
+  const cols=rows.reduce((mx,r)=>{let l=-1;r.forEach((v,i)=>{if(String(v==null?'':v).trim()!=='')l=i});return Math.max(mx,l+1)},0);
+  if(rows.length<8)throw new Error('File minimal 8 baris (header di baris 7).');
+  if(cols<14)throw new Error('Kolom terlalu sedikit untuk format DSR.');
+  if(cols>100)throw new Error('File memiliki terlalu banyak kolom ('+cols+'). Gunakan file asli dari sistem.');
+  rows=rows.map(r=>{const o=new Array(cols).fill('');r.slice(0,cols).forEach((v,i)=>o[i]=v);return o});
+  const H=peta(rows[6]),T=rows.slice(7).filter(r=>String(r[H.invoice]||'').trim()&&String(r[H.date]||'').trim());
+  if(!T.length)throw new Error('Tidak ada transaksi mulai baris 8 (kolom Invoice & Tanggal kosong).');
+  const rusak=T.filter(r=>ilmiah(r[H.sku])).length;
+  if(rusak)throw new Error(nf(rusak)+' kode SKU sudah berubah jadi angka ilmiah (mis. 9.10011E+11). Gunakan file asli hasil export sistem, jangan dibuka lalu disimpan ulang di Excel.');
+  const D=T.map(r=>tgl(r[H.date])).filter(Boolean).sort(),inv=new Set(T.map(r=>String(r[H.invoice]).trim()));
+  let gross=0;T.forEach(r=>{gross+=Number(String(r[H.gross]||'').replace(/[^\d.-]/g,''))||0});
+  return{rows,info:{sheet:cand[0].n,baris:rows.length,kolom:cols,trx:T.length,inv:inv.size,dari:D[0]||'',sampai:D[D.length-1]||'',gross}};
+ }
+ function buka(){
+  if(!configured())return alert('Alamat Apps Script belum diatur.');
+  st={};
+  openModal('Upload DSR','<div id="dsrUp"></div>');
+  cleanup=()=>{if(st&&st.run)toast('Upload DSR tetap berjalan…');else st=null};
+  draw();
+ }
+ window.ofaDsrUpload=buka;
+ function draw(){
+  const el=$id('dsrUp');if(!el||!st)return;
+  if(st.done){el.innerHTML=st.done+'<div class="vd-act"><button type="button" class="btn" data-dsr="tutup">Selesai</button></div>';return}
+  const i=st.info,dis=st.run?'disabled':'';
+  el.innerHTML=`<p class="hint" style="margin-top:0">Upload file <b>ItemDSRReport</b> (.xlsx) hasil export sistem. Transaksi baru ditambahkan ke Database DSR; invoice yang sudah ada diperbarui (data lama dicadangkan otomatis).</p>
+   <label class="vd-pick${st.file?' has':''}" id="dsrDrop"><input type="file" id="dsrFile" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" ${dis}><b>${st.file?'📄 '+esc(st.file.name):'📄 Pilih file DSR'}</b><small>${st.file?nf(st.file.size/1024)+' KB':'atau seret file ke sini'}</small></label>
+   ${st.baca?'<p class="hint">Membaca & memeriksa file…</p>':''}
+   ${i?`<div class="dsr-sum"><div><span>Periode transaksi</span><b>${esc(tglS(i.dari))}${i.sampai&&i.sampai!==i.dari?' – '+esc(tglS(i.sampai)):''}</b></div>
+     <div><span>Baris transaksi</span><b>${nf(i.trx)}</b></div><div><span>Invoice</span><b>${nf(i.inv)}</b></div><div><span>Gross</span><b>Rp ${nf(i.gross)}</b></div></div>
+     <p class="hint">Sheet "${esc(i.sheet)}" · ${nf(i.baris)} baris × ${nf(i.kolom)} kolom · file valid ✓</p>`:''}
+   ${st.run||st.pct!=null?`<div class="vd-prog"><div><i style="width:${Math.round((st.pct||0)*100)}%"></i></div><small>${esc(st.msg||'')}</small></div>`:''}
+   ${st.err?`<div class="vd-done bad"><b>${st.run===false&&st.pct!=null?'Upload gagal':'File tidak bisa dipakai'}</b><span>${esc(st.err)}</span></div>`:''}
+   <div class="vd-act"><button type="button" class="btn" id="dsrGo" ${!i||st.run?'disabled':''}>${st.run?'Mengupload… jangan tutup aplikasi':'Upload ke Database DSR'}</button></div>`;
+ }
+ async function pilih(f){
+  if(!st||st.run)return;
+  st={file:f,baca:true};draw();
+  try{const r=await baca(f);st.rows=r.rows;st.info=r.info}
+  catch(e){st.err=e.message||String(e)}
+  st.baca=false;draw();
+ }
+ function prog(p,m){st.pct=p;st.msg=m;const b=document.querySelector('#dsrUp .vd-prog');if(b){b.querySelector('i').style.width=Math.round(p*100)+'%';b.querySelector('small').textContent=m}}
+ async function kirim(){
+  if(!st||!st.rows||st.run)return;
+  const s=st,rows=s.rows;let id='';
+  s.run=true;s.err='';s.pct=0;s.msg='Menyiapkan…';draw();
+  const warn=e=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);
+  try{
+   prog(.04,'Mempersiapkan ruang upload…');
+   id=(await api('beginDatabaseUpload',{fileName:s.file.name,totalRows:rows.length,totalColumns:rows[0].length})).uploadId;
+   for(let a=0;a<rows.length;a+=CHUNK){
+    const r=await api('appendDatabaseUploadChunk',{uploadId:id,startRow:a,rows:rows.slice(a,a+CHUNK)});
+    prog(.05+.8*(r.receivedRows/r.totalRows),'Mengupload '+nf(r.receivedRows)+' dari '+nf(r.totalRows)+' baris…');
+   }
+   prog(.9,'Memperbarui database & dashboard…');
+   const r=await api('finalizeDatabaseUpload',{uploadId:id});id='';
+   s.run=false;prog(1,'Selesai');
+   s.done=`<div class="vd-done ok"><b>✓ DSR berhasil diupload</b><span>${esc(r&&r.message||'Database DSR diperbarui.')}</span>${r&&r.duplicatesSkipped?`<span>${nf(r.duplicatesSkipped)} baris duplikat dilewati.</span>`:''}<span>${esc(s.file.name)} · ${esc(tglS(s.info.dari))} – ${esc(tglS(s.info.sampai))}</span></div>`;
+   s.rows=null;
+   ['ofaPgRefresh','ofaSysReload','ofaMonthReload','ofaRaporReload'].forEach(k=>{try{window[k]&&window[k]()}catch(e){}});
+   const rf=$id('slRefresh');if(rf)rf.click();
+   if($id('dsrUp')&&st===s)draw();else toast('DSR berhasil diupload ✓');
+  }catch(e){
+   if(id)api('cancelDatabaseUpload',{uploadId:id}).catch(()=>{});
+   s.run=false;s.err=/tidak dikenal/i.test(e.message||'')?'Fungsi upload DSR belum ada di Apps Script (Code.gs).':(e.message||String(e));
+   if($id('dsrUp')&&st===s)draw();else toast('Upload DSR gagal: '+s.err);
+  }finally{window.removeEventListener('beforeunload',warn)}
+ }
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('#slUp,#dsrGo,[data-dsr]');if(!t)return;
+  if(t.id==='slUp')return buka();
+  if(t.id==='dsrGo')return kirim();
+  if(t.dataset.dsr==='tutup')return close();
+ });
+ document.addEventListener('change',e=>{if(e.target.id==='dsrFile'&&e.target.files&&e.target.files[0])pilih(e.target.files[0])});
+ ['dragover','drop'].forEach(n=>document.addEventListener(n,e=>{const d=e.target.closest&&e.target.closest('#dsrDrop');if(!d)return;e.preventDefault();if(n==='drop'&&e.dataTransfer.files[0])pilih(e.dataTransfer.files[0])}));
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
