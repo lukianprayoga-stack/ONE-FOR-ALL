@@ -1297,6 +1297,19 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .vd-raw{font-size:11px;opacity:.75;word-break:break-word}
 .vd-act.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:380px){.vd-tiles{grid-template-columns:1fr}}
+/* ====== VIDEO BARANG DATANG ====== */
+.bd-list{display:grid;gap:6px;margin-top:4px}
+.bd-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;background:var(--bg);border:1px solid var(--card-bd,var(--line))}
+.bd-row.ok{box-shadow:inset 3px 0 0 #16a34a}.bd-row.none{box-shadow:inset 3px 0 0 #e5484d}.bd-row.warn{box-shadow:inset 3px 0 0 #f59e0b}
+.bd-row>span{flex:1;min-width:0}.bd-row b{display:block;font-size:13.5px}.bd-row small{display:block;font-size:11.5px;color:var(--mut)}
+.bd-row a{display:block;font-size:12px;font-weight:600;color:var(--blue,#1d4ed8);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.bd-row em{font-style:normal;font-size:11.5px;font-weight:800;white-space:nowrap;border-radius:6px;padding:2px 8px}
+.bd-row.ok em{background:var(--ok-bg);color:var(--ok-fg)}.bd-row.none em{background:var(--bad-bg);color:var(--bad-fg)}.bd-row.warn em{background:var(--warn-bg);color:var(--warn-fg)}
+.bd-row{min-width:0}.bd-r{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.bd-row .btn{flex:none;padding:6px 12px;font-size:12px;white-space:nowrap}
+.bd-pick{margin:-2px 0 10px}.bd-pick small{display:block;font-size:12px;font-weight:700;color:var(--mut)}
+.bd-cek{margin:0 0 10px;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.5}
+.bd-cek.ok{background:var(--ok-bg);color:var(--ok-fg)}.bd-cek.bad{background:var(--bad-bg);color:var(--bad-fg)}.bd-cek.info{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
 /* ====== CASH OPNAME INTERNAL ====== */
 .co-last{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--bg)}
 .co-last.ok{background:var(--ok-bg);border-color:transparent}.co-last.bad{background:var(--bad-bg);border-color:transparent}
@@ -1697,6 +1710,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="bm" aria-label="Barang masuk">
           <div class="sh-head"><div><h3>Barang Masuk</h3><p id="bmSub">Riwayat setiap barang datang ke toko</p></div></div>
           <div id="bmBody"></div>
+        </section>
+        <section class="rs" id="bdv" aria-label="Video barang datang">
+          <div class="sh-head"><div><h3>Video Barang Datang</h3><p id="bdvSub">SOP penerimaan barang</p></div></div>
+          <div id="bdvBody"></div>
         </section>
         <section class="rs" id="ps" aria-label="Stok pusat">
           <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
@@ -6724,7 +6741,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Pengingat',need:['pengingatStatus'],latest:['statusSistem'],peran:'Pengingat data & status sistem'},
   {n:'Rapor',need:['raporData'],latest:['raporIpmTpl','raporTeladan'],flag:'rankSkor',peran:'Rapor RA, IPM, RA Teladan'},
   {n:'Pusat',need:['uploadStokPusat'],latest:['getArusBarang'],peran:'Stok pusat, order repeat, arus barang'},
-  {n:'Video',need:['videoStatus'],latest:['videoKirim'],peran:'Video opening & closing ke spreadsheet area'},
+  {n:'Video',need:['videoStatus'],latest:['videoKirim','videoDatang'],peran:'Video opening & closing ke spreadsheet area'},
   {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
  ];
@@ -6919,6 +6936,41 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    x.send(file);
   });
  }
+
+ // Inti upload video (dipakai juga oleh Video Barang Datang): sesi Drive → kirim langsung / per potongan → selesai.
+ async function unggah(f,meta,prog){
+  const s=await api('videoMulai',Object.assign({size:f.size,type:f.type||'video/mp4',nama:f.name,origin:location.origin},meta));
+  let id=null,r=null;
+  if(s.izin===false){
+   // izin "Connect to an external service" belum ada: video kecil dikirim utuh lewat Apps Script
+   if(f.size>s.max)throw new Error('IZIN_BESAR:'+s.max);
+   prog(0,'Mengupload lewat server');
+   r=await apiProg('videoKirim',Object.assign({type:f.type||'video/mp4',nama:f.name,data:await b64(f)},meta),p=>prog(p*.97));
+  }else{
+   prog(0,'Mengupload ke Drive');
+   try{id=await direct(s.url,f,p=>prog(p*.97))}catch(e){id=null}
+  }
+  if(!r&&!id){
+   let st=await api('videoChunk',{sid:s.sid,cek:1});
+   if(st.done)id=st.fileId;
+   let pos=st.next||0;
+   while(!id){
+    prog(pos/f.size*.97,'Mengupload lewat server');
+    const c=await api('videoChunk',{sid:s.sid,start:pos,data:await b64(f.slice(pos,pos+s.chunk))});
+    if(c.done){id=c.fileId;break}
+    if(!(c.next>pos))throw new Error('Upload tidak bertambah. Coba lagi.');
+    pos=c.next;
+   }
+  }
+  if(!r){prog(.98,meta.jenis==='datang'?'Mencatat ke database':'Menulis link ke spreadsheet area');r=await api('videoSelesai',Object.assign({sid:s.sid,fileId:id},meta))}
+  return r;
+ }
+ function pesanGagal(e){
+  const besar=/^IZIN_BESAR:(\d+)/.exec(e.message||''),izin=besar||/script\.external_request|UrlFetchApp|izin.*(Drive|eksternal)|permission/i.test(e.message||'');
+  return izin?`<b>${besar?'Video lebih dari '+mb(+besar[1])+' belum bisa dikirim':'Izin Apps Script belum lengkap'}</b>${besar?'<span>Kirim video yang lebih pendek atau resolusi lebih kecil (720p), atau:</span>':''}<span>Store Head perlu membuka editor Apps Script, menjalankan <b>videoIzin</b>, lalu menyetujui izin <i>"Connect to an external service"</i> dan Google Drive. Setelah itu Deploy → Kelola deployment → Edit → Versi baru.</span>${besar?'':`<small class="vd-raw">${esc(e.message)}</small>`}`
+   :`<b>Upload gagal</b><span>${esc(missing(e)?'Video.gs belum terpasang di Apps Script.':e.message)}</span>`;
+ }
+ window.ofaVideoUpload=unggah;window.ofaVideoErr=pesanGagal;
  async function kirim(){
   if(!up||!up.file||up.run)return;
   const u=up,f=u.file,timpa=!!u.timpa;let lock=null;
@@ -6927,31 +6979,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const warn=e=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);
   try{lock=await navigator.wakeLock.request('screen')}catch(e){lock=null}
   try{
-   const s=await api('videoMulai',{jenis:u.j,tanggal:u.tgl,size:f.size,type:f.type||'video/mp4',nama:f.name,origin:location.origin});
-   let id=null,r=null;
-   if(s.izin===false){
-    // izin "Connect to an external service" belum ada: video kecil dikirim utuh lewat Apps Script
-    if(f.size>s.max)throw new Error('IZIN_BESAR:'+s.max);
-    prog(0,'Mengupload lewat server');
-    r=await apiProg('videoKirim',{jenis:u.j,tanggal:u.tgl,type:f.type||'video/mp4',nama:f.name,timpa,month:u.tgl.slice(0,7),data:await b64(f)},p=>prog(p*.97));
-   }else{
-   prog(0,'Mengupload ke Drive');
-   try{id=await direct(s.url,f,p=>prog(p*.97))}catch(e){id=null}
-   }
-   if(!r&&!id){
-    let st=await api('videoChunk',{sid:s.sid,cek:1});
-    if(st.done)id=st.fileId;
-    let pos=st.next||0;
-    while(!id){
-     prog(pos/f.size*.97,'Mengupload lewat server');
-     const r=await api('videoChunk',{sid:s.sid,start:pos,data:await b64(f.slice(pos,pos+s.chunk))});
-     if(r.done){id=r.fileId;break}
-     if(!(r.next>pos))throw new Error('Upload tidak bertambah. Coba lagi.');
-     pos=r.next;
-    }
-   }
-   if(!r){prog(.98,'Menulis link ke spreadsheet area');
-   r=await api('videoSelesai',{sid:s.sid,fileId:id,timpa,month:u.tgl.slice(0,7)})}
+   const r=await unggah(f,{jenis:u.j,tanggal:u.tgl,timpa,month:u.tgl.slice(0,7)},prog);
    if(r.status)simpan(r.status),month=r.status.month;
    u.run=false;prog(1,'Selesai');
    const msg=r.tulis==='ok'?`<div class="vd-done ok"><b>✓ Video terkirim</b><span>Link ditulis ke ${esc(r.ket)}.</span><a href="${esc(r.url)}" target="_blank" rel="noopener">Putar ${esc(r.label)} ↗</a></div>`
@@ -6963,9 +6991,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    render();
   }catch(e){
    u.run=false;u.stage='Gagal';
-   const besar=/^IZIN_BESAR:(\d+)/.exec(e.message||''),izin=besar||/script\.external_request|UrlFetchApp|izin.*(Drive|eksternal)|permission/i.test(e.message||'');
-   const pesan=izin?`<b>${besar?'Video lebih dari '+mb(+besar[1])+' belum bisa dikirim':'Izin Apps Script belum lengkap'}</b>${besar?'<span>Kirim video yang lebih pendek atau resolusi lebih kecil (720p), atau:</span>':''}<span>Store Head perlu membuka editor Apps Script, menjalankan <b>videoSetup</b>, lalu menyetujui izin <i>"Connect to an external service"</i> dan Google Drive. Setelah itu Deploy → Manage deployments → Edit → New version.</span>${besar?'':`<small class="vd-raw">${esc(e.message)}</small>`}`
-    :`<b>Upload gagal</b><span>${esc(missing(e)?'Video.gs belum terpasang di Apps Script.':e.message)}</span>`;
+   const pesan=pesanGagal(e);
    if($id('vdUp')&&up===u)drawUp(`<div class="vd-done bad">${pesan}</div>`);
    else toast('Upload video gagal: '+e.message);
   }finally{window.removeEventListener('beforeunload',warn);try{lock&&lock.release()}catch(e){}}
@@ -7006,6 +7032,151 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  render();load(false);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!(up&&up.run))load(false)});
+})();
+/* ====== VIDEO BARANG DATANG (SOP penerimaan barang) ====== */
+(function(){
+ const box=document.getElementById('bdv');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_bdv',TTL=10*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const BLNL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const pad=n=>String(n).padStart(2,'0');
+ const hariIni=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const mb=b=>(b/1048576).toLocaleString('id-ID',{maximumFractionDigits:b<10485760?1:0})+' MB';
+ const mL=m=>m?BLNL[+m.slice(5,7)-1]+' '+m.slice(0,4):'';
+ const tglP=k=>{const p=k.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]);return HARI[d.getDay()]+', '+p[2]+' '+BLNL[p[1]-1]+' '+p[0]};
+ const tglS=k=>{if(!k)return '';const p=k.split('-');return +p[2]+' '+BLN[+p[1]-1]};
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ let data=null,busy=false,err='',up=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ function simpan(r){data=Object.assign(r,{at:Date.now()});err='';if(r.month===hariIni().slice(0,7)){try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}}
+ async function load(force,m){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return render();
+  const want=m||(data&&data.month)||hariIni().slice(0,7);
+  if(!force&&data&&data.month===want&&Date.now()-(data.at||0)<TTL)return render();
+  busy=true;render();
+  try{simpan(await api('videoDatang',{month:want}))}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;render();if($id('bdUp'))drawUp()}
+ }
+ // gabungkan kedatangan (STO Inbound) dengan video per tanggal
+ function hari(){
+  const D={};
+  (data.arrivals||[]).forEach(a=>{D[a.d]={d:a.d,a:a,v:[]}});
+  (data.videos||[]).forEach(v=>{(D[v.d]||(D[v.d]={d:v.d,a:null,v:[]})).v.push(v)});
+  return Object.values(D).sort((x,y)=>y.d.localeCompare(x.d));
+ }
+ function render(){
+  const b=$id('bdvBody');if(!b)return;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>';return}
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Tempel <b>Video.gs</b> versi terbaru di Apps Script, lalu Deploy → Versi baru.</p>';return}
+  if(!data||!data.month){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const H=hari(),A=H.filter(h=>h.a),doc=A.filter(h=>h.v.length),cur=data.month===hariIni().slice(0,7);
+  $id('bdvSub').textContent='SOP penerimaan barang · '+mL(data.month);
+  b.innerHTML=`${data.err?`<div class="vd-warn">${esc(data.err)}</div>`:''}
+   ${!data.masukAda?'<div class="vd-warn soft">Data Barang Masuk belum ada, jadi tanggal video belum bisa dicocokkan. Upload <b>SKU Transaction History</b> di kartu Kepatuhan Display.</div>':''}
+   <div class="vd-mh"><div class="vd-nav"><button type="button" data-bdm="-1" aria-label="Bulan sebelumnya">‹</button><b>${esc(mL(data.month))}</b><button type="button" data-bdm="1" aria-label="Bulan berikutnya" ${cur?'disabled':''}>›</button></div>${busy?'<small>Memuat…</small>':''}</div>
+   <div class="mb-tiles"><div><b>${A.length}</b><span>hari barang datang</span></div><div><b>${doc.length}</b><span>sudah ada video</span></div><div class="${A.length-doc.length?'bad':''}"><b>${A.length-doc.length}</b><span>belum ada video</span></div></div>
+   ${H.length?`<div class="bd-list">${H.slice(0,10).map(h=>{const v=h.v.length,bad=h.v.some(x=>x.cocok==='TIDAK');
+    return `<div class="bd-row ${v?(bad?'warn':'ok'):'none'}"><span><b>${esc(tglP(h.d))}</b><small>${h.a?nf(h.a.docs.length)+' dokumen · '+nf(h.a.pcs)+' pcs'+(h.a.jam?' · '+esc(h.a.jam):''):'Tidak ada di data Barang Masuk'}</small>
+     ${h.v.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">▶ ${esc(x.nama)}${x.doc?' · '+esc(x.doc):''}</a>`).join('')}</span>
+     <div class="bd-r"><em>${v?(bad?'⚠ Cek tanggal':'✓ '+v+' video'):'Belum'}</em>${h.a?`<button type="button" class="btn ${v?'ghost':''}" data-bdu="${h.d}">${v?'＋ Video':'⇪ Upload'}</button>`:''}</div></div>`}).join('')}</div>${H.length>10?`<p class="hint">+${H.length-10} tanggal lain di bulan ini.</p>`:''}`
+    :`<p class="hint">${data.masukAda?'Tidak ada barang datang di '+esc(mL(data.month))+' menurut data Barang Masuk'+(data.masukTo?' (data s/d '+esc(tglS(data.masukTo))+')':'')+'.':'Belum ada video barang datang bulan ini.'}</p>`}
+   <div class="co-acts"><button type="button" class="btn" data-bdu="">⇪ Upload video barang datang</button></div>
+   <div class="vd-links"><a href="${esc(data.folderUrl)}" target="_blank" rel="noopener">Folder video ↗</a><a href="${esc(data.dbUrl)}" target="_blank" rel="noopener">Database ↗</a></div>`;
+ }
+ /* ---------- upload ---------- */
+ function kedatangan(d){
+  return (data.arrivals||[]).concat(data.recent||[]).find(a=>a.d===d)||null;
+ }
+ function cekTanggal(d){
+  const a=kedatangan(d);
+  if(a)return{k:'ya',a};
+  if(!data.masukAda||!data.masukTo||d>data.masukTo)return{k:'belum'};
+  if(d.slice(0,7)!==data.month)return{k:busy?'muat':'tidak'};
+  return{k:'tidak'};
+ }
+ function openUp(d){
+  const rec=(data.recent||[]),pilih=d||(rec.find(a=>!a.video)||rec[0]||{}).d||hariIni();
+  up={tgl:pilih,docs:[],docTxt:'',ket:'',file:null,url:'',run:false,yakin:false};
+  openModal('Video Barang Datang','<div id="bdUp"></div>');
+  cleanup=()=>{if(up&&up.url)URL.revokeObjectURL(up.url);if(up&&up.run)toast('Upload tetap berjalan…');else up=null};
+  if(pilih.slice(0,7)!==data.month)load(true,pilih.slice(0,7));
+  drawUp();
+ }
+ function drawUp(){
+  const el=$id('bdUp');if(!el||!up)return;
+  if(up.done){el.innerHTML=up.done+`<div class="vd-act two"><button type="button" class="btn ghost" data-bdagain="1">Upload video lain</button><button type="button" class="btn" data-bdclose="1">Selesai</button></div>`;return}
+  const c=cekTanggal(up.tgl),f=up.file,rec=(data.recent||[]).slice(0,8),dis=up.run?'disabled':'';
+  const blok=c.k==='tidak'&&!up.yakin;
+  el.innerHTML=`<label class="vd-lab">Tanggal penerimaan barang<input class="in" type="date" id="bdTgl" value="${esc(up.tgl)}" max="${hariIni()}" ${dis}></label>
+   ${rec.length?`<div class="bd-pick"><small>Barang datang terakhir (data Barang Masuk):</small><div class="dp-chips">${rec.map(a=>`<button type="button" data-bdd="${a.d}" class="${a.d===up.tgl?'on':''}" ${dis}>${esc(tglS(a.d))} · ${a.docs.length} dok${a.video?' · ✓':''}</button>`).join('')}</div></div>`:''}
+   ${c.k==='ya'?`<div class="bd-cek ok">✓ Sesuai data Barang Masuk: <b>${nf(c.a.docs.length)} dokumen · ${nf(c.a.pcs)} pcs</b>${c.a.video?` · sudah ada ${c.a.video} video`:''}</div>`
+    :c.k==='belum'?`<div class="bd-cek info">Data Barang Masuk ${data.masukTo?'baru sampai '+esc(tglS(data.masukTo)):'belum ada'}. Tanggal ini akan dicocokkan otomatis setelah SKU Transaction History diupload.</div>`
+    :c.k==='muat'?'<div class="bd-cek info">Memeriksa data Barang Masuk…</div>'
+    :`<div class="bd-cek bad">Tidak ada barang masuk (STO Inbound) di tanggal ini menurut data. Pastikan tanggal sesuai tanggal penerimaan barang.<label class="vd-chk"><input type="checkbox" id="bdYakin" ${up.yakin?'checked':''} ${dis}> Tanggal ini sudah benar, tetap upload</label></div>`}
+   ${c.k==='ya'&&c.a.docs.length?`<div class="bd-pick"><small>No. dokumen yang divideokan (boleh lebih dari satu):</small><div class="dp-chips">${c.a.docs.map(x=>`<button type="button" data-bddoc="${esc(x.no)}" class="${up.docs.includes(x.no)?'on':''}" ${dis}>${esc(x.no)} · ${nf(x.pcs)} pcs</button>`).join('')}</div></div>`:''}
+   <label class="vd-lab">${c.k==='ya'?'No. dokumen lain (opsional)':'No. dokumen / surat jalan (opsional)'}<input class="in" id="bdDoc" value="${esc(up.docTxt)}" placeholder="mis. IN2299…" ${dis}></label>
+   <label class="vd-lab">Catatan (opsional)<input class="in" id="bdKet" value="${esc(up.ket)}" placeholder="mis. 3 koli, segel utuh" ${dis}></label>
+   <label class="vd-pick${f?' has':''}"><input type="file" id="bdFile" accept="video/*" ${dis}><b>${f?'🎬 '+esc(f.name):'🎬 Pilih atau rekam video'}</b><small>${f?mb(f.size):'Video proses bongkar & cek barang'}</small></label>
+   ${up.url?`<video class="vd-prev" src="${up.url}" controls muted playsinline preload="metadata"></video>`:''}
+   ${up.run||up.pct!=null?`<div class="vd-prog"><div><i style="width:${Math.round((up.pct||0)*100)}%"></i></div><small>${esc(up.stage||'')} · ${Math.round((up.pct||0)*100)}%</small></div>`:''}
+   ${up.err||''}
+   <p class="hint">Disimpan sebagai <b>BARANG DATANG_${up.tgl.slice(8,10)}-${up.tgl.slice(5,7)}-${up.tgl.slice(0,4)}</b> di folder VIDEO BARANG DATANG / ${esc(mL(up.tgl.slice(0,7)))}.</p>
+   <div class="vd-act"><button type="button" class="btn" id="bdGo" ${!f||up.run||blok||c.k==='muat'?'disabled':''}>${up.run?'Mengupload… jangan tutup aplikasi':'Upload video barang datang'}</button></div>`;
+ }
+ async function kirim(){
+  if(!up||!up.file||up.run)return;
+  if(!window.ofaVideoUpload)return toast('Modul video belum siap. Muat ulang aplikasi.');
+  const u=up,f=u.file;let lock=null;
+  const prog=(p,s)=>{u.pct=p;if(s)u.stage=s;const bar=document.querySelector('#bdUp .vd-prog');if(bar){bar.querySelector('i').style.width=Math.round(p*100)+'%';bar.querySelector('small').textContent=u.stage+' · '+Math.round(p*100)+'%'}};
+  u.run=true;u.pct=0;u.stage='Menyiapkan';u.err='';drawUp();
+  const warn=e=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);
+  try{lock=await navigator.wakeLock.request('screen')}catch(e){lock=null}
+  try{
+   const doc=u.docs.concat(u.docTxt.split(/[,;\s]+/).filter(Boolean)).filter((x,i,a)=>a.indexOf(x)===i).join(', ');
+   const r=await window.ofaVideoUpload(f,{jenis:'datang',tanggal:u.tgl,doc,ket:u.ket,month:u.tgl.slice(0,7)},prog);
+   if(r.datang)simpan(r.datang);
+   u.run=false;u.pct=null;
+   const cc=r.cocok==='YA'?'✓ Cocok dengan data Barang Masuk'+(r.docs&&r.docs.length?' ('+r.docs.length+' dokumen)':''):r.cocok==='TIDAK'?'⚠ Tanggal ini tidak ada di data Barang Masuk':'Akan dicocokkan setelah data Barang Masuk diupload';
+   u.done=`<div class="vd-done ${r.tulis==='ok'?'ok':'bad'}"><b>${r.tulis==='ok'?'✓ Video barang datang tersimpan':'Video tersimpan, catatan database gagal'}</b><span>${esc(tglP(u.tgl))} · ${esc(r.label)}</span><span>${esc(r.tulis==='ok'?cc:r.ket)}</span><a href="${esc(r.url)}" target="_blank" rel="noopener">Putar video ↗</a></div>`;
+   u.file=null;if(u.url){URL.revokeObjectURL(u.url);u.url=''}
+   if($id('bdUp')&&up===u)drawUp();else toast('Video barang datang tersimpan ✓');
+   render();
+  }catch(e){
+   u.run=false;u.stage='Gagal';u.err=`<div class="vd-done bad">${window.ofaVideoErr?window.ofaVideoErr(e):esc(e.message)}</div>`;
+   if($id('bdUp')&&up===u)drawUp();else toast('Upload video gagal: '+e.message);
+  }finally{window.removeEventListener('beforeunload',warn);try{lock&&lock.release()}catch(e){}}
+ }
+ /* ---------- event ---------- */
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-bdu],[data-bdm],[data-bdd],[data-bddoc],#bdGo,[data-bdagain],[data-bdclose]');if(!t)return;
+  if(t.dataset.bdu!=null)return openUp(t.dataset.bdu);
+  if(t.dataset.bdm){const p=data.month.split('-').map(Number),d=new Date(p[0],p[1]-1+Number(t.dataset.bdm),1),m=d.getFullYear()+'-'+pad(d.getMonth()+1);if(m>hariIni().slice(0,7))return;return load(true,m)}
+  if(!up)return;
+  if(t.dataset.bdd){up.tgl=t.dataset.bdd;up.docs=[];up.yakin=false;if(up.tgl.slice(0,7)!==data.month)load(true,up.tgl.slice(0,7));return drawUp()}
+  if(t.dataset.bddoc){const k=t.dataset.bddoc,i=up.docs.indexOf(k);if(i<0)up.docs.push(k);else up.docs.splice(i,1);return drawUp()}
+  if(t.id==='bdGo')return kirim();
+  if(t.dataset.bdagain){up.done='';return drawUp()}
+  if(t.dataset.bdclose)return close();
+ });
+ document.addEventListener('change',e=>{
+  if(!up)return;const t=e.target;
+  if(t.id==='bdFile'){const f=t.files&&t.files[0];if(!f)return;if(up.url)URL.revokeObjectURL(up.url);up.file=f;up.pct=null;up.err='';up.url=URL.createObjectURL(f);drawUp()}
+  else if(t.id==='bdTgl'){const v=t.value;if(!v)return;up.tgl=v>hariIni()?hariIni():v;up.docs=[];up.yakin=false;if(up.tgl.slice(0,7)!==data.month)load(true,up.tgl.slice(0,7));drawUp()}
+  else if(t.id==='bdYakin'){up.yakin=t.checked;drawUp()}
+ });
+ document.addEventListener('input',e=>{if(!up)return;if(e.target.id==='bdDoc')up.docTxt=e.target.value;else if(e.target.id==='bdKet')up.ket=e.target.value});
+ render();load(false);
 })();
 /* ====== CASH OPNAME INTERNAL (Berita Acara Pemeriksaan Kas) ====== */
 (function(){
