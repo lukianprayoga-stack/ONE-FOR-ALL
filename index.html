@@ -6684,6 +6684,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
   const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
  }
+ // seperti api(), tapi dengan progres kirim (untuk video yang dikirim utuh lewat Apps Script)
+ function apiProg(fn,arg,onp){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  return new Promise((res,rej)=>{
+   const x=new XMLHttpRequest();x.open('POST',HUB_API_URL);x.setRequestHeader('Content-Type','text/plain;charset=utf-8');
+   x.upload.onprogress=e=>{if(e.lengthComputable)onp(e.loaded/e.total)};
+   x.onload=()=>{try{const j=JSON.parse(x.responseText);j.ok?res(j.result):rej(new Error(j.error||'Gagal'))}catch(e){rej(new Error('Respon server tidak terbaca ('+x.status+')'))}};
+   x.onerror=()=>rej(new Error('Koneksi terputus saat mengupload. Coba lagi.'));
+   x.send(JSON.stringify({fn,args:[Object.assign({pin},arg)],pin}));
+  });
+ }
  const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
  function simpan(r){data=Object.assign(r,{at:Date.now()});err='';if(!month||month===hariIni().slice(0,7)){try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}}
  async function load(force,m){
@@ -6790,10 +6801,17 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   try{lock=await navigator.wakeLock.request('screen')}catch(e){lock=null}
   try{
    const s=await api('videoMulai',{jenis:u.j,tanggal:u.tgl,size:f.size,type:f.type||'video/mp4',nama:f.name,origin:location.origin});
-   let id=null;
+   let id=null,r=null;
+   if(s.izin===false){
+    // izin "Connect to an external service" belum ada: video kecil dikirim utuh lewat Apps Script
+    if(f.size>s.max)throw new Error('IZIN_BESAR:'+s.max);
+    prog(0,'Mengupload lewat server');
+    r=await apiProg('videoKirim',{jenis:u.j,tanggal:u.tgl,type:f.type||'video/mp4',nama:f.name,timpa,month:u.tgl.slice(0,7),data:await b64(f)},p=>prog(p*.97));
+   }else{
    prog(0,'Mengupload ke Drive');
    try{id=await direct(s.url,f,p=>prog(p*.97))}catch(e){id=null}
-   if(!id){
+   }
+   if(!r&&!id){
     let st=await api('videoChunk',{sid:s.sid,cek:1});
     if(st.done)id=st.fileId;
     let pos=st.next||0;
@@ -6805,8 +6823,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
      pos=r.next;
     }
    }
-   prog(.98,'Menulis link ke spreadsheet area');
-   const r=await api('videoSelesai',{sid:s.sid,fileId:id,timpa,month:u.tgl.slice(0,7)});
+   if(!r){prog(.98,'Menulis link ke spreadsheet area');
+   r=await api('videoSelesai',{sid:s.sid,fileId:id,timpa,month:u.tgl.slice(0,7)})}
    if(r.status)simpan(r.status),month=r.status.month;
    u.run=false;prog(1,'Selesai');
    const msg=r.tulis==='ok'?`<div class="vd-done ok"><b>✓ Video terkirim</b><span>Link ditulis ke ${esc(r.ket)}.</span><a href="${esc(r.url)}" target="_blank" rel="noopener">Putar ${esc(r.label)} ↗</a></div>`
@@ -6818,8 +6836,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    render();
   }catch(e){
    u.run=false;u.stage='Gagal';
-   const izin=/script\.external_request|UrlFetchApp|izin.*(Drive|eksternal)|permission/i.test(e.message||'');
-   const pesan=izin?`<b>Izin Apps Script belum lengkap</b><span>Store Head perlu membuka editor Apps Script, menjalankan <b>videoSetup</b>, lalu menyetujui izin <i>"Connect to an external service"</i> dan Google Drive. Setelah itu Deploy → Manage deployments → Edit → New version.</span><small class="vd-raw">${esc(e.message)}</small>`
+   const besar=/^IZIN_BESAR:(\d+)/.exec(e.message||''),izin=besar||/script\.external_request|UrlFetchApp|izin.*(Drive|eksternal)|permission/i.test(e.message||'');
+   const pesan=izin?`<b>${besar?'Video lebih dari '+mb(+besar[1])+' belum bisa dikirim':'Izin Apps Script belum lengkap'}</b>${besar?'<span>Kirim video yang lebih pendek atau resolusi lebih kecil (720p), atau:</span>':''}<span>Store Head perlu membuka editor Apps Script, menjalankan <b>videoSetup</b>, lalu menyetujui izin <i>"Connect to an external service"</i> dan Google Drive. Setelah itu Deploy → Manage deployments → Edit → New version.</span>${besar?'':`<small class="vd-raw">${esc(e.message)}</small>`}`
     :`<b>Upload gagal</b><span>${esc(missing(e)?'Video.gs belum terpasang di Apps Script.':e.message)}</span>`;
    if($id('vdUp')&&up===u)drawUp(`<div class="vd-done bad">${pesan}</div>`);
    else toast('Upload video gagal: '+e.message);
@@ -6828,6 +6846,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  /* ---------- pengaturan (Store Head) ---------- */
  function openSet(){
   const go=()=>{openModal('Pengaturan Video',`<div class="vd-set"><label class="vd-lab">Link spreadsheet area<input class="in" id="vdSs" value="${esc(data.ssUrl||'')}" placeholder="https://docs.google.com/spreadsheets/d/…"></label>
+   <label class="vd-lab">Link folder Google Drive tempat video disimpan<input class="in" id="vdFd" value="${esc(data.folderUrl||'')}" placeholder="https://drive.google.com/drive/folders/…"></label>
    <label class="vd-lab">Kode SITE toko (kolom SITE)<input class="in" id="vdSite" inputmode="numeric" value="${esc(data.site||'')}"></label>
    <p class="hint">Hub mencari sheet bernama Opening/Closing + nama bulan, lalu baris dengan SITE ini. Bila tahun berganti dan area membuat spreadsheet baru, ganti link di sini.</p>
    <div class="vd-act"><button type="button" class="btn" id="vdSetGo">Simpan</button></div></div>`)};
@@ -6835,7 +6854,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  async function simpanSet(){
   const btn=$id('vdSetGo');btn.disabled=true;btn.textContent='Menyimpan…';
-  try{simpan(await api('videoAtur',{cfg:{ssLink:$id('vdSs').value.trim(),site:$id('vdSite').value.trim()},month:data.month}));close();toast('Pengaturan video tersimpan');render()}
+  try{simpan(await api('videoAtur',{cfg:{ssLink:$id('vdSs').value.trim(),site:$id('vdSite').value.trim(),folderLink:$id('vdFd').value.trim()},month:data.month}));close();toast('Pengaturan video tersimpan');render()}
   catch(e){btn.disabled=false;btn.textContent='Simpan';toast(e.message)}
  }
  /* ---------- event ---------- */
