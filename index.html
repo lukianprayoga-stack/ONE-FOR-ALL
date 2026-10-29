@@ -1318,6 +1318,10 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .co-rows{display:grid;gap:6px}.co-rows label,.co-rows>div{display:flex;align-items:center;gap:10px;font-size:13.5px}
 .co-rows label span,.co-rows>div span{flex:1;min-width:0}.co-rows .in{width:150px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
 .co-rows.ro>div{padding:5px 0;border-bottom:1px dashed var(--line)}.co-rows.ro b{font-variant-numeric:tabular-nums}
+.co-rows label span small{display:block;font-size:11px;color:var(--mut);line-height:1.35;margin-top:2px}
+.co-sub{padding-top:4px}.co-sub span small{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-left:4px}.co-sub b{font-variant-numeric:tabular-nums}
+.co-rows .co-in2 span{padding-left:16px;color:var(--mut)}
+.co-flex{font-style:italic;color:var(--mut);font-size:11.5px}
 .co-sumrow{padding-top:8px;margin-top:2px;border-top:1px solid var(--line);font-weight:700}.co-sumrow b{font-size:16px;font-variant-numeric:tabular-nums}
 .co-sumrow.hl b{background:#fef08a;color:#111;border-radius:8px;padding:2px 8px}
 .co-colsel{display:none}
@@ -1360,7 +1364,7 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .co-catv{font-size:13px;margin:10px 0 0}
 .co-del{color:var(--bad-fg)}
 @media(max-width:640px){
- .co-colsel{display:flex;flex-wrap:wrap}.co-colsel button{display:flex;flex-direction:column;align-items:center;line-height:1.2}.co-colsel small{font-size:10px;font-weight:600;opacity:.8;min-height:12px}
+ .co-colsel{display:grid;grid-template-columns:1fr 1fr;gap:6px}.co-colsel button{margin:0}.co-colsel button{display:flex;flex-direction:column;align-items:center;line-height:1.2}.co-colsel small{font-size:10px;font-weight:600;opacity:.8;min-height:12px}
  .co-t[data-show] .co-c0,.co-t[data-show] .co-c1,.co-t[data-show] .co-c2,.co-t[data-show] .co-c3{display:none}
  .co-t[data-show="0"] .co-c0,.co-t[data-show="1"] .co-c1,.co-t[data-show="2"] .co-c2,.co-t[data-show="3"] .co-c3{display:table-cell}
  .co-l{max-width:none;min-width:70px;font-size:16px}
@@ -6970,7 +6974,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
  const BLNL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
  const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
- const KOL=['Setoran','Float @ Till','Modal','Kas'];
+ const KOL=['Setoran','Float @ Till','Modal besar','Kas'];
  const PEC=[[100000,'Lembar'],[75000,'Lembar'],[50000,'Lembar'],[20000,'Lembar'],[10000,'Lembar'],[5000,'Lembar'],[2000,'Lembar'],[1000,'Lembar'],[1000,'Logam'],[500,'Logam'],[200,'Logam'],[100,'Logam']];
  const key=p=>p[1]==='Logam'?'c'+p[0]:String(p[0]);
  const pad=n=>String(n).padStart(2,'0');
@@ -7001,16 +7005,21 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   finally{busy=false;renderAll()}
  }
  /* ---------- draf formulir (tersimpan di HP ini sampai disimpan) ---------- */
- function baru(){const n=now();return{tanggal:n.t,jam:n.j,oleh:(window.ofaAkun&&window.ofaAkun.nama)||'',kasir:'',sh:'',buku:{penjualan:'',modal:'',kas:''},lembar:{},lain:'',kartu:'',palsu:'',rusak:'',catatan:''}}
+ function baru(){const n=now();return{tanggal:n.t,jam:n.j,oleh:(window.ofaAkun&&window.ofaAkun.nama)||'',kasir:'',sh:'',buku:{penjualan:'',float:'',modalBesar:'',kas:''},lembar:{},lain:'',kartu:'',palsu:'',rusak:'',catatan:''}}
  let F=null;try{F=JSON.parse(localStorage.getItem(DK)||'null')}catch(e){F=null}
  if(!F)F=baru();
  const simpanDraf=()=>{try{localStorage.setItem(DK,JSON.stringify(F))}catch(e){}};
  function hitung(){
   const c=[0,0,0,0];
   PEC.forEach(p=>{const r=F.lembar[key(p)]||[];for(let j=0;j<4;j++)c[j]+=num(r[j])*p[0]});
-  const b={penjualan:num(F.buku.penjualan),modal:F.buku.modal===''&&data&&data.cfg?data.cfg.modal:num(F.buku.modal),kas:num(F.buku.kas)};
-  const fisik=c[0]+c[1]+c[2]+c[3],lain=num(F.lain),kartu=num(F.kartu),palsu=num(F.palsu),rusak=num(F.rusak),grand=fisik+lain+kartu+palsu+rusak,jb=b.penjualan+b.modal+b.kas,sel=grand-jb;
-  return{c,b,fisik,lain,kartu,palsu,rusak,grand,jb,sel,status:sel===0?'SESUAI':sel>0?'KELEBIHAN':'KEKURANGAN',komp:[c[0]-b.penjualan,c[1]+c[2]-b.modal,c[3]-b.kas],isi:grand>0||num(F.buku.penjualan)>0||num(F.buku.kas)>0};
+  // Float @ Till & Modal besar tetap (total modal); Setoran & Kas fleksibel kecuali angka bukunya diisi
+  const ada=v=>v!=null&&String(v).trim()!=='',cf=data&&data.cfg||{},B=F.buku;
+  if(!B||B.modal!=null&&B.float==null)F.buku={penjualan:B&&B.penjualan||'',float:'',modalBesar:'',kas:B&&B.kas||''};
+  const fisik=c[0]+c[1]+c[2]+c[3],lain=num(F.lain),kartu=num(F.kartu),palsu=num(F.palsu),rusak=num(F.rusak),grand=fisik+lain+kartu+palsu+rusak;
+  const fS=c[0]+kartu+palsu+rusak,fK=c[3]+lain,cek={jual:ada(F.buku.penjualan),kas:ada(F.buku.kas)};
+  const b={penjualan:cek.jual?num(F.buku.penjualan):fS,float:ada(F.buku.float)?num(F.buku.float):(cf.float!=null?cf.float:1000000),modalBesar:ada(F.buku.modalBesar)?num(F.buku.modalBesar):(cf.modalBesar!=null?cf.modalBesar:2000000),kas:cek.kas?num(F.buku.kas):fK};
+  const jb=b.penjualan+b.float+b.modalBesar+b.kas,sel=grand-jb;
+  return{c,b,cek,fS,fK,fisik,lain,kartu,palsu,rusak,grand,jb,sel,status:sel===0?'SESUAI':sel>0?'KELEBIHAN':'KEKURANGAN',komp:[fS-b.penjualan,c[1]-b.float,c[2]-b.modalBesar,fK-b.kas],isi:fisik>0};
  }
  /* ---------- kartu ringkas di halaman Laporan ---------- */
  function renderCard(){
@@ -7041,7 +7050,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  function inp(path,v,cls,ph){return `<input class="in ${cls||''}" inputmode="numeric" autocomplete="off" data-cof="${path}" value="${v===''||v==null?'':esc(nf(num(v)))}" placeholder="${ph||'0'}">`}
  function drawForm(el){
-  const h=hitung(),modalPh=data&&data.cfg?nf(data.cfg.modal):'0';
+  const h=hitung(),cf=data&&data.cfg||{},flPh=nf(cf.float!=null?cf.float:1000000),mbPh=nf(cf.modalBesar!=null?cf.modalBesar:2000000);
   const rows=PEC.map(p=>{const k=key(p),r=F.lembar[k]||[],tot=[0,1,2,3].reduce((a,j)=>a+num(r[j]),0);
    return `<tr><th><b>${nf(p[0])}</b><small>${p[1]}</small></th>${[0,1,2,3].map(j=>`<td class="co-c${j}"><input class="in co-l" inputmode="numeric" autocomplete="off" data-col="${k}.${j}" value="${r[j]?esc(String(num(r[j]))):''}" aria-label="${KOL[j]} ${nf(p[0])} ${p[1]}"></td>`).join('')}<td class="co-tl" data-cotl="${k}">${tot||''}</td><td class="co-rp" data-corp="${k}">${tot?nf(tot*p[0]):''}</td></tr>`}).join('');
   el.innerHTML=`<div class="co-grid"><div class="co-main">
@@ -7052,9 +7061,11 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <label>Kasir / PIC kas<input class="in" data-cox="kasir" value="${esc(F.kasir)}" placeholder="Nama kasir yang bertugas"></label>
     <label class="span2">Mengetahui (Store Head)<input class="in" data-cox="sh" value="${esc(F.sh)}" placeholder="Opsional"></label></div></section>
    <section class="co-sec"><h4>A. Sisa uang kas menurut buku kas</h4>
-    <div class="co-rows"><label><span>1. Sisa menurut penjualan kas</span>${inp('buku.penjualan',F.buku.penjualan)}</label>
-    <label><span>2. Modal</span>${inp('buku.modal',F.buku.modal,'',modalPh)}</label>
-    <label><span>3. Uang kas</span>${inp('buku.kas',F.buku.kas)}</label>
+    <div class="co-rows"><label><span>1. Sisa menurut penjualan kas<small>Fleksibel (keuntungan hari ini). Isi bila ingin dicocokkan dengan laporan penjualan.</small></span>${inp('buku.penjualan',F.buku.penjualan,'','Fleksibel')}</label>
+    <div class="co-sub"><span>2. Modal <small>tetap</small></span><b id="coMd">${rp(h.b.float+h.b.modalBesar)}</b></div>
+    <label class="co-in2"><span>a. Float @ Till</span>${inp('buku.float',F.buku.float,'',flPh)}</label>
+    <label class="co-in2"><span>b. Modal besar</span>${inp('buku.modalBesar',F.buku.modalBesar,'',mbPh)}</label>
+    <label><span>3. Uang kas<small>Fleksibel (isi dompet toko). Isi bila ingin dicocokkan dengan buku kas.</small></span>${inp('buku.kas',F.buku.kas,'','Fleksibel')}</label>
     <div class="co-sumrow"><span>Jumlah sisa uang menurut buku</span><b id="coJb">${rp(h.jb)}</b></div></div></section>
    <section class="co-sec"><h4>B. Uang dalam kas</h4><p class="hint">1. Isi <b>jumlah lembar / keping</b> per pecahan.</p>
     <div class="dp-chips co-colsel">${KOL.map((k,j)=>`<button type="button" data-cocol="${j}" class="${col===j?'on':''}">${k}<small data-cocs="${j}">${h.c[j]?nf(h.c[j]):''}</small></button>`).join('')}</div>
@@ -7077,10 +7088,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    <div class="co-big"><small>${!h.isi?'Isi angka untuk melihat selisih':h.sel===0?'Sesuai buku':h.sel>0?'Kelebihan':'Kekurangan'}</small><b>${h.isi?(h.sel===0?'Rp 0':rp(Math.abs(h.sel))):'—'}</b></div>
    <div class="co-cmp"><div><span>Menurut buku</span><b>${rp(h.jb)}</b></div><div><span>Grand total fisik</span><b>${rp(h.grand)}</b></div></div>
    <table class="co-kp"><tr><th>Rincian</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>
-    <tr><td>Setoran</td><td>${nf(h.b.penjualan)}</td><td>${nf(h.c[0])}</td><td class="${h.komp[0]?'co-red':''}">${h.komp[0]>0?'+':''}${nf(h.komp[0])}</td></tr>
-    <tr><td>Float + Modal</td><td>${nf(h.b.modal)}</td><td>${nf(h.c[1]+h.c[2])}</td><td class="${h.komp[1]?'co-red':''}">${h.komp[1]>0?'+':''}${nf(h.komp[1])}</td></tr>
-    <tr><td>Kas</td><td>${nf(h.b.kas)}</td><td>${nf(h.c[3])}</td><td class="${h.komp[2]?'co-red':''}">${h.komp[2]>0?'+':''}${nf(h.komp[2])}</td></tr></table>
-   <p class="hint co-note">Bon, kartu, uang palsu & rusak dihitung di grand total, tidak di rincian.</p>
+    ${[['Setoran',h.cek.jual,h.b.penjualan,h.fS,h.komp[0]],['Float @ Till',1,h.b.float,h.c[1],h.komp[1]],['Modal besar',1,h.b.modalBesar,h.c[2],h.komp[2]],['Kas dompet',h.cek.kas,h.b.kas,h.fK,h.komp[3]]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]?nf(r[2]):'<i class="co-flex">fleksibel</i>'}</td><td>${nf(r[3])}</td><td class="${h.isi&&r[4]?'co-red':''}">${h.isi&&r[1]?(r[4]>0?'+':'')+nf(r[4]):'—'}</td></tr>`).join('')}</table>
+   <p class="hint co-note">Setoran dihitung bersama slip kartu, uang palsu & rusak; kas dompet bersama bon. Float @ Till dan Modal besar selalu dicocokkan dengan modal tetap.</p>
    <label class="co-cat">Catatan / penjelasan selisih${need?' <em>wajib</em>':''}<textarea class="in" data-cox="catatan" rows="3" placeholder="${need?'Jelaskan penyebab selisih…':'Opsional'}">${esc(F.catatan)}</textarea></label>
    <div class="co-acts"><button type="button" class="btn" id="coSave" ${saving?'disabled':''}>${saving?'Menyimpan & membuat PDF…':'Simpan berita acara'}</button><button type="button" class="btn ghost" data-co="reset">Kosongkan</button></div>
    <p class="hint">Disimpan ke database & PDF di folder <a href="${esc(data&&data.cfg?data.cfg.folderUrl:'#')}" target="_blank" rel="noopener">CASH OPNAME INTERNAL ↗</a>. Draf tersimpan otomatis di perangkat ini.</p>`;
@@ -7091,7 +7100,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   PEC.forEach(p=>{const k=key(p),r=F.lembar[k]||[],t=[0,1,2,3].reduce((a,j)=>a+num(r[j]),0),a=pg.querySelector('[data-cotl="'+k+'"]'),b=pg.querySelector('[data-corp="'+k+'"]');if(a)a.textContent=t||'';if(b)b.textContent=t?nf(t*p[0]):''});
   [0,1,2,3].forEach(j=>{const a=pg.querySelector('[data-coc="'+j+'"]'),b=pg.querySelector('[data-cocs="'+j+'"]');if(a)a.textContent=nf(h.c[j]);if(b)b.textContent=h.c[j]?nf(h.c[j]):''});
   const f=pg.querySelector('[data-cof2="fisik"]');if(f)f.textContent=nf(h.fisik);
-  if($id('coJb'))$id('coJb').textContent=rp(h.jb);if($id('coGt'))$id('coGt').textContent=rp(h.grand);
+  if($id('coJb'))$id('coJb').textContent=rp(h.jb);if($id('coMd'))$id('coMd').textContent=rp(h.b.float+h.b.modalBesar);if($id('coGt'))$id('coGt').textContent=rp(h.grand);
   const ta=pg.querySelector('#coRes textarea'),focus=document.activeElement===ta,pos=focus?ta.selectionStart:0;
   drawRes(h);
   if(focus){const t=pg.querySelector('#coRes textarea');t.focus();t.setSelectionRange(pos,pos)}
@@ -7103,7 +7112,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(h.sel!==0&&F.catatan.trim().length<5){toast('Ada selisih — tulis penjelasan di catatan');const t=pg.querySelector('#coRes textarea');if(t)t.focus();return}
   saving=true;drawRes(h);
   try{
-   const d=JSON.parse(JSON.stringify(F));if(d.buku.modal===''&&data&&data.cfg)d.buku.modal=data.cfg.modal;
+   const d=JSON.parse(JSON.stringify(F));
    const r=await api('kasSimpan',{data:d});
    if(r.status)simpan(r.status);
    F=baru();try{localStorage.removeItem(DK)}catch(e){}
@@ -7131,6 +7140,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <div class="co-cmp" style="margin-top:10px"><div><span>Menurut buku</span><b>${rp(H.jBuku)}</b></div><div><span>Grand total fisik</span><b>${rp(H.grand)}</b></div></div>
     <div class="co-tw"><table class="co-t co-tro"><thead><tr><th>Pecahan</th>${KOL.map(k=>`<th>${k}</th>`).join('')}<th>Total</th><th>Nilai</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th>Jumlah</th>${H.col.map(v=>`<td>${nf(v)}</td>`).join('')}<td></td><td>${nf(H.fisik)}</td></tr></tfoot></table></div>
     <div class="co-rows ro"><div><span>Bon diperhitungkan</span><b>${rp(H.lain)}</b></div><div><span>Credit / debit card</span><b>${rp(H.kartu)}</b></div><div><span>Uang palsu</span><b>${rp(H.palsu)}</b></div><div><span>Uang rusak</span><b>${rp(H.rusak)}</b></div></div>
+    <table class="co-kp"><tr><th>Rincian selisih</th><th>Buku</th><th>Fisik</th><th>Selisih</th></tr>${[['Setoran',H.cek&&H.cek.jual,H.buku.penjualan,H.fisSetor,H.komp.setoran],['Float @ Till',1,H.buku.float,H.col[1],H.komp.float],['Modal besar',1,H.buku.modalBesar,H.col[2],H.komp.modalBesar],['Kas dompet',H.cek&&H.cek.kas,H.buku.kas,H.fisKas,H.komp.kas]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]?nf(r[2]):'<i class="co-flex">fleksibel</i>'}</td><td>${nf(r[3])}</td><td class="${r[4]?'co-red':''}">${r[1]?(r[4]>0?'+':'')+nf(r[4]):'—'}</td></tr>`).join('')}</table>
     ${d.catatan?`<p class="co-catv"><b>Catatan:</b> ${esc(d.catatan)}</p>`:''}
     <div class="co-acts">${d.pdf?`<a class="btn" href="${esc(d.pdf)}" target="_blank" rel="noopener">PDF berita acara ↗</a>`:''}${isOwner()?`<button type="button" class="btn ghost co-del" data-codel="${esc(d.id)}">Hapus</button>`:''}</div>`;
   }catch(e){const el=$id('coDet');if(el)el.innerHTML='<p class="co-warn">'+esc(e.message)+'</p>'}
@@ -7138,7 +7148,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function openSet(){
   const c=data&&data.cfg||{};
   const go=()=>openModal('Pengaturan Cash Opname',`<div class="vd-set"><label class="vd-lab">Nama store di berita acara<input class="in" id="coStore" value="${esc(c.store||'')}"></label>
-   <label class="vd-lab">Modal standar (Rp)<input class="in" id="coModal" inputmode="numeric" value="${esc(nf(c.modal||0))}"></label>
+   <label class="vd-lab">Float @ Till tetap (Rp)<input class="in" id="coFl" inputmode="numeric" value="${esc(nf(c.float!=null?c.float:1000000))}"></label>
+   <label class="vd-lab">Modal besar tetap (Rp)<input class="in" id="coMb" inputmode="numeric" value="${esc(nf(c.modalBesar!=null?c.modalBesar:2000000))}"></label>
    <label class="vd-lab">Link spreadsheet database<input class="in" id="coDb" value="${esc(c.dbUrl||'')}"></label>
    <label class="vd-lab">Link folder PDF<input class="in" id="coFd" value="${esc(c.folderUrl||'')}"></label>
    <div class="vd-act"><button type="button" class="btn" id="coSetGo">Simpan</button></div></div>`);
@@ -7160,7 +7171,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(t.dataset.coid)return detail(t.dataset.coid);
   if(t.dataset.codel){if(t.dataset.ok!=='1'){t.dataset.ok='1';t.textContent='Yakin hapus? Ketuk lagi';return}
    try{simpan(await api('kasHapus',{id:t.dataset.codel}));close();toast('Data opname dihapus');renderAll()}catch(x){toast(x.message)}return}
-  if(t.id==='coSetGo'){t.disabled=true;try{simpan(await api('kasAtur',{cfg:{store:$id('coStore').value,modal:num($id('coModal').value),dbLink:$id('coDb').value.trim(),folderLink:$id('coFd').value.trim()}}));close();toast('Pengaturan tersimpan');renderAll()}catch(x){t.disabled=false;toast(x.message)}}
+  if(t.id==='coSetGo'){t.disabled=true;try{simpan(await api('kasAtur',{cfg:{store:$id('coStore').value,float:num($id('coFl').value),modalBesar:num($id('coMb').value),dbLink:$id('coDb').value.trim(),folderLink:$id('coFd').value.trim()}}));close();toast('Pengaturan tersimpan');renderAll()}catch(x){t.disabled=false;toast(x.message)}}
  },true);
  let resetAt=0;function confirmReset(){if(Date.now()-resetAt<4000)return true;resetAt=Date.now();toast('Ketuk Kosongkan sekali lagi untuk menghapus isian');return false}
  pg.addEventListener('input',e=>{
