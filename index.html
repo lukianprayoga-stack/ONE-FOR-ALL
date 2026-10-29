@@ -1294,6 +1294,7 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .vd-done.ok{background:var(--ok-bg);color:var(--ok-fg)}.vd-done.warn{background:var(--warn-bg);color:var(--warn-fg)}.vd-done.bad{background:var(--bad-bg);color:var(--bad-fg)}
 .vd-done a{color:inherit;font-weight:700}.vd-copy{display:flex;gap:6px;margin-top:4px}.vd-copy .in{flex:1;min-width:0;font-size:12px}
 .vd-act{margin-top:12px}.vd-act .btn{width:100%}
+.vd-raw{font-size:11px;opacity:.75;word-break:break-word}
 .vd-act.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:380px){.vd-tiles{grid-template-columns:1fr}}
 /* ====== TEMA & KERAPIAN ====== */
@@ -6817,7 +6818,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    render();
   }catch(e){
    u.run=false;u.stage='Gagal';
-   if($id('vdUp')&&up===u)drawUp(`<div class="vd-done bad"><b>Upload gagal</b><span>${esc(missing(e)?'Video.gs belum terpasang di Apps Script.':e.message)}</span></div>`);
+   const izin=/script\.external_request|UrlFetchApp|izin.*(Drive|eksternal)|permission/i.test(e.message||'');
+   const pesan=izin?`<b>Izin Apps Script belum lengkap</b><span>Store Head perlu membuka editor Apps Script, menjalankan <b>videoSetup</b>, lalu menyetujui izin <i>"Connect to an external service"</i> dan Google Drive. Setelah itu Deploy → Manage deployments → Edit → New version.</span><small class="vd-raw">${esc(e.message)}</small>`
+    :`<b>Upload gagal</b><span>${esc(missing(e)?'Video.gs belum terpasang di Apps Script.':e.message)}</span>`;
+   if($id('vdUp')&&up===u)drawUp(`<div class="vd-done bad">${pesan}</div>`);
    else toast('Upload video gagal: '+e.message);
   }finally{window.removeEventListener('beforeunload',warn);try{lock&&lock.release()}catch(e){}}
  }
