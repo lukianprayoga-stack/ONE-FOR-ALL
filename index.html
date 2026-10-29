@@ -1318,7 +1318,7 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .co-rows{display:grid;gap:6px}.co-rows label,.co-rows>div{display:flex;align-items:center;gap:10px;font-size:13.5px}
 .co-rows label span,.co-rows>div span{flex:1;min-width:0}.co-rows .in{width:150px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
 .co-rows.ro>div{padding:5px 0;border-bottom:1px dashed var(--line)}.co-rows.ro b{font-variant-numeric:tabular-nums}
-.co-rows label span small{display:block;font-size:11px;color:var(--mut);line-height:1.35;margin-top:2px}
+.co-rows span small{display:block;font-size:11px;color:var(--mut);line-height:1.35;margin-top:2px}
 .co-sub{padding-top:4px}.co-sub span small{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin-left:4px}.co-sub b{font-variant-numeric:tabular-nums}
 .co-rows .co-in2 span{padding-left:16px;color:var(--mut)}
 .co-flex{font-style:italic;color:var(--mut);font-size:11.5px}
@@ -1496,6 +1496,46 @@ html.scrolled header{border-bottom-color:var(--line)}
 .tg-note .in{flex:1;min-width:0}
 .tg-h{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:14px}
 @media(max-width:760px){.tg-row{grid-template-columns:1fr}}
+/* ====== AKSEN WARNA BIRU & ORANYE (garis & tulisan lebih tegas) ====== */
+:root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
+:root[data-theme=dark]{--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}
+/* kartu: garis tepi jelas + bayangan halus */
+.rs,.shift,.daily,.disp,.inv,.perf,.co-sec{border:1px solid var(--card-bd);box-shadow:0 1px 2px rgba(16,39,94,.04),0 6px 18px rgba(16,39,94,.05)}
+/* judul kartu: biru tua dengan garis aksen oranye */
+.sh-head h3{position:relative;padding-left:13px;color:var(--title)}
+.sh-head h3::before{content:"";position:absolute;left:0;top:.16em;bottom:.16em;width:4px;border-radius:3px;background:linear-gradient(180deg,var(--orange),#f59e0b)}
+.sh-head p{color:var(--mut)}
+.co-sec h4{color:var(--title)}
+/* tombol sekunder: tepi & tulisan biru */
+.btn.ghost{background:var(--blue-bg);color:var(--blue);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 30%,transparent)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--blue)}
+/* angka ringkasan: biru, kotak bergaris */
+.mb-tiles>div,.kt-sum button,.co-cmp div{border:1px solid var(--card-bd)}
+.mb-tiles b{color:var(--num)}
+.mb-tiles .bad b,.mb-tiles b.co-red,.mb-tiles b.bad{color:#dc2626}
+.mb-tiles span{color:var(--mut)}
+/* pilihan / chip */
+.dp-chips button{border-color:var(--line)}
+.dp-chips button:hover:not(.on){border-color:var(--blue);color:var(--blue)}
+/* input */
+.in{border-color:var(--line)}
+.in:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);outline:none}
+/* menu samping */
+.side-h{color:var(--orange)!important}
+.side button:hover:not(.on){background:var(--blue-bg);color:var(--blue)}
+.side button.on kbd{color:#fff;border-color:rgba(255,255,255,.5)}
+/* tab halaman */
+.deck-tabs,.kt-tabs{box-shadow:inset 0 0 0 1px var(--card-bd),0 4px 14px rgba(16,39,94,.06)}
+/* tautan dalam kartu */
+.rs a:not(.btn),.shift a:not(.btn),.perf a:not(.btn),.inv a:not(.btn),.co-pg a:not(.btn){color:var(--blue)}
+/* tabel: kepala kolom biru, garis lebih jelas */
+.co-t thead th,.co-kp th{color:var(--blue)}
+.co-kp td{border-top-color:var(--line)}
+.co-t tfoot td,.co-t tfoot th{border-top-color:var(--title)}
+.vd-c{box-shadow:inset 0 0 0 1px var(--card-bd)}
+/* angka di kepala halaman */
+.stats>div{border:1px solid var(--card-bd)}.stats b{color:var(--num)}.stats span{color:var(--mut)}
 </style>
 </head>
 <body>
