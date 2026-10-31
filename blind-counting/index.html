@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BA Blind Counting</title>
+<meta name="description" content="Berita acara selisih stock blind counting (REG-FRM-35) dari file export sistem. Dibuat oleh Lukian Prayoga.">
+<meta name="author" content="Lukian Prayoga">
+<meta name="theme-color" content="#0b2a7a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{color-scheme:light;--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff;--warn-bg:#fff4e5;--warn-fg:#8a4b00;--warn-bd:#f5c58a;--ok-bg:#e3f4e8;--ok-fg:#14642f;--bad-bg:#fde8e8;--bad-fg:#b42318;--amber:#b45309;--panel:#fff;--shadow:0 10px 30px rgba(10,10,10,.08)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d;--warn-bg:#33240d;--warn-fg:#ffd59e;--warn-bd:#6b4813;--ok-bg:#0f2e1b;--ok-fg:#8fe0ad;--bad-bg:#3a1416;--bad-fg:#ffb3b0;--amber:#f2a93b;--panel:#141418;--shadow:0 10px 30px rgba(0,0,0,.45)}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d;--warn-bg:#33240d;--warn-fg:#ffd59e;--warn-bd:#6b4813;--ok-bg:#0f2e1b;--ok-fg:#8fe0ad;--bad-bg:#3a1416;--bad-fg:#ffb3b0;--amber:#f2a93b;--panel:#141418;--shadow:0 10px 30px rgba(0,0,0,.45)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:16px/1.45 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;overflow-x:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.btn{display:inline-block;border:0;border-radius:999px;padding:11px 22px;background:var(--ink);color:var(--inkfg);font-weight:600;text-decoration:none}
+.btn.ghost{background:var(--card);color:var(--fg)}
+h2{font-size:clamp(34px,5.6vw,84px);letter-spacing:-.015em;line-height:1;font-weight:900;word-spacing:.08em}
+.ph h2{font-size:20px;letter-spacing:0;line-height:1.2;font-weight:700}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.ov{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:20}
+.ov.open{display:grid}
+.panel{background:var(--panel);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;animation:pop .18s}
+@keyframes pop{from{transform:scale(.96);opacity:0}}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ph h2{font-size:20px}
+.x{border:0;background:var(--card);border-radius:50%;width:34px;height:34px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.in{width:100%;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px}
+textarea.in{min-height:240px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.hint{color:var(--mut);font-size:13px;margin-top:10px}
+@media(max-width:760px){body{display:flex;flex-direction:column;padding-bottom:calc(76px + env(safe-area-inset-bottom));font-size:15px;-webkit-tap-highlight-color:transparent}body>*{min-width:0}.ov{place-items:end center;padding:0}.panel{width:100%;max-height:88vh;border-radius:22px 22px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));animation:up .22s ease-out}.panel::before{content:"";display:block;width:40px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 10px}.in{font-size:16px;padding:12px 14px}.row .btn{flex:1;text-align:center;padding:13px 16px}}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){.panel{animation:none}}
+.toast{position:fixed;left:50%;bottom:24px;z-index:30;transform:translate(-50%,20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--inkfg);border-radius:14px;padding:11px 14px 11px 18px;font-size:14px;font-weight:600;box-shadow:0 12px 30px #0004;transition:all .25s}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{border:0;background:none;color:var(--acc);font-weight:800;padding:4px 6px}
+@media(max-width:760px){.toast{bottom:calc(86px + env(safe-area-inset-bottom));width:calc(100% - 32px);justify-content:space-between}}
+.sh-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sh-head h3{font-size:19px;letter-spacing:-.3px}
+.sh-head p{color:var(--mut);font-size:13px;margin-top:2px}
+.sh-head .btn{padding:9px 14px;font-size:13px;flex:none}
+.dp-empty{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 2px}
+.wk-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:12px}
+.wk-hero b{display:block;font-size:30px;letter-spacing:-1px;line-height:1.1}
+.wk-hero span{color:var(--mut);font-size:13px}
+.wk-hero em{font-style:normal;font-weight:700;font-size:14px;text-align:right;white-space:nowrap}
+.wk-hero em small{display:block;font-weight:500;color:var(--mut);font-size:11px}
+.wk-p{font-size:13px;line-height:1.5;margin:0 0 8px}
+.wk-p small{color:var(--mut)}
+.iv-tile{background:var(--bg);border-radius:16px;padding:12px}
+.iv-tile small{display:block;font-size:12px;font-weight:700;color:var(--mut)}
+.iv-tile b{display:block;font-size:26px;letter-spacing:-1px;margin-top:2px}
+.iv-tile.ok b{color:#1a8a49}
+.iv-tile.bad b{color:#d33a40}
+.iv-tile em{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:6px;line-height:1.35}
+.iv-status{font-size:12px;color:var(--mut);margin-top:8px;min-height:1em}
+.iv-status.err{color:#d33a40}
+@media(max-width:760px){.iv-tile b{font-size:23px}}
+.rs{margin-top:16px;max-width:560px;background:var(--card);border-radius:24px;padding:18px}
+.ks-hbtn{display:flex;gap:6px;flex:none}
+.ks-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.ks-tiles .iv-tile b{font-size:16px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ks-warn{margin-top:12px;background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+.ks-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ks-act .btn{padding:11px 16px;font-size:14px}
+.ks-list{display:grid;gap:4px;max-height:60vh;overflow:auto}
+.ks-form{display:grid;gap:8px}
+.ks-f span{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px}
+@media(max-width:760px){.ks-tiles .iv-tile{padding:10px}.ks-tiles .iv-tile b{font-size:14px}}
+.bc-neg{color:#d33a40}
+.bc-t span{display:block;font-size:11.5px;color:var(--mut);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bc-t.m b{color:#d33a40}
+.bc-t.p b{color:#1a8a49}
+.bc-seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:12px;background:var(--bg);border-radius:14px;padding:4px}
+.bc-seg button{border:0;background:transparent;border-radius:11px;padding:8px 10px;font:inherit;font-size:13px;font-weight:700;color:var(--mut);text-align:left;cursor:pointer;line-height:1.3}
+.bc-seg button small{display:block;font-weight:500;font-size:11px}
+.bc-seg button.on{background:var(--card);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.bc-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.bc-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 0 2px}
+.bc-h span{color:var(--mut);font-size:12px}
+.bc-h.m b{color:#d33a40}
+.bc-h.p b{color:#1a8a49}
+.bc-it{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.bc-it span{min-width:0;line-height:1.3}
+.bc-it small{display:block;color:var(--mut);font-size:11.5px}
+.bc-cols .bc-it span b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bc-it em{font-style:normal;font-weight:700;white-space:nowrap;text-align:right}
+.bc-it em small{font-weight:500}
+.bc-it em.m{color:#d33a40}
+.bc-it em.p{color:#1a8a49}
+.bc-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:8px;margin-top:14px}
+.bc-lnk{border:0;background:none;padding:0;font:inherit;font-weight:700;color:inherit;text-decoration:underline;cursor:pointer}
+.bc-li{padding:2px 0 10px;border-bottom:1px solid var(--line)}
+.bc-li .bc-it{border:0;padding-bottom:4px}
+.bc-li .in{padding:8px 10px;font-size:13px}
+.bc-li.off{opacity:.62}
+.bc-list .bc-h{margin-top:12px;position:sticky;top:0;background:var(--bg);padding:6px 0;z-index:1}
+.bc-hist{display:flex;gap:6px;overflow-x:auto;margin-top:12px}
+.bc-hist span{flex:none;background:var(--bg);border-radius:10px;padding:6px 10px;font-size:12px}
+.bc-hist small{display:block;color:var(--mut);font-size:10.5px}
+.bc-ap{margin-top:8px}
+@media(max-width:560px){.bc-cols{grid-template-columns:1fr}.bc-form{grid-template-columns:1fr}}
+@media(max-width:760px){.rs{margin-top:12px;max-width:none;border-radius:20px;padding:16px}}
+@media(min-width:761px){.panel{width:min(640px,100%)}}
+@media(min-width:1100px){body{padding-left:236px}}
+.panel.wide{width:min(860px,100%)}
+:root[data-theme=dark] .mb-st.berjalan{background:#172554;color:#93c5fd}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .mb-st.berjalan{background:#172554;color:#93c5fd}}
+:root[data-theme=dark] .rp-s2{background:#172554;color:#93c5fd}
+:root[data-theme=dark] .rp-s3{background:#2e1065;color:#c4b5fd}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rp-s2{background:#172554;color:#93c5fd}:root:not([data-theme=light]) .rp-s3{background:#2e1065;color:#c4b5fd}}
+:root[data-theme=dark] .tl-wh{color:#fbbf24}
+:root[data-theme=dark] .tl-w.up .tl-wh{color:#4ade80}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .tl-wh{color:#fbbf24}:root:not([data-theme=light]) .tl-w.up .tl-wh{color:#4ade80}}
+:root[data-theme=dark] .tl-badge:not(.up){background:#451a03;color:#fcd34d}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .tl-badge:not(.up){background:#451a03;color:#fcd34d}}
+:root{--ab-in:#2f80ed;--ab-out:#d97706}
+:root[data-theme=dark]{--ab-in:#3b82f6;--ab-out:#d97706}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ab-in:#3b82f6;--ab-out:#d97706}}
+.panel{box-shadow:var(--shadow)}
+:root[data-theme=dark] .rr-t.up i{color:#4ade80}
+:root[data-theme=dark] .rr-t.dn i{color:#ff8a8a}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .rr-t.up i{color:#4ade80}:root:not([data-theme=light]) .rr-t.dn i{color:#ff8a8a}}
+:root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
+:root[data-theme=dark]{--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}
+.rs{border:1px solid var(--card-bd);box-shadow:0 1px 2px rgba(16,39,94,.04),0 6px 18px rgba(16,39,94,.05)}
+.sh-head h3{position:relative;padding-left:13px;color:var(--title)}
+.sh-head h3::before{content:"";position:absolute;left:0;top:.16em;bottom:.16em;width:4px;border-radius:3px;background:linear-gradient(180deg,var(--orange),#f59e0b)}
+.sh-head p{color:var(--mut)}
+.btn.ghost{background:var(--blue-bg);color:var(--blue);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 30%,transparent)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--blue)}
+.in{border-color:var(--line)}
+.in:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);outline:none}
+.rs a:not(.btn){color:var(--blue)}
+/* ====== aplikasi mandiri ====== */
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);padding:0!important}
+#bc .wk-hero{flex-wrap:wrap}#bc .wk-hero b{white-space:nowrap}
+@media(max-width:420px){#bc .wk-hero b{font-size:27px}#bc .wk-hero em{text-align:left}}
+.app-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,#0b2a7a,#1d4ed8);color:#fff;box-shadow:0 4px 18px rgba(11,42,122,.25)}
+.app-top img{width:40px;height:40px;border-radius:11px;flex:none}
+.app-top div{flex:1;min-width:0}.app-top b{display:block;font-size:17px;letter-spacing:-.2px}.app-top small{display:block;font-size:12px;opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-top button{flex:none;border:0;border-radius:50%;width:38px;height:38px;background:rgba(255,255,255,.16);color:#fff;font-size:17px}
+.app-main{flex:1;width:100%;max-width:820px;margin:0 auto;padding:6px 16px 28px}
+.app-main .rs{max-width:none}
+.app-start{margin-top:16px;padding:14px 16px;border-radius:18px;background:var(--orange-bg,#fff1e7);border:1px solid color-mix(in srgb,var(--orange,#f26a1b) 35%,transparent);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.app-start div{flex:1;min-width:200px}.app-start b{display:block;color:var(--orange,#f26a1b)}.app-start span{font-size:13px;color:var(--mut)}
+.app-help ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.65}
+.app-help li b{color:var(--title,var(--fg))}
+.app-note{margin-top:10px;font-size:12.5px;color:var(--mut)}
+.app-foot{padding:18px 16px 26px;text-align:center;font-size:12.5px;color:var(--mut);border-top:1px solid var(--line)}
+.app-foot b{color:var(--title,var(--fg))}
+.app-inst[hidden],.app-start[hidden]{display:none}
+</style>
+</head>
+<body>
+<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>BA Blind Counting</b><small>Berita acara selisih stock · REG-FRM-35</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
+<main class="app-main">
+  <div class="app-start" id="appStart" hidden><div><b>Mulai di sini: isi data toko</b><span>Nama toko, nama Store Head &amp; atasan yang tercetak di berita acara. Cukup sekali, tersimpan di perangkat ini.</span></div><button class="btn" type="button" id="appSet">⚙ Isi data toko</button></div>
+  <section class="rs" id="bc" aria-label="Berita acara blind counting">
+    <div class="sh-head"><div><h3>BA Blind Counting</h3><p id="bcSub">Berita acara selisih stock bulanan · barang plus &amp; minus</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="bcCfg" aria-label="Pengaturan berita acara">⚙</button><button class="btn ghost" type="button" id="bcUp">⇪ Upload</button></div></div>
+    <input type="file" id="bcFile" accept=".xlsx,.xls,.csv" hidden>
+    <div id="bcBody"></div>
+    <div class="iv-status" id="bcStatus"></div>
+  </section>
+  <section class="rs app-help" aria-label="Cara pakai">
+    <div class="sh-head"><div><h3>Cara pakai</h3><p>Dari file export sistem sampai BA siap tanda tangan</p></div></div>
+    <ol>
+      <li>Ketuk <b>⚙</b> lalu isi nama toko, nomor formulir, dan nama penanda tangan (cukup sekali).</li>
+      <li>Setelah blind counting sebulan selesai, export dari sistem lalu ketuk <b>⇪ Upload</b>:<br><b>blind_counting_details_BCP…xlsx</b> (rincian per SKU &amp; bin) atau <b>blind_counting_YYYY-MM-DD.xlsx</b> (rekap per sesi).</li>
+      <li>Bila nama produk kosong, upload juga file berisi kolom <b>SKU Name</b> &amp; <b>SKU Code</b> (mis. export inventory by SKU).</li>
+      <li>Periksa barang <b>plus</b> &amp; <b>minus</b>, isi keterangan di <b>Rincian &amp; keterangan</b>, pilih tanggal &amp; perihal BA.</li>
+      <li>Ketuk <b>⬇ Unduh BA Excel</b>, cetak, lalu tanda tangani.</li>
+    </ol>
+    <p class="app-note">🔒 File diolah langsung di perangkat ini. Data stock tidak dikirim ke server mana pun dan hanya tersimpan di browser perangkat ini.</p>
+  </section>
+</main>
+<footer class="app-foot">Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
+<div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
+<div class="toast" id="toast" role="status"><span id="toastTxt"></span></div>
+<script>
+const esc=v=>String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cleanup=null;
+function openModal(title,html){document.getElementById('pt').textContent=title;document.getElementById('pb').innerHTML=html;document.getElementById('ov').classList.add('open')}
+function close(){document.getElementById('ov').classList.remove('open');if(cleanup){cleanup();cleanup=null}document.getElementById('pb').innerHTML=''}
+document.getElementById('px').onclick=close;
+document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')close()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('ov').classList.contains('open'))close()});
+let toastT=0;window.ofaToast=t=>{const el=document.getElementById('toast');document.getElementById('toastTxt').textContent=t;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),3200)};
+const SK='bcapp_state';let ST={};try{ST=JSON.parse(localStorage.getItem(SK)||'{}')||{}}catch(e){ST={}}
+const stSave=()=>{try{localStorage.setItem(SK,JSON.stringify(ST))}catch(e){}appStart()};
+function appStart(){const s=document.getElementById('appStart');if(s)s.hidden=!!(ST.cfg&&ST.cfg.store&&ST.cfg.n1)}
+// tema
+(function(){const K='bcapp_theme',root=document.documentElement;const set=t=>{if(t)root.dataset.theme=t;else delete root.dataset.theme;try{t?localStorage.setItem(K,t):localStorage.removeItem(K)}catch(e){}};
+ let t='';try{t=localStorage.getItem(K)||''}catch(e){}if(t)root.dataset.theme=t;
+ document.getElementById('appTh').onclick=()=>{const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');set(cur==='dark'?'light':'dark')}})();
+// instal (PWA)
+(function(){let ev=null;const b=document.getElementById('appInst');addEventListener('beforeinstallprompt',e=>{e.preventDefault();ev=e;b.hidden=false});
+ b.onclick=async()=>{if(!ev)return;ev.prompt();try{await ev.userChoice}catch(e){}ev=null;b.hidden=true};
+ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))})();
+</script>
+<script>
+/* ====== BA BLIND COUNTING (berita acara selisih stock bulanan, barang plus & minus) ====== */
+(function(){
+ const box=document.getElementById('bc');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ /* ---------- penulis .xlsx (tanpa pustaka luar) ---------- */
+ const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+ function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRC[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+ function zip(files){
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  const u16=v=>[v&255,(v>>>8)&255],u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+  files.forEach(([name,txt])=>{
+   const nm=enc.encode(name),data=enc.encode(txt),crc=crc32(data);
+   const head=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0)]);
+   parts.push(head,nm,data);
+   central.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nm);
+   off+=head.length+nm.length+data.length;
+  });
+  const cl=central.reduce((t,a)=>t+a.length,0);
+  const end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cl),...u32(off),...u16(0)]);
+  return new Blob([...parts,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+ }
+
+ const CK='bcapp_rep',NK='bcapp_names';
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>(v<0?'-':'')+'Rp'+nf(Math.abs(v));
+ const BULAN=['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const cap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const p2=n=>('0'+n).slice(-2);
+ const DEF={store:'',form:'REG-FRM-35',rev:'0',
+  t1:'Store Head',n1:'',t2:'Head of Branch',n2:'',
+  t3:'Head of Regional Dept.',n3:'',t4:'Deputy Head of Retail & Sales Div.',n4:'',t5:'Head of Retail & Sales Div.',n5:'',
+  file:'BA Blind Counting',suffix:''};
+ const cfg=()=>Object.assign({},DEF,ST.cfg||{});
+ let rep=null;try{rep=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){rep=null}
+ const save=()=>{try{localStorage.setItem(CK,JSON.stringify(rep))}catch(e){}};
+ const configured=()=>false;
+
+ /* ---------- baca file ---------- */
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+ function num(v){
+  if(typeof v==='number')return isFinite(v)?v:0;
+  let s=String(v==null?'':v).trim().replace(/rp|\s/gi,'');if(!s||s==='-')return 0;
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(/,/g,'');
+  const n=Number(s.replace(/[^\d.-]/g,''));return isFinite(n)?n:0;
+ }
+ const blank=v=>v==null||String(v).trim()===''||String(v).trim()==='-';
+ function skuOf(v){
+  if(typeof v==='number')return isFinite(v)?String(Math.round(v)):'';
+  const s=String(v==null?'':v).trim();
+  if(/^\d+(\.0+)?$/.test(s))return s.replace(/\.0+$/,'');
+  if(/^\d(\.\d+)?e\+?\d+$/i.test(s))return String(Math.round(Number(s)));
+  return s;
+ }
+ function day(v){
+  if(typeof v==='number'&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*864e5));return d.getUTCFullYear()+'-'+p2(d.getUTCMonth()+1)+'-'+p2(d.getUTCDate())}
+  const s=String(v==null?'':v).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+p2(m[2])+'-'+p2(m[3]);
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m)return m[3]+'-'+p2(m[2])+'-'+p2(m[1]);
+  return '';
+ }
+ const pick=(h,...k)=>{for(const x of k){const i=h.indexOf(x);if(i>=0)return i}return -1};
+ async function parse(file){
+  await loadXlsx();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});
+  let names=null;
+  for(const sn of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
+   for(let i=0;i<Math.min(20,rows.length);i++){
+    const h=(rows[i]||[]).map(norm);
+    const iE=pick(h,'qtyyangdiharapkan','expectedqty','qtyexpected'),iC=pick(h,'qtyyangdihitung','countedqty','qtycounted'),iS=pick(h,'skucode','sku','kodesku');
+    if(pick(h,'blindcountingid')>=0&&pick(h,'totalsku')>=0&&iS<0){const out=parseSesi(rows,i,h);if(out.length)return {kind:'sesi',rows:out}}
+    if(iE>=0&&iC>=0&&iS>=0){
+     const c={bc:pick(h,'blindcountingid'),per:pick(h,'periodid'),d:pick(h,'tanggal','date'),mc:pick(h,'mclevel4name','mclv4','mclevel4'),pc:pick(h,'totalpricecutoff'),ps:pick(h,'totalpricescan'),
+      sel:pick(h,'selisihtotalprice'),bin:pick(h,'bincode'),sst:pick(h,'statusstock'),inv:pick(h,'statusinvestigasi'),iss:pick(h,'statusissue'),sbc:pick(h,'statusblindcounting'),rem:pick(h,'remark','remarks','keterangan')};
+     const out=[];
+     rows.slice(i+1).forEach(r=>{
+      const sku=skuOf(r[iS]);if(!sku)return;
+      const g=k=>c[k]>=0?r[c[k]]:'',t=k=>{const v=g(k);return blank(v)?'':String(v).replace(/\s+/g,' ').trim()};
+      const exp=num(r[iE]),cnt=num(r[iC]),pc=num(g('pc')),ps=num(g('ps'));
+      out.push({bc:t('bc'),per:t('per'),d:day(g('d')),mc:t('mc'),bin:t('bin'),sku,exp,cnt,gap:cnt-exp,pc,ps,
+       nom:c.sel>=0&&!blank(g('sel'))?num(g('sel')):ps-pc,sst:t('sst'),inv:t('inv'),iss:t('iss'),sbc:t('sbc'),rem:t('rem')});
+     });
+     if(out.length)return {kind:'bc',rows:out};
+    }
+    // file daftar nama SKU (Stock Database / inventory / BA lama)
+    const jN=pick(h,'skuname','namaproduk','productname','namasku'),jS=pick(h,'skucode','sku','kodesku');
+    if(jN>=0&&jS>=0&&!names){
+     names={};rows.slice(i+1).forEach(r=>{const s=skuOf(r[jS]),n=String(r[jN]==null?'':r[jN]).trim();if(/^\d{9,}$/.test(s)&&n)names[s]=n});
+     if(!Object.keys(names).length)names=null;
+    }
+   }
+  }
+  if(names)return {kind:'names',names};
+  throw new Error('Kolom skucode, Bin Code, Qty yang Diharapkan & Qty yang Dihitung tidak ditemukan. Pilih file export blind_counting_details_BCP… dari sistem.');
+ }
+
+ /* ---------- nama produk per SKU ---------- */
+ function nameMap(){
+  const m={};
+  try{const s=JSON.parse(localStorage.getItem('ofa_stok')||'null');(s&&s.items||[]).forEach(a=>(a[8]||[]).forEach(z=>{m[z[1]]=a[2]+(a[1]?', '+a[1]:'')+(z[0]&&z[0]!=='-'?', '+z[0]:'')}))}catch(e){}
+  try{Object.assign(m,JSON.parse(localStorage.getItem(NK)||'{}'))}catch(e){}
+  return m;
+ }
+ function applyNames(){
+  if(!rep||rep.mode==='sesi')return 0;const m=nameMap();let n=0;
+  rep.rows.forEach(r=>{if(!r.nm&&m[r.sku]){r.nm=m[r.sku];n++}});
+  return n;
+ }
+ const missing=()=>rep&&rep.mode!=='sesi'?rep.rows.filter(r=>!r.nm).length:0;
+ async function fetchNames(){throw new Error('Upload file berisi kolom SKU Name & SKU Code.')}
+
+
+ /* ---------- olah data ---------- */
+ function build(rows,fileName){
+  const months={},per={},bcs=new Set();
+  rows.forEach(r=>{if(r.d){const k=r.d.slice(0,7);months[k]=(months[k]||0)+1}if(r.per)per[r.per]=1;if(r.bc)bcs.add(r.bc)});
+  let ym='';const pk=Object.keys(per);
+  if(pk.length===1){const m=pk[0].match(/(\d{2})(\d{2})$/);if(m)ym='20'+m[1]+'-'+m[2]}
+  if(!ym)ym=Object.keys(months).sort((a,b)=>months[b]-months[a])[0]||'';
+  const y=+ym.slice(0,4),mo=+ym.slice(5,7);
+  const isMis=r=>r.sst?!/^match/i.test(r.sst):(r.gap!==0||r.nom!==0);
+  const mis=rows.map((r,i)=>Object.assign({},r,{i})).filter(isMis).sort((a,b)=>a.d.localeCompare(b.d)||a.bc.localeCompare(b.bc)||a.i-b.i);
+  const ds=rows.map(r=>r.d).filter(Boolean).sort();
+  const warn=[];
+  if(pk.length>1)warn.push('File berisi '+pk.length+' periode BC ('+pk.join(', ')+'). Pastikan tarik data satu bulan.');
+  const zeroGap=mis.filter(r=>r.gap===0).length;if(zeroGap)warn.push(zeroGap+' baris berstatus Mismatch tetapi qty sama (selisih harga).');
+  const st={lines:rows.length,match:rows.length-mis.length,sesi:bcs.size,exp:rows.reduce((t,r)=>t+r.exp,0),cnt:rows.reduce((t,r)=>t+r.cnt,0),care:rows.reduce((t,r)=>t+r.pc,0)};
+  return {ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',st,
+   rows:mis.map((r,k)=>({k,d:r.d,bc:r.bc,bin:r.bin,mc:r.mc,sku:r.sku,exp:r.exp,cnt:r.cnt,gap:r.gap,nom:r.nom,iss:r.iss,inv:r.inv,sbc:r.sbc,rem:r.rem})),
+   scope:'ops',jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
+ }
+ function today(){const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
+ const isSys=r=>/^system/i.test(r.iss||'');
+ const inScope=(R,r)=>R.scope==='all'||!isSys(r);
+ const remOf=(R,r)=>R.edit&&R.edit[r.k]!=null?R.edit[r.k]:(r.rem||'');
+ function calc(R){
+  const L=R.rows.filter(r=>inScope(R,r));
+  const minus=L.filter(r=>r.gap<0||(r.gap===0&&r.nom<0)),plus=L.filter(r=>!minus.includes(r));
+  const sum=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  const skuP=new Set(plus.map(r=>r.sku)),pair=new Set(minus.filter(r=>skuP.has(r.sku)).map(r=>r.sku));
+  return {L,minus,plus,qMinus:sum(minus,'gap'),vMinus:sum(minus,'nom'),qPlus:sum(plus,'gap'),vPlus:sum(plus,'nom'),net:sum(L,'nom'),
+   pair,noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved/i.test(r.inv||'')).length,sys:R.rows.filter(isSys).length};
+ }
+ function approvers(v){
+  const c=cfg();v=Math.abs(v);
+  if(v>=15e6)return [c.t2,c.t3,c.t4,c.t5];
+  if(v>=10e6)return [c.t2,c.t3,c.t4];
+  if(v>=5e6)return [c.t2,c.t3];
+  return [];
+ }
+ function dateText(iso){const p=String(iso||'').split('-').map(Number);if(p.length<3||!p[0])return {hari:'',tgl:''};const d=new Date(p[0],p[1]-1,p[2]);return {hari:HARI[d.getDay()],tgl:p[2]+' '+cap(BULAN[p[1]-1])+' '+p[0]}}
+
+ /* ---------- penulis .xlsx ---------- */
+ const X=s=>String(s==null?'':s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+ const COL=i=>i<26?String.fromCharCode(65+i):String.fromCharCode(64+Math.floor(i/26))+String.fromCharCode(65+i%26);
+ const serialDay=iso=>{const p=String(iso||'').split('-').map(Number);return p.length===3&&p[0]?(Date.UTC(p[0],p[1]-1,p[2])-Date.UTC(1899,11,30))/864e5:''};
+ const S={txt:1,bold:2,title:3,form:4,formD:5,th:6,tdC:7,td:8,tdN:9,secM:10,secP:11,subL:12,subN:13,totL:14,totN:15,para:16,sigT:17,sigN:18,note:19,tdD:20,pct:21,tdQ:22,subQ:23,totQ:24,secZ:25,totP:26};
+ const XF=(n,f,fi,b,al,extra)=>`<xf numFmtId="${n}" fontId="${f}" fillId="${fi}" borderId="${b}" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1">${al?`<alignment ${al}/>`:''}</xf>`;
+ const XFS=[
+  XF(0,0,0,0),XF(0,0,0,0),XF(0,1,0,0),
+  XF(0,2,0,1,'horizontal="center" vertical="center" wrapText="1"'),
+  XF(0,0,0,1,'vertical="center"'),XF(165,0,0,1,'horizontal="left" vertical="center"'),
+  XF(0,1,2,1,'horizontal="center" vertical="center" wrapText="1"'),
+  XF(0,0,0,1,'horizontal="center" vertical="top"'),XF(0,0,0,1,'vertical="top" wrapText="1"'),XF(164,0,0,1,'horizontal="right" vertical="top"'),
+  XF(0,1,3,1,'vertical="center"'),XF(0,1,4,1,'vertical="center"'),
+  XF(0,1,2,1,'horizontal="right" vertical="center"'),XF(164,1,2,1,'horizontal="right" vertical="center"'),
+  XF(0,1,5,1,'horizontal="right" vertical="center"'),XF(164,1,5,1,'horizontal="right" vertical="center"'),
+  XF(0,0,0,0,'vertical="top" wrapText="1"'),XF(0,0,0,0,'horizontal="center"'),XF(0,1,0,0,'horizontal="center"'),XF(0,3,0,0,'vertical="top"'),
+  XF(165,0,0,1,'horizontal="center" vertical="top"'),XF(166,0,0,1,'horizontal="right" vertical="top"'),
+  XF(164,0,0,1,'horizontal="center" vertical="top"'),XF(164,1,2,1,'horizontal="center" vertical="center"'),XF(164,1,5,1,'horizontal="center" vertical="center"'),
+  XF(0,1,2,1,'vertical="center"'),XF(166,1,5,1,'horizontal="right" vertical="center"')
+ ];
+ const STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt numFmtId="164" formatCode="#,##0;[Red]-#,##0"/><numFmt numFmtId="165" formatCode="d mmm yyyy"/><numFmt numFmtId="166" formatCode="0.0%"/></numFmts>
+<fonts count="4"><font><sz val="10"/><name val="Arial Narrow"/><family val="2"/></font><font><b/><sz val="10"/><name val="Arial Narrow"/><family val="2"/></font><font><b/><sz val="14"/><name val="Arial Narrow"/><family val="2"/></font><font><sz val="8"/><name val="Arial Narrow"/><family val="2"/></font></fonts>
+<fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFCE4E4"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE3F4E8"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD9D9D9"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color auto="1"/></left><right style="thin"><color auto="1"/></right><top style="thin"><color auto="1"/></top><bottom style="thin"><color auto="1"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="${XFS.length}">${XFS.join('')}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+ function sheetXml(o){
+  const W=o.widths.length,rows=o.rows.map((r,i)=>{
+   if(!r)return '';
+   const n=i+1,cells=(r.c||[]).slice().sort((a,b)=>a[0]-b[0]).map(([ci,v,s,f])=>{
+    const ref=COL(ci)+n,st=s?` s="${s}"`:'';
+    if(f)return `<c r="${ref}"${st}><f>${X(f)}</f><v>${Number(v)||0}</v></c>`;
+    if(v===''||v==null)return `<c r="${ref}"${st}/>`;
+    if(typeof v==='number')return `<c r="${ref}"${st}><v>${v}</v></c>`;
+    return `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${X(v)}</t></is></c>`;
+   }).join('');
+   return `<row r="${n}"${r.h?` ht="${r.h}" customHeight="1"`:''}>${cells}</row>`;
+  }).join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:${COL(W-1)}${o.rows.length}"/><sheetViews><sheetView workbookViewId="0"${o.grid===false?' showGridLines="0"':''}>${o.frozen?`<pane ySplit="${o.frozen}" topLeftCell="A${o.frozen+1}" activePane="bottomLeft" state="frozen"/>`:''}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="13.5"/>
+<cols>${o.widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData>${o.filter?`<autoFilter ref="${o.filter}"/>`:''}${o.merges&&o.merges.length?`<mergeCells count="${o.merges.length}">${o.merges.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells>`:''}<printOptions horizontalCentered="1"/><pageMargins left="0.35" right="0.35" top="0.45" bottom="0.5" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="${o.land?'landscape':'portrait'}" fitToWidth="1" fitToHeight="0"/><headerFooter><oddFooter>&amp;L${X(o.footer||'')}&amp;RHalaman &amp;P dari &amp;N</oddFooter></headerFooter></worksheet>`;
+ }
+ const lines=(s,w)=>Math.max(1,String(s||'').split('\n').reduce((t,p)=>t+Math.max(1,Math.ceil(p.length/w)),0));
+ function workbook(R){
+  const c=cfg(),K=calc(R),rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl);
+  const push=r=>{rows.push(r);return rows.length};
+  // kop formulir REG-FRM-35
+  push({h:20,c:[[0,'EIGERINDO MPI',S.title],[1,'',S.title],[2,'BERITA ACARA SELISIH STOCK BLIND COUNTING',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Form No',S.form],[8,c.form,S.form]]});
+  push({h:20,c:[[0,'',S.title],[1,'',S.title],[2,'',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Revision',S.form],[8,c.rev,S.form]]});
+  push({h:20,c:[[0,'',S.title],[1,'',S.title],[2,'',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Date',S.form],[8,serialDay(R.tgl),S.formD]]});
+  mg.push('A1:B3','C1:G3');
+  push(null);
+  push({c:[[0,'Perihal berita acara:',S.txt],[2,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
+  push({c:[[2,(R.jenis==='akhir'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
+  push(null);
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) dengan nominal selisih bersih mencapai ${rp(K.net)}, terdiri dari barang plus ${nf(K.qPlus)} pcs senilai ${rp(K.vPlus)} dan barang minus ${nf(-K.qMinus)} pcs senilai ${rp(K.vMinus)}${R.scope==='all'?'':' by Operasional'}.`;
+  let n=push({h:Math.max(28,13.5*lines(para,118)),c:[[0,para,S.para]]});mg.push(`A${n}:I${n}`);
+  n=push({c:[[0,'Adapun detail selisih stock tersebut serta keterangan penyebab/penyelesaian selisih stock adalah sebagai berikut:',S.para]]});mg.push(`A${n}:I${n}`);
+  push(null);
+  const h1=push({h:16,c:[[0,'No',S.th],[1,'SKU',S.th],[2,'Nama Produk',S.th],[3,'Selisih (pcs)',S.th],[4,'',S.th],[5,'',S.th],[6,'Nominal',S.th],[7,'Penyebab/Penyelesaian Selisih*',S.th],[8,'',S.th]]});
+  push({h:16,c:[[0,'',S.th],[1,'',S.th],[2,'',S.th],[3,'Fisik',S.th],[4,'CARE',S.th],[5,'Gap Qty',S.th],[6,'',S.th],[7,'',S.th],[8,'',S.th]]});
+  mg.push(`A${h1}:A${h1+1}`,`B${h1}:B${h1+1}`,`C${h1}:C${h1+1}`,`D${h1}:F${h1}`,`G${h1}:G${h1+1}`,`H${h1}:I${h1+1}`);
+  let no=0;const subs=[];
+  const section=(lab,st,list)=>{
+   const s=push({h:16,c:[[0,lab,st],...[1,2,3,4,5,6,7,8].map(i=>[i,'',st])]});mg.push(`A${s}:I${s}`);
+   const f=rows.length+1;
+   if(!list.length){const e=push({c:[[0,'',S.tdC],[1,'',S.td],[2,'Tidak ada',S.td],[3,'',S.tdQ],[4,'',S.tdQ],[5,'',S.tdQ],[6,'',S.tdN],[7,'',S.td],[8,'',S.td]]});mg.push(`H${e}:I${e}`)}
+   list.forEach(r=>{
+    no++;const rem=remOf(R,r),nm=r.nm||'',lh=Math.max(lines(rem,46),lines(nm,42));
+    const e=push({h:lh>1?13.5*lh:0,c:[[0,no,S.tdC],[1,r.sku,S.tdC],[2,nm,S.td],[3,r.cnt,S.tdQ],[4,r.exp,S.tdQ],[5,r.gap,S.tdQ],[6,r.nom,S.tdN],[7,rem,S.td],[8,'',S.td]]});
+    mg.push(`H${e}:I${e}`);
+   });
+   const l=rows.length,sum=k=>list.reduce((t,r)=>t+r[k],0);
+   const t=push({h:16,c:[[0,'Subtotal '+lab.replace(/^[AB]\.\s*/,'').replace(/\s*\(.*$/,'').toLowerCase(),S.subL],[1,'',S.subL],[2,'',S.subL],
+    [3,sum('cnt'),S.subQ,`SUM(D${f}:D${l})`],[4,sum('exp'),S.subQ,`SUM(E${f}:E${l})`],[5,sum('gap'),S.subQ,`SUM(F${f}:F${l})`],[6,sum('nom'),S.subN,`SUM(G${f}:G${l})`],[7,list.length+' baris',S.subL],[8,'',S.subL]]});
+   mg.push(`A${t}:C${t}`,`H${t}:I${t}`);subs.push(t);
+  };
+  section('A. BARANG MINUS (fisik kurang dari CARE)',S.secM,K.minus);
+  section('B. BARANG PLUS (fisik lebih dari CARE)',S.secP,K.plus);
+  const T=push({h:18,c:[[0,'Total Selisih',S.totL],[1,'',S.totL],[2,'',S.totL],
+   ...[3,4,5].map(i=>[i,[K.L.reduce((t,r)=>t+r.cnt,0),K.L.reduce((t,r)=>t+r.exp,0),K.qPlus+K.qMinus][i-3],S.totQ,subs.map(s=>COL(i)+s).join('+')]),
+   [6,K.net,S.totN,subs.map(s=>'G'+s).join('+')],[7,K.L.length+' baris',S.totL],[8,'',S.totL]]});
+  mg.push(`A${T}:C${T}`,`H${T}:I${T}`);
+  const lastTable=T;
+  push(null);push(null);
+  const five=approvers(K.net).length>3;
+  n=push({c:[[0,'Dibuat oleh',S.sigT],[2,'Diperiksa oleh',S.sigT],[3,'Disetujui oleh**',S.sigT]]});mg.push(`A${n}:B${n}`,`D${n}:I${n}`);
+  for(let i=0;i<4;i++)push({h:20,c:[]});
+  const nm=v=>'('+(v?String(v).toUpperCase():'____________________')+')';
+  n=push({c:[[0,nm(c.n1),S.sigN],[2,nm(c.n2),S.sigN],[3,nm(c.n3),S.sigN],[6,nm(c.n4),S.sigN],...(five?[[8,nm(c.n5),S.sigN]]:[])]});mg.push(`A${n}:B${n}`,`D${n}:F${n}`,`G${n}:H${n}`);
+  n=push({c:[[0,c.t1,S.sigT],[2,c.t2,S.sigT],[3,c.t3,S.sigT],[6,c.t4,S.sigT],...(five?[[8,c.t5,S.sigT]]:[])]});mg.push(`A${n}:B${n}`,`D${n}:F${n}`,`G${n}:H${n}`);
+  push(null);
+  ['* Penyebab selisih diisi untuk Berita Acara selisih stock di bulan berjalan. Penyelesaian selisih diisi untuk Berita Acara penyelesaian selisih stock (akhir periode)',
+   '** Persetujuan sesuai dengan nominal selisih:',
+   '   - Selisih Rp5.000.000 persetujuan oleh Head of Branch, Head of Regional Dept.',
+   '   - Selisih Rp10.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division',
+   '   - Selisih Rp15.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division, Head of R&S Division'].forEach(t=>push({h:12,c:[[0,t,S.note]]}));
+  const s1=sheetXml({rows,widths:[5.5,13.5,38,6.5,6.5,7.5,12,30,16],merges:mg,grid:false,footer:'BA Blind Counting '+cap(title)});
+
+  // Rincian semua baris selisih (termasuk System)
+  const r2=[],m2=[];
+  r2.push({h:20,c:[[0,'RINCIAN SELISIH BLIND COUNTING — '+title,S.title]]});m2.push('A1:P1');
+  r2.push({c:[[0,c.store+' · periode '+(R.period||'-')+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:'')+' · sumber '+(R.file||''),S.note]]});m2.push('A2:P2');
+  const HD=['No','Tanggal BC','Blind Counting ID','Bin','Kategori','SKU','Nama Produk','CARE','Fisik','Gap Qty','Nominal','Jenis','Status Issue','Investigasi','Masuk BA','Keterangan'];
+  r2.push({h:28,c:HD.map((t,i)=>[i,t,S.th])});
+  R.rows.forEach((r,i)=>{const rem=remOf(R,r);r2.push({h:Math.max(lines(rem,40),lines(r.nm,34))>1?13.5*Math.max(lines(rem,40),lines(r.nm,34)):0,c:[[0,i+1,S.tdC],[1,serialDay(r.d),S.tdD],[2,r.bc,S.tdC],[3,r.bin,S.tdC],[4,r.mc,S.td],[5,r.sku,S.tdC],[6,r.nm||'',S.td],
+   [7,r.exp,S.tdQ],[8,r.cnt,S.tdQ],[9,r.gap,S.tdQ],[10,r.nom,S.tdN],[11,(r.gap<0||(r.gap===0&&r.nom<0))?'Minus':'Plus',S.tdC],[12,r.iss||'-',S.tdC],[13,r.inv||'-',S.tdC],[14,inScope(R,r)?'Ya':'Tidak',S.tdC],[15,rem,S.td]]})});
+  const e2=r2.length;
+  const tt=k=>R.rows.reduce((t,r)=>t+r[k],0);
+  r2.push({h:18,c:[[0,'TOTAL',S.totL],...[1,2,3,4,5,6].map(i=>[i,'',S.totL]),[7,tt('exp'),S.totQ,`SUM(H4:H${e2})`],[8,tt('cnt'),S.totQ,`SUM(I4:I${e2})`],[9,tt('gap'),S.totQ,`SUM(J4:J${e2})`],[10,tt('nom'),S.totN,`SUM(K4:K${e2})`],...[11,12,13,14,15].map(i=>[i,'',S.totL])]});m2.push(`A${r2.length}:G${r2.length}`);
+  const s2=sheetXml({rows:r2,widths:[5,12,17,13,13,13.5,34,6,6,7,11,7,11,10,7.5,36],merges:m2,land:true,frozen:3,filter:`A3:P${e2}`,footer:'Rincian Selisih BC '+cap(title)});
+
+  // Ringkasan
+  const r3=[],m3=[],st=R.st||{};
+  r3.push({h:20,c:[[0,'RINGKASAN BLIND COUNTING — '+title,S.title]]});m3.push('A1:G1');
+  r3.push({c:[[0,c.store+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:''),S.note]]});m3.push('A2:G2');
+  r3.push(null);
+  r3.push({h:18,c:[[0,'Indikator',S.th],[1,'',S.th],[2,'Nilai',S.th]]});m3.push(`A${r3.length}:B${r3.length}`);
+  const allP=R.rows.filter(r=>r.gap>0||(r.gap===0&&r.nom>0)),allM=R.rows.filter(r=>!allP.includes(r)),sm=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  const absAll=sm(allP,'nom')-sm(allM,'nom');
+  [['Sesi blind counting',st.sesi,S.tdN],['Baris SKU-bin dihitung',st.lines,S.tdN],['Baris sesuai (matched)',st.match,S.tdN],['Baris selisih (mismatch)',R.rows.length,S.tdN],
+   ['Akurasi baris',st.lines?st.match/st.lines:0,S.pct],['Qty CARE (sistem)',st.exp,S.tdN],['Qty fisik terhitung',st.cnt,S.tdN],['Nilai stok CARE (Rp)',st.care,S.tdN],
+   ['Barang plus — semua (Rp)',sm(allP,'nom'),S.tdN],['Barang minus — semua (Rp)',sm(allM,'nom'),S.tdN],['Selisih bersih — semua (Rp)',sm(R.rows,'nom'),S.tdN],
+   ['Akurasi nilai (1 − |plus|+|minus| ÷ nilai CARE)',st.care?Math.max(0,1-absAll/st.care):0,S.pct],
+   ['Selisih bersih masuk BA'+(R.scope==='all'?'':' (tanpa issue System)'),K.net,S.tdN]].forEach(([a,v,s])=>{r3.push({c:[[0,a,S.td],[1,'',S.td],[2,v,s]]});m3.push(`A${r3.length}:B${r3.length}`)});
+  r3.push(null);
+  r3.push({h:28,c:['Kategori (MC Lv 4)','Baris selisih','Plus (pcs)','Plus (Rp)','Minus (pcs)','Minus (Rp)','Bersih (Rp)'].map((t,i)=>[i,t,S.th])});
+  const cf=r3.length+1,cat={};
+  R.rows.forEach(r=>{const k=r.mc||'LAINNYA',o=cat[k]||(cat[k]={n:0,qp:0,vp:0,qm:0,vm:0});o.n++;if(allP.includes(r)){o.qp+=r.gap;o.vp+=r.nom}else{o.qm+=r.gap;o.vm+=r.nom}});
+  Object.keys(cat).sort((a,b)=>(cat[a].vp+cat[a].vm)-(cat[b].vp+cat[b].vm)).forEach(k=>{const o=cat[k];r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.qp,S.tdQ],[3,o.vp,S.tdN],[4,o.qm,S.tdQ],[5,o.vm,S.tdN],[6,o.vp+o.vm,S.tdN,`D${r3.length+1}+F${r3.length+1}`]]})});
+  const cl=r3.length;
+  const cv=Object.values(cat),ct3=[0,cv.reduce((t,o)=>t+o.n,0),cv.reduce((t,o)=>t+o.qp,0),cv.reduce((t,o)=>t+o.vp,0),cv.reduce((t,o)=>t+o.qm,0),cv.reduce((t,o)=>t+o.vm,0),cv.reduce((t,o)=>t+o.vp+o.vm,0)];
+  r3.push({h:18,c:[[0,'TOTAL',S.totL],...[1,2,3,4,5,6].map(i=>[i,ct3[i],i===1||i===2||i===4?S.totQ:S.totN,`SUM(${COL(i)}${cf}:${COL(i)}${cl})`])]});
+  r3.push(null);
+  r3.push({h:18,c:['Status Issue','Baris','Plus (Rp)','Minus (Rp)','Bersih (Rp)','Masuk BA'].map((t,i)=>[i,t,S.th])});
+  const iss={};R.rows.forEach(r=>{const k=r.iss||'Belum ada status',o=iss[k]||(iss[k]={n:0,p:0,m:0,ba:inScope(R,r)});o.n++;if(allP.includes(r))o.p+=r.nom;else o.m+=r.nom});
+  Object.keys(iss).forEach(k=>{const o=iss[k];r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.p,S.tdN],[3,o.m,S.tdN],[4,o.p+o.m,S.tdN],[5,o.ba?'Ya':'Tidak',S.tdC]]})});
+  const s3=sheetXml({rows:r3,widths:[30,12,16,14,12,14,14],merges:m3,footer:'Ringkasan BC '+cap(title)});
+
+  return pack(R,[['BA BC '+title,s1,`$A$1:$I$${rows.length}`,`$${h1}:$${h1+1}`],['Rincian',s2,'',`$3:$3`,`$A$3:$P$${e2}`],['Ringkasan',s3]]);
+ }
+ // sheets: [[nama, xml, area cetak, judul cetak, filter]]
+ function pack(R,sheets){
+  const title=R.label||'BLIND COUNTING',q=n=>"'"+n.replace(/'/g,"''")+"'";
+  const nm=sheets.map(x=>x[0].slice(0,31).replace(/[\\/?*\[\]:]/g,' '));
+  const dn=sheets.map((x,i)=>(x[4]?`<definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">${X(q(nm[i]))}!${x[4]}</definedName>`:'')+(x[2]?`<definedName name="_xlnm.Print_Area" localSheetId="${i}">${X(q(nm[i]))}!${x[2]}</definedName>`:'')+(x[3]?`<definedName name="_xlnm.Print_Titles" localSheetId="${i}">${X(q(nm[i]))}!${x[3]}</definedName>`:'')).join('');
+  const wbx=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets>${nm.map((n,i)=>`<sheet name="${X(n)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets>${dn?`<definedNames>${dn}</definedNames>`:''}<calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`;
+  const WS='application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
+  return zip([
+   ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="${WS}"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
+   ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
+   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('BA Blind Counting '+title)}</dc:title><dc:creator>Aplikasi BA Blind Counting - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
+   ['xl/workbook.xml',wbx],
+   ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="${REL}worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="${REL}styles" Target="styles.xml"/></Relationships>`],
+   ['xl/styles.xml',STYLES],
+   ...sheets.map((x,i)=>['xl/worksheets/sheet'+(i+1)+'.xml',x[1]])
+  ]);
+ }
+ /* ---------- mode rekap per sesi (file blind_counting_YYYY-MM-DD.xlsx) ---------- */
+ // Selisih Total Price = jumlah selisih mutlak per SKU; bersih = Scan − Cutoff.
+ // Maka plus = (mutlak + bersih)/2 dan minus = (mutlak − bersih)/2, tepat sama dengan rincian per SKU.
+ function parseSesi(rows,i,h){
+  const c={bc:pick(h,'blindcountingid'),per:pick(h,'periodid'),smp:pick(h,'samplingid'),d:pick(h,'tanggal','date'),mcc:pick(h,'mclevel4code'),mc:pick(h,'mclevel4name','mclevel4'),
+   pc:pick(h,'totalpricecutoff'),ps:pick(h,'totalpricescan'),sel:pick(h,'selisihtotalprice'),exp:pick(h,'qtyyangdiharapkan'),cnt:pick(h,'qtyyangdihitung'),
+   sku:pick(h,'totalsku'),skuc:pick(h,'totalskudihitung'),pt:pick(h,'namapetugas'),st:pick(h,'status'),sst:pick(h,'statusstock'),inv:pick(h,'statusinvestigasi'),iss:pick(h,'statusissue'),done:pick(h,'selesaipada'),upd:pick(h,'diperbaruipada')};
+  const out=[];
+  rows.slice(i+1).forEach(r=>{
+   const g=k=>c[k]>=0?r[c[k]]:'',t=k=>{const v=g(k);return blank(v)?'':String(v).replace(/\s+/g,' ').trim()};
+   const bc=t('bc');if(!bc)return;
+   const pc=num(g('pc')),ps=num(g('ps')),net=ps-pc,gross=Math.max(Math.abs(net),num(g('sel')));
+   out.push({bc,per:t('per'),smp:t('smp'),d:day(g('d')),mcc:t('mcc'),mc:t('mc'),pc,ps,net,plus:(gross+net)/2,minus:-(gross-net)/2,gross,
+    exp:num(g('exp')),cnt:num(g('cnt')),sku:num(g('sku')),skuc:num(g('skuc')),pt:cap(t('pt')),st:t('st'),sst:t('sst'),inv:t('inv'),iss:t('iss'),done:t('done')||t('upd')});
+  });
+  return out;
+ }
+ function buildSesi(rows,fileName){
+  const per={},months={};rows.forEach(r=>{if(r.per)per[r.per]=1;if(r.d){const k=r.d.slice(0,7);months[k]=(months[k]||0)+1}});
+  let ym='';const pk=Object.keys(per);
+  if(pk.length===1){const m=pk[0].match(/(\d{2})(\d{2})$/);if(m)ym='20'+m[1]+'-'+m[2]}
+  if(!ym)ym=Object.keys(months).sort((a,b)=>months[b]-months[a])[0]||'';
+  const y=+ym.slice(0,4),mo=+ym.slice(5,7);
+  const L=rows.slice().sort((a,b)=>a.d.localeCompare(b.d)||a.bc.localeCompare(b.bc)).map((r,k)=>Object.assign(r,{k,gap:r.cnt-r.exp,mis:r.gross!==0||r.cnt!==r.exp||/mismatch/i.test(r.sst)}));
+  const ds=L.map(r=>r.d).filter(Boolean).sort(),sum=k=>L.reduce((t,r)=>t+r[k],0);
+  const warn=[];
+  if(pk.length>1)warn.push('File berisi '+pk.length+' periode BC ('+pk.join(', ')+'). Pastikan tarik data satu bulan.');
+  const notClosed=L.filter(r=>r.st&&!/closed/i.test(r.st));if(notClosed.length)warn.push(notClosed.length+' sesi belum Closed: '+notClosed.slice(0,4).map(r=>r.bc.slice(-3)+' '+cap(r.mc)+' ('+r.st+')').join(', ')+(notClosed.length>4?'…':''));
+  const unsolved=L.filter(r=>r.mis&&!/solved/i.test(r.inv));if(unsolved.length)warn.push(unsolved.length+' sesi selisih investigasinya belum "Solved".');
+  const skuGap=sum('sku')-sum('skuc');if(skuGap>0)warn.push(nf(skuGap)+' SKU dari '+nf(sum('sku'))+' tidak terhitung saat BC (Total SKU − Total SKU Dihitung).');
+  return {mode:'sesi',ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',
+   st:{sesi:L.length,match:L.filter(r=>!r.mis).length,sku:sum('sku'),skuc:sum('skuc'),exp:sum('exp'),cnt:sum('cnt'),care:sum('pc'),scan:sum('ps'),gross:sum('gross')},
+   rows:L,jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
+ }
+ function calcSesi(R){
+  const L=R.rows.filter(r=>r.mis),sum=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  const minus=L.filter(r=>r.net<0),plus=L.filter(r=>r.net>0),zero=L.filter(r=>r.net===0);
+  return {L,minus,plus,zero,vPlus:sum(L,'plus'),vMinus:sum(L,'minus'),net:sum(L,'net'),gap:sum(L,'gap'),
+   noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved/i.test(r.inv||'')).length};
+ }
+ function workbookSesi(R){
+  const c=cfg(),K=calcSesi(R),st=R.st,rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl),W=11;
+  const push=r=>{rows.push(r);return rows.length};
+  const all=(st0,list)=>[...Array(W).keys()].map(i=>[i,'',st0]).map(x=>{const f=list.find(y=>y[0]===x[0]);return f||x});
+  const accV=st.care?Math.max(0,1-st.gross/st.care):0,accS=st.sesi?st.match/st.sesi:0;
+  push({h:20,c:all(S.title,[[0,'EIGERINDO MPI',S.title],[3,'BERITA ACARA HASIL BLIND COUNTING',S.title],[9,'Periode',S.form],[10,R.period||'-',S.form]])});
+  push({h:20,c:all(S.title,[[9,'Toko',S.form],[10,c.suffix||c.store,S.form]])});
+  push({h:20,c:all(S.title,[[9,'Tanggal',S.form],[10,serialDay(R.tgl),S.formD]])});
+  mg.push('A1:C3','D1:I3');
+  push(null);
+  push({c:[[0,'Perihal berita acara:',S.txt],[3,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
+  push({c:[[3,(R.jenis==='akhir'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
+  push(null);
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} telah direkap hasil blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) sebanyak ${nf(st.sesi)} sesi dengan ${nf(st.skuc)} SKU terhitung. Sebanyak ${nf(st.match)} sesi sesuai dan ${nf(K.L.length)} sesi terdapat selisih stock dengan barang plus senilai ${rp(K.vPlus)} dan barang minus senilai ${rp(K.vMinus)}, sehingga nominal selisih bersih mencapai ${rp(K.net)}.`;
+  let n=push({h:Math.max(28,13.5*lines(para,170)),c:[[0,para,S.para]]});mg.push(`A${n}:K${n}`);
+  n=push({c:[[0,'Adapun ringkasan hasil serta rincian selisih per sesi blind counting adalah sebagai berikut:',S.para]]});mg.push(`A${n}:K${n}`);
+  push(null);
+  // ringkasan dua kolom
+  n=push({h:16,c:all(S.th,[[0,'RINGKASAN HASIL',S.th]])});mg.push(`A${n}:K${n}`);
+  const kvL=[['Sesi blind counting (sesuai · selisih)',nf(st.sesi)+' ('+nf(st.match)+' · '+nf(K.L.length)+')'],['SKU terhitung / total SKU',nf(st.skuc)+' / '+nf(st.sku)],['Qty CARE (sistem)',st.exp],['Qty fisik terhitung',st.cnt],['Selisih qty bersih',st.cnt-st.exp],['Akurasi sesi',accS]];
+  const kvR=[['Nilai stok CARE (Rp)',st.care],['Nilai fisik / scan (Rp)',st.scan],['Barang plus (Rp)',K.vPlus],['Barang minus (Rp)',K.vMinus],['Selisih bersih (Rp)',K.net],['Akurasi nilai',accV]];
+  const fmt=v=>typeof v==='string'?S.td:(v>0&&v<1&&v!==Math.round(v))?S.pct:S.tdN;
+  kvL.forEach((l,i)=>{const r=kvR[i];n=push({c:all(S.td,[[0,l[0],S.td],[4,l[1],fmt(l[1])],[7,r[0],S.td],[10,r[1],fmt(r[1])]])});mg.push(`A${n}:D${n}`,`E${n}:G${n}`,`H${n}:J${n}`)});
+  push(null);
+  const h1=push({h:28,c:['No','Tanggal','Blind Counting ID','Kategori (MC Lv 4)','Qty CARE','Qty Fisik','Selisih Qty','Plus (Rp)','Minus (Rp)','Bersih (Rp)','Keterangan*'].map((t,i)=>[i,t,S.th])});
+  let no=0;const subs=[];
+  const section=(lab,st0,list,sub)=>{
+   if(!list.length)return;
+   const s=push({h:16,c:all(st0,[[0,lab,st0]])});mg.push(`A${s}:K${s}`);
+   const f=rows.length+1;
+   list.forEach(r=>{no++;const rem=remOf(R,r);push({h:lines(rem,30)>1?13.5*lines(rem,30):0,c:[[0,no,S.tdC],[1,serialDay(r.d),S.tdD],[2,r.bc,S.tdC],[3,r.mc,S.td],[4,r.exp,S.tdQ],[5,r.cnt,S.tdQ],[6,r.gap,S.tdQ],[7,r.plus,S.tdN],[8,r.minus,S.tdN],[9,r.net,S.tdN],[10,rem,S.td]]})});
+   const l=rows.length,sm=k=>list.reduce((t,r)=>t+r[k],0);
+   const t=push({h:16,c:[[0,'Subtotal '+sub,S.subL],[1,'',S.subL],[2,'',S.subL],[3,list.length+' sesi',S.subL],
+    ...['exp','cnt','gap'].map((k,j)=>[4+j,sm(k),S.subQ,`SUM(${COL(4+j)}${f}:${COL(4+j)}${l})`]),...['plus','minus','net'].map((k,j)=>[7+j,sm(k),S.subN,`SUM(${COL(7+j)}${f}:${COL(7+j)}${l})`]),[10,'',S.subL]]});
+   mg.push(`A${t}:C${t}`);subs.push(t);
+  };
+  section('A. SESI DENGAN SELISIH BERSIH MINUS',S.secM,K.minus,'minus');
+  section('B. SESI DENGAN SELISIH BERSIH PLUS',S.secP,K.plus,'plus');
+  section('C. SESI PLUS & MINUS SALING MENUTUP (bersih 0)',S.secZ,K.zero,'saling menutup');
+  if(!subs.length){const e=push({c:all(S.td,[[0,'Tidak ada selisih stock pada periode ini.',S.td]])});mg.push(`A${e}:K${e}`)}
+  const tf=k=>subs.length?subs.map(s=>k+s).join('+'):'0';
+  const T=push({h:18,c:[[0,'Total Selisih',S.totL],[1,'',S.totL],[2,'',S.totL],[3,K.L.length+' sesi',S.totL],
+   ...['exp','cnt','gap'].map((k,j)=>[4+j,K.L.reduce((t,r)=>t+r[k],0),S.totQ,tf(COL(4+j))]),[7,K.vPlus,S.totN,tf('H')],[8,K.vMinus,S.totN,tf('I')],[9,K.net,S.totN,tf('J')],[10,'',S.totL]]});
+  mg.push(`A${T}:C${T}`);
+  push(null);
+  const five=approvers(K.net).length>3,nm=v=>'('+(v?String(v).toUpperCase():'____________________')+')';
+  n=push({c:[[0,'Dibuat oleh',S.sigT],[3,'Diperiksa oleh',S.sigT],[4,'Disetujui oleh**',S.sigT]]});mg.push(`A${n}:C${n}`,`E${n}:K${n}`);
+  for(let i=0;i<4;i++)push({h:20,c:[]});
+  n=push({c:[[0,nm(c.n1),S.sigN],[3,nm(c.n2),S.sigN],[4,nm(c.n3),S.sigN],[7,nm(c.n4),S.sigN],...(five?[[10,nm(c.n5),S.sigN]]:[])]});mg.push(`A${n}:C${n}`,`E${n}:G${n}`,`H${n}:J${n}`);
+  n=push({c:[[0,c.t1,S.sigT],[3,c.t2,S.sigT],[4,c.t3,S.sigT],[7,c.t4,S.sigT],...(five?[[10,c.t5,S.sigT]]:[])]});mg.push(`A${n}:C${n}`,`E${n}:G${n}`,`H${n}:J${n}`);
+  push(null);
+  ['* Keterangan diisi penyebab/penyelesaian selisih per sesi. Plus = nilai barang yang fisiknya lebih dari CARE, minus = nilai barang yang fisiknya kurang dari CARE (dari kolom Selisih Total Price & Total Price Cutoff/Scan).',
+   '** Persetujuan sesuai nominal selisih: Rp5.000.000 oleh Head of Branch, Head of Regional Dept. · Rp10.000.000 ditambah Deputy Head of R&S Division · Rp15.000.000 ditambah Head of R&S Division'].forEach(t=>push({h:12,c:[[0,t,S.note]]}));
+  const s1=sheetXml({rows,widths:[5,11.5,17,28,8,8,8,13,13,13,28],merges:mg,grid:false,land:true,footer:'BA Blind Counting '+cap(title)});
+
+  // Rincian semua sesi
+  const r2=[],m2=[];
+  r2.push({h:20,c:[[0,'RINCIAN SESI BLIND COUNTING — '+title,S.title]]});m2.push('A1:T1');
+  r2.push({c:[[0,c.store+' · periode '+(R.period||'-')+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:'')+' · sumber '+(R.file||''),S.note]]});m2.push('A2:T2');
+  const HD=['No','Tanggal','Blind Counting ID','Sampling ID','Kategori','Petugas','Total SKU','SKU Dihitung','Qty CARE','Qty Fisik','Selisih Qty','Nilai CARE (Rp)','Nilai Fisik (Rp)','Plus (Rp)','Minus (Rp)','Bersih (Rp)','Status','Status Stock','Investigasi','Keterangan'];
+  r2.push({h:28,c:HD.map((t,i)=>[i,t,S.th])});
+  R.rows.forEach((r,i)=>{const rem=remOf(R,r);r2.push({h:lines(rem,32)>1?13.5*lines(rem,32):0,c:[[0,i+1,S.tdC],[1,serialDay(r.d),S.tdD],[2,r.bc,S.tdC],[3,r.smp,S.tdC],[4,r.mc,S.td],[5,r.pt,S.td],[6,r.sku,S.tdQ],[7,r.skuc,S.tdQ],[8,r.exp,S.tdQ],[9,r.cnt,S.tdQ],[10,r.gap,S.tdQ],
+   [11,r.pc,S.tdN],[12,r.ps,S.tdN],[13,r.plus,S.tdN],[14,r.minus,S.tdN],[15,r.net,S.tdN],[16,r.st||'-',S.tdC],[17,r.sst||'-',S.tdC],[18,r.inv||'-',S.tdC],[19,rem,S.td]]})});
+  const e2=r2.length,tt=k=>R.rows.reduce((t,r)=>t+r[k],0);
+  r2.push({h:18,c:[[0,'TOTAL',S.totL],...[1,2,3,4,5].map(i=>[i,'',S.totL]),...['sku','skuc','exp','cnt','gap'].map((k,j)=>[6+j,tt(k),S.totQ,`SUM(${COL(6+j)}4:${COL(6+j)}${e2})`]),...['pc','ps','plus','minus','net'].map((k,j)=>[11+j,tt(k),S.totN,`SUM(${COL(11+j)}4:${COL(11+j)}${e2})`]),...[16,17,18,19].map(i=>[i,'',S.totL])]});m2.push(`A${r2.length}:F${r2.length}`);
+  const s2=sheetXml({rows:r2,widths:[5,11.5,17,16,24,22,7,8,7,7,7,15,15,12,12,12,9,9,9,30],merges:m2,land:true,frozen:3,filter:`A3:T${e2}`,footer:'Rincian Sesi BC '+cap(title)});
+
+  // Ringkasan per petugas & per minggu
+  const r3=[],m3=[];
+  r3.push({h:20,c:[[0,'RINGKASAN BLIND COUNTING — '+title,S.title]]});m3.push('A1:H1');
+  r3.push({c:[[0,c.store+' · '+(R.from?dateText(R.from).tgl:'')+' – '+(R.to?dateText(R.to).tgl:''),S.note]]});m3.push('A2:H2');
+  r3.push(null);
+  const grp=(label,keyOf)=>{
+   r3.push({h:28,c:[label,'Sesi','Sesi selisih','SKU dihitung','Akurasi sesi','Plus (Rp)','Minus (Rp)','Bersih (Rp)'].map((t,i)=>[i,t,S.th])});
+   const f=r3.length+1,G={};
+   R.rows.forEach(r=>{const k=keyOf(r)||'-',o=G[k]||(G[k]={n:0,m:0,s:0,p:0,mi:0,ne:0});o.n++;if(r.mis)o.m++;o.s+=r.skuc;o.p+=r.plus;o.mi+=r.minus;o.ne+=r.net});
+   Object.keys(G).sort().forEach(k=>{const o=G[k],i=r3.length+1;r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.m,S.tdQ],[3,o.s,S.tdN],[4,o.n?(o.n-o.m)/o.n:0,S.pct,`IF(B${i}=0,0,(B${i}-C${i})/B${i})`],[5,o.p,S.tdN],[6,o.mi,S.tdN],[7,o.ne,S.tdN]]})});
+   const l=r3.length,V=Object.values(G),sm=k=>V.reduce((t,o)=>t+o[k],0),i=r3.length+1;
+   r3.push({h:18,c:[[0,'TOTAL',S.totL],[1,sm('n'),S.totQ,`SUM(B${f}:B${l})`],[2,sm('m'),S.totQ,`SUM(C${f}:C${l})`],[3,sm('s'),S.totN,`SUM(D${f}:D${l})`],[4,sm('n')?(sm('n')-sm('m'))/sm('n'):0,S.totP,`IF(B${i}=0,0,(B${i}-C${i})/B${i})`],[5,sm('p'),S.totN,`SUM(F${f}:F${l})`],[6,sm('mi'),S.totN,`SUM(G${f}:G${l})`],[7,sm('ne'),S.totN,`SUM(H${f}:H${l})`]]});
+   r3.push(null);
+  };
+  grp('Petugas',r=>r.pt);
+  grp('Minggu (Senin)',r=>{if(!r.d)return '';const p=r.d.split('-').map(Number),d=new Date(Date.UTC(p[0],p[1]-1,p[2]));d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return dateText(d.toISOString().slice(0,10)).tgl});
+  const s3=sheetXml({rows:r3,widths:[30,8,10,12,11,14,14,14],merges:m3,footer:'Ringkasan BC '+cap(title)});
+  return pack(R,[['BA BC '+title,s1,`$A$1:$K$${rows.length}`,`$${h1}:$${h1}`],['Rincian Sesi',s2,'',`$3:$3`,`$A$3:$T$${e2}`],['Ringkasan',s3]]);
+ }
+ const rowSesi=(r,k)=>`<div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}</small></span><em class="${k==='minus'||(!k&&r.net<0)?'m':'p'}">${rp(k?r[k]:r.net)}<small>${k?'bersih '+rp(r.net):(r.gap>0?'+':'')+nf(r.gap)+' pcs'}</small></em></div>`;
+ const rpj=v=>Math.abs(v)>=1e6?(v<0?'-':'')+'Rp'+(Math.abs(v)/1e6).toFixed(1).replace('.',',')+' jt':rp(v);
+ function renderSesi(b){
+  const R=rep,K=calcSesi(R),st=R.st,ap=approvers(K.net),c=cfg(),accS=st.sesi?st.match/st.sesi:0,accV=st.care?Math.max(0,1-st.gross/st.care):0;
+  $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi)+' sesi BC · '+nf(st.skuc)+' SKU dihitung';
+  const top=k=>K.L.filter(r=>r[k]!==0).sort((x,y)=>Math.abs(y[k])-Math.abs(x[k])).slice(0,4).map(r=>rowSesi(r,k)).join('');
+  const hist=Object.entries(ST.hist||{}).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
+  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} dari ${nf(st.sesi)} sesi selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} · ${esc(R.period||'')}</small></em></div>
+   <div class="ks-tiles"><div class="iv-tile bc-t m"><small>Barang minus</small><b title="${rp(K.vMinus)}">${rpj(K.vMinus)}</b><span>${nf(K.L.filter(r=>r.minus).length)} sesi</span></div><div class="iv-tile bc-t p"><small>Barang plus</small><b title="${rp(K.vPlus)}">${rpj(K.vPlus)}</b><span>${nf(K.L.filter(r=>r.plus).length)} sesi</span></div><div class="iv-tile bc-t"><small>Akurasi nilai</small><b>${(accV*100).toFixed(1).replace('.',',')}%</b><span>${nf(st.match)}/${nf(st.sesi)} sesi</span></div></div>
+   ${R.warn.length?`<div class="ks-warn">${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
+   <div class="bc-cols"><div><p class="wk-p bc-h m"><b>Minus terbesar</b><span>per sesi</span></p>${top('minus')||'<p class="hint">Tidak ada barang minus.</p>'}</div>
+   <div><p class="wk-p bc-h p"><b>Plus terbesar</b><span>per sesi</span></p>${top('plus')||'<p class="hint">Tidak ada barang plus.</p>'}</div></div>
+   <p class="hint">Qty CARE ${nf(st.exp)} → fisik ${nf(st.cnt)} pcs (${st.cnt-st.exp>0?'+':''}${nf(st.cnt-st.exp)}) · nilai CARE ${rp(st.care)}${K.noRem?` · ${K.noRem} sesi selisih belum ada keterangan (<button type="button" class="bc-lnk" data-bc="list">isi</button>, opsional)`:''}</p>
+   <div class="bc-form"><label class="ks-f"><span>Tanggal BA</span><input class="in" type="date" id="bcTgl" value="${esc(R.tgl||today())}"></label>
+    <label class="ks-f"><span>Perihal</span><select class="in" id="bcJenis"><option value="akhir"${R.jenis==='akhir'?' selected':''}>Penyelesaian selisih (akhir periode)</option><option value="berjalan"${R.jenis==='berjalan'?' selected':''}>Selisih di bulan berjalan</option></select></label></div>
+   <p class="hint bc-ap">Nominal ${rp(Math.abs(K.net))} → ${ap.length?'persetujuan: '+esc(ap.join(', ')):'di bawah Rp5.000.000, cukup dibuat '+esc(c.t1)+' &amp; diperiksa '+esc(c.t2)}.</p>
+   <div class="ks-act"><button class="btn" type="button" data-bc="xlsx">⬇ Unduh BA Excel siap tanda tangan</button><button class="btn ghost" type="button" data-bc="list">Rincian &amp; keterangan</button></div>
+   ${hist.length>1?`<div class="bc-hist">${hist.map(([k,v])=>`<span><small>${esc(cap(BULAN[+k.slice(5,7)-1]).slice(0,3))} ${k.slice(2,4)}</small><b class="${v.net<0?'bc-neg':''}">${rp(v.net)}</b></span>`).join('')}</div>`:''}
+   <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc(c.n1||c.t1)} &amp; ${esc(c.n2||c.t2)}.</p>`;
+  $id('bcTgl').onchange=e=>{rep.tgl=e.target.value||today();save()};
+  $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;save()};
+ }
+ function showListSesi(){
+  const R=rep,K=calcSesi(R);
+  const item=r=>`<div class="bc-li"><div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}</small><small>${r.plus?'<span style="color:#1a8a49">plus '+rp(r.plus)+'</span>':''}${r.plus&&r.minus?' · ':''}${r.minus?'<span style="color:#d33a40">minus '+rp(r.minus)+'</span>':''}</small></span><em class="${r.net<0?'m':'p'}">${rp(r.net)}<small>${r.gap>0?'+':''}${nf(r.gap)} pcs</small></em></div>
+   <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Keterangan penyebab / penyelesaian (opsional)"></div>`;
+  const sec=(lab,cls,list,v)=>list.length?`<p class="wk-p bc-h ${cls}"><b>${lab}</b><span>${list.length} sesi · ${rp(v)}</span></p>${list.map(item).join('')}`:'';
+  const sm=(a,k)=>a.reduce((t,r)=>t+r[k],0);
+  openModal('Sesi selisih '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Satu baris = satu sesi blind counting. Keterangan yang diisi di sini ikut masuk ke Excel.</p>
+   <div class="ks-list bc-list">${sec('A. Selisih bersih minus','m',K.minus,sm(K.minus,'net'))}${sec('B. Selisih bersih plus','p',K.plus,sm(K.plus,'net'))}${sec('C. Plus & minus saling menutup','',K.zero,0)}${K.L.length?'':'<p class="hint">Semua sesi sesuai, tidak ada selisih.</p>'}</div>`);
+  document.querySelectorAll('[data-bck]').forEach(inp=>inp.addEventListener('input',()=>{const r=rep.rows[+inp.dataset.bck];rep.edit=rep.edit||{};if(!inp.value.trim())delete rep.edit[r.k];else rep.edit[r.k]=inp.value;save();clearTimeout(showListSesi.t);showListSesi.t=setTimeout(render,400)}));
+ }
+
+ const book=R=>R.mode==='sesi'?workbookSesi(R):workbook(R);
+ const fileName=R=>{const c=cfg();return (c.file+' '+cap(R.label||'')+(c.suffix?' - '+c.suffix:'')).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.xlsx'};
+ function download(R){
+  const blob=book(R),name=fileName(R);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+  if(window.ofaToast)window.ofaToast('Excel diunduh: '+name);
+  return name;
+ }
+
+ /* ---------- tampilan kartu ---------- */
+ const rowHtml=r=>`<div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>`;
+ function render(){
+  const b=$id('bcBody');if(!b)return;
+  if(!rep){b.innerHTML=`<p class="dp-empty">Upload file <b>blind_counting_details_BCP…xlsx</b> hasil export sistem setelah BC sebulan selesai. Barang <b>plus</b> dan <b>minus</b> per SKU dipisah otomatis, nama produk diisi dari file daftar SKU (opsional), lalu Berita Acara (REG-FRM-35) siap diunduh dan ditandatangani.</p>`;$id('bcSub').textContent='Berita acara blind counting bulanan · barang plus & minus';return}
+  if(rep.mode==='sesi')return renderSesi(b);
+  const R=rep,K=calc(R),st=R.st||{},acc=st.lines?st.match/st.lines:0,ap=approvers(K.net),miss=missing(),c=cfg();
+  $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi||0)+' sesi BC · '+nf(st.lines||0)+' baris dihitung';
+  const top=(a,asc)=>a.slice().sort((x,y)=>asc?x.nom-y.nom:y.nom-x.nom).slice(0,4).map(rowHtml).join('');
+  const hist=Object.entries(ST.hist||{}).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
+  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih · ${R.scope==='all'?'semua':'operasional'}</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} baris selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} ${esc(cap(R.label))}</small></em></div>
+   <div class="ks-tiles"><div class="iv-tile bc-t m"><small>Barang minus</small><b>${nf(-K.qMinus)} pcs</b><span>${rp(K.vMinus)}</span></div><div class="iv-tile bc-t p"><small>Barang plus</small><b>${nf(K.qPlus)} pcs</b><span>${rp(K.vPlus)}</span></div><div class="iv-tile bc-t"><small>Akurasi baris</small><b>${(acc*100).toFixed(1).replace('.',',')}%</b><span>${nf(st.match||0)}/${nf(st.lines||0)} sesuai</span></div></div>
+   <div class="bc-seg" role="group" aria-label="Cakupan berita acara"><button type="button" data-bcs="ops" class="${R.scope!=='all'?'on':''}">Operasional<small>${nf(R.rows.length-K.sys)} baris · tanpa issue System</small></button><button type="button" data-bcs="all" class="${R.scope==='all'?'on':''}">Semua selisih<small>${nf(R.rows.length)} baris · termasuk System</small></button></div>
+   ${(miss||K.noRem||K.open||R.warn.length)?`<div class="ks-warn">${miss?`⚠ ${miss} SKU belum ada nama produk. Upload file berisi kolom <b>SKU Name</b> &amp; <b>SKU Code</b> (mis. export inventory by SKU / stock database) lewat tombol ⇪ Upload untuk mengisi nama.<br>`:''}${K.noRem?`⚠ ${K.noRem} baris belum ada keterangan penyebab/penyelesaian. <button type="button" class="bc-lnk" data-bc="list">Isi sekarang</button><br>`:''}${K.open?`⚠ ${K.open} baris investigasinya belum "Solved".<br>`:''}${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
+   <div class="bc-cols"><div><p class="wk-p bc-h m"><b>Minus terbesar</b><span>${nf(K.minus.length)} baris</span></p>${top(K.minus,true)||'<p class="hint">Tidak ada barang minus.</p>'}</div>
+   <div><p class="wk-p bc-h p"><b>Plus terbesar</b><span>${nf(K.plus.length)} baris</span></p>${top(K.plus,false)||'<p class="hint">Tidak ada barang plus.</p>'}</div></div>
+   ${K.pair.size?`<p class="hint">${K.pair.size} SKU tercatat plus di satu bin dan minus di bin lain (kemungkinan salah bin/scan) — cek di rincian.</p>`:''}
+   <div class="bc-form"><label class="ks-f"><span>Tanggal BA</span><input class="in" type="date" id="bcTgl" value="${esc(R.tgl||today())}"></label>
+    <label class="ks-f"><span>Perihal</span><select class="in" id="bcJenis"><option value="akhir"${R.jenis==='akhir'?' selected':''}>Penyelesaian selisih (akhir periode)</option><option value="berjalan"${R.jenis==='berjalan'?' selected':''}>Selisih di bulan berjalan</option></select></label></div>
+   <p class="hint bc-ap">Nominal ${rp(Math.abs(K.net))} → ${ap.length?'persetujuan: '+esc(ap.join(', ')):'di bawah Rp5.000.000, cukup dibuat '+esc(c.t1)+' &amp; diperiksa '+esc(c.t2)}.</p>
+   <div class="ks-act"><button class="btn" type="button" data-bc="xlsx">⬇ Unduh BA Excel siap tanda tangan</button><button class="btn ghost" type="button" data-bc="list">Rincian &amp; keterangan</button></div>
+   ${hist.length>1?`<div class="bc-hist">${hist.map(([k,v])=>`<span><small>${esc(cap(BULAN[+k.slice(5,7)-1]).slice(0,3))} ${k.slice(2,4)}</small><b class="${v.net<0?'bc-neg':''}">${rp(v.net)}</b></span>`).join('')}</div>`:''}
+   <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc(c.n1||c.t1)} &amp; ${esc(c.n2||c.t2)}.</p>`;
+  $id('bcTgl').onchange=e=>{rep.tgl=e.target.value||today();save()};
+  $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;save()};
+ }
+ function remember(){
+  const sesi=rep.mode==='sesi',K=sesi?calcSesi(rep):calc(rep),h=Object.assign({},ST.hist||{});
+  h[rep.ym]={net:K.net,plus:K.vPlus,minus:K.vMinus,n:K.L.length,acc:sesi?(rep.st.sesi?rep.st.match/rep.st.sesi:0):(rep.st&&rep.st.lines?rep.st.match/rep.st.lines:0)};
+  Object.keys(h).sort().slice(0,-12).forEach(k=>delete h[k]);ST.hist=h;stSave();
+ }
+ function showList(){
+  const R=rep;if(!R)return;if(R.mode==='sesi')return showListSesi();const K=calc(R);
+  const item=r=>`<div class="bc-li${inScope(R,r)?'':' off'}"><div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${esc(r.mc||'')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · ${esc(r.iss||'belum ada status')}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}${K.pair.has(r.sku)?' · plus/minus antar bin':''}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>
+   <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Penyebab / penyelesaian selisih"></div>`;
+  const rest=R.rows.filter(r=>!inScope(R,r));
+  openModal('Rincian selisih '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Keterangan diambil dari kolom Remark sistem dan boleh diubah. Yang diubah di sini ikut masuk ke Excel.</p>
+   <div class="ks-list bc-list"><p class="wk-p bc-h m"><b>A. Barang minus</b><span>${nf(-K.qMinus)} pcs · ${rp(K.vMinus)}</span></p>${K.minus.map(item).join('')||'<p class="hint">Tidak ada.</p>'}
+   <p class="wk-p bc-h p"><b>B. Barang plus</b><span>${nf(K.qPlus)} pcs · ${rp(K.vPlus)}</span></p>${K.plus.map(item).join('')||'<p class="hint">Tidak ada.</p>'}
+   ${rest.length?`<p class="wk-p bc-h"><b>Tidak masuk BA (issue System)</b><span>${rest.length} baris</span></p>${rest.map(item).join('')}`:''}</div>`);
+  document.querySelectorAll('[data-bck]').forEach(inp=>inp.addEventListener('input',()=>{const r=rep.rows[+inp.dataset.bck];rep.edit=rep.edit||{};if(inp.value===(r.rem||''))delete rep.edit[r.k];else rep.edit[r.k]=inp.value;save();clearTimeout(showList.t);showList.t=setTimeout(render,400)}));
+ }
+ function settings(){
+  const c=cfg(),f=(k,l,ph)=>`<label class="ks-f"><span>${l}</span><input class="in" id="bc_${k}" value="${esc(c[k])}" placeholder="${esc(ph||'')}"></label>`;
+  openModal('Pengaturan BA Blind Counting',`<div class="ks-form">${f('store','Nama toko di kalimat BA','mis. Eiger Store Malioboro (7xxx)')}${f('form','Nomor formulir')}${f('rev','Revisi')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Dibuat oleh</b></p>${f('t1','Jabatan')}${f('n1','Nama','Nama Store Head')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Diperiksa oleh</b></p>${f('t2','Jabatan')}${f('n2','Nama','Nama atasan pemeriksa')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Disetujui oleh</b> (kosongkan nama bila belum tahu)</p>${f('t3','Jabatan 1')}${f('n3','Nama 1')}${f('t4','Jabatan 2')}${f('n4','Nama 2')}${f('t5','Jabatan 3 (selisih ≥ Rp15 juta)')}${f('n5','Nama 3')}
+   ${f('file','Awalan nama file')}${f('suffix','Akhiran nama file','mis. 7xxx - NAMA TOKO')}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" type="button" id="bcSave">Simpan</button><button class="btn ghost" type="button" id="bcReset">Kembalikan bawaan</button></div>`);
+  $id('bcSave').onclick=()=>{const v={};Object.keys(DEF).forEach(k=>{const e=$id('bc_'+k);v[k]=e?e.value.trim():DEF[k]});['store','form','t1','t2','t3','t4','t5','file'].forEach(k=>{if(!v[k])v[k]=DEF[k]});ST.cfg=v;stSave();close();render();if(window.ofaToast)window.ofaToast('Pengaturan BA disimpan')};
+  $id('bcReset').onclick=()=>{delete ST.cfg;stSave();close();render()};
+ }
+ async function names(){
+  const s=$id('bcStatus');s.className='iv-status';s.textContent='Mengambil nama produk dari data stok…';
+  try{const n=await fetchNames();save();render();const m=missing();s.textContent=(n?'✓ '+n+' nama produk terisi':'Tidak ada nama baru')+(m?' · '+m+' SKU masih kosong — upload file berisi SKU Name & SKU Code':'');}
+  catch(e){s.className='iv-status err';s.textContent='Gagal: '+(e.message||e)+' Upload file berisi kolom SKU Name & SKU Code (mis. Stock Database).'}
+ }
+ async function pickFile(file){
+  const s=$id('bcStatus');s.className='iv-status';s.textContent='Membaca '+file.name+'…';
+  try{
+   const p=await parse(file);
+   if(p.kind==='names'){
+    let m={};try{m=JSON.parse(localStorage.getItem(NK)||'{}')}catch(e){}
+    Object.assign(m,p.names);try{localStorage.setItem(NK,JSON.stringify(m))}catch(e){}
+    const n=applyNames();if(rep)save();render();
+    s.textContent='✓ Daftar nama '+nf(Object.keys(p.names).length)+' SKU disimpan'+(rep?' · '+n+' nama terisi'+(missing()?' · '+missing()+' masih kosong':''):'. Sekarang upload file blind_counting_details.');
+    return;
+   }
+   if(p.kind==='sesi'){
+    const R=buildSesi(p.rows,file.name),old=rep&&rep.ym===R.ym?rep:null;
+    if(old){R.jenis=old.jenis;R.tgl=old.tgl;if(old.mode==='sesi'){const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.bc]=old.edit[r.k]});R.rows.forEach(r=>{if(o[r.bc]!=null)R.edit[r.k]=o[r.bc]})}}
+    rep=R;save();remember();render();
+    s.textContent='✓ '+nf(R.st.sesi)+' sesi BC '+cap(R.label)+' terbaca · '+calcSesi(R).L.length+' sesi ada selisih';
+    return;
+   }
+   const R=build(p.rows,file.name);
+   const old=rep&&rep.ym===R.ym&&rep.mode!=='sesi'?rep:null;
+   if(old){R.scope=old.scope;R.jenis=old.jenis;R.tgl=old.tgl;const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.sku+'|'+r.bin+'|'+r.d]=old.edit[r.k]});R.rows.forEach(r=>{const v=o[r.sku+'|'+r.bin+'|'+r.d];if(v!=null)R.edit[r.k]=v})}
+   rep=R;applyNames();save();remember();render();
+   s.textContent='✓ '+nf(R.st.lines)+' baris BC '+cap(R.label)+' terbaca · '+R.rows.length+' baris selisih';
+   if(missing()&&configured()&&localStorage.getItem('salesTrackingPin'))names();
+  }catch(e){s.className='iv-status err';s.textContent='Gagal membaca file: '+(e.message||e)}
+ }
+ $id('bcUp').onclick=()=>$id('bcFile').click();
+ $id('bcFile').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)pickFile(f)};
+ $id('bcCfg').onclick=()=>(window.ofaHeadGate||(g=>g()))(settings);
+ box.addEventListener('click',e=>{
+  const s=e.target.closest('[data-bcs]');if(s&&rep){rep.scope=s.dataset.bcs;save();remember();render();return}
+  const a=e.target.closest('[data-bc]');if(!a||!rep)return;
+  if(a.dataset.bc==='xlsx'){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)window.ofaToast('Isi dulu nama toko & nama Store Head');settings();return}download(rep);}
+  if(a.dataset.bc==='list')showList();
+  if(a.dataset.bc==='names')names();
+ });
+ if(rep&&missing()&&applyNames())save();
+ render();
+})();
+
+</script>
+<script>
+document.getElementById('appSet').onclick=()=>document.getElementById('bcCfg').click();
+appStart();
+</script>
+</body>
+</html>
