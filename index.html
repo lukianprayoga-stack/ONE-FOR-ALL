@@ -7928,7 +7928,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  },true);
  document.addEventListener('input',e=>{if(e.target.id!=='bcuQ')return;q=e.target.value.trim();const p=e.target.selectionStart;renderPage();const i=$id('bcuQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
- function peran(){const s=document.querySelector('#side [data-sd="bcu"]');if(s)s.hidden=!owner();renderCard()}
+ function peran(){const s=document.querySelector('#side [data-sd="bcu"]');if(s)s.hidden=!owner();renderCard();lompat()}
+ // tautan langsung: .../#pengguna-bc membuka halaman ini
+ function lompat(){if(location.hash==='#pengguna-bc'&&!pg.classList.contains('open')){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}buka()}}
+ addEventListener('hashchange',lompat);
  setTimeout(peran,1500);
  renderCard();load(false);
 })();
