@@ -1404,6 +1404,44 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .pr-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.pr-chips span{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;background:var(--orange-bg,#fff1e7);color:var(--orange,#f26a1b)}
 .pr-chips span.rm{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
 .pr-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* ====== SALES HARIAN (SDR) ====== */
+.sdr-hero{margin-top:10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,var(--blue-bg,#eaf1ff),var(--bg));border:1px solid var(--card-bd,var(--line))}
+.sdr-hero small{display:block;font-size:11.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.sdr-hero b{display:block;font-size:26px;letter-spacing:-.6px;color:var(--title,var(--fg));font-variant-numeric:tabular-nums}
+.sdr-hero span{font-size:12.5px;color:var(--mut)}.sdr-hero em,.sdr-kpi em{font-style:normal;font-weight:800}.sdr-hero em.ok,.sdr-kpi em.ok{color:var(--ok-fg)}.sdr-hero em.bad{color:var(--bad-fg)}
+.sdr-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.sdr-mini div{background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:7px 10px;min-width:0}
+.sdr-mini small{display:block;font-size:11px;color:var(--mut)}.sdr-mini b{display:block;font-size:15px;color:var(--num,var(--fg));font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdr-warn{display:block;width:100%;margin-top:8px;border:0;border-radius:12px;padding:9px 12px;background:var(--warn-bg);color:var(--warn-fg);font:inherit;font-size:12.5px;font-weight:700;text-align:left;cursor:pointer}
+.sdr-body{max-width:1300px}
+.sdr-kpi{display:grid;grid-template-columns:minmax(0,1.9fr) repeat(6,minmax(0,1fr));gap:8px;margin-top:12px}
+.sdr-kpi>div{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:10px 12px;min-width:0}
+.sdr-kpi>div.sdr-big{background:linear-gradient(135deg,#0b2a7a,#1d4ed8);border-color:transparent;color:#fff}
+.sdr-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}.sdr-kpi .sdr-big small,.sdr-kpi .sdr-big span{color:rgba(255,255,255,.78)}
+.sdr-kpi b{display:block;font-size:19px;letter-spacing:-.4px;color:var(--num,var(--fg));font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdr-kpi .sdr-big b{font-size:24px;color:#fff}.sdr-kpi .sdr-big em.ok{color:#86efac}
+.sdr-kpi span{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.sdr-bar{margin-top:8px;background:rgba(255,255,255,.2)!important}.sdr-bar i{background:#fff!important}
+.sdr-tw{overflow-x:auto;margin-top:14px;border:1px solid var(--card-bd,var(--line));border-radius:16px;background:var(--card)}
+.sdr-t{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sdr-t th{vertical-align:bottom;line-height:1.25;font-size:10.5px;font-weight:800;color:var(--blue,#1d4ed8);text-transform:uppercase;letter-spacing:.03em;padding:8px 6px;text-align:right;border-bottom:1px solid var(--line);background:var(--bg)}
+.sdr-t td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line)}
+.sdr-t .l{text-align:left;position:sticky;left:0;background:var(--card);z-index:1}.sdr-t th.l{background:var(--bg)}
+.sdr-t td.l b{font-size:13px}.sdr-t td.l small{color:var(--mut);margin-left:4px;font-size:11px}
+.sdr-t tr.kos td{color:var(--mut)}.sdr-t tr.fut{opacity:.45}.sdr-t tr.now td{background:color-mix(in srgb,var(--blue,#1d4ed8) 7%,transparent)}
+.sdr-t td.ok{color:var(--ok-fg);font-weight:700}.sdr-t td.bad{color:var(--bad-fg);font-weight:700}
+.sdr-t td.tf{color:var(--mut)}
+.sdr-t .tfb button{min-width:46px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;padding:3px 8px;font:inherit;font-weight:700;cursor:pointer}
+.sdr-t .tfb button.need{border-color:var(--warn-bd);background:var(--warn-bg);color:var(--warn-fg)}.sdr-t .tfb button.isi{border-color:color-mix(in srgb,var(--blue,#1d4ed8) 40%,transparent);color:var(--blue,#1d4ed8)}
+.sdr-t tfoot td{font-weight:800;border-top:2px solid var(--title,var(--fg));border-bottom:0;background:var(--bg)}
+.sdr-wa{border:0;background:none;cursor:pointer;font-size:14px;padding:2px 4px}
+.sdr-slots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sdr-slots label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--mut)}.sdr-slots .in{font-size:20px;text-align:center;color:var(--fg);font-variant-numeric:tabular-nums}
+.sdr-slots small{font-weight:500;font-size:11.5px}
+.sdr-tot{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff)}
+.sdr-tot b{font-size:22px;color:var(--blue,#1d4ed8)}.sdr-tot span{font-size:12.5px;color:var(--mut)}.sdr-tot span b{font-size:13px}
+@media(max-width:1100px){.sdr-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}.sdr-kpi>div.sdr-big{grid-column:1/-1}}
+@media(max-width:640px){.sdr-t .m{display:none}.sdr-kpi{grid-template-columns:1fr 1fr}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1588,6 +1626,7 @@ html.scrolled header{border-bottom-color:var(--line)}
   <p class="side-h">Alat</p>
   <button type="button" data-sd="stok"><span>⌕</span>Cek stok<kbd>/</kbd></button>
   <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
+  <button type="button" data-sd="sdr"><span>▥</span>Sales Harian</button>
   <button type="button" data-sd="co"><span style="font-size:10.5px;font-weight:800;letter-spacing:-.3px">Rp</span>Cash Opname</button>
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
   <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
@@ -1646,6 +1685,10 @@ html.scrolled header{border-bottom-color:var(--line)}
             <button class="btn glass" type="button" id="slOpen">Dashboard ↗</button>
           </div>
           <div class="sl-foot"><span id="slAt"></span><button type="button" id="slRefresh">↻ Perbarui</button></div>
+        </section>
+        <section class="shift sdr-card" id="sdrc" aria-label="Report sales harian">
+          <div class="sh-head"><div><h3>Report Sales Harian</h3><p id="sdrcSub">Omzet dari DSR · traffic manual</p></div></div>
+          <div id="sdrcBody"></div>
         </section>
         <section class="shift rr" id="raRank" aria-label="Peringkat RA">
           <div class="sh-head"><div><h3>Peringkat RA</h3><p id="rrSub">Menunggu data sales…</p></div><button class="btn ghost" type="button" id="rrAll">Semua RA</button></div>
@@ -1810,6 +1853,10 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
+<div class="kt sdr-pg" id="sdrPg" role="dialog" aria-modal="true" aria-label="Sales Harian">
+  <div class="kt-top"><button class="kt-back" id="sdrBack" type="button" aria-label="Kembali">←</button><div><b>Sales Harian (SDR)</b><small id="sdrSub">Sales daily report</small></div></div>
+  <div class="kt-body sdr-body" id="sdrBody"></div>
+</div>
 <div class="kt co-pg" id="coPg" role="dialog" aria-modal="true" aria-label="Cash Opname Internal">
   <div class="kt-top"><button class="kt-back" id="coBack" type="button" aria-label="Kembali">←</button><div><b>Cash Opname Internal</b><small id="coSub">Berita acara pemeriksaan kas</small></div></div>
   <div class="kt-tabs co-tabs" role="tablist"><button type="button" data-cot="baru" class="on">Opname baru</button><button type="button" data-cot="riwayat">Riwayat</button></div>
@@ -6762,6 +6809,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Pusat',need:['uploadStokPusat'],latest:['getArusBarang'],peran:'Stok pusat, order repeat, arus barang'},
   {n:'Video',need:['videoStatus'],latest:['videoKirim','videoDatang'],peran:'Video opening & closing ke spreadsheet area'},
   {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
+  {n:'Sdr',need:['sdrBulan'],latest:['sdrKirim'],peran:'Sales harian (SDR) & traffic'},
   {n:'Promo',need:['promoKatalogStatus'],latest:['promoKatalogUpload'],peran:'Promo katalog website (daftar artikel promo)'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
  ];
@@ -7558,6 +7606,181 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  });
  document.addEventListener('change',e=>{if(e.target.id==='dsrFile'&&e.target.files&&e.target.files[0])pilih(e.target.files[0])});
  ['dragover','drop'].forEach(n=>document.addEventListener(n,e=>{const d=e.target.closest&&e.target.closest('#dsrDrop');if(!d)return;e.preventDefault();if(n==='drop'&&e.dataTransfer.files[0])pilih(e.dataTransfer.files[0])}));
+})();
+/* ====== SALES HARIAN (SDR): omzet & diskon dari DSR, traffic diisi manual ====== */
+(function(){
+ const pg=document.getElementById('sdrPg');if(!pg)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_sdr',TTL=10*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const BLNL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const SLOT=['09.00–12.00','12.00–15.00','15.00–18.00','18.00–22.00'];
+ const pad=n=>String(n).padStart(2,'0');
+ const hariIni=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>'Rp'+nf(v);
+ const jt=v=>{v=Number(v)||0;return Math.abs(v)>=1e6?'Rp'+(v/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+' jt':rp(v)};
+ const pct=(a,b)=>b?(a/b*100).toLocaleString('id-ID',{maximumFractionDigits:1})+'%':'–';
+ const hari=k=>{const p=k.split('-').map(Number);return HARI[new Date(p[0],p[1]-1,p[2]).getDay()]};
+ const tglS=k=>{if(!k)return '';const p=k.split('-');return +p[2]+' '+BLN[+p[1]-1]};
+ const tglP=k=>hari(k)+', '+tglS(k)+' '+k.slice(0,4);
+ const mL=m=>BLNL[+m.slice(5,7)-1]+' '+m.slice(0,4);
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ const isOwner=()=>window.ofaRole==='pemilik'||!window.ofaRole;
+ const trafik=d=>d.traffic?d.traffic.reduce((a,x)=>a+(Number(x)||0),0):null;
+ let data=null,busy=false,err='',month='',edit=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ function simpan(r){data=Object.assign(r,{at:Date.now()});err='';month=r.month;if(r.dsrMax&&r.month===r.dsrMax.slice(0,7)){try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}}
+ async function load(force,m){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return renderAll();
+  if(!force&&data&&!m&&Date.now()-(data.at||0)<TTL)return renderAll();
+  busy=true;renderAll();
+  try{simpan(await api('sdrBulan',m?{month:m}:{}))}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;renderAll()}
+ }
+ window.ofaSdrReload=()=>load(true);
+ // ringkasan bulan
+ function total(){
+  const D=data.days,ada=D.filter(d=>d.ada),T=D.filter(d=>d.ada&&trafik(d)!=null);
+  const s=k=>ada.reduce((a,d)=>a+d[k],0);
+  const omzet=s('omzet'),trx=s('trx'),pcs=s('pcs'),disc=s('disc'),net=s('net');
+  const tf=T.reduce((a,d)=>a+trafik(d),0),tfTrx=T.reduce((a,d)=>a+d.trx,0);
+  const last=ada.length?ada[ada.length-1]:null,sisa=data.days.length-(last?+last.d.slice(8,10):0);
+  return{omzet,trx,pcs,disc,net,tf,tfTrx,hariTf:T.length,hari:ada.length,last,sisa,kurang:Math.max(data.target-omzet,0)};
+ }
+ function hariLaporan(){const ada=data.days.filter(d=>d.ada);return ada.length?ada[ada.length-1]:null}
+ /* ---------- kartu ringkas (Hari Ini) ---------- */
+ function renderCard(){
+  const b=$id('sdrcBody');if(!b)return;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>';return}
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Tempel <b>Sdr.gs</b> di Apps Script (di atas Akun), lalu Deploy → Versi baru.</p>';return}
+  if(!data||!data.days){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const d=hariLaporan();
+  if(!d){b.innerHTML='<p class="dp-empty">Belum ada data DSR di '+esc(mL(data.month))+'.</p>'+aksi(null);return}
+  const tf=trafik(d);
+  $id('sdrcSub').textContent='Report '+tglP(d.d);
+  b.innerHTML=`<div class="sdr-hero"><div><small>Omzet</small><b>${rp(d.omzet)}</b><span>${d.pcs} pcs · target ${jt(d.target)} · <em class="${d.omzet>=d.target?'ok':'bad'}">${pct(d.omzet,d.target)}</em></span></div></div>
+   <div class="sdr-mini"><div><small>Traffic</small><b>${tf==null?'—':nf(tf)}</b></div><div><small>Transaksi</small><b>${nf(d.trx)}</b></div><div><small>CR</small><b>${tf?pct(d.trx,tf):'—'}</b></div><div><small>BS</small><b>${d.trx?jt(d.omzet/d.trx):'—'}</b></div><div><small>Diskon</small><b>${jt(d.disc)}</b></div><div><small>Net sales</small><b>${jt(d.net)}</b></div></div>
+   ${tf==null?`<button type="button" class="sdr-warn" data-sdt="${d.d}">⚠ Traffic ${esc(tglS(d.d))} belum diisi — ketuk untuk mengisi</button>`:''}
+   ${aksi(d)}`;
+ }
+ const aksi=d=>`<div class="co-acts">${d?`<button type="button" class="btn" data-sdw="${d.d}">📋 Salin report WA</button>`:''}<button type="button" class="btn ghost" data-sdo="1">Sales harian ↗</button></div>`;
+ /* ---------- halaman penuh ---------- */
+ function buka(){pg.classList.add('open');document.body.classList.add('kt-on');pg.scrollTop=0;sideOn(true);renderPage();load(false)}
+ function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
+ function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="sdr"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('.kt.open:not(#sdrPg)'))}
+ window.ofaOpenSdr=buka;
+ function renderAll(){renderCard();if(pg.classList.contains('open'))renderPage()}
+ function renderPage(){
+  const el=$id('sdrBody');
+  if(err==='missing'){el.innerHTML='<p class="dp-empty">Tempel <b>Sdr.gs</b> di Apps Script (di atas Akun), lalu Deploy → Versi baru.</p>';return}
+  if(!data||!data.days){el.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const t=total(),cur=data.month>=hariIni().slice(0,7);
+  $id('sdrSub').textContent=mL(data.month)+(data.dsrMax?' · DSR s/d '+tglS(data.dsrMax):'');
+  const rows=data.days.map(d=>{const tf=trafik(d),fut=d.d>hariIni(),now=d.d===hariIni();
+   return `<tr class="${d.ada?'':'kos'}${fut?' fut':''}${now?' now':''}"><td class="l"><b>${+d.d.slice(8,10)}</b><small>${hari(d.d).slice(0,3)}</small></td>
+    <td>${d.ada?nf(d.omzet):''}</td><td>${d.ada?nf(d.pcs):''}</td><td class="m">${d.ada?nf(d.kum):''}</td><td class="m">${nf(d.target)}</td>
+    <td class="${d.ada?(d.omzet>=d.target?'ok':'bad'):''}">${d.ada?pct(d.omzet,d.target):''}</td>
+    ${[0,1,2,3].map(j=>`<td class="tf m">${d.traffic&&d.traffic[j]!=null?nf(d.traffic[j]):''}</td>`).join('')}
+    <td class="tfb">${fut?'':`<button type="button" data-sdt="${d.d}" class="${tf==null?(d.ada?'need':''):'isi'}">${tf==null?(d.ada?'Isi':'＋'):nf(tf)}</button>`}</td>
+    <td>${d.ada?nf(d.trx):''}</td><td>${d.ada&&tf?pct(d.trx,tf):''}</td><td class="m">${d.ada&&d.trx?nf(d.omzet/d.trx):''}</td><td class="m">${d.ada?nf(d.disc):''}</td><td>${d.ada?nf(d.net):''}</td>
+    <td>${d.ada?`<button type="button" class="sdr-wa" data-sdw="${d.d}" title="Salin report WA">📋</button>`:''}</td></tr>`}).join('');
+  el.innerHTML=`<div class="vd-mh"><div class="vd-nav"><button type="button" data-sdm="-1" aria-label="Bulan sebelumnya">‹</button><b>${esc(mL(data.month))}</b><button type="button" data-sdm="1" aria-label="Bulan berikutnya" ${cur?'disabled':''}>›</button></div>${busy?'<small>Memuat…</small>':''}</div>
+   <div class="sdr-kpi">
+    <div class="sdr-big"><small>Omzet bulan ini</small><b>${rp(t.omzet)}</b><span>dari target ${jt(data.target)} · <em class="${t.omzet>=data.target?'ok':''}">${pct(t.omzet,data.target)}</em></span><div class="sl-bar sdr-bar"><i style="width:${Math.min(100,data.target?t.omzet/data.target*100:0)}%"></i></div></div>
+    <div><small>Kekurangan</small><b>${jt(t.kurang)}</b><span>${t.sisa>0?'butuh '+jt(t.kurang/t.sisa)+'/hari':'periode selesai'}</span></div>
+    <div><small>Traffic</small><b>${nf(t.tf)}</b><span>${t.hariTf} dari ${t.hari} hari terisi</span></div>
+    <div><small>Transaksi</small><b>${nf(t.trx)}</b><span>CR ${t.tf?pct(t.tfTrx,t.tf):'–'}</span></div>
+    <div><small>Basket size</small><b>${t.trx?jt(t.omzet/t.trx):'–'}</b><span>UPT ${t.trx?(t.pcs/t.trx).toLocaleString('id-ID',{maximumFractionDigits:2}):'–'}</span></div>
+    <div><small>Diskon</small><b>${jt(t.disc)}</b><span>${pct(t.disc,t.omzet)} dari omzet</span></div>
+    <div><small>Net sales</small><b>${jt(t.net)}</b><span>${nf(t.pcs)} pcs</span></div>
+   </div>
+   <div class="sdr-tw"><table class="sdr-t"><thead><tr><th class="l">Tgl</th><th>Omzet</th><th>Pcs</th><th class="m">Kumulatif</th><th class="m">Target harian</th><th>Ach</th>${SLOT.map(s=>`<th class="tf m">Traffic<br>${s.slice(0,5)}</th>`).join('')}<th>Traffic</th><th>Trx</th><th>CR</th><th class="m">BS</th><th class="m">Diskon</th><th>Net sales</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td class="l">Total</td><td>${nf(t.omzet)}</td><td>${nf(t.pcs)}</td><td class="m"></td><td class="m">${nf(data.target)}</td><td>${pct(t.omzet,data.target)}</td><td class="tf m" colspan="4"></td><td>${nf(t.tf)}</td><td>${nf(t.trx)}</td><td>${t.tf?pct(t.tfTrx,t.tf):''}</td><td class="m">${t.trx?nf(t.omzet/t.trx):''}</td><td class="m">${nf(t.disc)}</td><td>${nf(t.net)}</td><td></td></tr></tfoot></table></div>
+   <p class="hint">Omzet, pcs, transaksi, diskon & net sales dari Database DSR (upload DSR di kartu Sales). Traffic diisi manual per jam: ketuk kolom <b>Traffic</b>. Target harian memakai target bulanan Hub. CR dihitung dari hari yang traffic-nya terisi.</p>
+   <div class="vd-links"><button type="button" data-sdx="csv">Unduh CSV</button>${isOwner()?'<button type="button" data-sdx="kirim">Kirim ke spreadsheet SDR</button>':''}<a href="${esc(data.sdrUrl)}" target="_blank" rel="noopener">Spreadsheet SDR ↗</a></div>`;
+ }
+ /* ---------- isi traffic ---------- */
+ function openTraffic(d){
+  const x=data.days.find(z=>z.d===d);if(!x)return;
+  edit={d,s:(x.traffic||[null,null,null,null]).map(v=>v==null?'':String(v))};
+  openModal('Traffic '+tglP(d),'<div id="sdrTf"></div>');drawTf();
+  setTimeout(()=>{const i=document.querySelector('#sdrTf input');if(i)i.focus()},80);
+ }
+ function drawTf(){
+  const el=$id('sdrTf');if(!el||!edit)return;const x=data.days.find(z=>z.d===edit.d),tot=edit.s.reduce((a,v)=>a+(Number(v)||0),0);
+  el.innerHTML=`<p class="hint" style="margin-top:0">Jumlah pengunjung yang masuk toko per jam (hitungan manual / counter).</p>
+   <div class="sdr-slots">${SLOT.map((s,j)=>`<label><span>${s}</span><input class="in" inputmode="numeric" data-sdi="${j}" value="${esc(edit.s[j])}" placeholder="0"><small>${x&&x.ada?nf(x.slotTrx[j])+' transaksi'+(Number(edit.s[j])?' · CR '+pct(x.slotTrx[j],Number(edit.s[j])):''):''}</small></label>`).join('')}</div>
+   <div class="sdr-tot"><span>Total traffic</span><b id="sdrTot">${nf(tot)}</b>${x&&x.ada?`<span>Transaksi ${nf(x.trx)} · CR <b id="sdrCr">${tot?pct(x.trx,tot):'–'}</b></span>`:''}</div>
+   <div class="vd-act"><button type="button" class="btn" id="sdrTfGo">Simpan traffic</button></div>`;
+ }
+ async function simpanTf(btn){
+  btn.disabled=true;btn.textContent='Menyimpan…';
+  try{simpan(await api('sdrTraffic',{tanggal:edit.d,slot:edit.s.map(v=>v===''?'':Number(v)),month:edit.d.slice(0,7)}));close();toast('Traffic '+tglS(edit.d)+' tersimpan');renderAll()}
+  catch(e){btn.disabled=false;btn.textContent='Simpan traffic';toast(missing(e)?'Sdr.gs belum terpasang di Apps Script':e.message)}
+ }
+ /* ---------- report WA & ekspor ---------- */
+ function reportWA(k){
+  const d=data.days.find(z=>z.d===k);if(!d)return '';
+  const tf=trafik(d),upto=data.days.filter(z=>z.d<=k),kum=d.kum,kumT=d.kumTarget;
+  return ['*SALES DAILY REPORT*','EIGER Store Soekarno Solo Baru',tglP(k),'',
+   'Omzet: '+rp(d.omzet)+' ('+nf(d.pcs)+' pcs)',
+   'Target harian: '+rp(d.target)+' · Ach '+pct(d.omzet,d.target),
+   'Kumulatif: '+rp(kum)+' · Ach '+pct(kum,data.target)+' dari target '+rp(data.target),
+   '',
+   'Traffic: '+(tf==null?'-':nf(tf)+' ('+d.traffic.map(v=>v==null?'-':v).join('/')+')'),
+   'Transaksi: '+nf(d.trx)+(tf?' · CR '+pct(d.trx,tf):''),
+   'Basket size: '+(d.trx?rp(d.omzet/d.trx):'-')+' · UPT '+(d.trx?(d.pcs/d.trx).toLocaleString('id-ID',{maximumFractionDigits:2}):'-'),
+   'Diskon: '+rp(d.disc),'Net sales: '+rp(d.net),
+   '','Kekurangan bulan ini: '+rp(Math.max(data.target-kum,0))].join('\n');
+ }
+ async function salin(k){
+  const t=reportWA(k);
+  try{await navigator.clipboard.writeText(t);toast('Report '+tglS(k)+' disalin — tempel di WhatsApp')}
+  catch(e){openModal('Report WA','<textarea class="in" rows="16" style="min-height:300px" readonly>'+esc(t)+'</textarea>')}
+ }
+ function csv(){
+  const h=['Hari','Tanggal','Omzet','Pcs','Kumulatif','Target harian','Daily ach','Traffic 09-12','Traffic 12-15','Traffic 15-18','Traffic 18-22','Traffic','Transaksi','CR','BS','Diskon','Net sales'];
+  const L=[h].concat(data.days.map(d=>{const tf=trafik(d);return[hari(d.d),d.d,d.ada?d.omzet:'',d.ada?d.pcs:'',d.ada?d.kum:'',d.target,d.ada&&d.target?(d.omzet/d.target).toFixed(4):''].concat((d.traffic||['','','','']).map(v=>v==null?'':v),[tf==null?'':tf,d.ada?d.trx:'',d.ada&&tf?(d.trx/tf).toFixed(4):'',d.ada&&d.trx?Math.round(d.omzet/d.trx):'',d.ada?d.disc:'',d.ada?d.net:''])}));
+  const blob=new Blob(['﻿'+L.map(r=>r.map(v=>/[",;\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(',')).join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SDR '+mL(data.month)+'.csv';document.body.appendChild(a);a.click();a.remove();
+ }
+ async function kirim(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent='Yakin kirim '+mL(data.month)+'? Ketuk lagi';return}
+  btn.disabled=true;btn.textContent='Mengirim…';
+  try{const r=await api('sdrKirim',{month:data.month});btn.textContent='✓ Terkirim';toast(r.rows+' hari dikirim ke tab '+r.tab+(r.fixedDates?' (tanggal di tab diperbaiki)':''))}
+  catch(e){btn.disabled=false;btn.dataset.ok='';btn.textContent='Kirim ke spreadsheet SDR';toast(e.message)}
+ }
+ /* ---------- event ---------- */
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-sdt],[data-sdw],[data-sdo],[data-sdm],[data-sdx],#sdrTfGo,#sdrBack,.side button,.bnav button,#deckTabs button');if(!t)return;
+  if(t.matches('.side button,.bnav button,#deckTabs button')){if(t.dataset.sd==='sdr'){e.stopPropagation();buka()}else if(pg.classList.contains('open')&&!t.dataset.th)tutup();return}
+  if(t.id==='sdrBack')return tutup();
+  if(t.dataset.sdt)return openTraffic(t.dataset.sdt);
+  if(t.dataset.sdw)return salin(t.dataset.sdw);
+  if(t.dataset.sdo)return buka();
+  if(t.dataset.sdm){const p=data.month.split('-').map(Number),d=new Date(p[0],p[1]-1+Number(t.dataset.sdm),1),m=d.getFullYear()+'-'+pad(d.getMonth()+1);if(m>hariIni().slice(0,7))return;return load(true,m)}
+  if(t.dataset.sdx==='csv')return csv();
+  if(t.dataset.sdx==='kirim')return kirim(t);
+  if(t.id==='sdrTfGo')return simpanTf(t);
+ },true);
+ document.addEventListener('input',e=>{const t=e.target;if(!edit||t.dataset.sdi==null)return;t.value=t.value.replace(/[^\d]/g,'').slice(0,4);edit.s[+t.dataset.sdi]=t.value;const x=data.days.find(z=>z.d===edit.d),tot=edit.s.reduce((a,v)=>a+(Number(v)||0),0);const b=$id('sdrTot');if(b)b.textContent=nf(tot);const cr=$id('sdrCr');if(cr&&x)cr.textContent=tot?pct(x.trx,tot):'–';
+  const sm=t.parentNode.querySelector('small');if(sm&&x&&x.ada){const j=+t.dataset.sdi;sm.textContent=nf(x.slotTrx[j])+' transaksi'+(Number(t.value)?' · CR '+pct(x.slotTrx[j],Number(t.value)):'')}});
+ document.addEventListener('keydown',e=>{const t=e.target;if(e.key!=='Enter'||!edit||t.dataset.sdi==null)return;e.preventDefault();const n=document.querySelector('[data-sdi="'+(+t.dataset.sdi+1)+'"]');if(n)n.focus();else{const b=$id('sdrTfGo');if(b)b.click()}});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
+ // DSR baru diupload -> segarkan
+ const oldDsr=window.ofaPgRefresh;window.ofaPgRefresh=function(){try{oldDsr&&oldDsr()}catch(e){}load(true)};
+ renderCard();load(false);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
 (function(){
