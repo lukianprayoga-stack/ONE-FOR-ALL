@@ -1392,6 +1392,18 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .dsr-sum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .dsr-sum div{background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:8px 10px;min-width:0}
 .dsr-sum span{display:block;font-size:11.5px;color:var(--mut)}.dsr-sum b{display:block;font-size:14.5px;color:var(--num,var(--fg));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ====== PROMO KATALOG ====== */
+.pr-card .kt-ch .btn{padding:7px 12px;font-size:12.5px}
+.pr-head{display:flex;align-items:center;gap:10px;margin-top:6px}.pr-head span{flex:1;min-width:0}.pr-head b{display:block;font-size:15px;color:var(--title,var(--fg))}.pr-head small{display:block;font-size:12px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-pill{font-style:normal;font-size:11.5px;font-weight:800;border-radius:6px;padding:3px 9px;white-space:nowrap;background:var(--bg);color:var(--mut)}
+.pr-pill.ok{background:var(--ok-bg);color:var(--ok-fg)}.pr-pill.bad{background:var(--bad-bg);color:var(--bad-fg)}.pr-pill.info{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+.pr-per{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;padding:8px 10px;border-radius:12px;background:var(--bg);border:1px solid var(--card-bd,var(--line))}
+.pr-per span{font-size:12px;color:var(--mut)}.pr-per b{flex:1;font-size:13.5px}.pr-per .btn{padding:6px 12px;font-size:12px}
+.pr-sum{margin-top:6px}.pr-sum button{cursor:default}
+.pr-act{margin-top:10px}.pr-del{color:var(--bad-fg)!important}
+.pr-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.pr-chips span{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;background:var(--orange-bg,#fff1e7);color:var(--orange,#f26a1b)}
+.pr-chips span.rm{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+.pr-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -6750,6 +6762,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Pusat',need:['uploadStokPusat'],latest:['getArusBarang'],peran:'Stok pusat, order repeat, arus barang'},
   {n:'Video',need:['videoStatus'],latest:['videoKirim','videoDatang'],peran:'Video opening & closing ke spreadsheet area'},
   {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
+  {n:'Promo',need:['promoKatalogStatus'],latest:['promoKatalogUpload'],peran:'Promo katalog website (daftar artikel promo)'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
  ];
  const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
@@ -7834,7 +7847,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(!prod){b.innerHTML='<p class="dp-empty">Memuat produk katalog… (±10 detik)</p>';loadProd(false);return}
   const L=IT,cats=[...new Set(L.map(o=>o.cat).filter(Boolean))].sort();
   const cnt={live:L.filter(live).length,off:L.filter(o=>!live(o)).length,fix:L.filter(needFix).length,promo:L.filter(o=>o.promo>0).length,best:L.filter(o=>o.best).length,neu:L.filter(o=>o.neu).length};
-  b.innerHTML=`${masterCard()}<div class="kt-sum">
+  b.innerHTML=`${masterCard()}${promoCard()}<div class="kt-sum">
    <button type="button" data-kf="live"><b>${nf(cnt.live)}</b><small>produk tampil di web</small></button>
    <button type="button" data-kf="fix"><b class="${cnt.fix?'kt-bad':''}">${nf(cnt.fix)}</b><small>tanpa foto / harga</small></button>
    <button type="button" data-kf="promo"><b>${nf(cnt.promo)}</b><small>sedang promo</small></button></div>
@@ -7925,6 +7938,122 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  }
  const close_=()=>{const x=$id('px');if(x)x.click()};
 
+
+ /* ---------- PROMO KATALOG (daftar artikel promo per SKU, mis. "ARTIKEL PROMO UP TO 50") ---------- */
+ let prSt=null,prLoading=false,prPend=null;
+ const prIso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+ const prTgl=k=>{if(!k)return '';const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],p=k.split('-');return +p[2]+' '+B[+p[1]-1]+' '+p[0]};
+ async function prLoad(force){
+  if(prLoading||(prSt&&!force))return;prLoading=true;
+  try{prSt=await api('promoKatalogStatus',{})}catch(e){prSt={err:/tidak dikenal/i.test(e.message||'')?'missing':e.message}}
+  prLoading=false;if(tab==='produk'&&page.classList.contains('open'))render();
+ }
+ function promoCard(){
+  if(!prSt){prLoad(false);return '<section class="kt-card kt-master pr-card"><div class="kt-ch"><h4>Promo katalog</h4></div><p class="hint">Memuat…</p></section>'}
+  if(prSt.err==='missing')return '<section class="kt-card kt-master pr-card"><div class="kt-ch"><h4>Promo katalog</h4></div><p class="hint">Tempel <b>Promo.gs</b> di Apps Script (di bawah Katalog, di atas Akun), lalu Deploy → Versi baru.</p></section>';
+  const m=prSt.meta,k=prSt.katalog||{},st=prSt.status;
+  const pill={aktif:['ok','Aktif'],terjadwal:['info','Mulai '+prTgl(m&&m.mulai)],berakhir:['bad','Sudah berakhir'],kosong:['','Belum ada']}[st]||['',''];
+  return `<section class="kt-card kt-master pr-card"><div class="kt-ch"><h4>Promo katalog</h4><button class="btn" type="button" data-kpr="up">⇪ Upload daftar promo</button></div>
+   ${m&&m.rows?`<div class="pr-head"><span><b>${esc(m.judul||'Promo')}</b><small>${nf(m.rows)} SKU · ${esc(m.file||'')}</small></span><em class="pr-pill ${pill[0]}">${esc(pill[1])}</em></div>
+    <div class="pr-per"><span>Periode</span><b>${esc(prTgl(m.mulai))} – ${m.selesai?esc(prTgl(m.selesai)):'sampai diganti'}</b><button class="btn ghost" type="button" data-kpr="atur">Ubah periode</button></div>
+    ${prSt.katalog?`<div class="kt-sum pr-sum"><button type="button" disabled><b>${nf(k.ada)}</b><small>SKU promo ada di katalog</small></button><button type="button" disabled><b>${nf(k.stok)}</b><small>ada stok (badge PROMO)</small></button><button type="button" disabled><b>${nf(st==='aktif'?k.tampil:0)}</b><small>tampil harga promo</small></button></div>`:''}
+    ${st==='terjadwal'?`<p class="hint">Harga promo otomatis tampil di website mulai <b>${esc(prTgl(m.mulai))}</b> pukul 00.10.</p>`:''}
+    <div class="row pr-act"><button class="btn ghost pr-del" type="button" data-kpr="hapus">Hapus daftar promo</button></div>`
+   :'<p class="hint">Upload file daftar artikel promo (kolom <b>Kode, Nama, Cross-Site, Fash. Grade, Old MC, Disc, Netto, Remark</b>). Harga promo = Netto, otomatis tampil di website sesuai periode yang dipilih.</p>'}
+   <input type="file" id="prFile" accept=".xlsx,.xls,.csv" hidden></section>`;
+ }
+ async function prParse(file){
+  await loadX();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellText:false,cellDates:false});
+  const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const sku=v=>typeof v==='number'?String(Math.round(v)):String(v==null?'':v).trim().replace(/\.0+$/,'');
+  for(const name of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:''});
+   let hi=-1,h=null;
+   for(let i=0;i<Math.min(10,rows.length);i++){const n=(rows[i]||[]).map(norm);if(n.includes('kode')&&(n.includes('netto')||n.includes('disc'))){hi=i;h=n;break}}
+   if(hi<0)continue;
+   const ix=(...a)=>{for(const x of a){const i=h.indexOf(x);if(i>=0)return i}return -1};
+   const c=[ix('kode','sku'),ix('nama','skuname'),ix('crosssite'),ix('fashgrade'),ix('oldmc'),ix('disc','diskon'),ix('netto','hargapromo'),ix('remark','keterangan')];
+   const out=new Map();
+   for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[],k=sku(row[c[0]]);if(!/^\d{6,}$/.test(k)||out.has(k))continue;
+    out.set(k,c.map((ci,j)=>j===0?k:ci<0?'':row[ci]))}
+   return {sheet:name,rows:[...out.values()]};
+  }
+  throw new Error('Kolom Kode dan Netto/Disc tidak ditemukan. Pastikan memakai template daftar artikel promo.');
+ }
+ const prDisc=v=>{let d=String(v==null?'':v).replace(',','.').trim();d=/%$/.test(d)?Number(d.slice(0,-1))/100:Number(d);if(d>1)d=d/100;return d>0&&d<1?d:0};
+ function prDefault(){
+  const t=new Date(),last=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+  // menjelang akhir bulan, promo baru biasanya berlaku mulai tanggal 1 bulan depan
+  return t.getDate()>=25?prIso(new Date(t.getFullYear(),t.getMonth()+1,1)):prIso(t);
+ }
+ async function prPick(file){
+  openModal('Promo katalog','<p class="dp-empty">Membaca file '+esc(file.name)+'…</p>');
+  let d;
+  try{d=await prParse(file)}catch(e){$id('pb').innerHTML='<p class="dp-empty">Gagal membaca file: '+esc(e.message||e)+'</p>';return}
+  if(!d.rows.length){$id('pb').innerHTML='<p class="dp-empty">Tidak ada SKU promo di file ini.</p>';return}
+  const D={},Rm={};let noNet=0;
+  d.rows.forEach(r=>{const x=Math.round(prDisc(r[5])*100);D[x]=(D[x]||0)+1;const rm=String(r[7]||'-');Rm[rm]=(Rm[rm]||0)+1;if(!(Number(r[6])>0))noNet++});
+  const set=new Set(d.rows.map(r=>r[0])),all=IT.flatMap(o=>o.sizes.map(z=>String(z[1]))),hit=all.filter(k=>set.has(k)).length;
+  const judul=String(file.name).replace(/\.[^.]+$/,'').replace(/[_]+/g,' ').replace(/^[0-9a-f]{6,}[-\s]+/i,'').replace(/^artikel\s*/i,'').trim()||'Promo';
+  prPend={file,rows:d.rows};
+  $id('pb').innerHTML=`<div class="kt-mf pr-mf"><p class="ct-meta">${esc(file.name)} · sheet ${esc(d.sheet)}</p>
+   <p class="wk-p"><b>${nf(d.rows.length)} SKU promo</b>${all.length?` · cocok dengan <b>${nf(hit)}</b> dari ${nf(all.length)} SKU katalog`:''}.</p>
+   <div class="pr-chips">${Object.keys(D).map(Number).sort((a,b)=>a-b).map(x=>`<span>${x?'Disc '+x+'%':'Tanpa disc'} · ${nf(D[x])}</span>`).join('')}</div>
+   <div class="pr-chips">${Object.keys(Rm).map(x=>`<span class="rm">${esc(x)} · ${nf(Rm[x])}</span>`).join('')}</div>
+   ${noNet?`<p class="hint">${nf(noNet)} SKU tanpa Netto: harga promo dihitung dari harga katalog × (1 − Disc).</p>`:''}
+   <label class="vd-lab">Nama promo<input class="in" id="prJudul" value="${esc(judul.toUpperCase())}"></label>
+   <div class="pr-dates"><label class="vd-lab">Berlaku mulai<input class="in" type="date" id="prMulai" value="${prDefault()}"></label>
+   <label class="vd-lab">Sampai (opsional)<input class="in" type="date" id="prSelesai" value=""></label></div>
+   <p class="hint">Daftar promo lama diganti dengan file ini. Promo toko (DCNP/SMDS) tetap berlaku; bila SKU ada di keduanya, dipakai harga termurah. Kosongkan tanggal "Sampai" bila promo berlaku sampai daftar berikutnya diupload.</p>
+   <div class="row"><button class="btn" type="button" data-kpr="go">Upload &amp; jadwalkan</button></div></div>`;
+ }
+ async function prRun(){
+  const p=prPend;if(!p)return;
+  const mulai=$id('prMulai').value,selesai=$id('prSelesai').value,judul=$id('prJudul').value;
+  if(selesai&&selesai<mulai)return toast('Tanggal selesai lebih awal dari tanggal mulai');
+  const total=p.rows.length;
+  $id('pb').innerHTML='<div class="kt-mf"><p class="wk-p" id="prProg">Mengunggah…</p><div class="sl-bar kt-mbar"><i id="prBar" style="width:2%"></i></div></div>';
+  const prog=(t,f)=>{const a=$id('prProg'),b=$id('prBar');if(a)a.textContent=t;if(b)b.style.width=Math.round(f*100)+'%'};
+  try{
+   let r=null;
+   for(let i=0;i<total;i+=3000){prog('Mengunggah '+nf(Math.min(i+3000,total))+' dari '+nf(total)+' SKU…',.05+.8*i/total);
+    r=await api('promoKatalogUpload',{start:i,total,rows:p.rows.slice(i,i+3000),file:p.file.name,judul,mulai,selesai})}
+   prog('Selesai',1);prPend=null;prSt=r.status;
+   const st=prSt.status,k=prSt.katalog||{};
+   $id('pb').innerHTML=`<div class="kt-mf"><p class="wk-p"><b>✓ ${nf(r.saved)} SKU promo tersimpan.</b></p><ul class="wk-ul">
+    <li>Periode: <b>${esc(prTgl(prSt.meta.mulai))} – ${prSt.meta.selesai?esc(prTgl(prSt.meta.selesai)):'sampai diganti'}</b></li>
+    <li>${st==='aktif'?'Harga promo sudah tampil di website untuk <b>'+nf(k.tampil)+' SKU</b> katalog ('+nf(k.stok)+' ada stok).':st==='terjadwal'?'Harga promo otomatis tampil mulai <b>'+esc(prTgl(prSt.meta.mulai))+'</b> pukul 00.10 untuk '+nf(k.ada)+' SKU katalog.':'Periode promo sudah lewat.'}</li></ul></div>`;
+   loadProd(true);render();
+  }catch(e){const a=$id('prProg');if(a)a.innerHTML=errTxt(e)}
+ }
+ function prAtur(){
+  const m=prSt&&prSt.meta;if(!m)return;
+  openModal('Periode promo',`<div class="kt-mf"><label class="vd-lab">Nama promo<input class="in" id="prJudul" value="${esc(m.judul||'')}"></label>
+   <div class="pr-dates"><label class="vd-lab">Berlaku mulai<input class="in" type="date" id="prMulai" value="${esc(m.mulai||'')}"></label>
+   <label class="vd-lab">Sampai (opsional)<input class="in" type="date" id="prSelesai" value="${esc(m.selesai||'')}"></label></div>
+   <div class="row"><button class="btn" type="button" data-kpr="simpan">Simpan periode</button></div></div>`);
+ }
+ async function prSimpan(btn){
+  const mulai=$id('prMulai').value,selesai=$id('prSelesai').value;if(selesai&&selesai<mulai)return toast('Tanggal selesai lebih awal dari tanggal mulai');
+  btn.disabled=true;btn.textContent='Menyimpan…';
+  try{prSt=await api('promoKatalogAtur',{mulai,selesai,judul:$id('prJudul').value});$id('px').click();toast('Periode promo disimpan');loadProd(true);render()}
+  catch(e){btn.disabled=false;btn.textContent='Simpan periode';toast(errTxt(e).replace(/<[^>]+>/g,''))}
+ }
+ async function prHapus(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent='Yakin hapus? Ketuk lagi';return}
+  btn.disabled=true;btn.textContent='Menghapus…';
+  try{prSt=await api('promoKatalogHapus',{});toast('Daftar promo dihapus');loadProd(true);render()}catch(e){btn.disabled=false;toast(errTxt(e).replace(/<[^>]+>/g,''))}
+ }
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-kpr]');if(!b)return;const k=b.dataset.kpr;
+  if(k==='up')return gate(()=>{const f=$id('prFile');if(f){f.value='';f.click()}});
+  if(k==='go')return gate(prRun);
+  if(k==='atur')return gate(prAtur);
+  if(k==='simpan')return prSimpan(b);
+  if(k==='hapus')return gate(()=>prHapus(b));
+ });
+ document.addEventListener('change',e=>{if(e.target.id==='prFile'&&e.target.files[0])prPick(e.target.files[0])});
 
  /* ---------- MASTER HARGA & FOTO ---------- */
  let mPend=null;
