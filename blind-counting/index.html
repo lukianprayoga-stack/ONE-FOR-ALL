@@ -158,6 +158,24 @@ body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);pa
 .app-foot{padding:18px 16px 26px;text-align:center;font-size:12.5px;color:var(--mut);border-top:1px solid var(--line)}
 .app-foot b{color:var(--title,var(--fg))}
 .app-inst[hidden],.app-start[hidden]{display:none}
+.app-reg{margin:0 0 6px;font-size:12.5px;color:var(--mut)}.app-reg b{color:var(--fg)}
+.app-reg button{border:0;background:none;color:var(--blue,#1d4ed8);font:inherit;font-weight:700;cursor:pointer;padding:0 2px;text-decoration:underline}
+.reg{position:fixed;inset:0;z-index:40;overflow-y:auto;background:linear-gradient(160deg,#0b2a7a 0%,#1d4ed8 55%,#f26a1b 140%);display:flex;align-items:flex-start;justify-content:center;padding:28px 16px 40px}
+.reg[hidden]{display:none}
+body.locked{overflow:hidden}
+.reg-card{width:100%;max-width:440px;background:var(--card);color:var(--fg);border-radius:24px;padding:22px 20px 18px;box-shadow:0 24px 60px rgba(0,0,0,.28);margin:auto 0}
+.reg-card>img{width:56px;height:56px;border-radius:16px;display:block}
+.reg-card h1{margin:12px 0 4px;font-size:22px;letter-spacing:-.4px;color:var(--title,var(--fg))}
+.reg-card>p{margin:0 0 12px;font-size:14px;color:var(--mut)}
+.reg-card label{display:grid;gap:4px;margin-top:10px;font-size:13px;font-weight:700;color:var(--mut)}
+.reg-card .in{width:100%;font-size:16px;color:var(--fg)}
+.reg-card #regSite{text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.reg-card #regSite::placeholder{text-transform:none;letter-spacing:0;font-weight:500}
+.reg-card [hidden]{display:none!important}
+.reg-note{margin:14px 0 0;padding:10px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);font-size:12.5px;line-height:1.5;color:var(--fg)}
+.reg-err{min-height:18px;margin:8px 0 4px;font-size:13px;font-weight:700;color:var(--bad-fg,#c62828)}
+.reg-card .btn{width:100%;justify-content:center;margin-top:6px;padding:12px;font-size:15px}
+.reg-by{margin:14px 0 0;text-align:center;font-size:12px;color:var(--mut)}.reg-by b{color:var(--title,var(--fg))}
 </style>
 </head>
 <body>
@@ -179,10 +197,29 @@ body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);pa
       <li>Periksa barang <b>plus</b> &amp; <b>minus</b>, isi keterangan di <b>Rincian &amp; keterangan</b>, pilih tanggal &amp; perihal BA.</li>
       <li>Ketuk <b>⬇ Unduh BA Excel</b>, cetak, lalu tanda tangani.</li>
     </ol>
-    <p class="app-note">🔒 File diolah langsung di perangkat ini. Data stock tidak dikirim ke server mana pun dan hanya tersimpan di browser perangkat ini.</p>
+    <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh BA beserta periodenya).</p>
   </section>
 </main>
-<footer class="app-foot">Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
+<footer class="app-foot"><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
+<div class="reg" id="reg" hidden>
+  <form class="reg-card" id="regForm" novalidate autocomplete="on">
+    <img src="icons/icon-192.png" alt="">
+    <h1 id="regH">Daftar dulu</h1>
+    <p id="regP">Isi kode site &amp; nama toko sebelum memakai aplikasi BA Blind Counting. Cukup sekali di perangkat ini.</p>
+    <label><span>Kode site</span><input class="in" id="regSite" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="mis. 7014"></label>
+    <label><span>Nama toko</span><input class="in" id="regToko" maxlength="80" autocomplete="organization" placeholder="mis. Eiger Store Soekarno Solo Baru"></label>
+    <label><span>Nama Anda</span><input class="in" id="regNama" maxlength="60" autocomplete="name" placeholder="Nama lengkap"></label>
+    <label><span>Jabatan</span><select class="in" id="regJab"><option>Store Head</option><option>Asst. Store Head</option><option>Admin Toko</option><option>Head of Branch</option><option>Area Manager</option><option>Lainnya</option></select></label>
+    <p class="reg-note">Dengan mendaftar, kode site, nama toko, nama, jabatan, dan aktivitas (buka aplikasi, upload file, unduh BA beserta periodenya) dicatat untuk pembuat aplikasi. <b>Isi data stock tidak dikirim.</b></p>
+    <div class="reg-err" id="regErr" role="alert"></div>
+    <button class="btn" type="submit" id="regGo">Daftar &amp; mulai</button>
+    <button class="btn ghost" type="button" id="regBatal" hidden>Batal</button>
+    <p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p>
+  </form>
+</div>
+<div class="reg" id="blok" hidden>
+  <div class="reg-card"><img src="icons/icon-192.png" alt=""><h1>Akses dinonaktifkan</h1><p>Akses perangkat ini ke aplikasi BA Blind Counting sedang dinonaktifkan oleh pembuat aplikasi. Hubungi Lukian Prayoga bila ini keliru.</p><button class="btn" type="button" id="blokCek">Cek lagi</button><p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p></div>
+</div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span></div>
 <script>
@@ -756,7 +793,7 @@ function appStart(){const s=document.getElementById('appStart');if(s)s.hidden=!!
    const p=await parse(file);
    if(p.kind==='names'){
     let m={};try{m=JSON.parse(localStorage.getItem(NK)||'{}')}catch(e){}
-    Object.assign(m,p.names);try{localStorage.setItem(NK,JSON.stringify(m))}catch(e){}
+    Object.assign(m,p.names);try{localStorage.setItem(NK,JSON.stringify(m))}catch(e){}if(window.bcLog)bcLog('nama','',Object.keys(p.names).length+' SKU');
     const n=applyNames();if(rep)save();render();
     s.textContent='✓ Daftar nama '+nf(Object.keys(p.names).length)+' SKU disimpan'+(rep?' · '+n+' nama terisi'+(missing()?' · '+missing()+' masih kosong':''):'. Sekarang upload file blind_counting_details.');
     return;
@@ -765,14 +802,14 @@ function appStart(){const s=document.getElementById('appStart');if(s)s.hidden=!!
     const R=buildSesi(p.rows,file.name),old=rep&&rep.ym===R.ym?rep:null;
     if(old){R.jenis=old.jenis;R.tgl=old.tgl;if(old.mode==='sesi'){const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.bc]=old.edit[r.k]});R.rows.forEach(r=>{if(o[r.bc]!=null)R.edit[r.k]=o[r.bc]})}}
     rep=R;save();remember();render();
-    s.textContent='✓ '+nf(R.st.sesi)+' sesi BC '+cap(R.label)+' terbaca · '+calcSesi(R).L.length+' sesi ada selisih';
+    s.textContent='✓ '+nf(R.st.sesi)+' sesi BC '+cap(R.label)+' terbaca · '+calcSesi(R).L.length+' sesi ada selisih';if(window.bcLog)bcLog('upload',cap(R.label),'rekap sesi · '+R.st.sesi+' sesi');
     return;
    }
    const R=build(p.rows,file.name);
    const old=rep&&rep.ym===R.ym&&rep.mode!=='sesi'?rep:null;
    if(old){R.scope=old.scope;R.jenis=old.jenis;R.tgl=old.tgl;const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.sku+'|'+r.bin+'|'+r.d]=old.edit[r.k]});R.rows.forEach(r=>{const v=o[r.sku+'|'+r.bin+'|'+r.d];if(v!=null)R.edit[r.k]=v})}
    rep=R;applyNames();save();remember();render();
-   s.textContent='✓ '+nf(R.st.lines)+' baris BC '+cap(R.label)+' terbaca · '+R.rows.length+' baris selisih';
+   s.textContent='✓ '+nf(R.st.lines)+' baris BC '+cap(R.label)+' terbaca · '+R.rows.length+' baris selisih';if(window.bcLog)bcLog('upload',cap(R.label),'rincian · '+R.st.lines+' baris · '+R.rows.length+' selisih');
    if(missing()&&configured()&&localStorage.getItem('salesTrackingPin'))names();
   }catch(e){s.className='iv-status err';s.textContent='Gagal membaca file: '+(e.message||e)}
  }
@@ -782,11 +819,12 @@ function appStart(){const s=document.getElementById('appStart');if(s)s.hidden=!!
  box.addEventListener('click',e=>{
   const s=e.target.closest('[data-bcs]');if(s&&rep){rep.scope=s.dataset.bcs;save();remember();render();return}
   const a=e.target.closest('[data-bc]');if(!a||!rep)return;
-  if(a.dataset.bc==='xlsx'){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)window.ofaToast('Isi dulu nama toko & nama Store Head');settings();return}download(rep);}
+  if(a.dataset.bc==='xlsx'){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)window.ofaToast('Isi dulu nama toko & nama Store Head');settings();return}download(rep);if(window.bcLog)bcLog('unduh',cap(rep.label||''),rep.mode==='sesi'?'rekap sesi':'rincian');}
   if(a.dataset.bc==='list')showList();
   if(a.dataset.bc==='names')names();
  });
  if(rep&&missing()&&applyNames())save();
+ window.bcRender=render;
  render();
 })();
 
@@ -794,6 +832,63 @@ function appStart(){const s=document.getElementById('appStart');if(s)s.hidden=!!
 <script>
 document.getElementById('appSet').onclick=()=>document.getElementById('bcCfg').click();
 appStart();
+/* ---------- pendaftaran & catatan pemakaian ---------- */
+(function(){
+ const API='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iWJ__7MoJRCP7y7jrtOfGMerTFef5hY2zZZfSCZ27dugMZ1C/exec',VER='1';
+ const $=i=>document.getElementById(i);
+ const p2=n=>String(n).padStart(2,'0');
+ function devId(){if(!/^[a-f0-9]{24}$/.test(ST.dev||'')){const a=new Uint8Array(12);crypto.getRandomValues(a);ST.dev=[...a].map(b=>b.toString(16).padStart(2,'0')).join('');stSave()}return ST.dev}
+ function alat(){const u=navigator.userAgent||'';const os=/Android/i.test(u)?'Android':/iPhone|iPad|iPod/i.test(u)?'iOS':/Windows/i.test(u)?'Windows':/Mac OS/i.test(u)?'Mac':/CrOS/i.test(u)?'ChromeOS':/Linux/i.test(u)?'Linux':'Lainnya';
+  const br=/Edg\//.test(u)?'Edge':/SamsungBrowser/.test(u)?'Samsung Internet':/OPR\//.test(u)?'Opera':/Firefox\//.test(u)?'Firefox':/Chrome\//.test(u)?'Chrome':/Safari\//.test(u)?'Safari':'Browser';
+  let pwa='';try{if(matchMedia('(display-mode: standalone)').matches)pwa=' · terinstal'}catch(e){}return os+' · '+br+pwa}
+ async function api(fn,arg){let r,j;try{r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[arg]})});j=await r.json()}catch(e){throw Object.assign(new Error('Tidak tersambung ke server.'),{net:true})}
+  if(!j.ok)throw new Error(j.error||'Gagal');return j.result}
+ const turunan=v=>({store:v.toko+' ('+v.site+')',n1:v.nama.toUpperCase(),t1:v.jabatan==='Lainnya'?'Store Head':v.jabatan,suffix:v.site+' - '+v.toko.toUpperCase()});
+ function isiCfg(v,lama){const c=Object.assign({},ST.cfg||{}),baru=turunan(v),old=lama?turunan(lama):{};
+  Object.keys(baru).forEach(k=>{if(!c[k]||c[k]===old[k]||(k==='t1'&&c[k]==='Store Head'))c[k]=baru[k]});ST.cfg=c}
+ function kunci(id){['reg','blok'].forEach(x=>$(x).hidden=x!==id);document.body.classList.toggle('locked',!!id)}
+ function regInfo(){const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
+  el.innerHTML='Terdaftar: <b>'+esc(r.nama)+'</b> · '+esc(r.jabatan)+' · site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' <button type="button" id="regUbah">Ubah</button>'}
+ function bukaForm(edit){const r=edit&&ST.reg||{};$('regSite').value=r.site||'';$('regToko').value=r.toko||'';$('regNama').value=r.nama||'';$('regJab').value=r.jabatan||'Store Head';
+  $('regH').textContent=edit?'Ubah data pendaftaran':'Daftar dulu';$('regP').textContent=edit?'Perubahan juga dipakai di pengaturan berita acara.':'Isi kode site & nama toko sebelum memakai aplikasi BA Blind Counting. Cukup sekali di perangkat ini.';
+  $('regGo').textContent=edit?'Simpan':'Daftar & mulai';$('regBatal').hidden=!edit;$('regErr').textContent='';kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
+ let busy=false;
+ async function flush(){if(busy||!ST.reg||ST.blokir&&!ST.cekBlok)return;busy=true;
+  try{for(let n=0;n<6;n++){
+   if(!ST.regSync){const r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},ST.reg));if(r&&r.blokir){blokir();break}ST.regSync=true;stSave()}
+   const kirim=(ST.q||[]).slice(0,30);
+   if(!kirim.length&&!ST.cekBlok)break;
+   const r=await api('bcAppCatat',{id:devId(),ev:kirim,v:VER});
+   if(r&&r.blokir){blokir();break}
+   if(r&&r.daftar===false){ST.regSync=false;stSave();continue}
+   if(ST.blokir){ST.blokir=false;kunci(null)}ST.cekBlok=false;
+   ST.q=(ST.q||[]).slice(kirim.length);stSave();
+  }}catch(e){if(!e.net&&ST.cekBlok){ST.cekBlok=false}}finally{busy=false}}
+ function blokir(){ST.blokir=true;ST.cekBlok=false;stSave();kunci('blok')}
+ window.bcLog=(k,p,x)=>{if(!ST.reg)return;ST.q=(ST.q||[]).concat([{k,p:p||'',x:x||'',w:new Date().toISOString()}]).slice(-100);stSave();flush()};
+ $('regForm').addEventListener('submit',async e=>{e.preventDefault();
+  const v={site:$('regSite').value.trim().toUpperCase(),toko:$('regToko').value.trim().replace(/\s+/g,' '),nama:$('regNama').value.trim().replace(/\s+/g,' '),jabatan:$('regJab').value};
+  const er=$('regErr'),b=$('regGo'),edit=!!ST.reg;er.textContent='';
+  if(!/^[A-Z0-9]{3,8}$/.test(v.site)){er.textContent='Kode site 3–8 huruf/angka, mis. 7014.';return $('regSite').focus()}
+  if(v.toko.length<3){er.textContent='Nama toko wajib diisi.';return $('regToko').focus()}
+  if(v.nama.length<2){er.textContent='Nama wajib diisi.';return $('regNama').focus()}
+  b.disabled=true;b.textContent=edit?'Menyimpan…':'Mendaftar…';
+  let sync=true;
+  try{const r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},v));if(r&&r.blokir){b.disabled=false;return blokir()}}
+  catch(x){if(!x.net){er.textContent=x.message;b.disabled=false;b.textContent=edit?'Simpan':'Daftar & mulai';return}sync=false}
+  const lama=ST.reg;ST.reg=Object.assign({},v,{at:lama&&lama.at||new Date().toISOString()});ST.regSync=sync;isiCfg(v,lama);stSave();
+  b.disabled=false;kunci(null);regInfo();if(window.bcRender)bcRender();
+  if(!edit){ST.lastBuka=Date.now();window.bcLog('buka','','pertama')}
+  ofaToast(edit?'Data pendaftaran disimpan':sync?'Terdaftar. Selamat memakai!':'Terdaftar di perangkat ini. Akan dikirim saat online.');flush()});
+ $('regBatal').onclick=()=>kunci(null);
+ $('blokCek').onclick=()=>{ST.cekBlok=true;flush().then(()=>{if(ST.blokir)ofaToast('Akses masih dinonaktifkan')})};
+ document.addEventListener('click',e=>{if(e.target.id==='regUbah')bukaForm(true)});
+ addEventListener('online',flush);
+ // mulai
+ if(!ST.reg)bukaForm(false);
+ else if(ST.blokir){kunci('blok');ST.cekBlok=true;flush()}
+ else{regInfo();ST.cekBlok=true;if(Date.now()-(ST.lastBuka||0)>30*60e3){ST.lastBuka=Date.now();window.bcLog('buka')}else flush()}
+})();
 </script>
 </body>
 </html>

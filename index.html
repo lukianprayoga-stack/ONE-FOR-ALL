@@ -1442,6 +1442,42 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .sdr-tot b{font-size:22px;color:var(--blue,#1d4ed8)}.sdr-tot span{font-size:12.5px;color:var(--mut)}.sdr-tot span b{font-size:13px}
 @media(max-width:1100px){.sdr-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}.sdr-kpi>div.sdr-big{grid-column:1/-1}}
 @media(max-width:640px){.sdr-t .m{display:none}.sdr-kpi{grid-template-columns:1fr 1fr}}
+/* ====== PENGGUNA APLIKASI BA BLIND COUNTING ====== */
+.bcu-mini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}
+.bcu-mini div{background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:7px 10px;min-width:0}
+.bcu-mini small{display:block;font-size:11px;color:var(--mut)}.bcu-mini b{display:block;font-size:17px;color:var(--num,var(--fg));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcu-last{margin:8px 0 0;font-size:12.5px;color:var(--mut)}.bcu-last b{color:var(--fg)}
+.bcu-share{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 8px 8px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);border:1px dashed color-mix(in srgb,var(--blue,#1d4ed8) 40%,transparent)}
+.bcu-share code{flex:1;min-width:0;font-size:12px;color:var(--blue,#1d4ed8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bcu-share .btn{flex:none;padding:6px 12px;font-size:13px}
+.bcu-body{max-width:1100px}
+.bcu-kpi{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.bcu-kpi>div{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:10px 12px;min-width:0}
+.bcu-kpi>div.bcu-big{background:linear-gradient(135deg,#0b2a7a,#1d4ed8);border-color:transparent;color:#fff}
+.bcu-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}.bcu-kpi .bcu-big small,.bcu-kpi .bcu-big span{color:rgba(255,255,255,.8)}
+.bcu-kpi b{display:block;font-size:22px;letter-spacing:-.4px;color:var(--num,var(--fg))}.bcu-kpi .bcu-big b{font-size:28px;color:#fff}
+.bcu-kpi span{display:block;font-size:11.5px;color:var(--mut)}
+.bcu-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}.bcu-bar .in{flex:1;min-width:200px}
+.bcu-tabs{display:none;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px}
+.bcu-tabs button{border:0;background:none;border-radius:9px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--mut)}.bcu-tabs button.on{background:var(--blue,#1d4ed8);color:#fff}
+.bcu-cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;margin-top:12px;align-items:start}
+.bcu-col h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--orange,#f26a1b)}
+.bcu-u{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:11px 12px;margin-bottom:8px}
+.bcu-u.off{opacity:.62;border-style:dashed}
+.bcu-u-h{display:flex;align-items:flex-start;gap:10px}.bcu-u-h>div{flex:1;min-width:0}
+.bcu-u-h b{display:block;font-size:14.5px;color:var(--title,var(--fg))}.bcu-u-h small{display:block;font-size:12.5px;color:var(--mut)}.bcu-u-h em{font-style:normal;color:var(--bad-fg);font-weight:700}
+.bcu-site{flex:none;min-width:48px;text-align:center;padding:4px 7px;border-radius:9px;background:var(--orange-bg,#fff1e7);color:var(--orange,#f26a1b);font-weight:800;font-size:13px}
+.bcu-when{flex:none;font-size:12px;font-weight:700;color:var(--blue,#1d4ed8);white-space:nowrap}
+.bcu-u-n{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12.5px;color:var(--mut)}.bcu-u-n b{color:var(--fg)}
+.bcu-u-f{display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}.bcu-u-f small{flex:1;min-width:0;font-size:11.5px;color:var(--mut)}
+.bcu-lnk{flex:none;border:0;background:none;font:inherit;font-size:12px;font-weight:700;color:var(--bad-fg);cursor:pointer;padding:2px 0}.bcu-u.off .bcu-lnk{color:var(--blue,#1d4ed8)}
+.bcu-log{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:4px 12px;max-height:640px;overflow-y:auto}
+.bcu-log>div{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.bcu-log>div:last-child{border-bottom:0}
+.bcu-log time{flex:none;width:72px;font-size:11px;color:var(--mut);line-height:1.35;font-variant-numeric:tabular-nums}
+.bcu-log p{margin:0;font-size:13px;line-height:1.35;min-width:0}.bcu-log small{color:var(--mut);font-size:11.5px}
+.bcu-note{margin-top:12px;font-size:12px;color:var(--mut)}
+@media(max-width:800px){.bcu-tabs{display:flex}.bcu-cols{grid-template-columns:1fr}.bcu-col{display:none}.bcu-col.on{display:block}.bcu-col h4{display:none}
+ .bcu-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}.bcu-kpi>div.bcu-big{grid-column:1/-1}.bcu-mini{grid-template-columns:1fr 1fr}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1628,6 +1664,7 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
   <button type="button" data-sd="sdr"><span>▥</span>Sales Harian</button>
   <button type="button" data-sd="co"><span style="font-size:10.5px;font-weight:800;letter-spacing:-.3px">Rp</span>Cash Opname</button>
+  <button type="button" data-sd="bcu"><span>◉</span>Pengguna BA BC</button>
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
   <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
   <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
@@ -1809,6 +1846,10 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div id="bcBody"></div>
           <div class="iv-status" id="bcStatus"></div>
         </section>
+        <section class="rs bcu-card" id="bcuc" aria-label="Pengguna aplikasi BA Blind Counting">
+          <div class="sh-head"><div><h3>Aplikasi BA Blind Counting</h3><p>Dipakai Store Head toko lain · siapa saja yang sudah mendaftar</p></div></div>
+          <div id="bcucBody"></div>
+        </section>
         <section class="rs" id="pgCard" aria-label="Pengingat data">
           <div class="sh-head"><div><h3>Pengingat Data</h3><p id="pgSub">Inventory by bin, by SKU &amp; SKU transaction history</p></div></div>
           <div id="pgBody"></div>
@@ -1853,6 +1894,10 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
+<div class="kt bcu-pg" id="bcuPg" role="dialog" aria-modal="true" aria-label="Pengguna aplikasi BA Blind Counting">
+  <div class="kt-top"><button class="kt-back" id="bcuBack" type="button" aria-label="Kembali">←</button><div><b>Pengguna BA Blind Counting</b><small id="bcuSub">Aplikasi untuk toko lain</small></div></div>
+  <div class="kt-body bcu-body" id="bcuBody"></div>
+</div>
 <div class="kt sdr-pg" id="sdrPg" role="dialog" aria-modal="true" aria-label="Sales Harian">
   <div class="kt-top"><button class="kt-back" id="sdrBack" type="button" aria-label="Kembali">←</button><div><b>Sales Harian (SDR)</b><small id="sdrSub">Sales daily report</small></div></div>
   <div class="kt-body sdr-body" id="sdrBody"></div>
@@ -6811,7 +6856,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
   {n:'Sdr',need:['sdrBulan'],latest:['sdrKirim'],peran:'Sales harian (SDR) & traffic'},
   {n:'Promo',need:['promoKatalogStatus'],latest:['promoKatalogUpload'],peran:'Promo katalog website (daftar artikel promo)'},
-  {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (harus paling bawah)'}
+  {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (di bawah semua file, kecuali BcApp)'},
+  {n:'BcApp',need:['bcAppPengguna'],latest:['bcAppAtur'],peran:'Pendaftaran & pengguna aplikasi BA Blind Counting (paling bawah, di bawah Akun)'}
  ];
  const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
  let data=null,busy=false,err='',ver='';
@@ -7780,6 +7826,110 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
  // DSR baru diupload -> segarkan
  const oldDsr=window.ofaPgRefresh;window.ofaPgRefresh=function(){try{oldDsr&&oldDsr()}catch(e){}load(true)};
+ renderCard();load(false);
+})();
+/* ====== PENGGUNA APLIKASI BA BLIND COUNTING (toko lain) ====== */
+(function(){
+ const pg=document.getElementById('bcuPg');if(!pg)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_bcu',TTL=5*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const APP=new URL('blind-counting/',location.href).href;
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const p2=n=>String(n).padStart(2,'0');
+ const tgl=s=>{const d=new Date(s);return isNaN(d)?'–':d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear()};
+ const jam=s=>{const d=new Date(s);return isNaN(d)?'':p2(d.getHours())+'.'+p2(d.getMinutes())};
+ const lalu=s=>{const d=new Date(s);if(isNaN(d))return '–';const m=Math.round((Date.now()-d)/60e3);if(m<2)return 'baru saja';if(m<60)return m+' menit lalu';const h=Math.round(m/60);if(h<24)return h+' jam lalu';const x=Math.round(h/24);if(x===1)return 'kemarin';if(x<31)return x+' hari lalu';return tgl(s)};
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ const owner=()=>window.ofaRole!=='staf';
+ let data=null,busy=false,err='',q='',tab='u';
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ function simpan(r){(r.log||[]).sort((a,b)=>new Date(b.w)-new Date(a.w));data=Object.assign(r,{at:Date.now()});err='';try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin')||!owner())return renderAll();
+  if(!force&&data&&Date.now()-(data.at||0)<TTL)return renderAll();
+  busy=true;renderAll();
+  try{simpan(await api('bcAppPengguna',{}))}
+  catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;renderAll()}
+ }
+ function ringkas(){
+  const U=data.users||[],now=Date.now(),aktif=U.filter(u=>u.status!=='blokir');
+  const sites=new Set(aktif.map(u=>u.site));
+  const a7=new Set(aktif.filter(u=>now-new Date(u.aktif)<7*864e5).map(u=>u.site));
+  const dl=U.reduce((a,u)=>a+u.unduh,0),up=U.reduce((a,u)=>a+u.upload,0);
+  return{toko:sites.size,orang:aktif.length,a7:a7.size,dl,up,blok:U.length-aktif.length};
+ }
+ const pesanMissing='<p class="dp-empty">Tempel <b>BcApp.gs</b> di Apps Script <b>paling bawah (di bawah Akun)</b>, jalankan <b>bcAppSetup</b>, lalu Deploy → Versi baru.</p>';
+ /* ---------- kartu di halaman Admin ---------- */
+ function renderCard(){
+  const c=$id('bcuc');if(!c)return;c.hidden=!owner();
+  const b=$id('bcucBody');if(!b||!owner())return;
+  const share=`<div class="bcu-share"><code>${esc(APP)}</code><button type="button" class="btn ghost" data-bcu="copy">Salin link</button></div>`;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>'+share;return}
+  if(err==='missing'){b.innerHTML=pesanMissing+share;return}
+  if(!data||!data.users){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>'+share;return}
+  const s=ringkas(),last=(data.log||[])[0];
+  b.innerHTML=`<div class="bcu-mini"><div><small>Toko terdaftar</small><b>${nf(s.toko)}</b></div><div><small>Pengguna</small><b>${nf(s.orang)}</b></div><div><small>Aktif 7 hari</small><b>${nf(s.a7)} toko</b></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b></div></div>
+   ${last?`<p class="bcu-last">Terakhir: <b>${esc(last.nama)}</b> · ${esc(last.site)} ${esc(last.toko)} · ${esc(last.k)}${last.p?' '+esc(last.p):''} · ${esc(lalu(last.w))}</p>`:'<p class="bcu-last">Belum ada yang mendaftar. Bagikan link di bawah ke Store Head lain.</p>'}
+   ${share}<div class="co-acts"><button type="button" class="btn" data-bcu="open">Lihat pengguna &amp; aktivitas</button></div>`;
+ }
+ /* ---------- halaman penuh ---------- */
+ function buka(){if(!owner())return toast('Menu ini khusus pemilik');pg.classList.add('open');document.body.classList.add('kt-on');pg.scrollTop=0;sideOn(true);renderPage();load(false)}
+ function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
+ function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="bcu"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('.kt.open:not(#bcuPg)'))}
+ function renderAll(){renderCard();if(pg.classList.contains('open'))renderPage()}
+ function cocok(u){if(!q)return true;const s=(u.site+' '+u.toko+' '+u.nama+' '+u.jabatan+' '+(u.k||'')+' '+(u.p||'')).toLowerCase();return q.toLowerCase().split(/\s+/).every(w=>s.includes(w))}
+ function renderPage(){
+  const el=$id('bcuBody'),sub=$id('bcuSub');
+  if(err==='missing'){el.innerHTML=pesanMissing;return}
+  if(!data||!data.users){el.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
+  const s=ringkas();
+  sub.textContent=nf(s.toko)+' toko · '+nf(s.orang)+' pengguna'+(busy?' · memuat…':' · diperbarui '+jam(new Date(data.at).toISOString()));
+  const U=(data.users||[]).slice().sort((a,b)=>new Date(b.aktif)-new Date(a.aktif)).filter(cocok);
+  const L=(data.log||[]).filter(cocok).slice(0,150);
+  const users=U.length?U.map(u=>`<div class="bcu-u${u.status==='blokir'?' off':''}">
+    <div class="bcu-u-h"><span class="bcu-site">${esc(u.site)}</span><div><b>${esc(u.toko)}</b><small>${esc(u.nama)} · ${esc(u.jabatan)}${u.status==='blokir'?' · <em>dinonaktifkan</em>':''}</small></div><span class="bcu-when" title="${esc(tgl(u.aktif)+' '+jam(u.aktif))}">${esc(lalu(u.aktif))}</span></div>
+    <div class="bcu-u-n"><span>Buka <b>${nf(u.buka)}</b></span><span>Upload <b>${nf(u.upload)}</b></span><span>Unduh BA <b>${nf(u.unduh)}</b></span>${u.periode?`<span>Periode terakhir <b>${esc(u.periode)}</b></span>`:''}</div>
+    <div class="bcu-u-f"><small>Terdaftar ${esc(tgl(u.daftar))}${u.perangkat?' · '+esc(u.perangkat):''}</small><button type="button" class="bcu-lnk" data-bcb="${esc(u.id)}" data-st="${u.status==='blokir'?'aktif':'blokir'}">${u.status==='blokir'?'Aktifkan lagi':'Nonaktifkan'}</button></div>
+   </div>`).join(''):'<p class="dp-empty">'+(q?'Tidak ada yang cocok.':'Belum ada yang mendaftar.')+'</p>';
+  const log=L.length?'<div class="bcu-log">'+L.map(x=>`<div><time>${esc(tgl(x.w))}<br>${esc(jam(x.w))}</time><p><b>${esc(x.k)}</b>${x.p?' · '+esc(x.p):''}<br><small>${esc(x.site)} ${esc(x.toko)} · ${esc(x.nama)}${x.x?' · '+esc(x.x):''}</small></p></div>`).join('')+'</div>':'<p class="dp-empty">Belum ada aktivitas.</p>';
+  el.innerHTML=`<div class="bcu-kpi"><div class="bcu-big"><small>Toko terdaftar</small><b>${nf(s.toko)}</b><span>${nf(s.orang)} pengguna${s.blok?' · '+nf(s.blok)+' dinonaktifkan':''}</span></div>
+    <div><small>Aktif 7 hari</small><b>${nf(s.a7)}</b><span>toko</span></div><div><small>Upload file BC</small><b>${nf(s.up)}</b><span>total</span></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b><span>total</span></div></div>
+   <div class="bcu-share"><code>${esc(APP)}</code><button type="button" class="btn ghost" data-bcu="copy">Salin link aplikasi</button></div>
+   <div class="bcu-bar"><input class="in" id="bcuQ" type="search" placeholder="Cari site, toko, nama…" value="${esc(q)}"><div class="bcu-tabs" role="tablist"><button type="button" role="tab" data-bct="u" class="${tab==='u'?'on':''}">Pengguna (${U.length})</button><button type="button" role="tab" data-bct="l" class="${tab==='l'?'on':''}">Aktivitas</button></div></div>
+   <div class="bcu-cols"><section class="bcu-col${tab==='u'?' on':''}"><h4>Pengguna</h4>${users}</section><section class="bcu-col${tab==='l'?' on':''}"><h4>Aktivitas terbaru</h4>${log}</section></div>
+   <div class="vd-links"><button type="button" data-bcu="reload">Muat ulang</button>${data.sheetUrl?`<a href="${esc(data.sheetUrl)}" target="_blank" rel="noopener">Buka spreadsheet ↗</a>`:''}<a href="${esc(APP)}" target="_blank" rel="noopener">Buka aplikasi ↗</a></div>
+   <p class="bcu-note">Yang tercatat hanya pendaftaran (site, toko, nama, jabatan) dan aktivitas (buka, upload, unduh BA beserta periodenya). Isi data stock toko lain tidak dikirim ke Hub.</p>`;
+ }
+ async function salin(){try{await navigator.clipboard.writeText(APP);toast('Link aplikasi disalin')}catch(e){prompt('Salin link ini:',APP)}}
+ async function atur(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent=btn.dataset.st==='blokir'?'Yakin nonaktifkan? Ketuk lagi':'Ketuk lagi untuk mengaktifkan';return}
+  btn.disabled=true;btn.textContent='Menyimpan…';
+  try{simpan(await api('bcAppAtur',{id:btn.dataset.bcb,status:btn.dataset.st}));toast(btn.dataset.st==='blokir'?'Akses pengguna dinonaktifkan':'Akses pengguna diaktifkan');renderAll()}
+  catch(e){btn.disabled=false;btn.dataset.ok='';toast(e.message);renderAll()}
+ }
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-bcu],[data-bcb],[data-bct],#bcuBack,.side button,.bnav button,#deckTabs button');if(!t)return;
+  if(t.matches('.side button,.bnav button,#deckTabs button')){if(t.dataset.sd==='bcu'){e.stopPropagation();buka()}else if(pg.classList.contains('open')&&!t.dataset.th)tutup();return}
+  if(t.id==='bcuBack')return tutup();
+  if(t.dataset.bcu==='open')return buka();
+  if(t.dataset.bcu==='copy')return salin();
+  if(t.dataset.bcu==='reload')return load(true);
+  if(t.dataset.bct){tab=t.dataset.bct;return renderPage()}
+  if(t.dataset.bcb)return atur(t);
+ },true);
+ document.addEventListener('input',e=>{if(e.target.id!=='bcuQ')return;q=e.target.value.trim();const p=e.target.selectionStart;renderPage();const i=$id('bcuQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
+ function peran(){const s=document.querySelector('#side [data-sd="bcu"]');if(s)s.hidden=!owner();renderCard()}
+ setTimeout(peran,1500);
  renderCard();load(false);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */

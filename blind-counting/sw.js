@@ -1,4 +1,4 @@
-const CACHE='bcapp-v1';
+const CACHE='bcapp-v2';
 const SHELL=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 const XLSX_URL='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL).then(()=>c.add(XLSX_URL).catch(()=>{}))).then(()=>self.skipWaiting()))});
