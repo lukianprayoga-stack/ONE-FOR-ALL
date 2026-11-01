@@ -654,7 +654,7 @@ BIG.ready.then(function(){
   const sum=(a,k)=>a.reduce((t,r)=>t+r[k],0);
   const skuP=new Set(plus.map(r=>r.sku)),pair=new Set(minus.filter(r=>skuP.has(r.sku)).map(r=>r.sku));
   return {L,minus,plus,qMinus:sum(minus,'gap'),vMinus:sum(minus,'nom'),qPlus:sum(plus,'gap'),vPlus:sum(plus,'nom'),net:sum(L,'nom'),
-   pair,noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved/i.test(r.inv||'')).length,sys:R.rows.filter(isSys).length};
+   pair,noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved|matched/i.test(r.inv||'')).length,sys:R.rows.filter(isSys).length};
  }
  function approvers(v){
   const c=cfg();v=Math.abs(v);
@@ -853,7 +853,7 @@ BIG.ready.then(function(){
   const warn=[];
   if(pk.length>1)warn.push('File berisi '+pk.length+' periode BC ('+pk.join(', ')+'). Pastikan tarik data satu bulan.');
   const notClosed=L.filter(r=>r.st&&!/closed/i.test(r.st));if(notClosed.length)warn.push(notClosed.length+' sesi belum Closed: '+notClosed.slice(0,4).map(r=>r.bc.slice(-3)+' '+cap(r.mc)+' ('+r.st+')').join(', ')+(notClosed.length>4?'…':''));
-  const unsolved=L.filter(r=>r.mis&&!/solved/i.test(r.inv));if(unsolved.length)warn.push(unsolved.length+' sesi selisih investigasinya belum "Solved".');
+  const unsolved=L.filter(r=>r.mis&&!/solved|matched/i.test(r.inv));if(unsolved.length)warn.push(unsolved.length+' sesi selisih investigasinya belum "Solved".');
   const skuGap=sum('sku')-sum('skuc');if(skuGap>0)warn.push(nf(skuGap)+' SKU dari '+nf(sum('sku'))+' tidak terhitung saat BC (Total SKU − Total SKU Dihitung).');
   return {mode:'sesi',ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',
    st:{sesi:L.length,match:L.filter(r=>!r.mis).length,sku:sum('sku'),skuc:sum('skuc'),exp:sum('exp'),cnt:sum('cnt'),care:sum('pc'),scan:sum('ps'),gross:sum('gross')},
@@ -863,7 +863,7 @@ BIG.ready.then(function(){
   const L=R.rows.filter(r=>r.mis),sum=(a,k)=>a.reduce((t,r)=>t+r[k],0);
   const minus=L.filter(r=>r.net<0),plus=L.filter(r=>r.net>0),zero=L.filter(r=>r.net===0);
   return {L,minus,plus,zero,vPlus:sum(L,'plus'),vMinus:sum(L,'minus'),net:sum(L,'net'),gap:sum(L,'gap'),
-   noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved/i.test(r.inv||'')).length};
+   noRem:L.filter(r=>!remOf(R,r).trim()).length,open:L.filter(r=>!/solved|matched/i.test(r.inv||'')).length};
  }
  function workbookSesi(R){
   const c=cfg(),K=calcSesi(R),st=R.st,rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl),W=11;
@@ -975,7 +975,7 @@ BIG.ready.then(function(){
  }
  function showListSesi(){
   const R=rep,K=calcSesi(R);
-  const item=r=>`<div class="bc-li"><div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}</small><small>${r.plus?'<span style="color:#1a8a49">plus '+rp(r.plus)+'</span>':''}${r.plus&&r.minus?' · ':''}${r.minus?'<span style="color:#d33a40">minus '+rp(r.minus)+'</span>':''}</small></span><em class="${r.net<0?'m':'p'}">${rp(r.net)}<small>${r.gap>0?'+':''}${nf(r.gap)} pcs</small></em></div>
+  const item=r=>`<div class="bc-li"><div class="bc-it"><span><b>${esc(cap(r.mc)||r.bc)}</b><small>${esc(r.bc)} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''}${r.pt?' · '+esc(r.pt):''} · CARE ${nf(r.exp)} → fisik ${nf(r.cnt)}${/solved|matched/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}</small><small>${r.plus?'<span style="color:#1a8a49">plus '+rp(r.plus)+'</span>':''}${r.plus&&r.minus?' · ':''}${r.minus?'<span style="color:#d33a40">minus '+rp(r.minus)+'</span>':''}</small></span><em class="${r.net<0?'m':'p'}">${rp(r.net)}<small>${r.gap>0?'+':''}${nf(r.gap)} pcs</small></em></div>
    <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Keterangan penyebab / penyelesaian (opsional)"></div>`;
   const sec=(lab,cls,list,v)=>list.length?`<p class="wk-p bc-h ${cls}"><b>${lab}</b><span>${list.length} sesi · ${rp(v)}</span></p>${list.map(item).join('')}`:'';
   const sm=(a,k)=>a.reduce((t,r)=>t+r[k],0);
@@ -1027,7 +1027,7 @@ BIG.ready.then(function(){
  }
  function showList(){
   const R=rep;if(!R)return;if(R.mode==='sesi')return showListSesi();const K=calc(R);
-  const item=r=>`<div class="bc-li${inScope(R,r)?'':' off'}"><div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${esc(r.mc||'')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · ${esc(r.iss||'belum ada status')}${/solved/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}${K.pair.has(r.sku)?' · plus/minus antar bin':''}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>
+  const item=r=>`<div class="bc-li${inScope(R,r)?'':' off'}"><div class="bc-it"><span><b>${esc(r.nm||'SKU '+r.sku)}</b><small>${esc(r.sku)} · ${esc(r.bin||'-')} · ${esc(r.mc||'')} · ${r.d?esc(r.d.slice(8)+'/'+r.d.slice(5,7)):''} · ${esc(r.iss||'belum ada status')}${/solved|matched/i.test(r.inv||'')?'':' · <b style="color:#d33a40">belum solved</b>'}${K.pair.has(r.sku)?' · plus/minus antar bin':''}</small></span><em class="${r.nom<0?'m':'p'}">${r.gap>0?'+':''}${nf(r.gap)} pcs<small>${rp(r.nom)}</small></em></div>
    <input class="in" data-bck="${r.k}" value="${esc(remOf(R,r))}" placeholder="Penyebab / penyelesaian selisih"></div>`;
   const rest=R.rows.filter(r=>!inScope(R,r));
   openModal('Rincian selisih '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Keterangan diambil dari kolom Remark sistem dan boleh diubah. Yang diubah di sini ikut masuk ke Excel.</p>
@@ -1052,6 +1052,14 @@ BIG.ready.then(function(){
   try{const n=await fetchNames();save();render();const m=missing();s.textContent=(n?'✓ '+n+' nama produk terisi':'Tidak ada nama baru')+(m?' · '+m+' SKU masih kosong — upload file berisi SKU Name & SKU Code':'');}
   catch(e){s.className='iv-status err';s.textContent='Gagal: '+(e.message||e)+' Upload file berisi kolom SKU Name & SKU Code (mis. Stock Database).'}
  }
+ function sesiMatched(R){
+  const S={};let n=0;(R.rows||[]).forEach(r=>{const k=r.bc||'';(S[k]=S[k]||[]).push(r)});
+  Object.keys(S).forEach(k=>{const L=S[k];if(!k||L.length<2)return;
+   if(L.some(r=>/solved/i.test(r.inv||''))||!L.every(r=>!r.sbc||/complete/i.test(r.sbc)))return;
+   if(L.reduce((a,r)=>a+(Number(r.gap)||0),0)!==0)return;
+   L.forEach(r=>{r.inv='Matched (sesi)';if(!r.iss)r.iss='Matched di sistem';if(!r.rem)r.rem='Selisih saling menutup dalam sesi '+k+' (qty plus = minus, sesi Matched di sistem)';r.auto=1});n++});
+  R.sesiMatched=n;return R;
+ }
  async function pickFile(file){
   const s=$id('bcStatus');s.className='iv-status';s.textContent='Membaca '+file.name+'…';
   try{
@@ -1070,7 +1078,7 @@ BIG.ready.then(function(){
     s.textContent='✓ '+nf(R.st.sesi)+' sesi BC '+cap(R.label)+' terbaca · '+calcSesi(R).L.length+' sesi ada selisih';if(window.bcLog)bcLog('upload',cap(R.label),'rekap sesi · '+R.st.sesi+' sesi');
     return;
    }
-   const R=build(p.rows,file.name);
+   const R=sesiMatched(build(p.rows,file.name));
    const old=rep&&rep.ym===R.ym&&rep.mode!=='sesi'?rep:null;
    if(old){R.scope=old.scope;R.jenis=old.jenis;R.tgl=old.tgl;const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.sku+'|'+r.bin+'|'+r.d]=old.edit[r.k]});R.rows.forEach(r=>{const v=o[r.sku+'|'+r.bin+'|'+r.d];if(v!=null)R.edit[r.k]=v})}
    rep=R;applyNames();save();remember();render();
