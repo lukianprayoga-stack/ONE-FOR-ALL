@@ -1552,13 +1552,14 @@ BIG.ready.then(function(){
  let cur=db.cur||today().slice(0,7);
  const P=()=>db.periods[cur]||(db.periods[cur]={aju:[],real:[],tgl:''});
  const uid=()=>Math.random().toString(36).slice(2,9);
- // harga realisasi: sebelum potong pajak & setelah potong pajak
+ // pajak DIPOTONG dari harga: harga/unit (potong pajak) = harga sebelum pajak − pajak
  function hitung(x){
-  const r=(Number(x.r)||0)/100,h=Number(x.h)||0,q=Number(x.q)||0;
-  let pre,net;
-  if(x.mode==='net'){net=Math.round(h);pre=r?Math.round(h/(1-r)):net}else{pre=Math.round(h);net=r?Math.round(h*(1-r)):pre}
+  const r=(Number(x.r)||0)/100,q=Number(x.q)||0,pre=Math.round(Number(x.h)||0),net=r?Math.round(pre*(1-r)):pre;
   return {pre,net,tot:net*q,pajak:(pre-net)*q};
  }
+ // data lama yang diisi sebagai "harga setelah pajak" diubah sekali ke harga sebelum pajak
+ Object.keys(db.periods).forEach(k=>(db.periods[k].real||[]).forEach(x=>{if(x.mode==='net'){const r=(Number(x.r)||0)/100;x.h=r?Math.round((Number(x.h)||0)/(1-r)):Number(x.h)||0;delete x.mode;db._mig=1}}));
+ if(db._mig){delete db._mig;save()}
  function ringkas(p){
   p=p||P();
   const ta=p.aju.reduce((a,x)=>a+(Number(x.q)||0)*(Number(x.h)||0),0),tr=p.real.reduce((a,x)=>a+hitung(x).tot,0);
@@ -1623,25 +1624,21 @@ BIG.ready.then(function(){
    <label class="ks-f"><span>Item realisasi <small>(boleh diganti, mis. nama vendor/jasa sebenarnya)</small></span><input class="in" id="bgRN" autocomplete="off"></label>
    <div class="bg-2"><label class="ks-f"><span>Alasan</span><select class="in" id="bgRA">${alasanList().map(a=>`<option>${esc(a)}</option>`).join('')}</select></label><label class="ks-f"><span>Pajak</span><select class="in" id="bgRP">${pjOpt(x?x.r:0)}</select></label></div>
    <div class="bg-2"><label class="ks-f"><span>Jumlah</span><input class="in" id="bgRQ" inputmode="numeric"></label><label class="ks-f"><span>Unit</span><input class="in" id="bgRU"></label></div>
-   <div class="bg-mode" role="radiogroup"><button type="button" data-bgm="pre">Harga sebelum potong pajak</button><button type="button" data-bgm="net">Harga yang dibayar (setelah pajak)</button></div>
-   <label class="ks-f"><span id="bgRHL">Harga/unit (Rp)</span><input class="in" id="bgRH" inputmode="numeric" placeholder="0"></label>
+   <label class="ks-f"><span>Harga/unit sebelum potong pajak (Rp)</span><input class="in" id="bgRH" inputmode="numeric" placeholder="0"></label>
    <div class="bg-prev" id="bgRPrev"></div></div>
    <p class="hint" id="bgErr" style="color:var(--bad-fg,#c62828);min-height:1em"></p>
    <div class="row" style="margin-top:8px"><button class="btn" type="button" id="bgSaveR">Simpan</button></div>`);
-  let mode=x?x.mode||'pre':'pre';
   const isi=a=>{$id('bgRN').value=a.n;$id('bgRA').value=a.a;$id('bgRQ').value=a.q;$id('bgRU').value=a.u||'Unit';$id('bgRH').value=a.h?nf(a.h):'';
    const pj=a.a==='PRODUK'?PJ.findIndex(t=>!Number(t.r)):PJ.findIndex(t=>Number(t.r)>0);if(!x&&pj>=0)$id('bgRP').value=pj};
   if(x){$id('bgRN').value=x.n;$id('bgRA').value=x.a;$id('bgRQ').value=x.q;$id('bgRU').value=x.u||'Unit';$id('bgRH').value=x.h?nf(x.h):''}else isi(p.aju.find(a=>a.id===ref0));
-  const cur3=()=>{const t=PJ[+$id('bgRP').value]||{r:0,l:''};return {r:Number(t.r)||0,pl:t.l,h:num($id('bgRH').value),q:num($id('bgRQ').value),mode}};
-  const prev=()=>{document.querySelectorAll('[data-bgm]').forEach(b=>b.classList.toggle('on',b.dataset.bgm===mode));
+  const cur3=()=>{const t=PJ[+$id('bgRP').value]||{r:0,l:''};return {r:Number(t.r)||0,pl:t.l,h:num($id('bgRH').value),q:num($id('bgRQ').value)}};
+  const prev=()=>{
    const v=cur3(),h=hitung(v),a=p.aju.find(y=>y.id===$id('bgRef').value),ta=a?(Number(a.q)||0)*(Number(a.h)||0):0;
-   $id('bgRHL').textContent=mode==='net'?'Harga/unit yang dibayar, setelah potong pajak (Rp)':'Harga/unit sebelum potong pajak (Rp)';
-   $id('bgRPrev').innerHTML=`<div><span>Harga sebelum potong pajak</span><b>${rp(h.pre)}</b></div><div><span>Harga/unit (potong pajak)</span><b>${rp(h.net)}</b></div>${v.r?`<div><span>Potongan pajak (${String(v.r).replace('.',',')}%)</span><b>${rp(h.pajak)}</b></div>`:''}<div class="t"><span>Total realisasi</span><b>${rp(h.tot)}</b></div>${a?`<div class="${h.tot>ta?'over':''}"><span>Pengajuan item ini</span><b>${rp(ta)}${h.tot>ta?' · lebih '+rp(h.tot-ta):''}</b></div>`:''}`};
+   $id('bgRPrev').innerHTML=`<div><span>Harga sebelum potong pajak</span><b>${rp(h.pre)}</b></div>${v.r?`<div><span>Dipotong pajak ${String(v.r).replace('.',',')}%</span><b>−${rp(h.pre-h.net)}/unit</b></div>`:''}<div><span>Harga/unit (potong pajak)</span><b>${rp(h.net)}</b></div><div class="t"><span>Total realisasi</span><b>${rp(h.tot)}</b></div>${a?`<div class="${h.tot>ta?'over':''}"><span>Pengajuan item ini</span><b>${rp(ta)}${h.tot>ta?' · lebih '+rp(h.tot-ta):''}</b></div>`:''}`};
   $id('bgRef').onchange=e=>{if(!x)isi(p.aju.find(a=>a.id===e.target.value));prev()};
   $id('bgRA').onchange=()=>{const pj=$id('bgRA').value==='PRODUK'?PJ.findIndex(t=>!Number(t.r)):-1;if(pj>=0)$id('bgRP').value=pj;prev()};
   ['bgRQ','bgRH'].forEach(i=>$id(i).addEventListener('input',prev));$id('bgRP').onchange=prev;
   $id('bgRH').addEventListener('blur',e=>{const v=num(e.target.value);e.target.value=v?nf(v):''});
-  document.querySelectorAll('[data-bgm]').forEach(b=>b.onclick=()=>{mode=b.dataset.bgm;prev()});
   prev();
   $id('bgSaveR').onclick=()=>{const v=Object.assign(cur3(),{ref:$id('bgRef').value,n:$id('bgRN').value.trim().toUpperCase(),a:$id('bgRA').value,u:$id('bgRU').value.trim()||'Unit'});
    if(!v.n){$id('bgErr').textContent='Item realisasi wajib diisi.';return}
