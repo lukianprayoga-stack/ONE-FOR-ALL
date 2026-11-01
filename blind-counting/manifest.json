@@ -1,7 +1,7 @@
 {
  "name": "BA Blind Counting",
  "short_name": "BA Blind Count",
- "description": "Berita acara selisih stock blind counting (REG-FRM-35). Dibuat oleh Lukian Prayoga.",
+ "description": "BA Blind Counting, Kepatuhan Display & Rekap Kas untuk Store Head. Dibuat oleh Lukian Prayoga.",
  "id": "ba-blind-counting",
  "start_url": "./",
  "scope": "./",
