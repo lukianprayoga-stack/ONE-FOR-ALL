@@ -1478,6 +1478,60 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .bcu-note{margin-top:12px;font-size:12px;color:var(--mut)}
 @media(max-width:800px){.bcu-tabs{display:flex}.bcu-cols{grid-template-columns:1fr}.bcu-col{display:none}.bcu-col.on{display:block}.bcu-col h4{display:none}
  .bcu-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}.bcu-kpi>div.bcu-big{grid-column:1/-1}.bcu-mini{grid-template-columns:1fr 1fr}}
+/* ====== ANALISIS PROMO ====== */
+.pa-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}
+.pa-mini div{background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:7px 10px;min-width:0}
+.pa-mini small{display:block;font-size:11px;color:var(--mut)}.pa-mini b{display:block;font-size:17px;color:var(--num,var(--fg));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pa-mini span{display:block;font-size:11px;color:var(--mut)}
+.pa-top{display:grid;gap:6px}.pa-top>div{display:flex;gap:10px;align-items:center}
+.pa-top em{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;background:var(--orange-bg,#fff1e7);color:var(--orange,#f26a1b)}
+.pa-top span{min-width:0}.pa-top b{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pa-top small{font-size:11.5px;color:var(--mut)}
+.pa-hint{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);font-size:12.5px;line-height:1.5}
+.pa-body{max-width:1240px}
+.pa-per{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pa-per button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.pa-per button.on{background:var(--blue,#1d4ed8);border-color:var(--blue,#1d4ed8);color:#fff}
+.pa-cus{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}.pa-cus .in{width:auto;flex:1;min-width:140px}.pa-cus span{font-size:13px;color:var(--mut)}
+.pa-kpi{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.pa-kpi>div{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:10px 12px;min-width:0}
+.pa-kpi>div.pa-big{background:linear-gradient(135deg,#0b2a7a,#1d4ed8);border-color:transparent;color:#fff}
+.pa-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}.pa-kpi .pa-big small,.pa-kpi .pa-big span{color:rgba(255,255,255,.8)}
+.pa-kpi b{display:block;font-size:21px;letter-spacing:-.4px;color:var(--num,var(--fg));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pa-kpi .pa-big b{font-size:28px;color:#fff}
+.pa-kpi span{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.pa-sec{background:var(--card);border:1px solid var(--card-bd,var(--line));border-radius:16px;padding:12px 14px;margin-top:12px}
+.pa-sec h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--orange,#f26a1b)}
+.pa-sh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}.pa-sh h4{margin:0}.pa-sh .in{width:auto;min-width:170px;padding:7px 10px;font-size:13px}
+.pa-sar{background:linear-gradient(180deg,var(--blue-bg,#eaf1ff),var(--card));border-color:color-mix(in srgb,var(--blue,#1d4ed8) 30%,transparent)}
+.pa-sar ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}.pa-sar li{display:flex;gap:10px;font-size:13.5px;line-height:1.5}.pa-sar li i{font-style:normal;flex:none}
+.pa-sar li b{color:var(--title,var(--fg))}
+.pa-mt{display:grid;gap:4px}
+.pa-mh,.pa-mr{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:10px;align-items:center}
+.pa-mh{font-size:10.5px;font-weight:800;color:var(--blue,#1d4ed8);text-transform:uppercase;letter-spacing:.03em;padding:4px 8px}
+.pa-mr{padding:8px;border-radius:12px;border:1px solid var(--line);font-size:13px}.pa-mr.base{background:var(--bg);border-style:dashed}
+.pa-mr b{font-variant-numeric:tabular-nums}.pa-mr small{display:block;font-size:11px;color:var(--mut)}.pa-mr small.up{color:var(--ok-fg,#15803d);font-weight:700}.pa-mr small.dn{color:var(--bad-fg,#c62828);font-weight:700}
+.pa-mr>span:nth-child(2) small{display:inline;margin-left:4px}
+.pa-bar{display:block;height:6px;border-radius:99px;background:var(--line);margin-top:4px;overflow:hidden}.pa-bar>i{display:block;height:100%;border-radius:99px;background:var(--blue,#1d4ed8)}
+.pa-bar.g>i{background:var(--mut)}.pa-bar.o>i{background:var(--orange,#f26a1b)}
+.pa-2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;align-items:start}.pa-2>section,.pa-2>div>section:first-child{margin-top:12px}
+.pa-pl{display:grid;gap:6px;max-height:900px;overflow-y:auto}
+.pa-p{display:flex;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px}
+.pa-p>em{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+.pa-p>div{flex:1;min-width:0}.pa-p b{display:block;font-size:13.5px;line-height:1.35}.pa-p small{display:block;font-size:11.5px;color:var(--mut);margin-top:2px}
+.pa-pn{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:6px;font-size:12px;color:var(--mut)}.pa-pn b{display:inline;font-size:12.5px;color:var(--fg)}
+.pa-cat{margin-top:4px!important}
+.pa-chip{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10.5px;font-weight:800;background:var(--orange-bg,#fff1e7);color:var(--orange,#f26a1b);margin-right:4px}
+.pa-chip.k-voucher,.pa-chip.k-eac{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}.pa-chip.k-bundling,.pa-chip.k-crosssell,.pa-chip.k-minbelanja{background:var(--ok-bg,#e9f9ef);color:var(--ok-fg,#15803d)}
+.pa-tr{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:16px}
+.pa-tr>div{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px}
+.pa-tr>div>i{position:relative;display:flex;flex-direction:column;justify-content:flex-end;width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:var(--line);overflow:hidden}
+.pa-tr>div>i>i{display:block;width:100%;background:var(--orange,#f26a1b)}
+.pa-tr small{font-size:10.5px;font-weight:700;color:var(--mut)}.pa-tr span{font-size:10.5px;color:var(--mut);white-space:nowrap}
+.pa-leg{margin:6px 0 0;font-size:11.5px;color:var(--mut)}.pa-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--line);vertical-align:-1px;margin:0 3px 0 6px}.pa-leg i.o{background:var(--orange,#f26a1b);margin-left:0}
+.pa-c{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:6px 0;border-bottom:1px solid var(--line)}.pa-c:last-child{border-bottom:0}
+.pa-c b{font-size:13px}.pa-c small{display:block;font-size:11.5px;color:var(--mut)}.pa-c em{font-style:normal;font-weight:800;color:var(--orange,#f26a1b)}.pa-c .pa-bar{grid-column:1/-1;margin-top:0}
+.pa-d{display:grid;grid-template-columns:34px minmax(0,1fr) 40px 70px;gap:8px;align-items:center;padding:3px 0;font-size:12.5px}.pa-d .pa-bar{margin:0}.pa-d b{text-align:right;font-variant-numeric:tabular-nums}.pa-d small{color:var(--mut);font-size:11px}
+.pa-k{display:grid;grid-template-columns:minmax(0,1fr) 40px 70px;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px}.pa-k:last-child{border-bottom:0}.pa-k b{text-align:right}.pa-k small{text-align:right;color:var(--mut)}
+.pa-note{margin-top:12px;font-size:12px;color:var(--mut)}
+@media(max-width:1100px){.pa-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.pa-kpi>div.pa-big{grid-column:1/-1}.pa-2{grid-template-columns:1fr}}
+@media(max-width:760px){.pa-mh{display:none}.pa-mr{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px 10px}.pa-mr>span:first-child,.pa-mr>span:nth-child(2){grid-column:1/-1}.pa-mr>span:nth-child(3)::before{content:'ATV';display:block;font-size:10px;color:var(--mut);font-weight:700}.pa-mr>span:nth-child(4)::before{content:'UPT';display:block;font-size:10px;color:var(--mut);font-weight:700}.pa-mr>span:nth-child(5)::before{content:'Diskon';display:block;font-size:10px;color:var(--mut);font-weight:700}.pa-mr>span:nth-child(6)::before{content:'Net/Rp1';display:block;font-size:10px;color:var(--mut);font-weight:700}.pa-mini{grid-template-columns:1fr 1fr}.pa-mini div:last-child{grid-column:1/-1}}
 /* ====== TEMA & KERAPIAN ====== */
 .theme-btn{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--fg);padding:0}
 .theme-btn:hover{border-color:var(--mut)}
@@ -1663,6 +1717,7 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button type="button" data-sd="stok"><span>⌕</span>Cek stok<kbd>/</kbd></button>
   <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
   <button type="button" data-sd="sdr"><span>▥</span>Sales Harian</button>
+  <button type="button" data-sd="pa"><span>%</span>Analisis Promo</button>
   <button type="button" data-sd="co"><span style="font-size:10.5px;font-weight:800;letter-spacing:-.3px">Rp</span>Cash Opname</button>
   <button type="button" data-sd="bcu"><span>◉</span>Pengguna SH Kit</button>
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
@@ -1771,6 +1826,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         <section class="rs" id="mb" aria-label="Laporan bulanan dan PICA">
           <div class="sh-head"><div><h3>Laporan Bulanan &amp; PICA</h3><p id="mbSub">Evaluasi bulan ini dan rencana perbaikan bulan depan</p></div></div>
           <div id="mbBody"></div>
+        </section>
+        <section class="rs pa-card" id="pac" aria-label="Analisis promo">
+          <div class="sh-head"><div><h3>Analisis Promo</h3><p id="pacSub">Promo paling sering dipakai customer</p></div></div>
+          <div id="pacBody"></div>
         </section>
         <section class="rs co-card" id="cop" aria-label="Cash opname internal">
           <div class="sh-head"><div><h3>Cash Opname Internal</h3><p>Berita acara pemeriksaan kas</p></div></div>
@@ -1897,6 +1956,10 @@ html.scrolled header{border-bottom-color:var(--line)}
 <div class="kt bcu-pg" id="bcuPg" role="dialog" aria-modal="true" aria-label="Pengguna Store Head Kit">
   <div class="kt-top"><button class="kt-back" id="bcuBack" type="button" aria-label="Kembali">←</button><div><b>Pengguna Store Head Kit</b><small id="bcuSub">Aplikasi untuk toko lain</small></div></div>
   <div class="kt-body bcu-body" id="bcuBody"></div>
+</div>
+<div class="kt pa-pg" id="paPg" role="dialog" aria-modal="true" aria-label="Analisis promo">
+  <div class="kt-top"><button class="kt-back" id="paBack" type="button" aria-label="Kembali">←</button><div><b>Analisis Promo</b><small id="paSub">Promo paling sering dipakai &amp; strategi promo</small></div></div>
+  <div class="kt-body pa-body" id="paBody"></div>
 </div>
 <div class="kt sdr-pg" id="sdrPg" role="dialog" aria-modal="true" aria-label="Sales Harian">
   <div class="kt-top"><button class="kt-back" id="sdrBack" type="button" aria-label="Kembali">←</button><div><b>Sales Harian (SDR)</b><small id="sdrSub">Sales daily report</small></div></div>
@@ -6856,6 +6919,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Kas',need:['kasStatus'],latest:['kasSimpan'],peran:'Cash opname internal & berita acara'},
   {n:'Sdr',need:['sdrBulan'],latest:['sdrKirim'],peran:'Sales harian (SDR) & traffic'},
   {n:'Promo',need:['promoKatalogStatus'],latest:['promoKatalogUpload'],peran:'Promo katalog website (daftar artikel promo)'},
+  {n:'PromoAnalisis',need:['promoAnalisis'],latest:[],peran:'Analisis promo & strategi promo (dari DSR)'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (di bawah semua file, kecuali BcApp)'},
   {n:'BcApp',need:['bcAppPengguna'],latest:['bcAppAtur'],peran:'Pendaftaran & pengguna Store Head Kit (paling bawah, di bawah Akun)'}
  ];
@@ -7933,6 +7997,179 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  function lompat(){if(location.hash==='#pengguna-bc'&&!pg.classList.contains('open')){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}buka()}}
  addEventListener('hashchange',lompat);
  setTimeout(peran,1500);
+ renderCard();load(false);
+})();
+/* ====== ANALISIS PROMO: promo paling sering dipakai customer & strategi promo ====== */
+(function(){
+ const pg=document.getElementById('paPg');if(!pg)return;
+ const $id=i=>document.getElementById(i);
+ const CK='ofa_pa',TTL=15*60e3;
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>'Rp'+nf(v);
+ const jt=v=>{v=Number(v)||0;const a=Math.abs(v);return a>=1e9?'Rp'+(v/1e9).toLocaleString('id-ID',{maximumFractionDigits:2})+' M':a>=1e6?'Rp'+(v/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+' jt':a>=1e3?'Rp'+Math.round(v/1e3).toLocaleString('id-ID')+' rb':rp(v)};
+ const pct=(a,b,d)=>b?(a/b*100).toLocaleString('id-ID',{maximumFractionDigits:d==null?1:d})+'%':'–';
+ const dlt=(a,b)=>{if(!b)return '';const v=(a/b-1)*100;return (v>=0?'+':'')+v.toLocaleString('id-ID',{maximumFractionDigits:0})+'%'};
+ const d2=v=>(Number(v)||0).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+ const pad=n=>String(n).padStart(2,'0');
+ const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+ const tglS=k=>{if(!k)return '';const p=k.split('-');return +p[2]+' '+BLN[+p[1]-1]+(p[0]!==String(new Date().getFullYear())?' '+p[0]:'')};
+ const mL=m=>BLN[+m.slice(5,7)-1]+' '+m.slice(2,4);
+ const toast=t=>window.ofaToast?window.ofaToast(t):null;
+ const PRESET=[['m','Bulan ini'],['3','3 bulan'],['6','6 bulan'],['y','Tahun ini'],['all','Semua data']];
+ let data=null,busy=false,err='',preset='3',custom=null,sort='trx',q='';
+ try{const c=JSON.parse(localStorage.getItem(CK)||'null');if(c&&c.r){data=c.r;preset=c.p||'3'}}catch(e){}
+ async function api(fn,arg){
+  const pin=localStorage.getItem('salesTrackingPin')||'';
+  const r=await fetch(HUB_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[Object.assign({pin},arg)],pin})});
+  const j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal memuat');return j.result;
+ }
+ const missing=e=>/tidak dikenal/i.test(e&&e.message||'');
+ // rentang tanggal dari pilihan periode (acuan: tanggal DSR terakhir)
+ function range(p,max){
+  const end=max?new Date(max+'T12:00:00'):new Date();
+  if(p==='custom'&&custom)return custom;
+  if(p==='all')return {};
+  if(p==='m')return {from:ymd(new Date(end.getFullYear(),end.getMonth(),1)),to:ymd(end)};
+  if(p==='y')return {from:end.getFullYear()+'-01-01',to:ymd(end)};
+  const n=+p,s=new Date(end.getFullYear(),end.getMonth()-n+1,1);return {from:ymd(s),to:ymd(end)};
+ }
+ async function load(force){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return renderAll();
+  if(!force&&data&&!data.message&&Date.now()-(data.at||0)<TTL)return renderAll();
+  busy=true;renderAll();
+  try{
+   const max=data&&data.range&&data.range.max;
+   const r=await api('promoAnalisis',range(preset,max));
+   // periode relatif dihitung ulang bila tanggal DSR terakhir berbeda dari perkiraan
+   if(r.range&&r.range.max&&r.range.max!==max&&preset!=='all'&&preset!=='custom'){const r2=await api('promoAnalisis',range(preset,r.range.max));data=Object.assign(r2,{at:Date.now()})}
+   else data=Object.assign(r,{at:Date.now()});
+   err='';try{localStorage.setItem(CK,JSON.stringify({r:data,p:preset}))}catch(e){}
+  }catch(e){err=missing(e)?'missing':e.message}
+  finally{busy=false;renderAll()}
+ }
+ window.ofaPaReload=()=>load(true);
+ /* ---------- olah ---------- */
+ function olah(){
+  const D=data,T=D.total,base=D.noPromo||{atv:0,upt:0};
+  const min=Math.max(8,T.trx*.015);
+  const M=D.mech.filter(m=>m.k!=='none').map(m=>Object.assign({},m,{share:m.trx/T.trx,dpct:m.gross?m.disc/m.gross:0,eff:m.disc?m.net/m.disc:Infinity}));
+  const Mok=M.filter(m=>m.trx>=min&&m.k!=='lain'&&m.k!=='karyawan'&&m.k!=='loyalty');
+  return {T,base,M,Mok,min,wp:D.withPromo||{atv:0,upt:0}};
+ }
+ function saran(){
+  const D=data,{T,base,M,Mok,min}=olah(),out=[];
+  const top=D.promos[0];
+  if(top)out.push(['🏆',`Promo paling sering dipakai: <b>${esc(top.name)}</b>, ${nf(top.trx)} transaksi (${pct(top.trx,T.trx)} dari semua transaksi).`]);
+  if(Mok.length){
+   const byTrx=Mok.slice().sort((a,b)=>b.trx-a.trx)[0];
+   const byAtv=Mok.slice().sort((a,b)=>b.atv-a.atv)[0];
+   const byUpt=Mok.slice().sort((a,b)=>b.upt-a.upt)[0];
+   const ef=Mok.filter(m=>m.disc>0&&isFinite(m.eff)).sort((a,b)=>b.eff-a.eff);
+   if(byTrx&&byTrx.k!==(top&&top.k))out.push(['📊',`Mekanisme yang paling banyak dipakai: <b>${esc(byTrx.label)}</b> (${nf(byTrx.trx)} transaksi, ${pct(byTrx.trx,T.trx)}).`]);
+   if(byAtv&&base.atv)out.push(['💰',`Untuk menaikkan nilai belanja, <b>${esc(byAtv.label)}</b> paling kuat: ATV ${jt(byAtv.atv)} (${dlt(byAtv.atv,base.atv)} dibanding transaksi tanpa promo ${jt(base.atv)}).${byAtv.k==='minbelanja'?' Pasang syarat min. belanja sedikit di atas ATV normal agar customer menambah 1 barang.':''}`]);
+   if(byUpt&&base.upt&&byUpt.k!==byAtv.k)out.push(['🛍️',`Untuk menambah pcs per transaksi, <b>${esc(byUpt.label)}</b> paling efektif: UPT ${d2(byUpt.upt)} vs ${d2(base.upt)} tanpa promo.`]);
+   if(ef.length>1){const a=ef[0],z=ef[ef.length-1];out.push(['⚖️',`Paling hemat biaya: setiap Rp1 diskon di <b>${esc(a.label)}</b> menghasilkan Rp${nf(a.eff)} penjualan, sedangkan <b>${esc(z.label)}</b> hanya Rp${nf(z.eff)} (diskon ${pct(z.disc,z.gross,0)}).${z.k==='markdown'?' Pakai markdown untuk cuci barang slow/dead stock, bukan untuk barang laku.':''}`])}
+   const v=M.find(m=>m.k==='voucher');if(v&&v.trx>=min)out.push(['🎟️',`Voucher member baru dipakai di ${nf(v.trx)} transaksi dengan ATV ${jt(v.atv)}. Pastikan RA selalu menawarkan daftar member: biayanya kecil (diskon ${pct(v.disc,v.gross,1)}) dan membuka promo member berikutnya.`]);
+  }
+  const share=T.ptrx/T.trx;
+  const last3=D.months.slice(-3),s3=last3.reduce((a,x)=>a+x.ptrx,0)/(last3.reduce((a,x)=>a+x.trx,0)||1);
+  if(share>=.6)out.push(['⚠️',`${pct(T.ptrx,T.trx,0)} transaksi memakai promo${D.months.length>3?' (3 bulan terakhir '+pct(s3*100,100,0)+')':''}. Ketergantungan promo tinggi: dorong produk baru & barang laku dengan harga normal (display depan, rekomendasi RA), simpan promo untuk hari ramai.`]);
+  else if(share<=.35)out.push(['✅',`Hanya ${pct(T.ptrx,T.trx,0)} transaksi yang memakai promo. Penjualan harga normal sehat; promo bisa dipakai lebih terarah untuk mendongkrak hari sepi.`]);
+  const cats=D.cats.filter(c=>c.qty>=20&&c.cat!=='LAINNYA').map(c=>Object.assign({},c,{s:c.pqty/c.qty}));
+  if(cats.length>1){cats.sort((a,b)=>b.s-a.s);const hi=cats[0],lo=cats[cats.length-1];if(hi.s-lo.s>.12)out.push(['🏷️',`<b>${esc(cap(hi.cat))}</b> paling bergantung promo (${pct(hi.pqty,hi.qty,0)} pcs terjual dengan promo), <b>${esc(cap(lo.cat))}</b> paling sering laku di harga normal (${pct(lo.qty-lo.pqty,lo.qty,0)} harga normal).`])}
+  const dw=D.dows.filter(x=>x.trx>=10);if(dw.length>3){const lo=dw.slice().sort((a,b)=>a.trx-b.trx)[0],hi=dw.slice().sort((a,b)=>b.trx-a.trx)[0];out.push(['📅',`Hari paling sepi: <b>${HARI[lo.d]}</b> (${nf(lo.trx)} transaksi), paling ramai <b>${HARI[hi.d]}</b> (${nf(hi.trx)}). Promo khusus hari sepi (mis. double date/payday yang jatuh di ${HARI[lo.d]}) bisa meratakan traffic.`])}
+  return out;
+ }
+ const cap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ /* ---------- kartu ringkas (Laporan) ---------- */
+ const pesanMissing='<p class="dp-empty">Tempel <b>PromoAnalisis.gs</b> di Apps Script (di atas Akun), lalu Deploy → Versi baru.</p>';
+ function perLabel(){const r=data&&data.range;if(!r)return '';return tglS(r.from)+' – '+tglS(r.to)}
+ function renderCard(){
+  const b=$id('pacBody');if(!b)return;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>';return}
+  if(err==='missing'){b.innerHTML=pesanMissing;return}
+  if(!data||!data.total){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):data&&data.message?esc(data.message):'Belum ada data.')+'</p>';return}
+  const {T,base,wp}=olah(),S=saran();
+  $id('pacSub').textContent='Dari DSR · '+perLabel();
+  b.innerHTML=`<div class="pa-mini"><div><small>Transaksi pakai promo</small><b>${pct(T.ptrx,T.trx,0)}</b><span>${nf(T.ptrx)} dari ${nf(T.trx)}</span></div><div><small>Biaya diskon</small><b>${jt(T.disc)}</b><span>${pct(T.disc,T.gross)} dari gross</span></div><div><small>ATV pakai promo</small><b>${jt(wp.atv)}</b><span>${dlt(wp.atv,base.atv)} vs tanpa promo</span></div></div>
+   <p class="wk-p" style="margin:12px 0 6px"><b>Paling sering dipakai</b></p>
+   <div class="pa-top">${data.promos.slice(0,3).map((p,i)=>`<div><em>${i+1}</em><span><b>${esc(p.name)}</b><small>${esc(p.label)} · ${nf(p.trx)} transaksi</small></span></div>`).join('')}</div>
+   ${S[1]?`<p class="pa-hint">${S[1][0]} ${S[1][1]}</p>`:''}
+   <div class="co-acts"><button type="button" class="btn" data-pao="1">Lihat analisis &amp; strategi</button></div>`;
+ }
+ /* ---------- halaman penuh ---------- */
+ function buka(){pg.classList.add('open');document.body.classList.add('kt-on');pg.scrollTop=0;sideOn(true);renderPage();load(false)}
+ function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
+ function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="pa"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('.kt.open:not(#paPg)'))}
+ window.ofaOpenPa=buka;
+ function renderAll(){renderCard();if(pg.classList.contains('open'))renderPage()}
+ function bar(v,mx,cls){return `<i class="pa-bar ${cls||''}"><i style="width:${mx?Math.max(1.5,v/mx*100).toFixed(1):0}%"></i></i>`}
+ function renderPage(){
+  const el=$id('paBody'),sub=$id('paSub');
+  const periode=`<div class="pa-per">${PRESET.map(([k,l])=>`<button type="button" data-pap="${k}" class="${preset===k?'on':''}">${l}</button>`).join('')}<button type="button" data-pap="custom" class="${preset==='custom'?'on':''}">Pilih tanggal</button></div>
+   ${preset==='custom'?`<div class="pa-cus"><input class="in" type="date" id="paFrom" value="${esc(custom&&custom.from||'')}"><span>s/d</span><input class="in" type="date" id="paTo" value="${esc(custom&&custom.to||'')}"><button type="button" class="btn" id="paGo">Terapkan</button></div>`:''}`;
+  if(err==='missing'){el.innerHTML=pesanMissing;return}
+  if(!data||!data.total){el.innerHTML=periode+'<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):data&&data.message?esc(data.message):'Belum ada data.')+'</p>';return}
+  const D=data,{T,base,M,wp}=olah(),S=saran();
+  sub.textContent=perLabel()+' · '+nf(T.trx)+' transaksi'+(busy?' · memuat…':'');
+  const Ms=M.slice().sort((a,b)=>sort==='atv'?b.atv-a.atv:sort==='upt'?b.upt-a.upt:sort==='eff'?(isFinite(b.eff)?b.eff:0)-(isFinite(a.eff)?a.eff:0):b.trx-a.trx);
+  const mxT=Math.max(1,...M.map(m=>m.trx));
+  const mech=`<div class="pa-mt"><div class="pa-mh"><span>Mekanisme</span><span>Transaksi</span><span>ATV</span><span>UPT</span><span>Diskon</span><span title="Penjualan bersih per Rp1 diskon">Net/Rp1 diskon</span></div>
+   <div class="pa-mr base"><span><b>Tanpa promo</b><small>pembanding</small></span><span><b>${nf(D.noPromo.trx)}</b>${bar(D.noPromo.trx,Math.max(mxT,D.noPromo.trx),'g')}</span><span><b>${jt(base.atv)}</b></span><span><b>${d2(base.upt)}</b></span><span>–</span><span>–</span></div>
+   ${Ms.map(m=>`<div class="pa-mr"><span><b>${esc(m.label)}</b><small>${m.promos} promo</small></span><span><b>${nf(m.trx)}</b> <small>${pct(m.trx,T.trx,0)}</small>${bar(m.trx,Math.max(mxT,D.noPromo.trx))}</span><span><b>${jt(m.atv)}</b><small class="${m.atv>=base.atv?'up':'dn'}">${dlt(m.atv,base.atv)}</small></span><span><b>${d2(m.upt)}</b><small class="${m.upt>=base.upt?'up':'dn'}">${dlt(m.upt,base.upt)}</small></span><span><b>${pct(m.disc,m.gross,0)}</b><small>${jt(m.disc)}</small></span><span><b>${isFinite(m.eff)?'Rp'+nf(m.eff):'–'}</b></span></div>`).join('')}</div>`;
+  const qq=q.toLowerCase().split(/\s+/).filter(Boolean),P=D.promos.filter(p=>qq.every(w=>(p.name+' '+p.label).toLowerCase().includes(w)));
+  const mxP=Math.max(1,...D.promos.map(p=>p.trx));
+  const promos=P.length?P.slice(0,30).map((p,i)=>`<div class="pa-p"><em>${D.promos.indexOf(p)+1}</em><div><b>${esc(p.name)}</b><small><span class="pa-chip k-${p.k}">${esc(p.label)}</span> ${tglS(p.first)}${p.last!==p.first?' – '+tglS(p.last):''} · ${p.days} hari dipakai</small>
+    <div class="pa-pn"><span>Transaksi <b>${nf(p.trx)}</b></span><span>per hari <b>${(p.trx/Math.max(1,p.days)).toLocaleString('id-ID',{maximumFractionDigits:1})}</b></span><span>ATV <b>${jt(p.atv)}</b></span><span>UPT <b>${d2(p.upt)}</b></span><span>Diskon <b>${pct(p.disc,p.gross,0)}</b></span><span>Net <b>${jt(p.net)}</b></span></div>
+    ${bar(p.trx,mxP)}<small class="pa-cat">${p.cats.map(c=>esc(cap(c[0]))+' '+nf(c[1])+' pcs').join(' · ')}</small></div></div>`).join(''):'<p class="dp-empty">Tidak ada promo yang cocok.</p>';
+  const mxM=Math.max(1,...D.months.map(x=>x.trx));
+  const tren=`<div class="pa-tr">${D.months.map(x=>`<div title="${mL(x.m)}: ${nf(x.ptrx)} dari ${nf(x.trx)} transaksi pakai promo · diskon ${jt(x.disc)}"><small>${pct(x.ptrx,x.trx,0)}</small><i style="height:${(x.trx/mxM*100).toFixed(1)}%"><i style="height:${x.trx?(x.ptrx/x.trx*100).toFixed(1):0}%"></i></i><span>${mL(x.m)}</span></div>`).join('')}</div>
+   <p class="pa-leg"><i class="o"></i> transaksi pakai promo <i></i> tanpa promo · angka = % pakai promo</p>`;
+  const cats=D.cats.filter(c=>c.cat!=='LAINNYA').map(c=>`<div class="pa-c"><span><b>${esc(cap(c.cat))}</b><small>${nf(c.qty)} pcs · diskon ${pct(c.disc,c.gross,0)}</small></span><em>${pct(c.pqty,c.qty,0)}</em>${bar(c.pqty,c.qty,'o')}</div>`).join('');
+  const mxD=Math.max(1,...D.dows.map(x=>x.trx));
+  const dows=[1,2,3,4,5,6,0].map(d=>D.dows[d]).map(x=>`<div class="pa-d"><span>${HARI[x.d].slice(0,3)}</span>${bar(x.trx,mxD)}<b>${nf(x.trx)}</b><small>${pct(x.ptrx,x.trx,0)} promo</small></div>`).join('');
+  const coup=D.coupons.length?D.coupons.map(c=>`<div class="pa-k"><span>${esc(c.g.length>60?c.g.slice(0,58)+'…':c.g)}</span><b>${nf(c.trx)}</b><small>${jt(c.disc)}</small></div>`).join(''):'<p class="dp-empty">Tidak ada kupon di periode ini.</p>';
+  el.innerHTML=periode+`
+   <div class="pa-kpi"><div class="pa-big"><small>Transaksi pakai promo</small><b>${pct(T.ptrx,T.trx,0)}</b><span>${nf(T.ptrx)} dari ${nf(T.trx)} transaksi · ${D.promoCount} promo berbeda</span></div>
+    <div><small>Biaya diskon</small><b>${jt(T.disc)}</b><span>${pct(T.disc,T.gross)} dari gross ${jt(T.gross)}</span></div>
+    <div><small>ATV</small><b>${jt(wp.atv)}</b><span>pakai promo · tanpa ${jt(base.atv)} (${dlt(wp.atv,base.atv)})</span></div>
+    <div><small>UPT</small><b>${d2(wp.upt)}</b><span>pakai promo · tanpa ${d2(base.upt)}</span></div>
+    <div><small>Net per Rp1 diskon</small><b>Rp${nf(T.disc?T.net/T.disc:0)}</b><span>semua promo</span></div></div>
+   <section class="pa-sec pa-sar"><h4>Rekomendasi strategi promo</h4><ul>${S.map(s=>`<li><i>${s[0]}</i><span>${s[1]}</span></li>`).join('')}</ul></section>
+   <section class="pa-sec"><div class="pa-sh"><h4>Mekanisme promo</h4><select class="in" id="paSort"><option value="trx"${sort==='trx'?' selected':''}>Paling sering dipakai</option><option value="atv"${sort==='atv'?' selected':''}>ATV tertinggi</option><option value="upt"${sort==='upt'?' selected':''}>UPT tertinggi</option><option value="eff"${sort==='eff'?' selected':''}>Paling hemat biaya</option></select></div>${mech}</section>
+   <div class="pa-2"><section class="pa-sec"><div class="pa-sh"><h4>Promo paling sering dipakai</h4><input class="in" id="paQ" type="search" placeholder="Cari promo…" value="${esc(q)}"></div><div class="pa-pl">${promos}</div>${P.length>30?`<p class="hint">+${P.length-30} promo lain · ada di CSV.</p>`:''}</section>
+    <div><section class="pa-sec"><h4>Tren bulanan</h4>${tren}</section>
+     <section class="pa-sec"><h4>Kategori · % pcs terjual dengan promo</h4>${cats}</section>
+     <section class="pa-sec"><h4>Transaksi per hari</h4>${dows}</section>
+     <section class="pa-sec"><h4>Kupon yang dipakai</h4>${coup}</section></div></div>
+   <div class="vd-links"><button type="button" data-pax="csv">Unduh CSV promo</button><button type="button" data-pax="reload">Muat ulang</button></div>
+   <p class="pa-note">Dihitung dari Database DSR (${tglS(D.range.min)} – ${tglS(D.range.max)} tersedia). Transaksi reversal/return &amp; wholesale tidak dihitung; paper bag/packing &amp; penjualan voucher tidak dihitung. ATV/UPT dihitung per transaksi utuh. ATV tinggi pada promo min. belanja sebagian karena syarat promonya, jadi bandingkan juga biaya diskonnya.</p>`;
+ }
+ function csv(){
+  if(!data||!data.promos)return;
+  const rows=[['Promo','Mekanisme','Mulai dipakai','Terakhir dipakai','Hari dipakai','Transaksi','Pcs','Gross','Diskon','Net','ATV','UPT']].concat(data.promos.map(p=>[p.name,p.label,p.first,p.last,p.days,p.trx,p.qty,p.gross,p.disc,p.net,p.atv,p.upt]));
+  const txt=rows.map(r=>r.map(v=>{v=String(v==null?'':v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+txt],{type:'text/csv'}));a.download='Analisis Promo '+(data.range.from||'')+' sd '+(data.range.to||'')+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);
+  toast('CSV promo diunduh');
+ }
+ /* ---------- event ---------- */
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-pao],[data-pap],[data-pax],#paGo,#paBack,.side button,.bnav button,#deckTabs button');if(!t)return;
+  if(t.matches('.side button,.bnav button,#deckTabs button')){if(t.dataset.sd==='pa'){e.stopPropagation();buka()}else if(pg.classList.contains('open')&&!t.dataset.th)tutup();return}
+  if(t.id==='paBack')return tutup();
+  if(t.dataset.pao)return buka();
+  if(t.dataset.pap){preset=t.dataset.pap;if(preset==='custom'){if(!custom){const r=data&&data.range||{};custom={from:r.from||'',to:r.to||''}}return renderPage()}return load(true)}
+  if(t.id==='paGo'){const f=$id('paFrom').value,to=$id('paTo').value;if(!f||!to||f>to)return toast('Pilih tanggal awal & akhir yang benar');custom={from:f,to};return load(true)}
+  if(t.dataset.pax==='csv')return csv();
+  if(t.dataset.pax==='reload')return load(true);
+ },true);
+ document.addEventListener('change',e=>{if(e.target.id==='paSort'){sort=e.target.value;renderPage()}});
+ document.addEventListener('input',e=>{if(e.target.id!=='paQ')return;q=e.target.value;const p=e.target.selectionStart;renderPage();const i=$id('paQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
+ const oldR=window.ofaPgRefresh;window.ofaPgRefresh=function(){try{oldR&&oldR()}catch(e){}load(true)};
  renderCard();load(false);
 })();
 /* ====== LAPORAN MINGGUAN (untuk Store Manager) ====== */
