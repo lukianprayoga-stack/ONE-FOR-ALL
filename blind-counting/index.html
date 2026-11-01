@@ -233,6 +233,30 @@ html.spl-on,html.spl-on body{overflow:hidden}
 .kd-row .kd-bin{color:var(--blue,#1d4ed8);font-weight:600;word-break:break-word}
 .kd-row em{flex:none;font-style:normal;font-weight:800;font-size:16px;text-align:right;color:var(--orange,#f26a1b)}.kd-row em small{font-weight:500;text-align:right}
 .kd-row.done{opacity:.55}.kd-row.done b{text-decoration:line-through}
+.bg-per{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px;margin-top:10px}.bg-per label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--mut)}.bg-per .in{width:auto}
+.bg-chips{display:flex;flex-wrap:wrap;gap:4px}.bg-chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.bg-chips button.on{background:var(--blue,#1d4ed8);border-color:var(--blue,#1d4ed8);color:#fff}
+.bg-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+.bg-sum div{border:1px solid var(--card-bd,var(--line));background:var(--bg);border-radius:14px;padding:9px 11px;min-width:0}.bg-sum small{display:block;font-size:11.5px;font-weight:700;color:var(--mut)}.bg-sum b{display:block;font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bg-sum .ok{background:var(--ok-bg,#e9f9ef);border-color:color-mix(in srgb,var(--ok-fg,#16a34a) 35%,transparent)}.bg-sum .ok b{color:var(--ok-fg,#15803d)}.bg-sum .over{background:var(--bad-bg,#fdecec);border-color:color-mix(in srgb,var(--bad-fg,#c62828) 35%,transparent)}.bg-sum .over b{color:var(--bad-fg,#c62828)}
+.bg-sec{margin-top:14px}.bg-sec h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--orange,#f26a1b)}
+.bg-sh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.bg-sh h4{margin:0}.bg-sh .btn{padding:6px 12px;font-size:13px}
+.bg-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--card-bd,var(--line));border-radius:12px;background:var(--bg);margin-bottom:6px}
+.bg-row>em{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:12px;background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+.bg-row>div{flex:1;min-width:0}.bg-row b{display:block;font-size:14px}.bg-row small{display:block;font-size:12px;color:var(--mut)}
+.bg-row>strong{flex:none;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bg-st{font-weight:700}.bg-st.ok{color:var(--ok-fg,#15803d)!important}.bg-st.over{color:var(--bad-fg,#c62828)!important}.bg-tax{color:var(--orange,#f26a1b);font-weight:700}.bg-warn{color:var(--bad-fg,#c62828)}
+.bg-act{flex:none;display:flex;gap:4px}.bg-act button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;min-width:30px;height:30px;font:inherit;font-size:13px;cursor:pointer}.bg-act button.yakin{background:var(--bad-fg,#c62828);color:#fff;border-color:transparent;padding:0 8px}
+.bg-tot{display:flex;justify-content:space-between;padding:8px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);font-weight:700}.bg-tot b{font-variant-numeric:tabular-nums}
+.bg-f{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--mut);max-width:260px}
+.bg-lnk{border:0;background:none;color:var(--blue,#1d4ed8);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0}
+.bg-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bg-form .ks-f small{font-weight:500}
+.bg-prev{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);font-size:13px}
+.bg-prev div{display:flex;justify-content:space-between;gap:8px;padding:2px 0}.bg-prev div.t{border-top:1px solid var(--line);margin-top:4px;padding-top:6px;font-size:14px}.bg-prev div.over b{color:var(--bad-fg,#c62828)}
+.bg-mode{display:flex;gap:4px;margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px}.bg-mode button{flex:1;border:0;background:none;border-radius:9px;padding:7px 6px;font:inherit;font-size:12.5px;font-weight:700;color:var(--mut);cursor:pointer}.bg-mode button.on{background:var(--blue,#1d4ed8);color:#fff}
+.bg-pj{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;gap:6px;align-items:center;margin-bottom:6px}.bg-pj span{font-size:13px;color:var(--mut)}
+.bg-logo{display:flex;align-items:center;gap:10px;margin-top:6px}.bg-logo img{max-height:44px;max-width:100px;background:#fff;border-radius:6px;padding:2px}.bg-logo small{color:var(--mut)}
+@media(max-width:560px){.bg-sum{grid-template-columns:1fr 1fr}.bg-sum div:last-child{grid-column:1/-1}.bg-sum b{white-space:normal}.bg-row{padding:9px 10px}.bg-row>strong{font-size:13px}}
 .kd-chk{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:13.5px}.kd-chk input{margin-top:3px}
 @media(max-width:420px){.kd-tile b{font-size:26px}.kd-tiles{gap:6px}.kd-tile{padding:10px 12px}}
 .app-reg{margin:0 0 6px;font-size:12.5px;color:var(--mut)}.app-reg b{color:var(--fg)}
@@ -276,8 +300,8 @@ body.locked{overflow:hidden}
  addEventListener('load',()=>setTimeout(tutup,Math.max(0,min-(Date.now()-t0))));
  setTimeout(tutup,min+2500);})();
 </script>
-<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Kepatuhan Display · Rekap Kas</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
-<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button></nav>
+<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Kepatuhan Display · Rekap Kas · Budget</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
+<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button><button type="button" role="tab" data-tab="bg">Rekap Budget</button></nav>
 <main class="app-main">
   <div class="app-start" id="appStart" hidden><div><b>Mulai di sini: isi data toko</b><span>Nama toko, nama Store Head &amp; atasan yang tercetak di berita acara. Cukup sekali, tersimpan di perangkat ini.</span></div><button class="btn" type="button" id="appSet">⚙ Isi data toko</button></div>
   <div class="pane" data-pane="bc">
@@ -333,6 +357,21 @@ body.locked{overflow:hidden}
     </ol>
   </section>
   </div>
+  <div class="pane" data-pane="bg" hidden>
+  <section class="rs" id="bg" aria-label="Rekap budget">
+    <div class="sh-head"><div><h3>Rekap Budget</h3><p id="bgSub">Pengajuan &amp; realisasi budget bulanan kas regional</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="bgCfg" aria-label="Pengaturan rekap budget">⚙</button></div></div>
+    <div id="bgBody"></div>
+  </section>
+  <section class="rs app-help" aria-label="Cara pakai rekap budget">
+    <div class="sh-head"><div><h3>Cara pakai</h3><p>Rekap Budget · pengajuan sampai realisasi siap tanda tangan</p></div></div>
+    <ol>
+      <li>Ketuk <b>⚙</b> sekali untuk mengisi kop laporan (nama toko, alamat, telepon, email, logo bila ada), kode &amp; nama site, penanda tangan, serta <b>pilihan pajak</b> sesuai ketentuan budget.</li>
+      <li>Pilih <b>periode budget</b>, lalu isi <b>Pengajuan</b>: item, alasan (jasa/produk), jumlah, unit, dan harga/unit.</li>
+      <li>Saat budget dipakai, tambah <b>Realisasi</b>: pilih item dari daftar pengajuan, sesuaikan nama/jumlah/harga, lalu pilih <b>pajaknya</b>. Harga bisa diisi sebelum atau setelah potong pajak, yang lain dihitung otomatis.</li>
+      <li>Sisa atau over budget langsung terlihat. Unduh <b>Excel</b>, <b>Cetak / Simpan PDF</b>, atau <b>CSV</b>, lalu tanda tangani.</li>
+    </ol>
+  </section>
+  </div>
   <section class="rs app-help app-privacy" aria-label="Privasi">
     <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya).</p>
   </section>
@@ -379,7 +418,7 @@ const stSave=()=>{try{localStorage.setItem(SK,JSON.stringify(ST))}catch(e){if(!s
 if(ST.reg)stSave();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}
 /* data laporan besar disimpan di IndexedDB (kuota jauh lebih besar dari localStorage) */
-const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas'];let db=null;
+const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas','bcapp_budget'];let db=null;
  const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},del:k=>{try{localStorage.removeItem(k)}catch(e){}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
  const put=(k,v)=>{if(!db)return ls.set(k,v);try{const t=db.transaction('kv','readwrite');v==null?t.objectStore('kv').delete(k):t.objectStore('kv').put(v,k)}catch(e){}};
  const ready=new Promise(done=>{let fin=false;const ok=()=>{if(fin)return;fin=true;
@@ -1478,6 +1517,349 @@ BIG.ready.then(function(){
  $id('ksCfg').onclick=()=>(window.ofaHeadGate||(g=>g()))(settings);
  box.addEventListener('click',e=>{const a=e.target.closest('[data-ks]');if(!a)return;if(a.dataset.ks==='xlsx'&&rep){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)ofaToast('Isi dulu nama toko & penanda tangan');settings();return}download(rep);if(window.bcLog)bcLog('kas',cap(rep.label||''),rep.n+' transaksi')}if(a.dataset.ks==='list')showList()});
  window.kasRender=render;
+ render();
+})();
+
+});
+</script>
+<script>
+BIG.ready.then(function(){
+/* ====== REKAP BUDGET (pengajuan & realisasi budget bulanan kas regional) ====== */
+(function(){
+ const box=document.getElementById('bg');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='bcapp_budget';
+ const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const rp=v=>'Rp'+nf(v);
+ const p2=n=>('0'+n).slice(-2);
+ const today=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+ const perL=k=>BULAN[+k.slice(5,7)-1]+' '+k.slice(0,4);
+ const tglP=k=>{const p=String(k||'').split('-').map(Number);if(p.length<3||!p[1])return '';const d=new Date(p[0],p[1]-1,p[2]);return HARI[d.getDay()]+', '+p[2]+' '+BULAN[p[1]-1]+' '+p[0]};
+ const num=v=>{const n=Number(String(v==null?'':v).replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',','.'));return isFinite(n)?n:0};
+ const DEF={judul:'REALISASI PENGAJUAN BUDGET BULANAN KAS REGIONAL',toko:'',alamat:'',telp:'',email:'',site:'',namaSite:'',
+  t1:'Store Head',n1:'',t2:'Head of Branch',n2:'',file:'Realisasi Budget',
+  alasan:'JASA, PRODUK',unit:'Unit',
+  pajak:[{l:'Tanpa pajak',r:0},{l:'Pajak PPh 2%',r:2},{l:'Pajak PPh 2,5%',r:2.5}],logo:''};
+ const cfg=()=>{const c=Object.assign({},DEF,ST.bgCfg||{});if(!Array.isArray(c.pajak)||!c.pajak.length)c.pajak=DEF.pajak;
+  const r=ST.reg;if(r){if(!c.site)c.site=r.site;if(!c.namaSite)c.namaSite=r.toko;if(!c.toko)c.toko=r.toko;if(!c.n1)c.n1=String(r.nama||'').toUpperCase();if(c.t1==='Store Head'&&r.jabatan&&r.jabatan!=='Lainnya')c.t1=r.jabatan}
+  return c};
+ const alasanList=()=>cfg().alasan.split(',').map(s=>s.trim().toUpperCase()).filter(Boolean);
+ let db={periods:{}};try{db=JSON.parse(BIG.getItem(CK)||'null')||{periods:{}}}catch(e){db={periods:{}}}
+ if(!db.periods)db.periods={};
+ const save=()=>{try{BIG.setItem(CK,JSON.stringify(db))}catch(e){}};
+ let cur=db.cur||today().slice(0,7);
+ const P=()=>db.periods[cur]||(db.periods[cur]={aju:[],real:[],tgl:''});
+ const uid=()=>Math.random().toString(36).slice(2,9);
+ // harga realisasi: sebelum potong pajak & setelah potong pajak
+ function hitung(x){
+  const r=(Number(x.r)||0)/100,h=Number(x.h)||0,q=Number(x.q)||0;
+  let pre,net;
+  if(x.mode==='net'){net=Math.round(h);pre=r?Math.round(h/(1-r)):net}else{pre=Math.round(h);net=r?Math.round(h*(1-r)):pre}
+  return {pre,net,tot:net*q,pajak:(pre-net)*q};
+ }
+ function ringkas(p){
+  p=p||P();
+  const ta=p.aju.reduce((a,x)=>a+(Number(x.q)||0)*(Number(x.h)||0),0),tr=p.real.reduce((a,x)=>a+hitung(x).tot,0);
+  return {ta,tr,sisa:ta-tr,tp:p.real.reduce((a,x)=>a+hitung(x).pajak,0)};
+ }
+ const pajakLbl=x=>Number(x.r)?(x.pl||('Pajak PPh '+String(x.r).replace('.',',')+'%')):'';
+ /* ---------- tampilan ---------- */
+ function render(){
+  const b=$id('bgBody');if(!b)return;
+  const p=P(),s=ringkas(p),c=cfg();
+  $id('bgSub').textContent='Periode '+perL(cur)+(c.site?' · site '+c.site:'');
+  const pers=Object.keys(db.periods).filter(k=>k===cur||db.periods[k].aju.length||db.periods[k].real.length).sort().reverse();
+  const realOf=id=>p.real.filter(x=>x.ref===id);
+  b.innerHTML=`<div class="bg-per"><label><span>Periode budget</span><input class="in" type="month" id="bgPer" value="${cur}"></label>${pers.length>1?`<div class="bg-chips">${pers.slice(0,6).map(k=>`<button type="button" data-bgp="${k}" class="${k===cur?'on':''}">${perL(k).replace(/^(\w{3})\w*/,'$1')}</button>`).join('')}</div>`:''}</div>
+   <div class="bg-sum"><div><small>Total pengajuan</small><b>${rp(s.ta)}</b></div><div><small>Total realisasi</small><b>${rp(s.tr)}</b></div><div class="${s.sisa<0?'over':'ok'}"><small>${s.sisa<0?'Over budget':'Sisa budget'}</small><b>${rp(Math.abs(s.sisa))}</b></div></div>
+   <div class="bg-sec"><div class="bg-sh"><h4>1 · Pengajuan budget</h4><button type="button" class="btn ghost" data-bg="aju">＋ Tambah</button></div>
+    ${p.aju.length?p.aju.map((x,i)=>{const rr=realOf(x.id),t=(Number(x.q)||0)*(Number(x.h)||0),tr=rr.reduce((a,y)=>a+hitung(y).tot,0);
+     return `<div class="bg-row"><em>${i+1}</em><div><b>${esc(x.n)}</b><small>${esc(x.a)} · ${nf(x.q)} ${esc(x.u||'Unit')} × ${rp(x.h)}</small>${rr.length?`<small class="bg-st ${tr>t?'over':'ok'}">Terealisasi ${rp(tr)}${tr>t?' · lebih '+rp(tr-t):' · sisa '+rp(t-tr)}</small>`:'<small class="bg-st">Belum direalisasi</small>'}</div><strong>${rp(t)}</strong><span class="bg-act"><button type="button" data-bge="aju:${x.id}" aria-label="Ubah">✎</button><button type="button" data-bgd="aju:${x.id}" aria-label="Hapus">✕</button></span></div>`}).join('')
+     :`<p class="dp-empty">Isi daftar pengajuan budget bulan ini (item, alasan, jumlah, harga/unit).${Object.keys(db.periods).some(k=>k<cur&&db.periods[k].aju.length)?' <button type="button" class="bg-lnk" data-bg="copy">Salin dari bulan sebelumnya</button>':''}</p>`}
+    ${p.aju.length?`<div class="bg-tot"><span>Total pengajuan</span><b>${rp(s.ta)}</b></div>`:''}</div>
+   <div class="bg-sec"><div class="bg-sh"><h4>2 · Realisasi budget</h4><button type="button" class="btn ghost" data-bg="real"${p.aju.length?'':' disabled'}>＋ Tambah</button></div>
+    ${p.real.length?p.real.map((x,i)=>{const h=hitung(x),a=p.aju.find(y=>y.id===x.ref);
+     return `<div class="bg-row"><em>${i+1}</em><div><b>${esc(x.n)}</b><small>${esc(x.a)} · ${nf(x.q)} ${esc(x.u||'Unit')} × ${rp(h.net)}${Number(x.r)?' (sebelum pajak '+rp(h.pre)+')':''}</small><small>${a?'Dari pengajuan: '+esc(a.n):'<span class="bg-warn">Item pengajuan sudah dihapus</span>'}${Number(x.r)?' · <span class="bg-tax">'+esc(pajakLbl(x))+'</span>':''}</small></div><strong>${rp(h.tot)}</strong><span class="bg-act"><button type="button" data-bge="real:${x.id}" aria-label="Ubah">✎</button><button type="button" data-bgd="real:${x.id}" aria-label="Hapus">✕</button></span></div>`}).join('')
+     :`<p class="dp-empty">${p.aju.length?'Tambahkan realisasi dengan memilih item dari daftar pengajuan, lalu pilih pajaknya.':'Isi pengajuan dulu, realisasi dipilih dari daftar pengajuan.'}</p>`}
+    ${p.real.length?`<div class="bg-tot"><span>Total realisasi</span><b>${rp(s.tr)}</b></div>${s.tp?`<p class="hint" style="margin:4px 0 0">Total potongan pajak ${rp(s.tp)}.</p>`:''}`:''}</div>
+   <div class="bg-sec"><h4>3 · Laporan</h4>
+    <label class="bg-f"><span>Tanggal laporan (di atas tanda tangan)</span><input class="in" type="date" id="bgTgl" value="${esc(p.tgl||today())}"></label>
+    <div class="ks-act"><button class="btn" type="button" data-bg="xlsx"${p.aju.length?'':' disabled'}>⬇ Unduh Excel</button><button class="btn ghost" type="button" data-bg="pdf"${p.aju.length?'':' disabled'}>🖨 Cetak / Simpan PDF</button><button class="btn ghost" type="button" data-bg="csv"${p.aju.length?'':' disabled'}>CSV</button></div>
+    <p class="hint">Tanda tangan dikosongkan untuk ${esc([c.n1,c.n2].filter(Boolean).join(' & ')||'penanda tangan')}. Kop, penanda tangan &amp; pilihan pajak diatur di ⚙.</p></div>`;
+ }
+ /* ---------- form pengajuan ---------- */
+ function formAju(id){
+  const p=P(),x=id?p.aju.find(y=>y.id===id):{n:'',a:alasanList()[0]||'JASA',q:1,u:cfg().unit||'Unit',h:''};if(!x)return;
+  openModal(id?'Ubah pengajuan':'Tambah pengajuan',`<div class="ks-form bg-form">
+   <label class="ks-f"><span>Item pengajuan</span><input class="in" id="bgN" value="${esc(x.n)}" placeholder="mis. CUCI AC" autocomplete="off"></label>
+   <label class="ks-f"><span>Alasan</span><select class="in" id="bgA">${alasanList().map(a=>`<option${a===x.a?' selected':''}>${esc(a)}</option>`).join('')}</select></label>
+   <div class="bg-2"><label class="ks-f"><span>Jumlah</span><input class="in" id="bgQ" inputmode="numeric" value="${esc(x.q)}"></label><label class="ks-f"><span>Unit</span><input class="in" id="bgU" value="${esc(x.u||'Unit')}"></label></div>
+   <label class="ks-f"><span>Harga/unit (Rp)</span><input class="in" id="bgH" inputmode="numeric" value="${x.h?nf(x.h):''}" placeholder="0"></label>
+   <div class="bg-prev" id="bgPrev"></div></div>
+   <p class="hint" id="bgErr" style="color:var(--bad-fg,#c62828);min-height:1em"></p>
+   <div class="row" style="margin-top:8px"><button class="btn" type="button" id="bgSaveA">Simpan</button>${id?'':'<button class="btn ghost" type="button" id="bgSaveA2">Simpan &amp; tambah lagi</button>'}</div>`);
+  const prev=()=>{$id('bgPrev').innerHTML='Total pengajuan: <b>'+rp(num($id('bgQ').value)*num($id('bgH').value))+'</b>'};
+  ['bgQ','bgH'].forEach(i=>$id(i).addEventListener('input',prev));prev();
+  $id('bgH').addEventListener('blur',e=>{const v=num(e.target.value);e.target.value=v?nf(v):''});
+  const simpan=lagi=>{const v={n:$id('bgN').value.trim().toUpperCase(),a:$id('bgA').value,q:num($id('bgQ').value),u:$id('bgU').value.trim()||'Unit',h:num($id('bgH').value)};
+   if(!v.n){$id('bgErr').textContent='Item pengajuan wajib diisi.';return $id('bgN').focus()}
+   if(!(v.q>0)){$id('bgErr').textContent='Jumlah harus lebih dari 0.';return $id('bgQ').focus()}
+   if(id)Object.assign(x,v);else p.aju.push(Object.assign({id:uid()},v));save();render();
+   if(lagi){formAju()}else close()};
+  $id('bgSaveA').onclick=()=>simpan(false);if(!id)$id('bgSaveA2').onclick=()=>simpan(true);
+  setTimeout(()=>$id('bgN').focus(),60);
+ }
+ /* ---------- form realisasi ---------- */
+ function formReal(id){
+  const p=P(),c=cfg();if(!p.aju.length)return;
+  const x=id?p.real.find(y=>y.id===id):null;if(id&&!x)return;
+  const ref0=x?x.ref:(p.aju.find(a=>!p.real.some(r=>r.ref===a.id))||p.aju[0]).id;
+  const PJ=c.pajak;
+  const pjOpt=r=>PJ.map((t,i)=>`<option value="${i}"${Number(t.r)===Number(r)?' selected':''}>${esc(t.l)}${t.r?'':''}</option>`).join('');
+  openModal(id?'Ubah realisasi':'Tambah realisasi',`<div class="ks-form bg-form">
+   <label class="ks-f"><span>Pilih dari pengajuan</span><select class="in" id="bgRef">${p.aju.map((a,i)=>`<option value="${a.id}"${a.id===ref0?' selected':''}>${i+1}. ${esc(a.n)} · ${rp((Number(a.q)||0)*(Number(a.h)||0))}</option>`).join('')}</select></label>
+   <label class="ks-f"><span>Item realisasi <small>(boleh diganti, mis. nama vendor/jasa sebenarnya)</small></span><input class="in" id="bgRN" autocomplete="off"></label>
+   <div class="bg-2"><label class="ks-f"><span>Alasan</span><select class="in" id="bgRA">${alasanList().map(a=>`<option>${esc(a)}</option>`).join('')}</select></label><label class="ks-f"><span>Pajak</span><select class="in" id="bgRP">${pjOpt(x?x.r:0)}</select></label></div>
+   <div class="bg-2"><label class="ks-f"><span>Jumlah</span><input class="in" id="bgRQ" inputmode="numeric"></label><label class="ks-f"><span>Unit</span><input class="in" id="bgRU"></label></div>
+   <div class="bg-mode" role="radiogroup"><button type="button" data-bgm="pre">Harga sebelum potong pajak</button><button type="button" data-bgm="net">Harga yang dibayar (setelah pajak)</button></div>
+   <label class="ks-f"><span id="bgRHL">Harga/unit (Rp)</span><input class="in" id="bgRH" inputmode="numeric" placeholder="0"></label>
+   <div class="bg-prev" id="bgRPrev"></div></div>
+   <p class="hint" id="bgErr" style="color:var(--bad-fg,#c62828);min-height:1em"></p>
+   <div class="row" style="margin-top:8px"><button class="btn" type="button" id="bgSaveR">Simpan</button></div>`);
+  let mode=x?x.mode||'pre':'pre';
+  const isi=a=>{$id('bgRN').value=a.n;$id('bgRA').value=a.a;$id('bgRQ').value=a.q;$id('bgRU').value=a.u||'Unit';$id('bgRH').value=a.h?nf(a.h):'';
+   const pj=a.a==='PRODUK'?PJ.findIndex(t=>!Number(t.r)):PJ.findIndex(t=>Number(t.r)>0);if(!x&&pj>=0)$id('bgRP').value=pj};
+  if(x){$id('bgRN').value=x.n;$id('bgRA').value=x.a;$id('bgRQ').value=x.q;$id('bgRU').value=x.u||'Unit';$id('bgRH').value=x.h?nf(x.h):''}else isi(p.aju.find(a=>a.id===ref0));
+  const cur3=()=>{const t=PJ[+$id('bgRP').value]||{r:0,l:''};return {r:Number(t.r)||0,pl:t.l,h:num($id('bgRH').value),q:num($id('bgRQ').value),mode}};
+  const prev=()=>{document.querySelectorAll('[data-bgm]').forEach(b=>b.classList.toggle('on',b.dataset.bgm===mode));
+   const v=cur3(),h=hitung(v),a=p.aju.find(y=>y.id===$id('bgRef').value),ta=a?(Number(a.q)||0)*(Number(a.h)||0):0;
+   $id('bgRHL').textContent=mode==='net'?'Harga/unit yang dibayar, setelah potong pajak (Rp)':'Harga/unit sebelum potong pajak (Rp)';
+   $id('bgRPrev').innerHTML=`<div><span>Harga sebelum potong pajak</span><b>${rp(h.pre)}</b></div><div><span>Harga/unit (potong pajak)</span><b>${rp(h.net)}</b></div>${v.r?`<div><span>Potongan pajak (${String(v.r).replace('.',',')}%)</span><b>${rp(h.pajak)}</b></div>`:''}<div class="t"><span>Total realisasi</span><b>${rp(h.tot)}</b></div>${a?`<div class="${h.tot>ta?'over':''}"><span>Pengajuan item ini</span><b>${rp(ta)}${h.tot>ta?' · lebih '+rp(h.tot-ta):''}</b></div>`:''}`};
+  $id('bgRef').onchange=e=>{if(!x)isi(p.aju.find(a=>a.id===e.target.value));prev()};
+  $id('bgRA').onchange=()=>{const pj=$id('bgRA').value==='PRODUK'?PJ.findIndex(t=>!Number(t.r)):-1;if(pj>=0)$id('bgRP').value=pj;prev()};
+  ['bgRQ','bgRH'].forEach(i=>$id(i).addEventListener('input',prev));$id('bgRP').onchange=prev;
+  $id('bgRH').addEventListener('blur',e=>{const v=num(e.target.value);e.target.value=v?nf(v):''});
+  document.querySelectorAll('[data-bgm]').forEach(b=>b.onclick=()=>{mode=b.dataset.bgm;prev()});
+  prev();
+  $id('bgSaveR').onclick=()=>{const v=Object.assign(cur3(),{ref:$id('bgRef').value,n:$id('bgRN').value.trim().toUpperCase(),a:$id('bgRA').value,u:$id('bgRU').value.trim()||'Unit'});
+   if(!v.n){$id('bgErr').textContent='Item realisasi wajib diisi.';return}
+   if(!(v.q>0)){$id('bgErr').textContent='Jumlah harus lebih dari 0.';return}
+   if(!(v.h>0)){$id('bgErr').textContent='Isi harga/unit.';return}
+   if(x)Object.assign(x,v);else p.real.push(Object.assign({id:uid()},v));save();close();render()};
+ }
+ /* ---------- pengaturan ---------- */
+ function settings(){
+  const c=cfg(),f=(k,l,ph)=>`<label class="ks-f"><span>${l}</span><input class="in" id="bg_${k}" value="${esc(c[k])}" placeholder="${esc(ph||'')}"></label>`;
+  openModal('Pengaturan Rekap Budget',`<div class="ks-form">
+   <p class="wk-p" style="margin:0 0 2px"><b>Kop laporan</b></p>${f('toko','Nama toko di kop','mis. EIGER Adventure Store Soekarno Solo Baru')}${f('alamat','Alamat')}${f('telp','Telepon')}${f('email','Email')}
+   <label class="ks-f"><span>Logo kop (opsional, gambar PNG/JPG milik toko)</span><input class="in" type="file" id="bg_logo" accept="image/png,image/jpeg"></label>
+   <div class="bg-logo" id="bgLogoPrev">${c.logo?`<img src="${c.logo}" alt=""><button type="button" class="bg-lnk" id="bgLogoDel">Hapus logo</button>`:'<small>Belum ada logo</small>'}</div>
+   ${f('judul','Judul laporan')}${f('site','Kode site')}${f('namaSite','Nama site','mis. ST EG Solo Baru')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Mengajukan</b></p>${f('t1','Jabatan')}${f('n1','Nama')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Mengetahui</b></p>${f('t2','Jabatan','mis. Head of Branch Jateng 01')}${f('n2','Nama')}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Pilihan pajak</b> (sesuai ketentuan penggunaan budget)</p>
+   <div id="bgPj">${c.pajak.map((t,i)=>`<div class="bg-pj"><input class="in" data-pjl="${i}" value="${esc(t.l)}" placeholder="Nama pajak"><input class="in" data-pjr="${i}" inputmode="decimal" value="${esc(String(t.r).replace('.',','))}" placeholder="%"><span>%</span></div>`).join('')}</div>
+   <button type="button" class="bg-lnk" id="bgPjAdd">＋ Tambah jenis pajak</button>
+   ${f('alasan','Pilihan alasan (pisahkan koma)','JASA, PRODUK')}${f('file','Awalan nama file')}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" type="button" id="bgSave">Simpan</button><button class="btn ghost" type="button" id="bgReset">Kembalikan bawaan</button></div>`);
+  let logo=c.logo;
+  $id('bg_logo').onchange=e=>{const fl=e.target.files&&e.target.files[0];if(!fl)return;if(fl.size>1.5e6)return ofaToast('Logo maksimal 1,5 MB');
+   const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,240/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);logo=cv.toDataURL('image/png');$id('bgLogoPrev').innerHTML=`<img src="${logo}" alt=""><small>Logo baru, tekan Simpan</small>`};im.src=rd.result};rd.readAsDataURL(fl)};
+  const del=$id('bgLogoDel');if(del)del.onclick=()=>{logo='';$id('bgLogoPrev').innerHTML='<small>Logo dihapus, tekan Simpan</small>'};
+  $id('bgPjAdd').onclick=()=>{const d=document.createElement('div');const i=document.querySelectorAll('[data-pjl]').length;d.className='bg-pj';d.innerHTML=`<input class="in" data-pjl="${i}" placeholder="mis. Pajak PPh 4%"><input class="in" data-pjr="${i}" inputmode="decimal" placeholder="%"><span>%</span>`;$id('bgPj').appendChild(d)};
+  $id('bgSave').onclick=()=>{const v={};['judul','toko','alamat','telp','email','site','namaSite','t1','n1','t2','n2','alasan','file'].forEach(k=>v[k]=$id('bg_'+k).value.trim());
+   v.n1=v.n1.toUpperCase();v.n2=v.n2.toUpperCase();if(!v.judul)v.judul=DEF.judul;if(!v.alasan)v.alasan=DEF.alasan;if(!v.file)v.file=DEF.file;
+   v.pajak=[...document.querySelectorAll('[data-pjl]')].map((e,i)=>({l:e.value.trim(),r:num(document.querySelector('[data-pjr="'+i+'"]').value.replace('.',','))})).filter(t=>t.l);
+   if(!v.pajak.some(t=>!t.r))v.pajak.unshift({l:'Tanpa pajak',r:0});v.logo=logo;ST.bgCfg=v;stSave();close();render();ofaToast('Pengaturan budget disimpan')};
+  $id('bgReset').onclick=()=>{delete ST.bgCfg;stSave();close();render()};
+ }
+ /* ---------- Excel ---------- */
+ function xlsx(){
+  const p=P(),c=cfg(),s=ringkas(p),X=v=>String(v==null?'':v).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const rows=[],merges=[],H={};let r=0;
+  const C='ABCDEFGHI';
+  const cell=(ref,v,st)=>{const t=v==null||v===''?'':typeof v==='number'?`<v>${v}</v>`:`<is><t xml:space="preserve">${X(v)}</t></is>`;return `<c r="${ref}" s="${st||0}"${typeof v==='number'||t===''?'':' t="inlineStr"'}>${t}</c>`};
+  const row=(cells,ht)=>{r++;rows.push(`<row r="${r}"${ht?` ht="${ht}" customHeight="1"`:''}>${cells.map(([col,v,st])=>cell(col+r,v,st)).join('')}</row>`);return r};
+  const mg=(a,b)=>merges.push(`<mergeCell ref="${a}${r}:${b}${r}"/>`);
+  const box=(cols,st)=>cols.split('').map(cc=>[cc,'',st]);
+  // kop
+  row([['B',c.toko||c.namaSite||'',1]],22);mg('B','I');
+  row([['B',c.alamat,2]],13);mg('B','I');
+  row([['B',[c.telp?'Telp: '+c.telp:'',c.email?'Email: '+c.email:''].filter(Boolean).join(' | '),2]],13);mg('B','I');
+  row(box('ABCDEFGHI',19),6);
+  row([['A',c.judul,3]],20);mg('A','I');
+  row([],8);
+  row([['A','Kode Site',4],['C',': '+(c.site||''),4]]);row([['A','Nama Site',4],['C',': '+(c.namaSite||''),4]]);row([['A','Periode Budget',4],['C',': '+perL(cur),4]]);
+  row([],8);
+  row([['A','Pengajuan Budget',5]]);
+  row([['A','No.',6],['B','Item Pengajuan',6],['C','Alasan',6],['D','Jumlah',6],['E','Unit',6],['F','',6],['G','Harga/unit',6],['H','Total Pengajuan',6]],28);
+  const nA=Math.max(5,p.aju.length);
+  for(let i=0;i<nA;i++){const x=p.aju[i];row(x?[['A',i+1,7],['B',x.n,8],['C',x.a,8],['D',Number(x.q)||0,7],['E',x.u||'Unit',7],['F','',7],['G',Number(x.h)||0,9],['H',(Number(x.q)||0)*(Number(x.h)||0),9]]:[['A',i+1,7],['B','',7],['C','',7],['D','',7],['E','Unit',7],['F','',7],['G',0,9],['H',0,9]],22)}
+  row([],6);
+  row([['A','Total',10],['B','',10],['C','',10],['D','',10],['E','',10],['F','',10],['G','',10],['H',s.ta,11]]);mg('A','G');
+  row([],10);
+  row([['A','Realisasi Budget',5]]);
+  row([['A','No.',6],['B','Item Realisasi',6],['C','Alasan',6],['D','Jumlah',6],['E','Unit',6],['F','Harga (Sebelum Potong Pajak)',6],['G','Harga/unit (Potong Pajak)',6],['H','Total Realisasi',6],['I','PAJAK',6]],30);
+  const nR=Math.max(3,p.real.length);
+  for(let i=0;i<nR;i++){const x=p.real[i];if(x){const h=hitung(x);row([['A',i+1,7],['B',x.n,8],['C',x.a,8],['D',Number(x.q)||0,7],['E',x.u||'Unit',7],['F',h.pre,9],['G',h.net,9],['H',h.tot,9],['I',pajakLbl(x),8]],22)}else row([['A','',7],['B','',7],['C','',7],['D','',7],['E','',7],['F','',7],['G','',7],['H','',7],['I','',7]],22)}
+  row([],6);
+  row([['A','Total',10],['B','',10],['C','',10],['D','',10],['E','',10],['F','',10],['G','',10],['H',s.tr,11]]);mg('A','G');
+  row([['H',s.sisa,11]]);
+  row([],8);
+  row([['A','Sisa atau Over Budget',5]]);
+  row([['A','Keterangan',6],['B','',6],['C','Nominal',6],['D','',6],['E','',6]]);merges.push(`<mergeCell ref="A${r}:B${r}"/>`,`<mergeCell ref="C${r}:E${r}"/>`);
+  row([['A',s.sisa<0?'Over Budget':'Sisa Budget',s.sisa<0?14:12],['B','',s.sisa<0?14:12],['C',Math.abs(s.sisa),13],['D','',13],['E','',13]]);merges.push(`<mergeCell ref="A${r}:B${r}"/>`,`<mergeCell ref="C${r}:E${r}"/>`);
+  row([],14);row([],14);
+  row([['G',tglP(p.tgl||today()),15]]);mg('G','I');
+  row([['B','Mengajukan,',15],['G','Mengetahui,',15]]);mg('G','I');
+  row([],22);row([],22);row([],22);
+  row([['B',c.t1,16],['G',c.t2,16]]);mg('G','I');
+  row([['B',c.n1,15],['G',c.n2,15]]);mg('G','I');
+  const last=r;
+  const W=[7,32,11,8,8,15,15,17,17];
+  const hasLogo=/^data:image\/png;base64,/.test(c.logo||'');
+  const sheet=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews><cols>${W.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows.join('')}</sheetData><mergeCells count="${merges.length}">${merges.join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/>${hasLogo?'<drawing r:id="rId1"/>':''}</worksheet>`;
+  const thin='<left style="thin"><color rgb="FF000000"/></left><right style="thin"><color rgb="FF000000"/></right><top style="thin"><color rgb="FF000000"/></top><bottom style="thin"><color rgb="FF000000"/></bottom><diagonal/>';
+  const money='&quot;Rp&quot;\\ #,##0;\\-&quot;Rp&quot;\\ #,##0;&quot;Rp&quot;\\ \\-';
+  const xf=(f,fill,b,nfm,h,v,wrap)=>`<xf numFmtId="${nfm||0}" fontId="${f}" fillId="${fill}" borderId="${b}" xfId="0" applyFont="1" applyFill="1" applyBorder="1"${nfm?' applyNumberFormat="1"':''} applyAlignment="1"><alignment${h?` horizontal="${h}"`:''} vertical="${v||'center'}"${wrap?' wrapText="1"':''}/></xf>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="${money}"/></numFmts>
+<fonts count="6"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="15"/><name val="Arial"/></font><font><sz val="8"/><name val="Arial"/></font><font><b/><sz val="11"/><name val="Arial"/></font><font><b/><sz val="10"/><name val="Arial"/></font><font><sz val="10"/><name val="Arial"/></font></fonts>
+<fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD9EAD3"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF4CCCC"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FF404040"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border><border>${thin}</border><border><left/><right/><top/><bottom style="medium"><color rgb="FF404040"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="20">${[
+ xf(0,0,0),            //0
+ xf(1,0,0,0,'left'),   //1 nama toko
+ xf(2,0,0,0,'left'),   //2 alamat
+ xf(3,0,0,0,'center'), //3 judul
+ xf(5,0,0,0,'left'),   //4 info
+ xf(4,0,0,0,'left'),   //5 sub judul
+ xf(4,2,1,0,'center','center',1), //6 header tabel
+ xf(5,0,1,0,'center'), //7 sel tengah
+ xf(4,0,1,0,'center','center',1), //8 sel tebal tengah
+ xf(5,0,1,164,'right'),//9 uang
+ xf(4,2,1,0,'left'),   //10 total label
+ xf(4,2,1,164,'right'),//11 total uang
+ xf(4,3,1,0,'center'), //12 sisa label
+ xf(4,0,1,164,'center'),//13 sisa nominal
+ xf(4,4,1,0,'center'), //14 over label
+ xf(5,0,0,0,'center'), //15 tengah biasa
+ xf(4,0,0,0,'center'), //16 tengah tebal
+ xf(0,0,0),xf(0,0,0),  //17,18
+ xf(0,0,2)             //19 garis kop
+].join('')}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const now=new Date().toISOString().replace(/\.\d+Z$/,'Z'),sn='Realisasi Budget';
+  const files=[
+   ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${hasLogo?'<Default Extension="png" ContentType="image/png"/><Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>':''}<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
+   ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
+   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X(c.judul+' '+perL(cur))}</dc:title><dc:creator>Store Head Kit - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created></cp:coreProperties>`],
+   ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="${sn}" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm.Print_Area" localSheetId="0">'${sn}'!$A$1:$I$${last}</definedName></definedNames></workbook>`],
+   ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+   ['xl/styles.xml',styles],
+   ['xl/worksheets/sheet1.xml',sheet]
+  ];
+  let bin=null;
+  if(hasLogo){
+   files.push(['xl/worksheets/_rels/sheet1.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing1.xml"/></Relationships>']);
+   files.push(['xl/drawings/_rels/drawing1.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image1.png"/></Relationships>']);
+   const im=new Image();im.src=c.logo;const w=im.naturalWidth||120,h=im.naturalHeight||90,sc=Math.min(46/w,40/h)*1.0;const cx=Math.round(w*sc*9525*1.2),cy=Math.round(h*sc*9525*1.2);
+   files.push(['xl/drawings/drawing1.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>38100</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>38100</xdr:rowOff></xdr:from><xdr:ext cx="${cx}" cy="${cy}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="2" name="Logo"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId1"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor></xdr:wsDr>`]);
+   const b64=c.logo.split(',')[1],raw=atob(b64);bin=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bin[i]=raw.charCodeAt(i);
+  }
+  return zipBin(files,bin?[['xl/media/image1.png',bin]]:[]);
+ }
+ // zip dengan dukungan file biner (logo)
+ function zipBin(files,bins){
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  const u16=v=>[v&255,(v>>>8)&255],u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+  const T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+  const crc=u8=>{let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=T[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0};
+  files.map(([n,t])=>[n,enc.encode(t)]).concat(bins).forEach(([name,data])=>{
+   const nm=enc.encode(name),cr=crc(data);
+   const head=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(cr),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0)]);
+   parts.push(head,nm,data);
+   central.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(cr),...u32(data.length),...u32(data.length),...u16(nm.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nm);
+   off+=head.length+nm.length+data.length;
+  });
+  const cl=central.reduce((t,a)=>t+a.length,0),n=files.length+bins.length;
+  const end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(n),...u16(n),...u32(cl),...u32(off),...u16(0)]);
+  return new Blob([...parts,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+ }
+ const fname=ext=>{const c=cfg();return (c.file+' '+(c.namaSite||c.site||'')+' - '+perL(cur).toUpperCase()).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.'+ext};
+ function unduh(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);ofaToast('Diunduh: '+name)}
+ /* ---------- PDF (cetak) ---------- */
+ function printHtml(){
+  const p=P(),c=cfg(),s=ringkas(p),E=esc;
+  const nA=Math.max(5,p.aju.length),nR=Math.max(3,p.real.length);
+  const ra=[];for(let i=0;i<nA;i++){const x=p.aju[i];ra.push(x?`<tr><td>${i+1}</td><td class="b">${E(x.n)}</td><td class="b">${E(x.a)}</td><td class="b">${nf(x.q)}</td><td>${E(x.u||'Unit')}</td><td></td><td class="m"><i>Rp</i>${nf(x.h)}</td><td class="m"><i>Rp</i>${nf((Number(x.q)||0)*(Number(x.h)||0))}</td></tr>`:`<tr><td>${i+1}</td><td></td><td></td><td></td><td>Unit</td><td></td><td class="m"><i>Rp</i>-</td><td class="m"><i>Rp</i>-</td></tr>`)}
+  const rr=[];for(let i=0;i<nR;i++){const x=p.real[i];if(x){const h=hitung(x);rr.push(`<tr><td>${i+1}</td><td class="b">${E(x.n)}</td><td class="b">${E(x.a)}</td><td class="b">${nf(x.q)}</td><td>${E(x.u||'Unit')}</td><td class="m"><i>Rp</i>${nf(h.pre)}</td><td class="m"><i>Rp</i>${nf(h.net)}</td><td class="m"><i>Rp</i>${nf(h.tot)}</td><td class="b">${E(pajakLbl(x))}</td></tr>`)}else rr.push('<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>')}
+  return `<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(fname('pdf').replace(/\.pdf$/,''))}</title><style>
+@page{size:A4 portrait;margin:12mm 11mm}*{box-sizing:border-box}body{margin:0;font:9pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.kop{display:flex;align-items:center;gap:12px;border-bottom:2px solid #444;padding-bottom:6px}.kop img{max-height:46px;max-width:90px}.kop h1{margin:0;font-size:14pt}.kop p{margin:1px 0 0;font-size:7.5pt}
+h2{text-align:center;font-size:11pt;margin:10px 0 8px}.info td{padding:1px 8px 1px 0;font-size:8.5pt}h3{font-size:8.5pt;margin:12px 0 3px}
+table.t{width:100%;border-collapse:collapse;font-size:8.5pt}table.t th,table.t td{border:1px solid #000;padding:4px 5px;text-align:center;vertical-align:middle;height:22px}
+table.t th{background:#f2f2f2;font-weight:700}table.t td.b{font-weight:700}table.t td.m{text-align:right;white-space:nowrap}table.t td.m i{font-style:normal;float:left;padding-right:6px}
+.tot{width:100%;border-collapse:collapse;margin-top:5px;font-size:8.5pt}.tot td{border:1px solid #000;padding:3px 5px;background:#f2f2f2;font-weight:700}.tot td.m{text-align:right;width:15%;white-space:nowrap}.tot td.m i{font-style:normal;float:left}
+.sisa{border-collapse:collapse;width:46%;font-size:8.5pt}.sisa th,.sisa td{border:1px solid #000;padding:3px 8px;text-align:center}.sisa th{background:#f2f2f2}.sisa td.k{background:${s.sisa<0?'#f4cccc':'#d9ead3'};font-weight:700}.sisa td.v{font-weight:700;font-size:10pt}
+.ttd{display:flex;justify-content:space-between;margin-top:26px;text-align:center;font-size:8.5pt}.ttd div{width:40%}.ttd .sp{height:58px}.ttd b{display:block}
+.foot{margin-top:18px;font-size:6.5pt;color:#888;text-align:right}
+</style></head><body>
+<div class="kop">${/^data:image\//.test(c.logo||'')?`<img src="${c.logo}" alt="">`:''}<div><h1>${E(c.toko||c.namaSite)}</h1>${c.alamat?`<p>${E(c.alamat)}</p>`:''}<p>${E([c.telp?'Telp: '+c.telp:'',c.email?'Email: '+c.email:''].filter(Boolean).join(' | '))}</p></div></div>
+<h2>${E(c.judul)}</h2>
+<table class="info"><tr><td>Kode Site</td><td>:</td><td>${E(c.site)}</td></tr><tr><td>Nama Site</td><td>:</td><td>${E(c.namaSite)}</td></tr><tr><td>Periode Budget</td><td>:</td><td>${E(perL(cur))}</td></tr></table>
+<h3>Pengajuan Budget</h3>
+<table class="t"><thead><tr><th style="width:6%">No.</th><th style="width:29%">Item Pengajuan</th><th style="width:10%">Alasan</th><th style="width:7%">Jumlah</th><th style="width:7%">Unit</th><th style="width:11%"></th><th style="width:13%">Harga/unit</th><th style="width:17%">Total Pengajuan</th></tr></thead><tbody>${ra.join('')}</tbody></table>
+<table class="tot"><tr><td>Total</td><td class="m"><i>Rp</i>${nf(s.ta)}</td></tr></table>
+<h3>Realisasi Budget</h3>
+<table class="t"><thead><tr><th style="width:5%">No.</th><th style="width:22%">Item Realisasi</th><th style="width:8%">Alasan</th><th style="width:6%">Jumlah</th><th style="width:6%">Unit</th><th style="width:12%">Harga (Sebelum Potong Pajak)</th><th style="width:12%">Harga/unit (Potong Pajak)</th><th style="width:14%">Total Realisasi</th><th style="width:15%">PAJAK</th></tr></thead><tbody>${rr.join('')}</tbody></table>
+<table class="tot"><tr><td>Total</td><td class="m"><i>Rp</i>${nf(s.tr)}</td></tr><tr><td style="background:#fff;border-color:transparent transparent transparent transparent"></td><td class="m"><i>Rp</i>${nf(s.sisa)}</td></tr></table>
+<h3>Sisa atau Over Budget</h3>
+<table class="sisa"><tr><th>Keterangan</th><th>Nominal</th></tr><tr><td class="k">${s.sisa<0?'Over Budget':'Sisa Budget'}</td><td class="v">${rp(Math.abs(s.sisa))}</td></tr></table>
+<div class="ttd"><div><span>&nbsp;</span><br>Mengajukan,<div class="sp"></div><b>${E(c.t1)}</b>${E(c.n1)}</div><div><span>${E(tglP(p.tgl||today()))}</span><br>Mengetahui,<div class="sp"></div><b>${E(c.t2)}</b>${E(c.n2)}</div></div>
+<div class="foot">Dibuat dengan Store Head Kit</div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+ }
+ function pdf(){
+  const html=printHtml();
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);
+  fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  ofaToast('Pilih "Simpan sebagai PDF" di jendela cetak');
+  if(window.bcLog)bcLog('budget',perL(cur),'pdf');
+ }
+ function csv(){
+  const p=P(),s=ringkas(p),L=[['Bagian','No','Item','Alasan','Jumlah','Unit','Harga sebelum potong pajak','Harga/unit','Total','Pajak']];
+  p.aju.forEach((x,i)=>L.push(['Pengajuan',i+1,x.n,x.a,x.q,x.u||'Unit','',x.h,(Number(x.q)||0)*(Number(x.h)||0),'']));
+  p.real.forEach((x,i)=>{const h=hitung(x);L.push(['Realisasi',i+1,x.n,x.a,x.q,x.u||'Unit',h.pre,h.net,h.tot,pajakLbl(x)])});
+  L.push([],['Total pengajuan','','','','','','','',s.ta],['Total realisasi','','','','','','','',s.tr],[s.sisa<0?'Over budget':'Sisa budget','','','','','','','',Math.abs(s.sisa)]);
+  const txt=L.map(r=>r.map(v=>{v=String(v==null?'':v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\n');
+  unduh(new Blob(['﻿'+txt],{type:'text/csv'}),fname('csv'));
+  if(window.bcLog)bcLog('budget',perL(cur),'csv');
+ }
+ /* ---------- event ---------- */
+ $id('bgCfg').onclick=settings;
+ box.addEventListener('click',e=>{
+  const pc=e.target.closest('[data-bgp]');if(pc){cur=pc.dataset.bgp;db.cur=cur;save();return render()}
+  const ed=e.target.closest('[data-bge]');if(ed){const [k,id]=ed.dataset.bge.split(':');return k==='aju'?formAju(id):formReal(id)}
+  const dl=e.target.closest('[data-bgd]');if(dl){const [k,id]=dl.dataset.bgd.split(':'),p=P();
+   if(dl.dataset.ok!=='1'){dl.dataset.ok='1';dl.textContent='Hapus?';dl.classList.add('yakin');setTimeout(()=>{if(dl.isConnected){dl.dataset.ok='';dl.textContent='✕';dl.classList.remove('yakin')}},3000);return}
+   if(k==='aju'){p.aju=p.aju.filter(x=>x.id!==id)}else p.real=p.real.filter(x=>x.id!==id);save();return render()}
+  const a=e.target.closest('[data-bg]');if(!a||a.disabled)return;
+  const k=a.dataset.bg;
+  if(k==='aju')formAju();
+  if(k==='real')formReal();
+  if(k==='copy'){const prev=Object.keys(db.periods).filter(x=>x<cur&&db.periods[x].aju.length).sort().pop();if(!prev)return;P().aju=db.periods[prev].aju.map(x=>Object.assign({},x,{id:uid()}));save();render();ofaToast('Pengajuan '+perL(prev)+' disalin. Sesuaikan jumlah & harganya.')}
+  if(k==='xlsx'){const c=cfg();if(!c.n1||!c.site){ofaToast('Lengkapi kode site & penanda tangan di ⚙');return settings()}unduh(xlsx(),fname('xlsx'));if(window.bcLog)bcLog('budget',perL(cur),'excel')}
+  if(k==='pdf')pdf();
+  if(k==='csv')csv();
+ });
+ box.addEventListener('change',e=>{
+  if(e.target.id==='bgPer'&&/^\d{4}-\d{2}$/.test(e.target.value)){cur=e.target.value;db.cur=cur;save();render()}
+  if(e.target.id==='bgTgl'){P().tgl=e.target.value;save()}
+ });
+ window.bgRender=render;
+ window.bgPrintHtml=printHtml;
  render();
 })();
 
