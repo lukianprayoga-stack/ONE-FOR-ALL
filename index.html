@@ -1476,6 +1476,10 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .bcu-log time{flex:none;width:72px;font-size:11px;color:var(--mut);line-height:1.35;font-variant-numeric:tabular-nums}
 .bcu-log p{margin:0;font-size:13px;line-height:1.35;min-width:0}.bcu-log small{color:var(--mut);font-size:11.5px}
 .bcu-note{margin-top:12px;font-size:12px;color:var(--mut)}
+.bcu-promo{margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid color-mix(in srgb,var(--orange,#f26a1b) 35%,transparent);background:var(--orange-bg,#fff1e7)}
+.bcu-ph{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.bcu-ph h4{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--orange,#f26a1b)}
+.bcu-ph p{margin:0;font-size:13px;line-height:1.5}.bcu-ph small{color:var(--mut)}.bcu-ph em{font-style:normal;font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px;background:var(--line);margin-left:4px}.bcu-ph em.ok{background:var(--ok-bg,#e9f9ef);color:var(--ok-fg,#15803d)}.bcu-ph em.bad{background:var(--bad-bg,#fdecec);color:var(--bad-fg,#c62828)}
+.bcu-pa{display:flex;gap:10px;align-items:center}.bcu-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}.bcu-chips span{font-size:12px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
 @media(max-width:800px){.bcu-tabs{display:flex}.bcu-cols{grid-template-columns:1fr}.bcu-col{display:none}.bcu-col.on{display:block}.bcu-col h4{display:none}
  .bcu-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}.bcu-kpi>div.bcu-big{grid-column:1/-1}.bcu-mini{grid-template-columns:1fr 1fr}}
 /* ====== ANALISIS PROMO ====== */
@@ -7968,11 +7972,71 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   el.innerHTML=`<div class="bcu-kpi"><div class="bcu-big"><small>Toko terdaftar</small><b>${nf(s.toko)}</b><span>${nf(s.orang)} pengguna${s.blok?' · '+nf(s.blok)+' dinonaktifkan':''}</span></div>
     <div><small>Aktif 7 hari</small><b>${nf(s.a7)}</b><span>toko</span></div><div><small>Upload file BC</small><b>${nf(s.up)}</b><span>total</span></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b><span>total</span></div></div>
    <div class="bcu-share"><code>${esc(APP)}</code><button type="button" class="btn ghost" data-bcu="copy">Salin link aplikasi</button></div>
+   ${promoHtml()}
    <div class="bcu-bar"><input class="in" id="bcuQ" type="search" placeholder="Cari site, toko, nama…" value="${esc(q)}"><div class="bcu-tabs" role="tablist"><button type="button" role="tab" data-bct="u" class="${tab==='u'?'on':''}">Pengguna (${U.length})</button><button type="button" role="tab" data-bct="l" class="${tab==='l'?'on':''}">Aktivitas</button></div></div>
    <div class="bcu-cols"><section class="bcu-col${tab==='u'?' on':''}"><h4>Pengguna</h4>${users}</section><section class="bcu-col${tab==='l'?' on':''}"><h4>Aktivitas terbaru</h4>${log}</section></div>
    <div class="vd-links"><button type="button" data-bcu="reload">Muat ulang</button>${data.sheetUrl?`<a href="${esc(data.sheetUrl)}" target="_blank" rel="noopener">Buka spreadsheet ↗</a>`:''}<a href="${esc(APP)}" target="_blank" rel="noopener">Buka aplikasi ↗</a></div>
    <p class="bcu-note">Yang tercatat hanya pendaftaran (site, toko, nama, jabatan) dan aktivitas (buka, upload, unduh laporan beserta periodenya). Isi data stock toko lain tidak dikirim ke Hub.</p>`;
  }
+ /* ---------- database promo untuk fitur Produk Promo di Store Head Kit ---------- */
+ const tglS=k=>{if(!k)return '';const p=String(k).slice(0,10).split('-');return p.length===3?+p[2]+' '+BLN[+p[1]-1]+' '+p[0]:k};
+ function promoHtml(){
+  const m=data&&data.promo,now=new Date().toISOString().slice(0,10);
+  const st=!m?'':m.selesai&&m.selesai<now?'<em class="bad">berakhir</em>':m.mulai&&m.mulai>now?'<em>belum mulai</em>':'<em class="ok">berlaku</em>';
+  return `<section class="bcu-promo"><div class="bcu-ph"><div><h4>Database promo untuk Store Head Kit</h4><p>${m?`<b>${esc(m.judul)}</b> ${st} · ${nf(m.rows)} artikel${m.mulai?' · '+esc(tglS(m.mulai))+(m.selesai?' – '+esc(tglS(m.selesai)):''):''}<br><small>Diupload ${esc(lalu(m.at))} · ${esc(m.file||'')}</small>`:'Belum ada. Upload daftar artikel promo (kolom <b>Kode, Nama, Disc, Netto, Remark</b>), lalu semua toko bisa mencocokkan dengan inventory by bin masing-masing.'}</p></div>
+   <div class="bcu-pa"><button type="button" class="btn" data-bcu="pup">⇪ ${m?'Ganti':'Upload'} database promo</button>${m?'<button type="button" class="bcu-lnk" data-bcu="pdel">Hapus</button>':''}</div></div><input type="file" id="bcuPF" accept=".xlsx,.xls,.csv" hidden><div class="iv-status" id="bcuPS"></div></section>`;
+ }
+ function loadX(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ async function promoParse(file){
+  await loadX();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});
+  const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,''),sku=v=>typeof v==='number'?String(Math.round(v)):String(v==null?'':v).trim().replace(/\.0+$/,'');
+  for(const name of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:''});
+   let hi=-1,h=null;
+   for(let i=0;i<Math.min(10,rows.length);i++){const n=(rows[i]||[]).map(norm);if((n.includes('kode')||n.includes('sku')||n.includes('skucode'))&&(n.includes('netto')||n.includes('disc')||n.includes('diskon'))){hi=i;h=n;break}}
+   if(hi<0)continue;
+   const ix=(...a)=>{for(const x of a){const i=h.indexOf(x);if(i>=0)return i}return -1};
+   const c=[ix('kode','sku','skucode'),ix('nama','skuname'),ix('crosssite'),ix('fashgrade'),ix('oldmc'),ix('disc','diskon'),ix('netto','hargapromo'),ix('remark','keterangan')];
+   const out=new Map();
+   for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[],k=sku(row[c[0]]);if(!/^\d{6,}$/.test(k)||out.has(k))continue;out.set(k,c.map((ci,j)=>j===0?k:ci<0?'':row[ci]))}
+   return {sheet:name,rows:[...out.values()]};
+  }
+  throw new Error('Kolom Kode dan Disc/Netto tidak ditemukan. Pakai template daftar artikel promo.');
+ }
+ function promoForm(file,P){
+  const d=new Date(),y=d.getFullYear(),m=d.getMonth(),nx=d.getDate()>=25?new Date(y,m+1,1):new Date(y,m,1),last=new Date(nx.getFullYear(),nx.getMonth()+1,0);
+  const ymd=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  const D={};P.rows.forEach(r=>{let v=Number(String(r[5]).replace(',','.').replace('%',''))||0;if(v>1)v=v/100;const k=Math.round(v*100);D[k]=(D[k]||0)+1});
+  const nm=file.name.replace(/\.[^.]+$/,'').replace(/^[0-9a-f]{6,}-/i,'').replace(/_+/g,' ').replace(/^ARTIKEL\s+/i,'').trim(),um=nm.match(/UP ?TO\s*(\d+)/i),judul=um?'Promo Up To '+um[1]+'%':(nm||'Promo');
+  openModal('Upload database promo',`<p class="hint" style="margin:0 0 8px">${esc(file.name)} · lembar ${esc(P.sheet)} · <b>${nf(P.rows.length)} artikel</b></p>
+   <div class="bcu-chips">${Object.keys(D).map(Number).sort((a,b)=>a-b).map(k=>`<span>${k?'Disc '+k+'%':'Tanpa disc'} · ${nf(D[k])}</span>`).join('')}</div>
+   <label class="ks-f"><span>Judul promo (tampil di aplikasi toko)</span><input class="in" id="bcuPJ" value="${esc(judul)}"></label>
+   <div class="row" style="gap:8px"><label class="ks-f" style="flex:1"><span>Mulai</span><input class="in" type="date" id="bcuPM" value="${ymd(nx)}"></label><label class="ks-f" style="flex:1"><span>Selesai (opsional)</span><input class="in" type="date" id="bcuPE" value="${ymd(last)}"></label></div>
+   <p class="hint">Database lama diganti. Toko yang membuka Store Head Kit akan otomatis memakai daftar baru.</p>
+   <div class="row" style="margin-top:10px"><button class="btn" type="button" id="bcuPGo">Upload ke Store Head Kit</button></div>`);
+  $id('bcuPGo').onclick=async()=>{
+   const btn=$id('bcuPGo'),meta={judul:$id('bcuPJ').value.trim()||'Promo',mulai:$id('bcuPM').value,selesai:$id('bcuPE').value,file:file.name};
+   btn.disabled=true;
+   try{const CH=2000;let res=null;
+    for(let a=0;a<P.rows.length;a+=CH){btn.textContent='Mengupload '+nf(Math.min(a+CH,P.rows.length))+' / '+nf(P.rows.length)+'…';
+     res=await api('bcAppPromoSimpan',Object.assign({start:a,rows:P.rows.slice(a,a+CH),akhir:a+CH>=P.rows.length,total:P.rows.length},meta))}
+    if(data)data.promo=res&&res.meta;close();toast('Database promo diupload: '+nf(P.rows.length)+' artikel');load(true)}
+   catch(e){btn.disabled=false;btn.textContent='Upload ke Store Head Kit';toast(missing(e)?'Tempel BcApp.gs terbaru lalu deploy versi baru':e.message)}
+  };
+ }
+ async function promoPick(file){
+  const st=$id('bcuPS');if(st){st.className='iv-status';st.textContent='Membaca '+file.name+'…'}
+  try{const P=await promoParse(file);if(st)st.textContent='';promoForm(file,P)}catch(e){if(st){st.className='iv-status err';st.textContent='Gagal: '+(e.message||e)}}
+ }
+ async function promoHapus(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent='Yakin hapus? Ketuk lagi';return}
+  try{await api('bcAppPromoHapus',{});if(data)data.promo=null;toast('Database promo dihapus');renderAll()}catch(e){toast(e.message)}
+ }
+ document.addEventListener('change',e=>{if(e.target.id!=='bcuPF')return;const f=e.target.files&&e.target.files[0];e.target.value='';if(f)promoPick(f)});
  async function salin(){try{await navigator.clipboard.writeText(APP);toast('Link aplikasi disalin')}catch(e){prompt('Salin link ini:',APP)}}
  async function atur(btn){
   if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent=btn.dataset.st==='blokir'?'Yakin nonaktifkan? Ketuk lagi':'Ketuk lagi untuk mengaktifkan';return}
@@ -7987,6 +8051,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(t.dataset.bcu==='open')return buka();
   if(t.dataset.bcu==='copy')return salin();
   if(t.dataset.bcu==='reload')return load(true);
+  if(t.dataset.bcu==='pup'){const f=$id('bcuPF');if(f)f.click();return}
+  if(t.dataset.bcu==='pdel')return promoHapus(t);
   if(t.dataset.bct){tab=t.dataset.bct;return renderPage()}
   if(t.dataset.bcb)return atur(t);
  },true);
