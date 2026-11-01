@@ -1,7 +1,7 @@
 {
- "name": "BA Blind Counting",
- "short_name": "BA Blind Count",
- "description": "BA Blind Counting, Kepatuhan Display & Rekap Kas untuk Store Head. Dibuat oleh Lukian Prayoga.",
+ "name": "Store Head Kit",
+ "short_name": "SH Kit",
+ "description": "Store Head Kit: BA Blind Counting, Kepatuhan Display & Rekap Kas. Dibuat oleh Lukian Prayoga.",
  "id": "ba-blind-counting",
  "start_url": "./",
  "scope": "./",

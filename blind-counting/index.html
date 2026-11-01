@@ -3,13 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BA Blind Counting</title>
-<meta name="description" content="BA Blind Counting, Kepatuhan Display & Rekap Kas untuk Store Head dari file export sistem. Dibuat oleh Lukian Prayoga.">
+<title>Store Head Kit</title>
+<meta name="description" content="Store Head Kit: BA Blind Counting, Kepatuhan Display & Rekap Kas dari file export sistem. Dibuat oleh Lukian Prayoga.">
 <meta name="author" content="Lukian Prayoga">
 <meta name="theme-color" content="#0b2a7a">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="SH Kit">
+<meta name="application-name" content="Store Head Kit">
 <style>
 :root{color-scheme:light;--bg:#fff;--fg:#0a0a0a;--mut:#6c6c75;--card:#f3f3f1;--line:#e3e3df;--acc:#ff4f1f;--ink:#0a0a0a;--inkfg:#fff;--warn-bg:#fff4e5;--warn-fg:#8a4b00;--warn-bd:#f5c58a;--ok-bg:#e3f4e8;--ok-fg:#14642f;--bad-bg:#fde8e8;--bad-fg:#b42318;--amber:#b45309;--panel:#fff;--shadow:0 10px 30px rgba(10,10,10,.08)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0b0b0d;--fg:#f5f5f2;--mut:#9b9ba3;--card:#18181c;--line:#2a2a30;--acc:#ff6a3d;--ink:#f5f5f2;--inkfg:#0b0b0d;--warn-bg:#33240d;--warn-fg:#ffd59e;--warn-bd:#6b4813;--ok-bg:#0f2e1b;--ok-fg:#8fe0ad;--bad-bg:#3a1416;--bad-fg:#ffb3b0;--amber:#f2a93b;--panel:#141418;--shadow:0 10px 30px rgba(0,0,0,.45)}}
@@ -170,6 +173,33 @@ body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);pa
 .app-foot b{color:var(--title,var(--fg))}
 .app-inst[hidden],.app-start[hidden]{display:none}
 .pane[hidden]{display:none}
+/* ====== layar pembuka ====== */
+html.spl-on,html.spl-on body{overflow:hidden}
+.spl{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;
+ background:radial-gradient(120% 80% at 50% 38%,#1d4ed8 0%,#0b2a7a 52%,#06133f 100%);transition:opacity .5s ease,visibility .5s}
+.spl.out{opacity:0;visibility:hidden}
+.spl-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px}
+.spl-glow{position:absolute;top:-30px;left:50%;width:240px;height:240px;margin-left:-120px;border-radius:50%;background:radial-gradient(circle,rgba(242,106,27,.45) 0%,rgba(242,106,27,0) 68%);animation:splGlow 2.4s ease-in-out .5s infinite;opacity:0}
+.spl-logo{position:relative;width:148px;height:148px;filter:drop-shadow(0 18px 36px rgba(0,0,0,.35));animation:splPop .75s cubic-bezier(.2,1.5,.4,1) both}
+.spl-logo .bd{transform-box:fill-box;transform-origin:50% 100%;animation:splRise .5s cubic-bezier(.3,1.4,.5,1) .18s both}
+.spl-logo .aw{animation:splDrop .6s cubic-bezier(.25,1.6,.45,1) .42s both}
+.spl-logo .hd{stroke-dasharray:330;stroke-dashoffset:330;opacity:0;animation:splDraw .5s ease-out .62s forwards}
+.spl-logo .ck{stroke-dasharray:240;stroke-dashoffset:240;opacity:0;animation:splDraw .45s cubic-bezier(.6,0,.3,1) .95s forwards}
+.spl-t{margin:22px 0 4px;font-size:30px;font-weight:800;letter-spacing:-.6px;animation:splUp .6s ease-out 1.05s both}
+.spl-s{margin:0;font-size:13.5px;opacity:.8;animation:splUp .6s ease-out 1.2s both}
+.spl-bar{width:150px;height:4px;margin-top:22px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden;animation:splUp .4s ease-out 1.25s both}
+.spl-bar i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#f26a1b,#ffb27a);transform-origin:0 50%;animation:splFill 1.7s cubic-bezier(.4,0,.2,1) .3s both}
+.spl-by{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));margin:0;font-size:11.5px;font-weight:700;letter-spacing:.24em;opacity:.65;animation:splUp .6s ease-out 1.35s both}
+.spl.fast .spl-logo,.spl.fast .spl-logo *,.spl.fast .spl-t,.spl.fast .spl-s,.spl.fast .spl-bar,.spl.fast .spl-by{animation-duration:.35s!important;animation-delay:0s!important}
+.spl.fast .spl-bar i{animation:splFill .8s ease-out both!important}
+@keyframes splPop{0%{opacity:0;transform:scale(.35) rotate(-10deg)}100%{opacity:1;transform:none}}
+@keyframes splRise{0%{transform:scaleY(.15);opacity:0}100%{transform:none;opacity:1}}
+@keyframes splDrop{0%{transform:translateY(-70px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes splDraw{0%{opacity:1}100%{opacity:1;stroke-dashoffset:0}}
+@keyframes splUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
+@keyframes splFill{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes splGlow{0%,100%{opacity:.35;transform:scale(.9)}50%{opacity:.8;transform:scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.spl *{animation:none!important;stroke-dashoffset:0!important;opacity:1!important}.spl-glow{opacity:.5}}
 .app-tabs{position:sticky;top:64px;z-index:4;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);scrollbar-width:none;justify-content:center}
 .app-tabs::-webkit-scrollbar{display:none}
 .app-tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -226,7 +256,27 @@ body.locked{overflow:hidden}
 </style>
 </head>
 <body>
-<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>BA Blind Counting</b><small>BA Blind Counting · Kepatuhan Display · Rekap Kas</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
+<div class="spl" id="spl" aria-hidden="true">
+  <div class="spl-in">
+    <div class="spl-glow"></div>
+    <svg class="spl-logo" viewBox="0 0 512 512" role="img" aria-label="Logo Store Head Kit"><defs><linearGradient id="shBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b2a7a"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient> <clipPath id="shLid"><rect x="120" y="178" width="272" height="140"/></clipPath><clipPath id="shLid2"><rect x="104" y="178" width="304" height="140" rx="22"/></clipPath></defs><rect width="512" height="512" rx="112" fill="url(#shBg)"/><path class="hd" d="M196 178 V146 a26 26 0 0 1 26 -26 h68 a26 26 0 0 1 26 26 V178" fill="none" stroke="#f26a1b" stroke-width="22" stroke-linecap="round"/> <rect class="bd" x="120" y="226" width="272" height="182" rx="30" fill="#ffffff"/> <g class="aw"><g clip-path="url(#shLid)"><path d="M104.0 187 H154.7 V245 A25.3 15.7 0 0 1 104.0 245 Z" fill="#c7d4f0"/><path d="M154.7 187 H205.3 V245 A25.3 15.7 0 0 1 154.7 245 Z" fill="#c7d4f0"/><path d="M205.3 187 H256.0 V245 A25.3 15.7 0 0 1 205.3 245 Z" fill="#c7d4f0"/><path d="M256.0 187 H306.7 V245 A25.3 15.7 0 0 1 256.0 245 Z" fill="#c7d4f0"/><path d="M306.7 187 H357.3 V245 A25.3 15.7 0 0 1 306.7 245 Z" fill="#c7d4f0"/><path d="M357.3 187 H408.0 V245 A25.3 15.7 0 0 1 357.3 245 Z" fill="#c7d4f0"/></g><g clip-path="url(#shLid2)"><path d="M104.0 178 H154.7 V236 A25.3 15.7 0 0 1 104.0 236 Z" fill="#f26a1b"/><path d="M154.7 178 H205.3 V236 A25.3 15.7 0 0 1 154.7 236 Z" fill="#ffffff"/><path d="M205.3 178 H256.0 V236 A25.3 15.7 0 0 1 205.3 236 Z" fill="#f26a1b"/><path d="M256.0 178 H306.7 V236 A25.3 15.7 0 0 1 256.0 236 Z" fill="#ffffff"/><path d="M306.7 178 H357.3 V236 A25.3 15.7 0 0 1 306.7 236 Z" fill="#f26a1b"/><path d="M357.3 178 H408.0 V236 A25.3 15.7 0 0 1 357.3 236 Z" fill="#ffffff"/></g></g> <path class="ck" d="M190 322 l42 40 l92 -92" fill="none" stroke="#1d4ed8" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h1 class="spl-t">Store Head Kit</h1>
+    <p class="spl-s">BA Blind Counting · Kepatuhan Display · Rekap Kas</p>
+    <div class="spl-bar"><i></i></div>
+  </div>
+  <p class="spl-by">BY LUKIAN PRAYOGA</p>
+</div>
+<script>
+/* layar pembuka: penuh saat pertama dibuka, singkat bila dibuka lagi di sesi yang sama */
+(function(){const el=document.getElementById('spl');let lagi=false;try{lagi=sessionStorage.getItem('shk_spl')==='1';sessionStorage.setItem('shk_spl','1')}catch(e){}
+ const red=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=Date.now(),min=red?350:lagi?900:2100;
+ if(lagi)el.classList.add('fast');document.documentElement.classList.add('spl-on');
+ const tutup=()=>{if(el.classList.contains('out'))return;el.classList.add('out');document.documentElement.classList.remove('spl-on');setTimeout(()=>el.remove(),600)};
+ el.addEventListener('click',tutup);
+ addEventListener('load',()=>setTimeout(tutup,Math.max(0,min-(Date.now()-t0))));
+ setTimeout(tutup,min+2500);})();
+</script>
+<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Kepatuhan Display · Rekap Kas</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
 <nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button></nav>
 <main class="app-main">
   <div class="app-start" id="appStart" hidden><div><b>Mulai di sini: isi data toko</b><span>Nama toko, nama Store Head &amp; atasan yang tercetak di berita acara. Cukup sekali, tersimpan di perangkat ini.</span></div><button class="btn" type="button" id="appSet">⚙ Isi data toko</button></div>
@@ -292,7 +342,7 @@ body.locked{overflow:hidden}
   <form class="reg-card" id="regForm" novalidate autocomplete="on">
     <img src="icons/icon-192.png" alt="">
     <h1 id="regH">Daftar dulu</h1>
-    <p id="regP">Isi kode site &amp; nama toko sebelum memakai aplikasi BA Blind Counting. Cukup sekali di perangkat ini.</p>
+    <p id="regP">Isi kode site &amp; nama toko sebelum memakai Store Head Kit. Cukup sekali di perangkat ini.</p>
     <label><span>Kode site</span><input class="in" id="regSite" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="mis. 7014"></label>
     <label><span>Nama toko</span><input class="in" id="regToko" maxlength="80" autocomplete="organization" placeholder="mis. Eiger Store Soekarno Solo Baru"></label>
     <label><span>Nama Anda</span><input class="in" id="regNama" maxlength="60" autocomplete="name" placeholder="Nama lengkap"></label>
@@ -304,7 +354,7 @@ body.locked{overflow:hidden}
   </form>
 </div>
 <div class="reg" id="blok" hidden>
-  <div class="reg-card"><img src="icons/icon-192.png" alt=""><h1>Akses dinonaktifkan</h1><p>Akses perangkat ini ke aplikasi BA Blind Counting sedang dinonaktifkan oleh pembuat aplikasi. Hubungi Lukian Prayoga bila ini keliru.</p><button class="btn" type="button" id="blokCek">Cek lagi</button><p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p></div>
+  <div class="reg-card"><img src="icons/icon-192.png" alt=""><h1>Akses dinonaktifkan</h1><p>Akses perangkat ini ke Store Head Kit sedang dinonaktifkan oleh pembuat aplikasi. Hubungi Lukian Prayoga bila ini keliru.</p><button class="btn" type="button" id="blokCek">Cek lagi</button><p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p></div>
 </div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span></div>
@@ -376,7 +426,7 @@ function xlsxSimple(sheets,title){
  const files=[
   ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
   ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
-  ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X(title||'')}</dc:title><dc:creator>Aplikasi BA Blind Counting - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created></cp:coreProperties>`],
+  ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X(title||'')}</dc:title><dc:creator>Store Head Kit - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created></cp:coreProperties>`],
   ['xl/workbook.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets>${sheets.map((s,i)=>`<sheet name="${X(String(s.name).slice(0,31))}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets>${sheets.map((s,i)=>s.head&&s.rows.length>s.head?`<definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">'${X(String(s.name).slice(0,31))}'!$A$${s.head}:$${col(s.rows.reduce((m,r)=>Math.max(m,r.length),1)-1)}$${s.rows.length}</definedName></definedNames>`:'').join('').replace(/<\/definedNames><definedNames>/g,'')}</workbook>`],
   ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
   ['xl/styles.xml',styles]
@@ -678,7 +728,7 @@ function xlsxSimple(sheets,title){
   return zip([
    ['[Content_Types].xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${sheets.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="${WS}"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`],
    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
-   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('BA Blind Counting '+title)}</dc:title><dc:creator>Aplikasi BA Blind Counting - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
+   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('BA Blind Counting '+title)}</dc:title><dc:creator>Store Head Kit - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
    ['xl/workbook.xml',wbx],
    ['xl/_rels/workbook.xml.rels',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((x,i)=>`<Relationship Id="rId${i+1}" Type="${REL}worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="${REL}styles" Target="styles.xml"/></Relationships>`],
    ['xl/styles.xml',STYLES],
@@ -1109,7 +1159,7 @@ function xlsxSimple(sheets,title){
   W.forEach((o,i)=>R1.push([i+1,o.g,o.c,o.n,cap(o.l2),cap(o.l3),cap(o.l4),o.sz,o.w,o.bw,gset.has(o.g)?'Generic belum ada di display':'Warna belum dipajang',isDone(o.k)?'✓':'']));
   const R2=[['Kepatuhan Display'],[(rep.loc||'')+' · inventory '+tglL(rep.date)],[],['','Terdisplay','Total','Persentase','Target'],
    ['By generic',s.gD,s.gT,s.gT?s.gD/s.gT:0,c.target/100],['By color',s.cD,s.cT,s.cT?s.cD/s.cT:0,c.target/100],[],
-   ['Warna belum dipajang',W.length],['Generic belum dipajang',Gn.length],['Stok sales area (pcs)',s.pS],['Stok gudang (pcs)',s.pW],[],['Sumber',rep.file||''],['Dibuat dengan aplikasi BA Blind Counting · Lukian Prayoga']];
+   ['Warna belum dipajang',W.length],['Generic belum dipajang',Gn.length],['Stok sales area (pcs)',s.pS],['Stok gudang (pcs)',s.pW],[],['Sumber',rep.file||''],['Dibuat dengan Store Head Kit · Lukian Prayoga']];
   const name=('Kepatuhan Display '+(ST.reg?ST.reg.site+' ':'')+tglL(rep.date)).replace(/[\\/:*?"<>|]+/g,' ')+'.xlsx';
   const blob=xlsxSimple([{name:'Belum Dipajang',rows:R1,widths:[5,12,12,40,14,16,18,10,10,40,26,10],head:1},{name:'Ringkasan',rows:R2,widths:[26,12,10,12,10],pct:[[5,4],[5,5],[6,4],[6,5]],title:1}],'Kepatuhan Display');
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
@@ -1340,7 +1390,7 @@ function xlsxSimple(sheets,title){
   return zip([
    ['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>'],
    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>'],
-   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('Rekap Pengeluaran Kas '+title)}</dc:title><dc:creator>Aplikasi BA Blind Counting - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
+   ['docProps/core.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X('Rekap Pengeluaran Kas '+title)}</dc:title><dc:creator>Store Head Kit - dibuat oleh Lukian Prayoga</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`],
    ['xl/workbook.xml',wbx],
    ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
    ['xl/styles.xml',STYLES],
@@ -1437,7 +1487,7 @@ appStart();
  function regInfo(){const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
   el.innerHTML='Terdaftar: <b>'+esc(r.nama)+'</b> · '+esc(r.jabatan)+' · site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' <button type="button" id="regUbah">Ubah</button>'}
  function bukaForm(edit){const r=edit&&ST.reg||{};$('regSite').value=r.site||'';$('regToko').value=r.toko||'';$('regNama').value=r.nama||'';$('regJab').value=r.jabatan||'Store Head';
-  $('regH').textContent=edit?'Ubah data pendaftaran':'Daftar dulu';$('regP').textContent=edit?'Perubahan juga dipakai di pengaturan berita acara.':'Isi kode site & nama toko sebelum memakai aplikasi BA Blind Counting. Cukup sekali di perangkat ini.';
+  $('regH').textContent=edit?'Ubah data pendaftaran':'Daftar dulu';$('regP').textContent=edit?'Perubahan juga dipakai di pengaturan berita acara.':'Isi kode site & nama toko sebelum memakai Store Head Kit. Cukup sekali di perangkat ini.';
   $('regGo').textContent=edit?'Simpan':'Daftar & mulai';$('regBatal').hidden=!edit;$('regErr').textContent='';kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
  let busy=false;
  async function flush(){if(busy||!ST.reg||ST.blokir&&!ST.cekBlok)return;busy=true;
