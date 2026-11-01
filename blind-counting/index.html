@@ -642,7 +642,7 @@ BIG.ready.then(function(){
   const st={lines:rows.length,match:rows.length-mis.length,sesi:bcs.size,exp:rows.reduce((t,r)=>t+r.exp,0),cnt:rows.reduce((t,r)=>t+r.cnt,0),care:rows.reduce((t,r)=>t+r.pc,0)};
   return {ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',st,
    rows:mis.map((r,k)=>({k,d:r.d,bc:r.bc,bin:r.bin,mc:r.mc,sku:r.sku,exp:r.exp,cnt:r.cnt,gap:r.gap,nom:r.nom,iss:r.iss,inv:r.inv,sbc:r.sbc,rem:r.rem})),
-   scope:'ops',jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
+   scope:'all',jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
  }
  function today(){const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
  const isSys=r=>/^system/i.test(r.iss||'');
