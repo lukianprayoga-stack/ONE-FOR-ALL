@@ -1,4 +1,4 @@
-const CACHE='bcapp-v16';
+const CACHE='bcapp-v17';
 const SHELL=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png','./icons/favicon-32.png','./icons/apple-touch-icon.png'];
 const XLSX_URL='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
 // halaman & manifest selalu diambil terbaru (tanpa cache browser); salinan hanya dipakai saat offline
