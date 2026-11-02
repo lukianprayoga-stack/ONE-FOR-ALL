@@ -1405,6 +1405,11 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .pr-chips span.rm{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
 .pr-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* ====== SALES HARIAN (SDR) ====== */
+.sdr-wa-pv{background:#e7fbd8;color:#111;border-radius:12px 12px 12px 4px;padding:10px 12px;font:14px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-height:58vh;overflow:auto;box-shadow:0 1px 2px rgba(0,0,0,.12);word-break:break-word}
+.sdr-wa-pv b{font-weight:700}.sdr-wa-pv i{color:#555}
+:root[data-theme="dark"] .sdr-wa-pv{background:#144d37;color:#e9edef}:root[data-theme="dark"] .sdr-wa-pv i{color:#b7c4bd}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sdr-wa-pv{background:#144d37;color:#e9edef}:root:not([data-theme=light]) .sdr-wa-pv i{color:#b7c4bd}}
+.co-acts a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 .sdr-hero{margin-top:10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,var(--blue-bg,#eaf1ff),var(--bg));border:1px solid var(--card-bd,var(--line))}
 .sdr-hero small{display:block;font-size:11.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
 .sdr-hero b{display:block;font-size:26px;letter-spacing:-.6px;color:var(--title,var(--fg));font-variant-numeric:tabular-nums}
@@ -7846,22 +7851,79 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
  /* ---------- report WA & ekspor ---------- */
  function reportWA(k){
   const d=data.days.find(z=>z.d===k);if(!d)return '';
-  const tf=trafik(d),upto=data.days.filter(z=>z.d<=k),kum=d.kum,kumT=d.kumTarget;
-  return ['*SALES DAILY REPORT*','EIGER Store Soekarno Solo Baru',tglP(k),'',
-   'Omzet: '+rp(d.omzet)+' ('+nf(d.pcs)+' pcs)',
-   'Target harian: '+rp(d.target)+' · Ach '+pct(d.omzet,d.target),
-   'Kumulatif: '+rp(kum)+' · Ach '+pct(kum,data.target)+' dari target '+rp(data.target),
-   '',
-   'Traffic: '+(tf==null?'-':nf(tf)+' ('+d.traffic.map(v=>v==null?'-':v).join('/')+')'),
-   'Transaksi: '+nf(d.trx)+(tf?' · CR '+pct(d.trx,tf):''),
-   'Basket size: '+(d.trx?rp(d.omzet/d.trx):'-')+' · UPT '+(d.trx?(d.pcs/d.trx).toLocaleString('id-ID',{maximumFractionDigits:2}):'-'),
-   'Diskon: '+rp(d.disc),'Net sales: '+rp(d.net),
-   '','Kekurangan bulan ini: '+rp(Math.max(data.target-kum,0))].join('\n');
+  const tf=trafik(d),n=+k.slice(8,10),nDays=data.days.length,sisaHari=nDays-n,T=data.target;
+  const upto=data.days.filter(z=>z.d<=k&&z.ada),kum=d.kum,kumT=d.kumTarget;
+  const ok=(a,b)=>b>0&&a>=b,dot=(a,b)=>b>0?(a>=b?'🟢':'🔴'):'⚪';
+  const p1=v=>(Number(v)||0).toLocaleString('id-ID',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+  const ach=(a,b)=>b?p1(a/b*100):'–';
+  const sel=(a,b)=>{const x=Math.round(a-b);return (x>=0?'+':'−')+rp(Math.abs(x))};
+  const chg=(a,b)=>{if(!b)return '';const x=(a-b)/b*100;return (x>=0?'▲ ':'▼ ')+p1(Math.abs(x))};
+  const dec=v=>(Number(v)||0).toLocaleString('id-ID',{maximumFractionDigits:2});
+  const L=[];
+  // judul
+  L.push('📊 *SALES DAILY REPORT*','🏬 EIGER Store Soekarno Solo Baru','📅 '+tglP(k),'━━━━━━━━━━━━━━━━━━');
+  // status hari ini
+  const okH=ok(d.omzet,d.target);
+  L.push('',(d.target>0?(okH?'🟢 *ACHIEVE*':'🔴 *NOT ACHIEVE*'):'⚪ *TARGET BELUM DIATUR*')+' — Ach harian *'+ach(d.omzet,d.target)+'*');
+  // sales hari ini
+  L.push('','💰 *SALES HARI INI*',
+   '▸ Omzet: *'+rp(d.omzet)+'*',
+   '▸ Target: '+rp(d.target),
+   '▸ Ach: *'+ach(d.omzet,d.target)+'* '+dot(d.omzet,d.target)+(d.target?' ('+sel(d.omzet,d.target)+')':''),
+   '▸ Qty: '+nf(d.pcs)+' pcs');
+  // MTD
+  const okM=ok(kum,kumT),proj=n?kum/n*nDays:0,kurang=Math.max(T-kum,0);
+  L.push('','📈 *KUMULATIF '+mL(data.month).toUpperCase()+' (s.d. '+tglS(k)+')*',
+   '▸ Omzet MTD: *'+rp(kum)+'*',
+   '▸ Target MTD: '+rp(kumT),
+   '▸ Ach MTD: *'+ach(kum,kumT)+'* '+dot(kum,kumT)+(kumT?' ('+sel(kum,kumT)+')':''),
+   '▸ Ach target bulan: '+ach(kum,T)+' dari '+rp(T),
+   '▸ Hari achieve: '+upto.filter(z=>ok(z.omzet,z.target)).length+' dari '+upto.length+' hari 🟢');
+  if(T>0){
+   L.push('▸ Proyeksi akhir bulan: '+rp(proj)+' ('+ach(proj,T)+') '+dot(proj,T));
+   L.push(kurang>0?'▸ Sisa target: *'+rp(kurang)+'*'+(sisaHari>0?' → butuh *'+rp(kurang/sisaHari)+'/hari* ('+sisaHari+' hari lagi)':''):'▸ 🎉 Target bulan sudah tercapai! Lebih '+rp(kum-T));
+  }
+  // traffic & konversi
+  const M=upto.filter(z=>trafik(z)!=null),mTf=M.reduce((a,z)=>a+trafik(z),0),mTrx=M.reduce((a,z)=>a+z.trx,0);
+  const mO=upto.reduce((a,z)=>a+z.omzet,0),mT=upto.reduce((a,z)=>a+z.trx,0),mP=upto.reduce((a,z)=>a+z.pcs,0);
+  const cr=tf?d.trx/tf:null,mcr=mTf?mTrx/mTf:null,bs=d.trx?d.omzet/d.trx:null,mbs=mT?mO/mT:null,upt=d.trx?d.pcs/d.trx:null,mupt=mT?mP/mT:null;
+  const vs=(a,b,f)=>a==null||b==null?'':' '+(a>=b?'⬆️':'⬇️')+' _rata2 MTD '+f(b)+'_';
+  L.push('','👥 *TRAFFIC & KONVERSI*',
+   '▸ Traffic: '+(tf==null?'⚠️ _belum diisi_':'*'+nf(tf)+'* pengunjung'),
+   '▸ Transaksi: *'+nf(d.trx)+'*',
+   '▸ CR: '+(cr==null?'–':'*'+p1(cr*100)+'*'+vs(cr,mcr,v=>p1(v*100))),
+   '▸ Basket size: '+(bs==null?'–':'*'+rp(bs)+'*'+vs(bs,mbs,rp)),
+   '▸ UPT: '+(upt==null?'–':'*'+dec(upt)+'*'+vs(upt,mupt,dec)));
+  // per jam
+  if(tf!=null||d.slotTrx.some(Boolean)){
+   L.push('','🕐 *PER JAM* (traffic · trx · CR)');
+   SLOT.forEach((s,j)=>{const t=d.traffic?d.traffic[j]:null,x=d.slotTrx[j]||0;L.push('▸ '+s+': '+(t==null?'–':nf(t))+' · '+nf(x)+' trx'+(t?' · '+p1(x/t*100):''))});
+  }
+  // diskon
+  L.push('','🏷️ *DISKON & NET SALES*',
+   '▸ Diskon: '+rp(d.disc)+' ('+(d.omzet?p1(d.disc/d.omzet*100):'0,0%')+' dari omzet)',
+   '▸ Net sales: *'+rp(d.net)+'*');
+  // perbandingan
+  const prev=data.days.find(z=>z.d<k&&z.ada&&z.d===(()=>{const p=k.split('-').map(Number),x=new Date(p[0],p[1]-1,p[2]-1);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())})());
+  const wk=data.days.find(z=>z.ada&&+z.d.slice(8,10)===n-7);
+  if(prev||wk){
+   L.push('','🔁 *PERBANDINGAN OMZET*');
+   if(prev)L.push('▸ vs kemarin ('+hari(prev.d)+'): '+rp(prev.omzet)+' '+chg(d.omzet,prev.omzet));
+   if(wk)L.push('▸ vs '+hari(wk.d)+' lalu ('+tglS(wk.d)+'): '+rp(wk.omzet)+' '+chg(d.omzet,wk.omzet));
+  }
+  L.push('','━━━━━━━━━━━━━━━━━━','🟢 achieve  🔴 belum achieve  ⬆️⬇️ vs rata-rata MTD','_OFA Hub · EIGER Soekarno Solo Baru_');
+  return L.join('\n');
  }
+ // tampilan pratinjau gaya WhatsApp (*tebal*, _miring_)
+ const waHtml=t=>esc(t).replace(/\*([^*\n]+)\*/g,'<b>$1</b>').replace(/(^|[\s(])_([^_\n]+)_/g,'$1<i>$2</i>').replace(/\n/g,'<br>');
  async function salin(k){
-  const t=reportWA(k);
-  try{await navigator.clipboard.writeText(t);toast('Report '+tglS(k)+' disalin — tempel di WhatsApp')}
-  catch(e){openModal('Report WA','<textarea class="in" rows="16" style="min-height:300px" readonly>'+esc(t)+'</textarea>')}
+  const t=reportWA(k);let ok=true;
+  try{await navigator.clipboard.writeText(t)}catch(e){ok=false}
+  openModal('Report WA · '+tglS(k),`<div class="sdr-wa-pv">${waHtml(t)}</div>
+   <p class="hint" style="margin:8px 0">${ok?'✓ Sudah disalin — tinggal tempel di grup WhatsApp.':'Salin otomatis tidak diizinkan browser, ketuk Salin.'}</p>
+   <div class="co-acts"><button type="button" class="btn" id="sdrWaCp">📋 Salin${ok?' lagi':''}</button><a class="btn ghost" id="sdrWaGo" href="https://wa.me/?text=${encodeURIComponent(t)}" target="_blank" rel="noopener">Buka WhatsApp</a></div>`);
+  const b=$id('sdrWaCp');if(b)b.onclick=async()=>{try{await navigator.clipboard.writeText(t);b.textContent='✓ Disalin';toast('Report '+tglS(k)+' disalin')}catch(e){const r=document.createRange(),el=document.querySelector('.sdr-wa-pv');r.selectNodeContents(el);const sl=getSelection();sl.removeAllRanges();sl.addRange(r);toast('Teks sudah dipilih — salin manual (Ctrl+C / Salin)')}};
+  if(ok)toast('Report '+tglS(k)+' disalin — tempel di WhatsApp');
  }
  function csv(){
   const h=['Hari','Tanggal','Omzet','Pcs','Kumulatif','Target harian','Daily ach','Traffic 09-12','Traffic 12-15','Traffic 15-18','Traffic 18-22','Traffic','Transaksi','CR','BS','Diskon','Net sales'];
