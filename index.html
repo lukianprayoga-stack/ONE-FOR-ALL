@@ -1405,6 +1405,23 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .pr-chips span.rm{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
 .pr-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* ====== SALES HARIAN (SDR) ====== */
+.sdr-chw{position:relative;margin-top:10px;background:var(--bg);border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:8px 8px 6px;--c-ok:#1f9d55;--c-bad:#d92d20}
+.sdr-chw.sdr-chlg{margin-top:12px;background:var(--card);border-radius:16px;padding:12px 12px 8px}
+:root[data-theme=dark] .sdr-chw{--c-ok:#17703a;--c-bad:#e45e5e}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sdr-chw{--c-ok:#17703a;--c-bad:#e45e5e}}
+.sdr-chh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 2px 4px;font-size:12px}.sdr-chh b{color:var(--fg)}
+.sdr-chh em{font-style:normal;color:var(--mut);font-size:11.5px;white-space:nowrap}.sdr-chh .ok{color:var(--ok-fg);font-weight:700}.sdr-chh .bad{color:var(--bad-fg);font-weight:700}
+.sdr-ch{width:100%;overflow:hidden}.sdr-ch svg{display:block}
+.sdr-ch .gr{stroke:var(--line);stroke-width:1}.sdr-ch .gr.b0{stroke:var(--mut);opacity:.6}
+.sdr-ch .ax{font-size:10px;fill:var(--mut);font-variant-numeric:tabular-nums}
+.sdr-ch path.ok{fill:var(--c-ok)}.sdr-ch path.bad{fill:var(--c-bad)}.sdr-ch .hatch{stroke:rgba(255,255,255,.45);stroke-width:1.6}
+.sdr-ch .tg{stroke:var(--fg);stroke-width:2;stroke-linecap:round}.sdr-ch .tg.fut{stroke:var(--mut);stroke-dasharray:2 2;opacity:.8}
+.sdr-ch .hit{fill:transparent;cursor:pointer}.sdr-ch .hit.on{fill:var(--fg);opacity:.07}
+.sdr-chl{display:flex;gap:12px;flex-wrap:wrap;padding:4px 2px 0;font-size:11.5px;color:var(--mut)}
+.sdr-chl span{display:inline-flex;align-items:center;gap:5px}.sdr-chl i{display:inline-block;width:10px;height:10px;border-radius:3px}
+.sdr-chl i.ok{background:var(--c-ok)}.sdr-chl i.bad{background:repeating-linear-gradient(45deg,transparent 0 2px,rgba(255,255,255,.45) 2px 3.5px),var(--c-bad)}.sdr-chl i.tg{height:2px;border-radius:1px;background:var(--fg);width:12px}.sdr-chl i.tgf{height:0;width:12px;border-radius:0;border-top:2px dashed var(--mut)}
+.sdr-tip{position:absolute;top:30px;z-index:3;min-width:170px;max-width:240px;background:var(--panel,var(--card));color:var(--fg);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:7px 9px;font-size:12px;line-height:1.45;pointer-events:none}
+.sdr-tip span{display:block;color:var(--mut)}.sdr-tip span b{color:var(--fg);font-variant-numeric:tabular-nums}.sdr-tip .ok{color:var(--ok-fg);font-weight:700}.sdr-tip .bad{color:var(--bad-fg);font-weight:700}
 .sdr-wa-pv{background:#e7fbd8;color:#111;border-radius:12px 12px 12px 4px;padding:10px 12px;font:14px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-height:58vh;overflow:auto;box-shadow:0 1px 2px rgba(0,0,0,.12);word-break:break-word}
 .sdr-wa-pv b{font-weight:700}.sdr-wa-pv i{color:#555}
 :root[data-theme="dark"] .sdr-wa-pv{background:#144d37;color:#e9edef}:root[data-theme="dark"] .sdr-wa-pv i{color:#b7c4bd}
@@ -7777,6 +7794,51 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   return{omzet,trx,pcs,disc,net,tf,tfTrx,hariTf:T.length,hari:ada.length,last,sisa,kurang:Math.max(data.target-omzet,0)};
  }
  function hariLaporan(){const ada=data.days.filter(d=>d.ada);return ada.length?ada[ada.length-1]:null}
+ /* ---------- grafik omzet (gross) vs target harian ---------- */
+ function chartHtml(big){
+  if(!data||!data.days)return '';
+  const A=data.days.filter(d=>d.ada&&d.target>0),nOk=A.filter(d=>d.omzet>=d.target).length;
+  return `<div class="sdr-chw${big?' sdr-chlg':''}"><div class="sdr-chh"><b>Omzet gross vs target harian</b><em>${A.length?`<span class="ok">${nOk} hari achieve</span> · <span class="bad">${A.length-nOk} tidak</span>`:''}</em></div>
+   <div class="sdr-ch" data-big="${big?1:''}" role="img" aria-label="Grafik omzet gross harian dibanding target harian ${esc(mL(data.month))}: ${nOk} dari ${A.length} hari achieve"></div>
+   <div class="sdr-chl"><span><i class="ok"></i>Achieve</span><span><i class="bad"></i>Tidak achieve</span><span><i class="tg"></i>Target harian</span>${data.days.some(d=>d.d>hariIni())?'<span><i class="tgf"></i>Target hari berikutnya</span>':''}</div><div class="sdr-tip" hidden></div></div>`;
+ }
+ function niceStep(v){const p=Math.pow(10,Math.floor(Math.log10(v||1))),f=v/p;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p}
+ const jtS=v=>v>=1e6?(v/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+' jt':v>=1e3?Math.round(v/1e3)+' rb':String(v);
+ function drawCh(el){
+  if(!data||!data.days)return;
+  const D=data.days,big=!!el.dataset.big,W=Math.max(260,Math.floor(el.clientWidth||600)),H=big?230:150,pl=38,pr=4,pt=8,pb=18,uid=big?'B':'S';
+  const top=Math.max(1,...D.map(d=>Math.max(d.ada?d.omzet:0,d.target||0))),st=niceStep(top/(big?4:3)),max=Math.ceil(top*1.04/st)*st;
+  const n=D.length,slot=(W-pl-pr)/n,bw=Math.max(2,Math.min(slot-2,big?26:18)),off=(slot-bw)/2,X=i=>pl+i*slot+off,Y=v=>pt+(H-pt-pb)*(1-v/max),base=Y(0);
+  const today=hariIni();let g='';
+  for(let v=0;v<=max+1;v+=st){const y=Y(v).toFixed(1);g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" class="gr${v?'':' b0'}"/><text x="${pl-5}" y="${(+y+3.5).toFixed(1)}" class="ax" text-anchor="end">${v?jtS(v):'0'}</text>`}
+  let bars='',tg='',hit='',lab='';
+  D.forEach((d,i)=>{
+   const x=X(i),dn=+d.d.slice(8,10);
+   if(d.ada&&d.omzet>0){const ok=d.target>0&&d.omzet>=d.target,y=Y(d.omzet),h=Math.max(1,base-y),r=Math.min(4,bw/2,h);
+    const path=`M${x.toFixed(1)},${base.toFixed(1)}V${(y+r).toFixed(1)}Q${x.toFixed(1)},${y.toFixed(1)} ${(x+r).toFixed(1)},${y.toFixed(1)}H${(x+bw-r).toFixed(1)}Q${(x+bw).toFixed(1)},${y.toFixed(1)} ${(x+bw).toFixed(1)},${(y+r).toFixed(1)}V${base.toFixed(1)}Z`;
+    bars+=`<path d="${path}" class="${ok?'ok':'bad'}"/>${ok?'':`<path d="${path}" fill="url(#sdrH${uid})"/>`}`}
+   if(d.target>0){const y=Y(d.target).toFixed(1);tg+=`<line x1="${(x-1.5).toFixed(1)}" x2="${(x+bw+1.5).toFixed(1)}" y1="${y}" y2="${y}" class="tg${d.d>today||!d.ada?' fut':''}"/>`}
+   if(dn===1||dn%5===0&&n-dn>=2||dn===n)lab+=`<text x="${(x+bw/2).toFixed(1)}" y="${H-4}" class="ax" text-anchor="middle">${dn}</text>`;
+   hit+=`<rect x="${(pl+i*slot).toFixed(1)}" y="${pt}" width="${slot.toFixed(1)}" height="${(H-pt).toFixed(1)}" data-sci="${i}" class="hit"/>`;
+  });
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><pattern id="sdrH${uid}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" class="hatch"/></pattern></defs>${g}${bars}${tg}${lab}${hit}</svg>`;
+ }
+ function drawCharts(){document.querySelectorAll('.sdr-ch').forEach(drawCh)}
+ function chTip(e){
+  const h=e.target.closest&&e.target.closest('.sdr-ch [data-sci]'),w=h&&h.closest('.sdr-chw');
+  document.querySelectorAll('.sdr-chw .on').forEach(x=>{if(x!==h)x.classList.remove('on')});
+  document.querySelectorAll('.sdr-tip').forEach(t=>{if(!w||t.parentNode!==w)t.hidden=true});
+  if(!h||!data)return;
+  const d=data.days[+h.dataset.sci],tip=w.querySelector('.sdr-tip');if(!d||!tip)return;h.classList.add('on');
+  const ok=d.target>0&&d.omzet>=d.target;
+  tip.innerHTML=`<b>${esc(tglP(d.d))}</b>${d.ada?`<span>Omzet gross <b>${rp(d.omzet)}</b></span>`:`<span>${d.d>hariIni()?'Belum berjalan':'Belum ada data DSR'}</span>`}<span>Target <b>${rp(d.target)}</b></span>${d.ada&&d.target?`<span class="${ok?'ok':'bad'}">${ok?'🟢 Achieve':'🔴 Tidak achieve'} · ${pct(d.omzet,d.target)} (${d.omzet>=d.target?'+':'−'}${rp(Math.abs(d.omzet-d.target))})</span>`:''}`;
+  tip.hidden=false;
+  const wr=w.getBoundingClientRect(),hr=h.getBoundingClientRect(),tw=tip.offsetWidth;
+  tip.style.left=Math.max(4,Math.min(wr.width-tw-4,hr.left-wr.left+hr.width/2-tw/2))+'px';
+ }
+ document.addEventListener('pointermove',e=>{if(e.pointerType==='mouse')chTip(e)});
+ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.sdr-ch'))chTip(e);else if(!e.target.closest||!e.target.closest('.sdr-tip'))document.querySelectorAll('.sdr-tip').forEach(t=>t.hidden=true)});
+ let rz=0;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawCharts,150)});
  /* ---------- kartu ringkas (Hari Ini) ---------- */
  function renderCard(){
   const b=$id('sdrcBody');if(!b)return;
@@ -7789,8 +7851,10 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   $id('sdrcSub').textContent='Report '+tglP(d.d);
   b.innerHTML=`<div class="sdr-hero"><div><small>Omzet</small><b>${rp(d.omzet)}</b><span>${d.pcs} pcs · target ${jt(d.target)} · <em class="${d.omzet>=d.target?'ok':'bad'}">${pct(d.omzet,d.target)}</em></span></div></div>
    <div class="sdr-mini"><div><small>Traffic</small><b>${tf==null?'—':nf(tf)}</b></div><div><small>Transaksi</small><b>${nf(d.trx)}</b></div><div><small>CR</small><b>${tf?pct(d.trx,tf):'—'}</b></div><div><small>BS</small><b>${d.trx?jt(d.omzet/d.trx):'—'}</b></div><div><small>Diskon</small><b>${jt(d.disc)}</b></div><div><small>Net sales</small><b>${jt(d.net)}</b></div></div>
+   ${chartHtml(false)}
    ${tf==null?`<button type="button" class="sdr-warn" data-sdt="${d.d}">⚠ Traffic ${esc(tglS(d.d))} belum diisi — ketuk untuk mengisi</button>`:''}
    ${aksi(d)}`;
+  drawCharts();
  }
  const aksi=d=>`<div class="co-acts">${d?`<button type="button" class="btn" data-sdw="${d.d}">📋 Salin report WA</button>`:''}<button type="button" class="btn ghost" data-sdo="1">Sales harian ↗</button></div>`;
  /* ---------- halaman penuh ---------- */
@@ -7823,11 +7887,13 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <div><small>Diskon</small><b>${jt(t.disc)}</b><span>${pct(t.disc,t.omzet)} dari omzet</span></div>
     <div><small>Net sales</small><b>${jt(t.net)}</b><span>${nf(t.pcs)} pcs</span></div>
    </div>
+   ${chartHtml(true)}
    <div class="sdr-tw"><table class="sdr-t"><thead><tr><th class="l">Tgl</th><th>Omzet</th><th>Pcs</th><th class="m">Kumulatif</th><th class="m">Target harian</th><th>Ach</th>${SLOT.map(s=>`<th class="tf m">Traffic<br>${s.slice(0,5)}</th>`).join('')}<th>Traffic</th><th>Trx</th><th>CR</th><th class="m">BS</th><th class="m">Diskon</th><th>Net sales</th><th></th></tr></thead>
     <tbody>${rows}</tbody>
     <tfoot><tr><td class="l">Total</td><td>${nf(t.omzet)}</td><td>${nf(t.pcs)}</td><td class="m"></td><td class="m">${nf(data.target)}</td><td>${pct(t.omzet,data.target)}</td><td class="tf m" colspan="4"></td><td>${nf(t.tf)}</td><td>${nf(t.trx)}</td><td>${t.tf?pct(t.tfTrx,t.tf):''}</td><td class="m">${t.trx?nf(t.omzet/t.trx):''}</td><td class="m">${nf(t.disc)}</td><td>${nf(t.net)}</td><td></td></tr></tfoot></table></div>
    <p class="hint">Omzet, pcs, transaksi, diskon & net sales dari Database DSR (upload DSR di kartu Sales). Traffic diisi manual per jam: ketuk kolom <b>Traffic</b>. Target harian memakai target bulanan Hub. CR dihitung dari hari yang traffic-nya terisi.</p>
    <div class="vd-links"><button type="button" data-sdx="csv">Unduh CSV</button>${isOwner()?'<button type="button" data-sdx="kirim">Kirim ke spreadsheet SDR</button>':''}<a href="${esc(data.sdrUrl)}" target="_blank" rel="noopener">Spreadsheet SDR ↗</a></div>`;
+  drawCharts();
  }
  /* ---------- isi traffic ---------- */
  function openTraffic(d){
