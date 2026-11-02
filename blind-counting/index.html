@@ -157,6 +157,7 @@ textarea.in{min-height:240px;resize:vertical}
 /* ====== aplikasi mandiri ====== */
 body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);padding:0!important}
 #bc .bc-seg3{grid-template-columns:repeat(3,1fr)}
+#bc .bc-mc{margin-top:10px}#bc .bc-mc .ks-f{margin-top:10px}#bc .bc-mc .ks-act{margin-top:8px}
 #bc .wk-hero{flex-wrap:wrap}#bc .wk-hero b{white-space:nowrap}
 @media(max-width:420px){#bc .wk-hero b{font-size:27px}#bc .wk-hero em{text-align:left}}
 .app-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,#0b2a7a,#1d4ed8);color:#fff;box-shadow:0 4px 18px rgba(11,42,122,.25)}
@@ -542,7 +543,7 @@ BIG.ready.then(function(){
  const DEF={store:'',form:'REG-FRM-35',rev:'0',
   t1:'Store Head',n1:'',t2:'Head of Branch',n2:'',
   t3:'Head of Regional Dept.',n3:'',t4:'Deputy Head of Retail & Sales Div.',n4:'',t5:'Head of Retail & Sales Div.',n5:'',
-  file:'BA Blind Counting',suffix:''};
+  file:'BA Blind Counting',suffix:'',balik:''};
  const cfg=()=>Object.assign({},DEF,ST.cfg||{});
  let rep=null;try{rep=JSON.parse(BIG.getItem(CK)||'null')}catch(e){rep=null}
  const save=()=>{try{BIG.setItem(CK,JSON.stringify(rep))}catch(e){}};
@@ -640,14 +641,16 @@ BIG.ready.then(function(){
   const warn=[];
   if(pk.length>1)warn.push('File berisi '+pk.length+' periode BC ('+pk.join(', ')+'). Pastikan tarik data satu bulan.');
   const zeroGap=mis.filter(r=>r.gap===0).length;if(zeroGap)warn.push(zeroGap+' baris berstatus Mismatch tetapi qty sama (selisih harga).');
+  const mcA={};rows.forEach(r=>{const mc=r.mc||'LAINNYA',k=mc+'\u0001'+(r.d||''),o=mcA[k]||(mcA[k]=[mc,r.d||'',0,0]);o[2]+=r.exp;o[3]+=r.cnt});
   const st={lines:rows.length,match:rows.length-mis.length,sesi:bcs.size,exp:rows.reduce((t,r)=>t+r.exp,0),cnt:rows.reduce((t,r)=>t+r.cnt,0),care:rows.reduce((t,r)=>t+r.pc,0)};
   return {ym,label:y?BULAN[mo-1]+' '+y:'',period:pk.join(', '),from:ds[0]||'',to:ds[ds.length-1]||'',st,
    rows:mis.map((r,k)=>({k,d:r.d,bc:r.bc,bin:r.bin,mc:r.mc,sku:r.sku,exp:r.exp,cnt:r.cnt,gap:r.gap,nom:r.nom,iss:r.iss,inv:r.inv,sbc:r.sbc,rem:r.rem})),
-   scope:'all',jenis:'akhir',tgl:today(),edit:{},warn,file:fileName,at:Date.now()};
+   scope:'all',jenis:'akhir',tgl:today(),edit:{},mcEdit:{},fmt:'sku',mcT:Object.values(mcA),warn,file:fileName,at:Date.now()};
  }
  function today(){const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
  const isSys=r=>/^system/i.test(r.iss||'');
- const inScope=(R,r)=>R.scope==='sys'?isSys(r):R.scope==='ops'?!isSys(r):true;
+ const inCut=(R,r)=>!(R.jenis==='berjalan'&&R.cut&&r.d&&r.d>R.cut);
+ const inScope=(R,r)=>inCut(R,r)&&(R.scope==='sys'?isSys(r):R.scope==='ops'?!isSys(r):true);
  const scopeL=R=>R.scope==='sys'?'issue Sistem':R.scope==='ops'?'issue Operasional':'seluruh selisih';
  const remOf=(R,r)=>R.edit&&R.edit[r.k]!=null?R.edit[r.k]:(r.rem||'');
  function calc(R){
@@ -671,7 +674,7 @@ BIG.ready.then(function(){
  const X=s=>String(s==null?'':s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
  const COL=i=>i<26?String.fromCharCode(65+i):String.fromCharCode(64+Math.floor(i/26))+String.fromCharCode(65+i%26);
  const serialDay=iso=>{const p=String(iso||'').split('-').map(Number);return p.length===3&&p[0]?(Date.UTC(p[0],p[1]-1,p[2])-Date.UTC(1899,11,30))/864e5:''};
- const S={txt:1,bold:2,title:3,form:4,formD:5,th:6,tdC:7,td:8,tdN:9,secM:10,secP:11,subL:12,subN:13,totL:14,totN:15,para:16,sigT:17,sigN:18,note:19,tdD:20,pct:21,tdQ:22,subQ:23,totQ:24,secZ:25,totP:26};
+ const S={txt:1,bold:2,title:3,form:4,formD:5,th:6,tdC:7,td:8,tdN:9,secM:10,secP:11,subL:12,subN:13,totL:14,totN:15,para:16,sigT:17,sigN:18,note:19,tdD:20,pct:21,tdQ:22,subQ:23,totQ:24,secZ:25,totP:26,lamp:27};
  const XF=(n,f,fi,b,al,extra)=>`<xf numFmtId="${n}" fontId="${f}" fillId="${fi}" borderId="${b}" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1">${al?`<alignment ${al}/>`:''}</xf>`;
  const XFS=[
   XF(0,0,0,0),XF(0,0,0,0),XF(0,1,0,0),
@@ -685,7 +688,8 @@ BIG.ready.then(function(){
   XF(0,0,0,0,'vertical="top" wrapText="1"'),XF(0,0,0,0,'horizontal="center"'),XF(0,1,0,0,'horizontal="center"'),XF(0,3,0,0,'vertical="top"'),
   XF(165,0,0,1,'horizontal="center" vertical="top"'),XF(166,0,0,1,'horizontal="right" vertical="top"'),
   XF(164,0,0,1,'horizontal="center" vertical="top"'),XF(164,1,2,1,'horizontal="center" vertical="center"'),XF(164,1,5,1,'horizontal="center" vertical="center"'),
-  XF(0,1,2,1,'vertical="center"'),XF(166,1,5,1,'horizontal="right" vertical="center"')
+  XF(0,1,2,1,'vertical="center"'),XF(166,1,5,1,'horizontal="right" vertical="center"'),
+  XF(0,0,0,1,'horizontal="center" vertical="center" wrapText="1"')
  ];
  const STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt numFmtId="164" formatCode="#,##0;[Red]-#,##0"/><numFmt numFmtId="165" formatCode="d mmm yyyy"/><numFmt numFmtId="166" formatCode="0.0%"/></numFmts>
@@ -711,6 +715,92 @@ BIG.ready.then(function(){
 <cols>${o.widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData>${o.filter?`<autoFilter ref="${o.filter}"/>`:''}${o.merges&&o.merges.length?`<mergeCells count="${o.merges.length}">${o.merges.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells>`:''}<printOptions horizontalCentered="1"/><pageMargins left="0.35" right="0.35" top="0.45" bottom="0.5" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="${o.land?'landscape':'portrait'}" fitToWidth="1" fitToHeight="0"/><headerFooter><oddFooter>&amp;L${X(o.footer||'')}&amp;RHalaman &amp;P dari &amp;N</oddFooter></headerFooter></worksheet>`;
  }
  const lines=(s,w)=>Math.max(1,String(s||'').split('\n').reduce((t,p)=>t+Math.max(1,Math.ceil(p.length/w)),0));
+ /* ---------- BA per MC Level 4 (format REG-FRM-35 per kategori) ---------- */
+ // Fisik & CARE = total semua baris BC kategori itu (s.d. tanggal potong bila bulan berjalan).
+ // Baris yang tidak dihitung (sesi Matched di sistem, di luar cakupan/tanggal) dianggap fisik = CARE,
+ // sehingga Gap Qty per kategori = jumlah selisih yang masuk BA.
+ const toOf=R=>R.jenis==='berjalan'&&R.cut&&(!R.to||R.cut<R.to)?R.cut:R.to;
+ const perTxt=R=>cap(R.label||'')+' ('+(R.from?dateText(R.from).tgl:'')+' – '+(toOf(R)?dateText(toOf(R)).tgl:'')+')'+(R.jenis==='berjalan'?' bulan berjalan':'');
+ function calcMc(R){
+  const K=calc(R),sg=cfg().balik?-1:1,M={},noT=!(R.mcT&&R.mcT.length),cut=R.jenis==='berjalan'&&R.cut?R.cut:'';
+  const get=k=>M[k]||(M[k]={mc:k,exp:0,cnt:0,gap:0,nom:0,n:0,rem:{},ord:[]});
+  if(!noT)R.mcT.forEach(([k,d,e])=>{if(cut&&d&&d>cut)return;get(k).exp+=e});
+  const all={},allO=[];
+  K.L.forEach(r=>{const o=get(r.mc||'LAINNYA');o.gap+=r.gap;o.nom+=r.nom*sg;o.n++;if(noT)o.exp+=r.exp;
+   const t=remOf(R,r).trim();if(t){const u=t.toUpperCase();if(!o.rem[u]){o.rem[u]=0;o.ord.push(t)}o.rem[u]++;if(!all[u]){all[u]=0;allO.push(t)}all[u]++}});
+  const list=Object.values(M).filter(o=>o.n).map(o=>{o.cnt=o.exp+o.gap;const srt=o.ord.slice().sort((a,b)=>o.rem[b.toUpperCase()]-o.rem[a.toUpperCase()]);o.auto=srt.slice(0,3).join(', ')+(srt.length>3?' (+'+(srt.length-3)+' keterangan lain di Rincian)':'');
+   o.ket=R.mcEdit&&R.mcEdit[o.mc]!=null?R.mcEdit[o.mc]:o.auto;return o}).sort((a,b)=>a.mc.localeCompare(b.mc));
+  const why=allO.filter(t=>t.length<=45).sort((a,b)=>all[b.toUpperCase()]-all[a.toUpperCase()]).slice(0,3).join(', ').toLowerCase();
+  const s=k=>list.reduce((t,o)=>t+o[k],0);
+  return {K,list,sg,noT,why,net:s('nom'),exp:s('exp'),cnt:s('cnt'),gap:s('gap')};
+ }
+ const whyOf=(R,Q)=>String(R.why!=null&&R.why.trim()!==''?R.why:Q.why).trim();
+ function mcSheet(R){
+  const c=cfg(),Q=calcMc(R),rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl);
+  const push=r=>{rows.push(r);return rows.length};
+  push({h:20,c:[[0,'EIGERINDO MPI',S.title],[1,'',S.title],[2,'BERITA ACARA SELISIH STOCK BLIND COUNTING',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Form No',S.form],[8,c.form,S.form]]});
+  push({h:20,c:[[0,'',S.title],[1,'',S.title],[2,'',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Revision',S.form],[8,c.rev,S.form]]});
+  push({h:20,c:[[0,'',S.title],[1,'',S.title],[2,'',S.title],[3,'',S.title],[4,'',S.title],[5,'',S.title],[6,'',S.title],[7,'Date',S.form],[8,serialDay(R.tgl),S.formD]]});
+  mg.push('A1:B3','C1:G3');
+  push(null);
+  push({c:[[0,'Perihal berita acara:',S.txt],[2,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
+  push({c:[[2,(R.jenis!=='berjalan'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
+  push(null);
+  const why=whyOf(R,Q);
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${perTxt(R)} dihitung total selisih ${rp(Q.net)}${why?' dikarenakan '+why:''}${R.scope==='ops'?' (issue Operasional)':R.scope==='sys'?' (issue Sistem)':''}.`;
+  let n=push({h:Math.max(28,13.5*lines(para,118)),c:[[0,para,S.para]]});mg.push(`A${n}:I${n}`);
+  n=push({c:[[0,'Adapun detail selisih stock tersebut serta keterangan penyebab/penyelesaian selisih stock adalah sebagai berikut:',S.para]]});mg.push(`A${n}:I${n}`);
+  push(null);
+  const h1=push({h:16,c:[[0,'No',S.th],[1,'SKU',S.th],[2,'Nama Produk',S.th],[3,'Selisih (pcs)',S.th],[4,'',S.th],[5,'',S.th],[6,'Nominal',S.th],[7,'Penyebab/Penyelesaian Selisih*',S.th],[8,'',S.th]]});
+  push({h:16,c:[[0,'',S.th],[1,'',S.th],[2,'',S.th],[3,'Fisik',S.th],[4,'CARE',S.th],[5,'Gap Qty',S.th],[6,'',S.th],[7,'',S.th],[8,'',S.th]]});
+  mg.push(`A${h1}:A${h1+1}`,`B${h1}:B${h1+1}`,`C${h1}:C${h1+1}`,`D${h1}:F${h1}`,`G${h1}:G${h1+1}`,`H${h1}:I${h1+1}`);
+  const f=rows.length+1,lamp=(R.file||'')+'\n(rincian per SKU: sheet "Rincian")';
+  if(!Q.list.length){const e=push({c:[[0,'',S.tdC],[1,'',S.lamp],[2,'Tidak ada selisih',S.td],[3,'',S.tdQ],[4,'',S.tdQ],[5,'',S.tdQ],[6,'',S.tdN],[7,'',S.td],[8,'',S.td]]});mg.push(`H${e}:I${e}`)}
+  Q.list.forEach((o,i)=>{
+   const e=rows.length+1,lh=Math.max(lines(o.ket,46),lines(o.mc,30));
+   const b=Q.list.length===1?'Lampiran Selisih\n'+lamp:i===0?'Lampiran Selisih':i===1?lamp:'';
+   push({h:lh>1?13.5*lh:0,c:[[0,i+1,S.tdC],[1,b,S.lamp],[2,o.mc,S.td],[3,o.cnt,S.tdQ],[4,o.exp,S.tdQ],[5,o.gap,S.tdQ,`D${e}-E${e}`],[6,o.nom,S.tdN],[7,o.ket,S.td],[8,'',S.td]]});
+   mg.push(`H${e}:I${e}`);
+  });
+  const l=rows.length;
+  if(Q.list.length>2)mg.push(`B${f+1}:B${l}`);
+  const T=push({h:18,c:[[0,'TOTAL SELISIH',S.totL],[1,'',S.totL],[2,'',S.totL],[3,Q.cnt,S.totQ,`SUM(D${f}:D${l})`],[4,Q.exp,S.totQ,`SUM(E${f}:E${l})`],[5,Q.gap,S.totQ,`D${l+1}-E${l+1}`],
+   [6,Q.net,S.totN,`SUM(G${f}:G${l})`],[7,Q.list.length+' kategori MC Level 4 · '+Q.K.L.length+' baris SKU',S.totL],[8,'',S.totL]]});
+  mg.push(`A${T}:C${T}`,`H${T}:I${T}`);
+  push(null);push(null);
+  const five=approvers(Q.net).length>3;
+  n=push({c:[[0,'Dibuat oleh',S.sigT],[2,'Diperiksa oleh',S.sigT],[3,'Disetujui oleh**',S.sigT]]});mg.push(`A${n}:B${n}`,`D${n}:I${n}`);
+  for(let i=0;i<4;i++)push({h:20,c:[]});
+  const nm=v=>'('+(v?String(v).toUpperCase():'____________________')+')';
+  n=push({c:[[0,nm(c.n1),S.sigN],[2,nm(c.n2),S.sigN],[3,nm(c.n3),S.sigN],[6,nm(c.n4),S.sigN],...(five?[[8,nm(c.n5),S.sigN]]:[])]});mg.push(`A${n}:B${n}`,`D${n}:F${n}`,`G${n}:H${n}`);
+  n=push({c:[[0,c.t1,S.sigT],[2,c.t2,S.sigT],[3,c.t3,S.sigT],[6,c.t4,S.sigT],...(five?[[8,c.t5,S.sigT]]:[])]});mg.push(`A${n}:B${n}`,`D${n}:F${n}`,`G${n}:H${n}`);
+  push(null);
+  ['* Penyebab selisih diisi untuk Berita Acara selisih stock di bulan berjalan. Penyelesaian selisih diisi untuk Berita Acara penyelesaian selisih stock (akhir periode)',
+   '** Persetujuan sesuai dengan nominal selisih:',
+   '   - Selisih Rp5.000.000 persetujuan oleh Head of Branch, Head of Regional Dept.',
+   '   - Selisih Rp10.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division',
+   '   - Selisih Rp15.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division, Head of R&S Division'].forEach(t=>push({h:12,c:[[0,t,S.note]]}));
+  return {xml:sheetXml({rows,widths:[5.5,17,30,8,8,8,13,30,16],merges:mg,grid:false,footer:'BA Blind Counting per MC Level 4 '+cap(title)}),n:rows.length,h1};
+ }
+ function mcBlock(R){
+  if(R.fmt!=='mc4')return '';
+  const Q=calcMc(R),top=Q.list.slice().sort((a,b)=>Math.abs(b.nom)-Math.abs(a.nom)).slice(0,5);
+  return `${Q.noT?`<p class="ks-warn">⚠ File ini diunggah sebelum format MC Level 4 tersedia, jadi Fisik/CARE hanya dari baris selisih. Upload ulang file blind_counting_details supaya total per kategori lengkap.</p>`:''}
+   <div class="bc-mc"><p class="wk-p bc-h"><b>Selisih per MC Level 4</b><span>${nf(Q.list.length)} kategori · ${rp(Q.net)}</span></p>
+   ${top.map(o=>`<div class="bc-it"><span><b>${esc(o.mc)}</b><small>Fisik ${nf(o.cnt)} · CARE ${nf(o.exp)} · ${esc(o.ket||'belum ada keterangan')}</small></span><em class="${o.gap<0||(o.gap===0&&o.nom*Q.sg<0)?'m':'p'}">${o.gap>0?'+':''}${nf(o.gap)} pcs<small>${rp(o.nom)}</small></em></div>`).join('')||'<p class="hint">Tidak ada selisih.</p>'}
+   ${Q.list.length>top.length?`<p class="hint">+ ${Q.list.length-top.length} kategori lain</p>`:''}
+   <label class="ks-f"><span>Penyebab selisih di kalimat BA ("… dikarenakan …")</span><input class="in" id="bcWhy" value="${esc(R.why||'')}" placeholder="${esc(Q.why||'mis. double scan, terlewat scan, beda bin')}"></label>
+   <div class="ks-act"><button class="btn ghost" type="button" data-bc="mclist">Keterangan per MC Level 4</button></div></div>`;
+ }
+ function showListMc(){
+  const R=rep;if(!R)return;const Q=calcMc(R);
+  openModal('Selisih per MC Level 4 · '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Fisik &amp; CARE = total semua baris BC kategori itu${R.jenis==='berjalan'&&R.cut?' s.d. '+esc(dateText(R.cut).tgl):''}. Keterangan otomatis dari remark baris selisih dan boleh diubah — yang diubah di sini ikut masuk ke Excel.</p>
+   <div class="ks-list bc-list">${Q.list.map(o=>`<div class="bc-li"><div class="bc-it"><span><b>${esc(o.mc)}</b><small>Fisik ${nf(o.cnt)} · CARE ${nf(o.exp)} · ${o.n} baris SKU selisih</small></span><em class="${o.gap<0||(o.gap===0&&o.nom*Q.sg<0)?'m':'p'}">${o.gap>0?'+':''}${nf(o.gap)} pcs<small>${rp(o.nom)}</small></em></div>
+   <input class="in" data-bcm="${esc(o.mc)}" value="${esc(o.ket)}" placeholder="Penyebab / penyelesaian selisih"></div>`).join('')||'<p class="hint">Tidak ada selisih.</p>'}</div>
+   <div class="ks-act" style="margin-top:10px"><button class="btn ghost" type="button" id="bcMcRow">Lihat rincian per SKU</button></div>`);
+  document.querySelectorAll('[data-bcm]').forEach(inp=>inp.addEventListener('input',()=>{const k=inp.dataset.bcm,o=calcMc(rep).list.find(x=>x.mc===k);rep.mcEdit=rep.mcEdit||{};if(o&&inp.value===o.auto)delete rep.mcEdit[k];else rep.mcEdit[k]=inp.value;save();clearTimeout(showListMc.t);showListMc.t=setTimeout(render,400)}));
+  const b=$id('bcMcRow');if(b)b.onclick=()=>showList();
+ }
  function workbook(R){
   const c=cfg(),K=calc(R),rows=[],mg=[],title=R.label||'BLIND COUNTING',dt=dateText(R.tgl);
   const push=r=>{rows.push(r);return rows.length};
@@ -723,7 +813,7 @@ BIG.ready.then(function(){
   push({c:[[0,'Perihal berita acara:',S.txt],[2,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
   push({c:[[2,(R.jenis==='akhir'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
   push(null);
-  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) dengan nominal selisih bersih mencapai ${rp(K.net)}, terdiri dari barang plus ${nf(K.qPlus)} pcs senilai ${rp(K.vPlus)} dan barang minus ${nf(-K.qMinus)} pcs senilai ${rp(K.vMinus)}${R.scope==='ops'?' by Operasional':R.scope==='sys'?' by Sistem':''}.`;
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${toOf(R)?dateText(toOf(R)).tgl:''})${R.jenis==='berjalan'?' bulan berjalan':''} dengan nominal selisih bersih mencapai ${rp(K.net)}, terdiri dari barang plus ${nf(K.qPlus)} pcs senilai ${rp(K.vPlus)} dan barang minus ${nf(-K.qMinus)} pcs senilai ${rp(K.vMinus)}${R.scope==='ops'?' by Operasional':R.scope==='sys'?' by Sistem':''}.`;
   let n=push({h:Math.max(28,13.5*lines(para,118)),c:[[0,para,S.para]]});mg.push(`A${n}:I${n}`);
   n=push({c:[[0,'Adapun detail selisih stock tersebut serta keterangan penyebab/penyelesaian selisih stock adalah sebagai berikut:',S.para]]});mg.push(`A${n}:I${n}`);
   push(null);
@@ -765,7 +855,8 @@ BIG.ready.then(function(){
    '   - Selisih Rp5.000.000 persetujuan oleh Head of Branch, Head of Regional Dept.',
    '   - Selisih Rp10.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division',
    '   - Selisih Rp15.000.000 persetujuan oleh Head of Branch, Head of Regional Dept., Deputy Head of R&S Division, Head of R&S Division'].forEach(t=>push({h:12,c:[[0,t,S.note]]}));
-  const s1=sheetXml({rows,widths:[5.5,13.5,38,6.5,6.5,7.5,12,30,16],merges:mg,grid:false,footer:'BA Blind Counting '+cap(title)});
+  let s1=sheetXml({rows,widths:[5.5,13.5,38,6.5,6.5,7.5,12,30,16],merges:mg,grid:false,footer:'BA Blind Counting '+cap(title)}),p1=rows.length,ph=h1;
+  if(R.fmt==='mc4'){const o=mcSheet(R);s1=o.xml;p1=o.n;ph=o.h1}
 
   // Rincian semua baris selisih (termasuk System)
   const r2=[],m2=[];
@@ -807,7 +898,7 @@ BIG.ready.then(function(){
   Object.keys(iss).forEach(k=>{const o=iss[k];r3.push({c:[[0,k,S.td],[1,o.n,S.tdQ],[2,o.p,S.tdN],[3,o.m,S.tdN],[4,o.p+o.m,S.tdN],[5,o.ba?'Ya':'Tidak',S.tdC]]})});
   const s3=sheetXml({rows:r3,widths:[30,12,16,14,12,14,14],merges:m3,footer:'Ringkasan BC '+cap(title)});
 
-  return pack(R,[['BA BC '+title,s1,`$A$1:$I$${rows.length}`,`$${h1}:$${h1+1}`],['Rincian',s2,'',`$3:$3`,`$A$3:$P$${e2}`],['Ringkasan',s3]]);
+  return pack(R,[[(R.fmt==='mc4'?'BA MC L4 ':'BA BC ')+title,s1,`$A$1:$I$${p1}`,`$${ph}:$${ph+1}`],['Rincian',s2,'',`$3:$3`,`$A$3:$P$${e2}`],['Ringkasan',s3]]);
  }
  // sheets: [[nama, xml, area cetak, judul cetak, filter]]
  function pack(R,sheets){
@@ -987,7 +1078,7 @@ BIG.ready.then(function(){
  }
 
  const book=R=>R.mode==='sesi'?workbookSesi(R):workbook(R);
- const fileName=R=>{const c=cfg();return (c.file+' '+cap(R.label||'')+(c.suffix?' - '+c.suffix:'')).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.xlsx'};
+ const fileName=R=>{const c=cfg();return (c.file+(R.mode!=='sesi'&&R.fmt==='mc4'?' per MC L4':'')+(R.mode!=='sesi'&&R.jenis==='berjalan'?' (berjalan s.d. '+dateText(toOf(R)).tgl+')':'')+' '+cap(R.label||'')+(c.suffix?' - '+c.suffix:'')).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.xlsx'};
  function download(R){
   const blob=book(R),name=fileName(R);
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
@@ -1006,7 +1097,7 @@ BIG.ready.then(function(){
   $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi||0)+' sesi BC · '+nf(st.lines||0)+' baris dihitung';
   const top=(a,asc)=>a.slice().sort((x,y)=>asc?x.nom-y.nom:y.nom-x.nom).slice(0,4).map(rowHtml).join('');
   const hist=Object.entries(ST.hist||{}).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
-  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih (plus − minus) · ${scopeL(R)}</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} baris selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} ${esc(cap(R.label))}</small></em></div>
+  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih (plus − minus) · ${scopeL(R)}</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} baris selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${toOf(R)?toOf(R).slice(8)+'/'+toOf(R).slice(5,7):''} ${esc(cap(R.label))}${R.jenis==='berjalan'?' · berjalan':''}</small></em></div>
    <div class="ks-tiles"><div class="iv-tile bc-t m"><small>Barang minus</small><b>${nf(-K.qMinus)} pcs</b><span>${rp(K.vMinus)}</span></div><div class="iv-tile bc-t p"><small>Barang plus</small><b>${nf(K.qPlus)} pcs</b><span>${rp(K.vPlus)}</span></div><div class="iv-tile bc-t"><small>Akurasi baris</small><b>${(acc*100).toFixed(1).replace('.',',')}%</b><span>${nf(st.match||0)}/${nf(st.lines||0)} sesuai</span></div></div>
    ${R.sesiM?`<p class="hint" style="margin:8px 0 0">✓ ${R.sesiM.n} sesi Matched di sistem (${R.sesiM.ids.map(esc).join(', ')}) tidak dimasukkan ke selisih.</p>`:''}<div class="bc-seg bc-seg3" role="group" aria-label="Cakupan berita acara"><button type="button" data-bcs="all" class="${R.scope!=='ops'&&R.scope!=='sys'?'on':''}">Seluruh selisih<small>${nf(R.rows.length)} baris</small></button><button type="button" data-bcs="ops" class="${R.scope==='ops'?'on':''}">Operasional<small>${nf(R.rows.length-K.sys)} baris</small></button><button type="button" data-bcs="sys" class="${R.scope==='sys'?'on':''}">Sistem<small>${nf(K.sys)} baris</small></button></div>
    ${(miss||K.noRem||K.open||R.warn.length)?`<div class="ks-warn">${miss?`⚠ ${miss} SKU belum ada nama produk. Upload file berisi kolom <b>SKU Name</b> &amp; <b>SKU Code</b> (mis. export inventory by SKU / stock database) lewat tombol ⇪ Upload untuk mengisi nama.<br>`:''}${K.noRem?`⚠ ${K.noRem} baris belum ada keterangan penyebab/penyelesaian. <button type="button" class="bc-lnk" data-bc="list">Isi sekarang</button><br>`:''}${K.open?(()=>{const O=K.L.filter(r=>!/solved/i.test(r.inv||'')),S={};O.forEach(r=>{const k=r.bc||'-';S[k]=S[k]||{n:0,st:r.sbc||''};S[k].n++});const ks=Object.keys(S),cp=ks.filter(k=>/complete/i.test(S[k].st));return `⚠ ${K.open} baris investigasinya belum "Solved" di file sistem${cp.length===ks.length?`: ${ks.length} sesi masih berstatus <b>Completed</b> (belum <b>Closed</b>)`:''} — ${ks.map(k=>esc(k)+(S[k].st?' ('+esc(S[k].st)+')':'')).join(', ')}. Selesaikan investigasi sesi ini di sistem sampai Closed/Solved, lalu export &amp; upload ulang.<br>`})():''}${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
@@ -1014,13 +1105,15 @@ BIG.ready.then(function(){
    <div><p class="wk-p bc-h p"><b>Plus terbesar</b><span>${nf(K.plus.length)} baris</span></p>${top(K.plus,false)||'<p class="hint">Tidak ada barang plus.</p>'}</div></div>
    ${K.pair.size?`<p class="hint">${K.pair.size} SKU tercatat plus di satu bin dan minus di bin lain (kemungkinan salah bin/scan) — cek di rincian.</p>`:''}
    <div class="bc-form"><label class="ks-f"><span>Tanggal BA</span><input class="in" type="date" id="bcTgl" value="${esc(R.tgl||today())}"></label>
-    <label class="ks-f"><span>Perihal</span><select class="in" id="bcJenis"><option value="akhir"${R.jenis==='akhir'?' selected':''}>Penyelesaian selisih (akhir periode)</option><option value="berjalan"${R.jenis==='berjalan'?' selected':''}>Selisih di bulan berjalan</option></select></label></div>
+    <label class="ks-f"><span>Perihal</span><select class="in" id="bcJenis"><option value="akhir"${R.jenis==='akhir'?' selected':''}>Penyelesaian selisih (akhir periode)</option><option value="berjalan"${R.jenis==='berjalan'?' selected':''}>Selisih di bulan berjalan</option></select></label>${R.jenis==='berjalan'?`<label class="ks-f"><span>Ambil data s.d. tanggal</span><input class="in" type="date" id="bcCut" value="${esc(R.cut||R.to||'')}" min="${esc(R.from||'')}" max="${esc(R.to||'')}"></label>`:''}</div>${R.jenis==='berjalan'?`<p class="hint" style="margin:6px 0 0">Bulan berjalan: data BC ${esc(R.from?dateText(R.from).tgl:'')} s.d. ${esc(toOf(R)?dateText(toOf(R)).tgl:'')} — sesi setelah tanggal itu tidak dihitung. Investigasi yang belum Solved wajar di bulan berjalan; isi kolom penyebab.</p>`:''}<p class="wk-p" style="margin:14px 0 6px"><b>Format berita acara</b></p><div class="bc-seg" role="group" aria-label="Format berita acara"><button type="button" data-bcf="sku" class="${R.fmt!=='mc4'?'on':''}">Per SKU<small>barang minus &amp; plus per SKU</small></button><button type="button" data-bcf="mc4" class="${R.fmt==='mc4'?'on':''}">Per MC Level 4<small>Fisik/CARE per kategori</small></button></div>${mcBlock(R)}
    <p class="hint bc-ap">Nominal ${rp(Math.abs(K.net))} → ${ap.length?'persetujuan: '+esc(ap.join(', ')):'di bawah Rp5.000.000, cukup dibuat '+esc(c.t1)+' &amp; diperiksa '+esc(c.t2)}.</p>
    <div class="ks-act"><button class="btn" type="button" data-bc="xlsx">⬇ Unduh BA Excel siap tanda tangan</button><button class="btn ghost" type="button" data-bc="list">Rincian &amp; keterangan</button></div>
    ${hist.length>1?`<div class="bc-hist">${hist.map(([k,v])=>`<span><small>${esc(cap(BULAN[+k.slice(5,7)-1]).slice(0,3))} ${k.slice(2,4)}</small><b class="${v.net<0?'bc-neg':''}">${rp(v.net)}</b></span>`).join('')}</div>`:''}
    <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc(c.n1||c.t1)} &amp; ${esc(c.n2||c.t2)}.</p>`;
   $id('bcTgl').onchange=e=>{rep.tgl=e.target.value||today();save()};
-  $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;save()};
+  $id('bcJenis').onchange=e=>{rep.jenis=e.target.value;if(rep.jenis==='berjalan'&&!rep.cut)rep.cut=rep.to;save();render()};
+  if($id('bcCut'))$id('bcCut').onchange=e=>{let v=e.target.value||rep.to;if(rep.from&&v<rep.from)v=rep.from;if(rep.to&&v>rep.to)v=rep.to;rep.cut=v;save();render()};
+  if($id('bcWhy'))$id('bcWhy').oninput=e=>{rep.why=e.target.value;save()};
  }
  function remember(){
   const sesi=rep.mode==='sesi',K=sesi?calcSesi(rep):calc(rep),h=Object.assign({},ST.hist||{});
@@ -1035,7 +1128,7 @@ BIG.ready.then(function(){
   openModal('Rincian selisih '+cap(R.label),`<p class="hint" style="margin:0 0 8px">Keterangan diambil dari kolom Remark sistem dan boleh diubah. Yang diubah di sini ikut masuk ke Excel.</p>
    <div class="ks-list bc-list"><p class="wk-p bc-h m"><b>A. Barang minus</b><span>${nf(-K.qMinus)} pcs · ${rp(K.vMinus)}</span></p>${K.minus.map(item).join('')||'<p class="hint">Tidak ada.</p>'}
    <p class="wk-p bc-h p"><b>B. Barang plus</b><span>${nf(K.qPlus)} pcs · ${rp(K.vPlus)}</span></p>${K.plus.map(item).join('')||'<p class="hint">Tidak ada.</p>'}
-   ${rest.length?`<p class="wk-p bc-h"><b>Tidak masuk BA (issue System)</b><span>${rest.length} baris</span></p>${rest.map(item).join('')}`:''}</div>`);
+   ${rest.length?`<p class="wk-p bc-h"><b>Tidak masuk BA (di luar cakupan${R.jenis==='berjalan'&&R.cut?' / setelah '+esc(dateText(R.cut).tgl):''})</b><span>${rest.length} baris</span></p>${rest.map(item).join('')}`:''}</div>`);
   document.querySelectorAll('[data-bck]').forEach(inp=>inp.addEventListener('input',()=>{const r=rep.rows[+inp.dataset.bck];rep.edit=rep.edit||{};if(inp.value===(r.rem||''))delete rep.edit[r.k];else rep.edit[r.k]=inp.value;save();clearTimeout(showList.t);showList.t=setTimeout(render,400)}));
  }
  function settings(){
@@ -1044,7 +1137,7 @@ BIG.ready.then(function(){
    <p class="wk-p" style="margin:10px 0 2px"><b>Dibuat oleh</b></p>${f('t1','Jabatan')}${f('n1','Nama','Nama Store Head')}
    <p class="wk-p" style="margin:10px 0 2px"><b>Diperiksa oleh</b></p>${f('t2','Jabatan')}${f('n2','Nama','Nama atasan pemeriksa')}
    <p class="wk-p" style="margin:10px 0 2px"><b>Disetujui oleh</b> (kosongkan nama bila belum tahu)</p>${f('t3','Jabatan 1')}${f('n3','Nama 1')}${f('t4','Jabatan 2')}${f('n4','Nama 2')}${f('t5','Jabatan 3 (selisih ≥ Rp15 juta)')}${f('n5','Nama 3')}
-   ${f('file','Awalan nama file')}${f('suffix','Akhiran nama file','mis. 7xxx - NAMA TOKO')}</div>
+   <label class="ks-f"><span>Tanda nominal (format MC Level 4)</span><select class="in" id="bc_balik"><option value="">Ikuti gap: barang plus = +, minus = −</option><option value="1"${c.balik?' selected':''}>Dibalik: barang minus = +, plus = −</option></select></label>${f('file','Awalan nama file')}${f('suffix','Akhiran nama file','mis. 7xxx - NAMA TOKO')}</div>
    <div class="row" style="margin-top:12px"><button class="btn" type="button" id="bcSave">Simpan</button><button class="btn ghost" type="button" id="bcReset">Kembalikan bawaan</button></div>`);
   $id('bcSave').onclick=()=>{const v={};Object.keys(DEF).forEach(k=>{const e=$id('bc_'+k);v[k]=e?e.value.trim():DEF[k]});['store','form','t1','t2','t3','t4','t5','file'].forEach(k=>{if(!v[k])v[k]=DEF[k]});ST.cfg=v;stSave();close();render();if(window.ofaToast)window.ofaToast('Pengaturan BA disimpan')};
   $id('bcReset').onclick=()=>{delete ST.cfg;stSave();close();render()};
@@ -1084,6 +1177,8 @@ BIG.ready.then(function(){
    }
    const R=sesiMatched(build(p.rows,file.name));
    const old=rep&&rep.ym===R.ym&&rep.mode!=='sesi'?rep:null;
+   if(rep&&rep.fmt)R.fmt=rep.fmt;
+   if(old){R.cut=old.cut&&old.cut!==old.to?old.cut:R.to;R.why=old.why;R.mcEdit=old.mcEdit||{}}
    if(old){R.scope=old.scope;R.jenis=old.jenis;R.tgl=old.tgl;const o={};old.rows.forEach(r=>{if(old.edit&&old.edit[r.k]!=null)o[r.sku+'|'+r.bin+'|'+r.d]=old.edit[r.k]});R.rows.forEach(r=>{const v=o[r.sku+'|'+r.bin+'|'+r.d];if(v!=null)R.edit[r.k]=v})}
    rep=R;applyNames();save();remember();render();
    s.textContent='✓ '+nf(R.st.lines)+' baris BC '+cap(R.label)+' terbaca · '+R.rows.length+' baris selisih';if(window.bcLog)bcLog('upload',cap(R.label),'rincian · '+R.st.lines+' baris · '+R.rows.length+' selisih');
@@ -1095,9 +1190,11 @@ BIG.ready.then(function(){
  $id('bcCfg').onclick=()=>(window.ofaHeadGate||(g=>g()))(settings);
  box.addEventListener('click',e=>{
   const s=e.target.closest('[data-bcs]');if(s&&rep){rep.scope=s.dataset.bcs;save();remember();render();return}
+  const fm=e.target.closest('[data-bcf]');if(fm&&rep){rep.fmt=fm.dataset.bcf;save();render();return}
   const a=e.target.closest('[data-bc]');if(!a||!rep)return;
   if(a.dataset.bc==='xlsx'){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)window.ofaToast('Isi dulu nama toko & nama Store Head');settings();return}download(rep);if(window.bcLog)bcLog('unduh',cap(rep.label||''),rep.mode==='sesi'?'rekap sesi':'rincian');}
   if(a.dataset.bc==='list')showList();
+  if(a.dataset.bc==='mclist')showListMc();
   if(a.dataset.bc==='names')names();
  });
  if(rep&&missing()&&applyNames())save();
