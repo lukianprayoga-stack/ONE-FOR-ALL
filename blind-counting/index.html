@@ -1321,7 +1321,7 @@ BIG.ready.then(function(){
    ${nd?`<p class="hint" style="margin:6px 0 0">Perkiraan setelah yang ditandai dipajang: generic ${pc(pk.g)} · color ${pc(pk.c)} (angka resmi diperbarui saat upload ulang).</p>`:''}
    <p class="wk-p" style="margin:14px 0 6px"><b>Per kategori (MC LV 3) · by color</b></p>
    <div class="kd-cat">${CL.map(([k,x])=>{const v=x.d/x.t;return `<button type="button" class="kd-c" data-kdc="${esc(k)}"><span>${esc(cap(k))}<small>${x.w?nf(x.w)+' warna di gudang':'semua terdisplay'}</small></span><em class="${v>=cfg().target/100?'ok':'bad'}">${pc(v)}</em><i style="width:${(v*100).toFixed(1)}%"></i></button>`}).join('')}</div>
-   <div class="ks-act"><button class="btn" type="button" data-kd="list">Daftar belum dipajang</button><button class="btn ghost" type="button" data-kd="xlsx">⬇ Unduh daftar Excel</button></div>
+   <div class="ks-act"><button class="btn" type="button" data-kd="list">Daftar belum dipajang</button><button class="btn ghost" type="button" data-kd="pdf">🖨 Cetak / PDF</button><button class="btn ghost" type="button" data-kd="xlsx">⬇ Unduh daftar Excel</button></div>
    <p class="hint">Sumber: ${esc(rep.file||'')} · ${nf(s.lines)} baris · stok sales area ${nf(s.pS)} pcs · gudang ${nf(s.pW)} pcs${cfg().brand?' · brand '+esc(cfg().brand):''}.</p>`;
  }
  /* ---------- daftar belum dipajang ---------- */
@@ -1334,7 +1334,7 @@ BIG.ready.then(function(){
    :(Gn.length?Gn.map(g=>`<div class="kd-row g"><span><b>${esc(g.n)}</b><small>generic ${esc(g.g)} · ${esc(cap(g.l3))}${g.l4?' / '+esc(cap(g.l4)):''} · ${g.cols.length} warna</small>${g.cols.filter(o=>o.w>0).map(o=>`<small class="kd-bin">${esc(o.c)}: 📍 ${esc(o.bw)}</small>`).join('')}</span><em>${nf(g.w)}<small>pcs</small></em></div>`).join(''):'<p class="dp-empty">Tidak ada yang cocok.</p>');
   return `<div class="kd-tabs" role="tablist"><button type="button" data-kdt="w" class="${view.tab==='w'?'on':''}">Warna belum dipajang (${nf(nW)})</button><button type="button" data-kdt="g" class="${view.tab==='g'?'on':''}">Generic belum dipajang (${nf(nG)})</button></div>
    <p class="hint" style="margin:8px 0">${view.tab==='w'?'Warna ini punya stok di gudang tapi tidak ada di sales area. Ambil dari bin yang tertera, pajang, lalu centang.'+(nd?' <b>'+nd+' dari '+nW+' sudah ditandai.</b>':''):'Generic ini belum ada satu warna pun di sales area, jadi menurunkan kepatuhan by generic.'}</p>
-   <div class="kd-tools"><input class="in" id="kdQ" type="search" placeholder="Cari nama, warna, generic, bin…" value="${esc(view.q)}"><select class="in" id="kdCat"><option value="">Semua kategori</option>${cats.map(c=>`<option value="${esc(c)}"${view.cat===c?' selected':''}>${esc(cap(c))}</option>`).join('')}</select></div>
+   <div class="kd-tools"><input class="in" id="kdQ" type="search" placeholder="Cari nama, warna, generic, bin…" value="${esc(view.q)}"><select class="in" id="kdCat"><option value="">Semua kategori</option>${cats.map(c=>`<option value="${esc(c)}"${view.cat===c?' selected':''}>${esc(cap(c))}</option>`).join('')}</select><button class="btn ghost" type="button" id="kdPdfL" title="Cetak daftar warna belum dipajang sesuai filter">🖨 PDF</button></div>
    <div class="kd-list">${rows}</div>`;
  }
  function showList(cat){
@@ -1345,6 +1345,7 @@ BIG.ready.then(function(){
  function redrawList(keepFocus){const el=$id('kdL');if(!el)return;const f=document.activeElement&&document.activeElement.id,pos=f==='kdQ'?$id('kdQ').selectionStart:0;el.innerHTML=listHtml();if(keepFocus&&f==='kdQ'){const i=$id('kdQ');i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}}
  document.addEventListener('click',e=>{
   const t=e.target.closest('[data-kdt]');if(t){view.tab=t.dataset.kdt;redrawList();return}
+  if(e.target.closest('#kdPdfL')){pdf(true);return}
  });
  document.addEventListener('input',e=>{if(e.target.id==='kdQ'){view.q=e.target.value;redrawList(true)}});
  document.addEventListener('change',e=>{
@@ -1367,6 +1368,46 @@ BIG.ready.then(function(){
   if(window.ofaToast)ofaToast('Excel diunduh: '+name);
   if(window.bcLog)bcLog('kdxl',tglL(rep.date),W.length+' warna');
  }
+ /* ---------- PDF daftar belum dipajang (siap cetak) ---------- */
+ // dari kartu: semua; dari daftar: mengikuti filter kategori & pencarian yang sedang aktif
+ function pdf(useFilter){
+  if(!rep)return;
+  const L=all(),s=rep.st,c=cfg(),gset=new Set(todoG(L).map(g=>g.g)),E=esc;
+  const q=useFilter?view.q.toLowerCase().split(/\s+/).filter(Boolean):[],cat=useFilter?view.cat:'';
+  const W0=todoW(L).filter(o=>(!cat||(o.l3||'Lainnya')===cat)&&q.every(w=>[o.n,o.c,o.g,o.bw,o.l4].join(' ').toLowerCase().includes(w)));
+  const W=W0.filter(o=>!isDone(o.k)),nDone=W0.length-W.length;
+  if(!W.length)return ofaToast&&ofaToast(W0.length?'Semua warna di daftar ini sudah ditandai dipajang':'Tidak ada produk yang belum dipajang');
+  const G={};W.forEach(o=>{const k=o.l3||'Lainnya';(G[k]=G[k]||[]).push(o)});
+  const firstBin=o=>String(o.bw||'').split(/[,;]/)[0].trim();
+  let no=0;
+  const body=Object.keys(G).sort().map(k=>{const A=G[k].sort((a,b)=>firstBin(a).localeCompare(firstBin(b))||a.n.localeCompare(b.n)||a.c.localeCompare(b.c));
+   return `<tbody><tr class="cat"><td colspan="9">${E(cap(k))} <span>· ${nf(A.length)} warna · ${nf(A.reduce((t,o)=>t+o.w,0))} pcs di gudang</span></td></tr>`+A.map(o=>`<tr${gset.has(o.g)?' class="g"':''}><td>${++no}</td><td class="bx"><i></i></td><td class="l"><b>${E(o.n)}</b>${gset.has(o.g)?' <em>generic belum ada di display</em>':''}</td><td class="l">${E(o.c)}</td><td>${E(o.g)}</td><td class="l">${E(cap(o.l4||''))}</td><td class="sm">${E(o.sz||'-')}</td><td><b>${nf(o.w)}</b></td><td class="l bin">${E(o.bw||'-')}</td></tr>`).join('')+'</tbody>'}).join('');
+  const site=ST.reg?ST.reg.site+' · '+ST.reg.toko:(rep.loc||'');
+  const title='Daftar Belum Dipajang '+(ST.reg?ST.reg.site+' ':'')+tglL(rep.date);
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(title)}</title><style>
+@page{size:A4 portrait;margin:9mm 8mm 10mm}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:13pt;margin:0}.sub{margin:2px 0 6px;font-size:8.5pt;color:#333}
+.kpi{display:flex;gap:6px;margin:0 0 8px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 6px}.kpi small{display:block;font-size:7pt;color:#555}.kpi b{font-size:11pt}.kpi .bad b{color:#b91c1c}.kpi .ok b{color:#15803d}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #888;padding:3px 4px;text-align:center;vertical-align:middle}th{background:#e8eefc;font-size:7.5pt}
+td.l{text-align:left}td.sm{font-size:7.5pt}td.bin{font-size:7.5pt;font-weight:700}td em{font-style:normal;font-size:6.5pt;color:#b45309;white-space:nowrap}
+tr.cat td{background:#eef0f3;text-align:left;font-weight:700;font-size:8.5pt}tr.cat span{font-weight:400;color:#444}tr.g td{background:#fff4e8}
+td.bx i{display:inline-block;width:10px;height:10px;border:1.2px solid #000;border-radius:2px}
+thead{display:table-header-group}tr{page-break-inside:avoid}
+.sig{display:flex;justify-content:space-between;margin-top:18px;page-break-inside:avoid}.sig div{width:30%;text-align:center;font-size:8pt}.sig p{margin:0 0 42px}
+.foot{margin-top:8px;font-size:7pt;color:#666}
+</style></head><body><h1>Daftar Produk Belum Terpajang</h1>
+<div class="sub">${E(site)} · inventory ${E(tglL(rep.date))} · dicetak ${E(new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}))}${cat?' · kategori '+E(cap(cat)):''}${q.length?' · cari "'+E(view.q)+'"':''}</div>
+<div class="kpi"><div class="${s.gT&&s.gD/s.gT>=c.target/100?'ok':'bad'}"><small>Kepatuhan by generic</small><b>${pc(s.gT?s.gD/s.gT:0)}</b> <small>${nf(s.gD)} dari ${nf(s.gT)} · target ${c.target}%</small></div><div class="${s.cT&&s.cD/s.cT>=c.target/100?'ok':'bad'}"><small>Kepatuhan by color</small><b>${pc(s.cT?s.cD/s.cT:0)}</b> <small>${nf(s.cD)} dari ${nf(s.cT)} · target ${c.target}%</small></div><div><small>Harus dipajang</small><b>${nf(W.length)} warna</b> <small>${nf(W.reduce((t,o)=>t+o.w,0))} pcs di gudang</small></div></div>
+<table><thead><tr><th style="width:4%">No</th><th style="width:4%">✓</th><th style="width:29%">Nama Produk</th><th style="width:11%">Warna</th><th style="width:9%">Generic</th><th style="width:11%">Sub kategori</th><th style="width:8%">Ukuran</th><th style="width:6%">Stok gudang</th><th style="width:18%">Lokasi bin gudang</th></tr></thead>${body}</table>
+<div class="sig"><div><p>Dikerjakan oleh</p>(______________________)</div><div><p>Tanggal &amp; jam selesai</p>______________________</div><div><p>Diperiksa oleh</p>(______________________)<br>Store Head</div></div>
+<div class="foot">Baris oranye = generic belum ada satu warna pun di display (menurunkan kepatuhan by generic). Urut per kategori lalu lokasi bin.${nDone?' '+nDone+' warna yang sudah ditandai dipajang di aplikasi tidak dicetak.':''} Sumber: ${E(rep.file||'')} · Store Head Kit</div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  if(window.ofaToast)ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
+  if(window.bcLog)bcLog('kdxl',tglL(rep.date),'pdf · '+W.length+' warna');
+  return html;
+ }
+ window.kdPdf=pdf;
  /* ---------- pengaturan ---------- */
  function settings(){
   const c=cfg();
@@ -1401,6 +1442,7 @@ BIG.ready.then(function(){
   const a=e.target.closest('[data-kd]');if(!a||!rep)return;
   if(a.dataset.kd==='list'){view.cat='';showList()}
   if(a.dataset.kd==='xlsx')download();
+  if(a.dataset.kd==='pdf')pdf(false);
  });
  window.kdRender=render;
  window.kdPick=f=>pick(f,true);
