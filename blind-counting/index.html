@@ -156,7 +156,7 @@ textarea.in{min-height:240px;resize:vertical}
 .rs a:not(.btn){color:var(--blue)}
 /* ====== aplikasi mandiri ====== */
 body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);padding:0!important}
-#bc .bc-seg{display:none!important}
+#bc .bc-seg3{grid-template-columns:repeat(3,1fr)}
 #bc .wk-hero{flex-wrap:wrap}#bc .wk-hero b{white-space:nowrap}
 @media(max-width:420px){#bc .wk-hero b{font-size:27px}#bc .wk-hero em{text-align:left}}
 .app-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,#0b2a7a,#1d4ed8);color:#fff;box-shadow:0 4px 18px rgba(11,42,122,.25)}
@@ -647,7 +647,8 @@ BIG.ready.then(function(){
  }
  function today(){const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
  const isSys=r=>/^system/i.test(r.iss||'');
- const inScope=()=>true;
+ const inScope=(R,r)=>R.scope==='sys'?isSys(r):R.scope==='ops'?!isSys(r):true;
+ const scopeL=R=>R.scope==='sys'?'issue Sistem':R.scope==='ops'?'issue Operasional':'seluruh selisih';
  const remOf=(R,r)=>R.edit&&R.edit[r.k]!=null?R.edit[r.k]:(r.rem||'');
  function calc(R){
   const L=R.rows.filter(r=>inScope(R,r));
@@ -722,7 +723,7 @@ BIG.ready.then(function(){
   push({c:[[0,'Perihal berita acara:',S.txt],[2,(R.jenis==='berjalan'?'☑':'☐')+'  Selisih stock di bulan berjalan',S.txt]]});
   push({c:[[2,(R.jenis==='akhir'?'☑':'☐')+'  Penyelesaian selisih stock (akhir periode)',S.txt]]});
   push(null);
-  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) dengan nominal selisih bersih mencapai ${rp(K.net)}, terdiri dari barang plus ${nf(K.qPlus)} pcs senilai ${rp(K.vPlus)} dan barang minus ${nf(-K.qMinus)} pcs senilai ${rp(K.vMinus)}${R.scope==='all'?'':' by Operasional'}.`;
+  const para=`Pada hari ini ${dt.hari}, tanggal ${dt.tgl} terdapat selisih stock pada pelaksanaan blind counting ${c.store} periode ${cap(title)} (${R.from?dateText(R.from).tgl:''} – ${R.to?dateText(R.to).tgl:''}) dengan nominal selisih bersih mencapai ${rp(K.net)}, terdiri dari barang plus ${nf(K.qPlus)} pcs senilai ${rp(K.vPlus)} dan barang minus ${nf(-K.qMinus)} pcs senilai ${rp(K.vMinus)}${R.scope==='ops'?' by Operasional':R.scope==='sys'?' by Sistem':''}.`;
   let n=push({h:Math.max(28,13.5*lines(para,118)),c:[[0,para,S.para]]});mg.push(`A${n}:I${n}`);
   n=push({c:[[0,'Adapun detail selisih stock tersebut serta keterangan penyebab/penyelesaian selisih stock adalah sebagai berikut:',S.para]]});mg.push(`A${n}:I${n}`);
   push(null);
@@ -791,7 +792,7 @@ BIG.ready.then(function(){
    ['Akurasi baris',st.lines?st.match/st.lines:0,S.pct],['Qty CARE (sistem)',st.exp,S.tdN],['Qty fisik terhitung',st.cnt,S.tdN],['Nilai stok CARE (Rp)',st.care,S.tdN],
    ['Barang plus — semua (Rp)',sm(allP,'nom'),S.tdN],['Barang minus — semua (Rp)',sm(allM,'nom'),S.tdN],['Selisih bersih — semua (Rp)',sm(R.rows,'nom'),S.tdN],
    ['Akurasi nilai (1 − |plus|+|minus| ÷ nilai CARE)',st.care?Math.max(0,1-absAll/st.care):0,S.pct],
-   ['Selisih bersih masuk BA'+(R.scope==='all'?'':' (tanpa issue System)'),K.net,S.tdN]].forEach(([a,v,s])=>{r3.push({c:[[0,a,S.td],[1,'',S.td],[2,v,s]]});m3.push(`A${r3.length}:B${r3.length}`)});
+   ['Selisih bersih masuk BA'+(R.scope==='ops'?' (issue Operasional)':R.scope==='sys'?' (issue Sistem)':' (seluruh selisih)'),K.net,S.tdN]].forEach(([a,v,s])=>{r3.push({c:[[0,a,S.td],[1,'',S.td],[2,v,s]]});m3.push(`A${r3.length}:B${r3.length}`)});
   r3.push(null);
   r3.push({h:28,c:['Kategori (MC Lv 4)','Baris selisih','Plus (pcs)','Plus (Rp)','Minus (pcs)','Minus (Rp)','Bersih (Rp)'].map((t,i)=>[i,t,S.th])});
   const cf=r3.length+1,cat={};
@@ -1005,9 +1006,9 @@ BIG.ready.then(function(){
   $id('bcSub').textContent=cap(R.label)+' · '+nf(st.sesi||0)+' sesi BC · '+nf(st.lines||0)+' baris dihitung';
   const top=(a,asc)=>a.slice().sort((x,y)=>asc?x.nom-y.nom:y.nom-x.nom).slice(0,4).map(rowHtml).join('');
   const hist=Object.entries(ST.hist||{}).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
-  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih (plus − minus)</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} baris selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} ${esc(cap(R.label))}</small></em></div>
+  b.innerHTML=`<div class="wk-hero"><div><span>Selisih bersih (plus − minus) · ${scopeL(R)}</span><b class="${K.net<0?'bc-neg':''}">${rp(K.net)}</b></div><em>${nf(K.L.length)} baris selisih<small>${R.from?R.from.slice(8)+'/'+R.from.slice(5,7):''}–${R.to?R.to.slice(8)+'/'+R.to.slice(5,7):''} ${esc(cap(R.label))}</small></em></div>
    <div class="ks-tiles"><div class="iv-tile bc-t m"><small>Barang minus</small><b>${nf(-K.qMinus)} pcs</b><span>${rp(K.vMinus)}</span></div><div class="iv-tile bc-t p"><small>Barang plus</small><b>${nf(K.qPlus)} pcs</b><span>${rp(K.vPlus)}</span></div><div class="iv-tile bc-t"><small>Akurasi baris</small><b>${(acc*100).toFixed(1).replace('.',',')}%</b><span>${nf(st.match||0)}/${nf(st.lines||0)} sesuai</span></div></div>
-   ${R.sesiM?`<p class="hint" style="margin:8px 0 0">✓ ${R.sesiM.n} sesi Matched di sistem (${R.sesiM.ids.map(esc).join(', ')}) tidak dimasukkan ke selisih.</p>`:''}<div class="bc-seg" role="group" aria-label="Cakupan berita acara"><button type="button" data-bcs="ops" class="${R.scope!=='all'?'on':''}">Operasional<small>${nf(R.rows.length-K.sys)} baris · tanpa issue System</small></button><button type="button" data-bcs="all" class="${R.scope==='all'?'on':''}">Semua selisih<small>${nf(R.rows.length)} baris · termasuk System</small></button></div>
+   ${R.sesiM?`<p class="hint" style="margin:8px 0 0">✓ ${R.sesiM.n} sesi Matched di sistem (${R.sesiM.ids.map(esc).join(', ')}) tidak dimasukkan ke selisih.</p>`:''}<div class="bc-seg bc-seg3" role="group" aria-label="Cakupan berita acara"><button type="button" data-bcs="all" class="${R.scope!=='ops'&&R.scope!=='sys'?'on':''}">Seluruh selisih<small>${nf(R.rows.length)} baris</small></button><button type="button" data-bcs="ops" class="${R.scope==='ops'?'on':''}">Operasional<small>${nf(R.rows.length-K.sys)} baris</small></button><button type="button" data-bcs="sys" class="${R.scope==='sys'?'on':''}">Sistem<small>${nf(K.sys)} baris</small></button></div>
    ${(miss||K.noRem||K.open||R.warn.length)?`<div class="ks-warn">${miss?`⚠ ${miss} SKU belum ada nama produk. Upload file berisi kolom <b>SKU Name</b> &amp; <b>SKU Code</b> (mis. export inventory by SKU / stock database) lewat tombol ⇪ Upload untuk mengisi nama.<br>`:''}${K.noRem?`⚠ ${K.noRem} baris belum ada keterangan penyebab/penyelesaian. <button type="button" class="bc-lnk" data-bc="list">Isi sekarang</button><br>`:''}${K.open?(()=>{const O=K.L.filter(r=>!/solved/i.test(r.inv||'')),S={};O.forEach(r=>{const k=r.bc||'-';S[k]=S[k]||{n:0,st:r.sbc||''};S[k].n++});const ks=Object.keys(S),cp=ks.filter(k=>/complete/i.test(S[k].st));return `⚠ ${K.open} baris investigasinya belum "Solved" di file sistem${cp.length===ks.length?`: ${ks.length} sesi masih berstatus <b>Completed</b> (belum <b>Closed</b>)`:''} — ${ks.map(k=>esc(k)+(S[k].st?' ('+esc(S[k].st)+')':'')).join(', ')}. Selesaikan investigasi sesi ini di sistem sampai Closed/Solved, lalu export &amp; upload ulang.<br>`})():''}${R.warn.map(w=>'⚠ '+esc(w)).join('<br>')}</div>`:''}
    <div class="bc-cols"><div><p class="wk-p bc-h m"><b>Minus terbesar</b><span>${nf(K.minus.length)} baris</span></p>${top(K.minus,true)||'<p class="hint">Tidak ada barang minus.</p>'}</div>
    <div><p class="wk-p bc-h p"><b>Plus terbesar</b><span>${nf(K.plus.length)} baris</span></p>${top(K.plus,false)||'<p class="hint">Tidak ada barang plus.</p>'}</div></div>
@@ -1099,7 +1100,6 @@ BIG.ready.then(function(){
   if(a.dataset.bc==='list')showList();
   if(a.dataset.bc==='names')names();
  });
- if(rep)rep.scope='all';
  if(rep&&missing()&&applyNames())save();
  window.bcRender=render;
  render();
