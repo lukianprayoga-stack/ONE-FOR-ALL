@@ -1385,7 +1385,7 @@ BIG.ready.then(function(){
   const site=ST.reg?ST.reg.site+' · '+ST.reg.toko:(rep.loc||'');
   const title='Daftar Belum Dipajang '+(ST.reg?ST.reg.site+' ':'')+tglL(rep.date);
   const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(title)}</title><style>
-@page{size:A4 portrait;margin:9mm 8mm 10mm}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 portrait;margin:9mm 8mm 10mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1{font-size:13pt;margin:0}.sub{margin:2px 0 6px;font-size:8.5pt;color:#333}
 .kpi{display:flex;gap:6px;margin:0 0 8px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 6px}.kpi small{display:block;font-size:7pt;color:#555}.kpi b{font-size:11pt}.kpi .bad b{color:#b91c1c}.kpi .ok b{color:#15803d}
 table{width:100%;border-collapse:collapse}th,td{border:1px solid #888;padding:3px 4px;text-align:center;vertical-align:middle}th{background:#e8eefc;font-size:7.5pt}
@@ -1400,7 +1400,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
 <div class="kpi"><div class="${s.gT&&s.gD/s.gT>=c.target/100?'ok':'bad'}"><small>Kepatuhan by generic</small><b>${pc(s.gT?s.gD/s.gT:0)}</b> <small>${nf(s.gD)} dari ${nf(s.gT)} · target ${c.target}%</small></div><div class="${s.cT&&s.cD/s.cT>=c.target/100?'ok':'bad'}"><small>Kepatuhan by color</small><b>${pc(s.cT?s.cD/s.cT:0)}</b> <small>${nf(s.cD)} dari ${nf(s.cT)} · target ${c.target}%</small></div><div><small>Harus dipajang</small><b>${nf(W.length)} warna</b> <small>${nf(W.reduce((t,o)=>t+o.w,0))} pcs di gudang</small></div></div>
 <table><thead><tr><th style="width:4%">No</th><th style="width:4%">✓</th><th style="width:29%">Nama Produk</th><th style="width:11%">Warna</th><th style="width:9%">Generic</th><th style="width:11%">Sub kategori</th><th style="width:8%">Ukuran</th><th style="width:6%">Stok gudang</th><th style="width:18%">Lokasi bin gudang</th></tr></thead>${body}</table>
 <div class="sig"><div><p>Dikerjakan oleh</p>(______________________)</div><div><p>Tanggal &amp; jam selesai</p>______________________</div><div><p>Diperiksa oleh</p>(______________________)<br>Store Head</div></div>
-<div class="foot">Baris oranye = generic belum ada satu warna pun di display (menurunkan kepatuhan by generic). Urut per kategori lalu lokasi bin.${nDone?' '+nDone+' warna yang sudah ditandai dipajang di aplikasi tidak dicetak.':''} Sumber: ${E(rep.file||'')} · Store Head Kit</div>
+<div class="foot">Baris oranye = generic belum ada satu warna pun di display (menurunkan kepatuhan by generic). Urut per kategori lalu lokasi bin.${nDone?' '+nDone+' warna yang sudah ditandai dipajang di aplikasi tidak dicetak.':''} Sumber: ${E(rep.file||'')} · Store Head Kit by Lukian Prayoga</div>
 <script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
   const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
   if(window.ofaToast)ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
@@ -1662,7 +1662,7 @@ BIG.ready.then(function(){
   const glr=R.gl.map(g=>`<tr><td>${E(cap(g[0]))}</td><td class="c">${g[1]}</td><td class="r">${nf(g[2])}</td><td class="c">${R.out?(Math.round(g[2]/R.out*1000)/10).toLocaleString('id-ID')+'%':''}</td></tr>`).join('');
   const sig=(t,n)=>`<div><p>${E(t||'')}</p><div class="sp"></div><b>${n?'( '+E(n)+' )':'(______________________)'}</b></div>`;
   const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E((c.file+' - '+title).replace(/[\\/:*?"<>|]+/g,' '))}</title><style>
-@page{size:A4 portrait;margin:9mm 8mm 10mm}*{box-sizing:border-box}body{margin:0;font:8.6pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 portrait;margin:9mm 8mm 10mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}body{margin:0;font:8.6pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1{font-size:13pt;margin:0 0 2px;letter-spacing:.2px}h2{font-size:10.5pt;margin:0 0 6px}.sub{color:#444;margin:0 0 8px}
 .info{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 10px;margin:0 0 8px;font-size:8.6pt}.info span{color:#444}
 .kpi{display:flex;gap:6px;margin:0 0 8px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 7px}.kpi small{display:block;font-size:7pt;color:#555}.kpi b{font-size:10.5pt}
@@ -1682,7 +1682,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
 <div class="p2"><h2>RINGKASAN PENGELUARAN KAS PER AKUN — ${E(title)}</h2><div class="sub">${E(c.store)} · ${E(R.from)} – ${E(R.to)}</div>
 <table><thead><tr><th>Cost Item / GL Account</th><th style="width:16%">Jumlah transaksi</th><th style="width:22%">Total (Rp)</th><th style="width:12%">Porsi</th></tr></thead><tbody>${glr}<tr class="tot"><td>TOTAL PENGELUARAN</td><td class="c">${R.nOut}</td><td class="r">${nf(R.out)}</td><td></td></tr></tbody></table>
 <table style="margin-top:10px"><tbody><tr><td>Saldo awal bulan</td><td class="r" style="width:22%">${nf(R.open)}</td></tr><tr><td>Penggantian / penerimaan kas (Debit)</td><td class="r">${nf(R.inn)}</td></tr><tr><td>Pengeluaran kas (Credit)</td><td class="r">${nf(R.out)}</td></tr><tr class="tot"><td>Saldo akhir bulan</td><td class="r">${nf(R.close)}</td></tr></tbody></table>
-<div class="foot">Sumber: ${E(R.file||'')} · ${R.n} transaksi · baris hijau = penggantian/penerimaan kas · Store Head Kit</div></div>
+<div class="foot">Sumber: ${E(R.file||'')} · ${R.n} transaksi · baris hijau = penggantian/penerimaan kas · Store Head Kit by Lukian Prayoga</div></div>
 <script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
   const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
   if(window.ofaToast)ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
@@ -2014,7 +2014,7 @@ BIG.ready.then(function(){
   const ra=[];for(let i=0;i<nA;i++){const x=p.aju[i];ra.push(x?`<tr><td>${i+1}</td><td class="b">${E(x.n)}</td><td class="b">${E(x.a)}</td><td class="b">${nf(x.q)}</td><td>${E(x.u||'Unit')}</td><td></td><td class="m"><i>Rp</i>${nf(x.h)}</td><td class="m"><i>Rp</i>${nf((Number(x.q)||0)*(Number(x.h)||0))}</td></tr>`:`<tr><td>${i+1}</td><td></td><td></td><td></td><td>Unit</td><td></td><td class="m"><i>Rp</i>-</td><td class="m"><i>Rp</i>-</td></tr>`)}
   const rr=[];for(let i=0;i<nR;i++){const x=p.real[i];if(x){const h=hitung(x);rr.push(`<tr><td>${i+1}</td><td class="b">${E(x.n)}</td><td class="b">${E(x.a)}</td><td class="b">${nf(x.q)}</td><td>${E(x.u||'Unit')}</td><td class="m"><i>Rp</i>${nf(h.pre)}</td><td class="m"><i>Rp</i>${nf(h.net)}</td><td class="m"><i>Rp</i>${nf(h.tot)}</td><td class="b">${E(pajakLbl(x))}</td></tr>`)}else rr.push('<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>')}
   return `<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(fname('pdf').replace(/\.pdf$/,''))}</title><style>
-@page{size:A4 portrait;margin:12mm 11mm}*{box-sizing:border-box}body{margin:0;font:9pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 portrait;margin:12mm 11mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}body{margin:0;font:9pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .kop{display:flex;align-items:center;gap:12px;border-bottom:2px solid #444;padding-bottom:6px}.kop img{max-height:46px;max-width:90px}.kop h1{margin:0;font-size:14pt}.kop p{margin:1px 0 0;font-size:7.5pt}
 h2{text-align:center;font-size:11pt;margin:10px 0 8px}.info td{padding:1px 8px 1px 0;font-size:8.5pt}h3{font-size:8.5pt;margin:12px 0 3px}
 table.t{width:100%;border-collapse:collapse;font-size:8.5pt}table.t th,table.t td{border:1px solid #000;padding:4px 5px;text-align:center;vertical-align:middle;height:22px}
@@ -2036,7 +2036,7 @@ table.t th{background:#f2f2f2;font-weight:700}table.t td.b{font-weight:700}table
 <h3>Sisa atau Over Budget</h3>
 <table class="sisa"><tr><th>Keterangan</th><th>Nominal</th></tr><tr><td class="k">${s.sisa<0?'Over Budget':'Sisa Budget'}</td><td class="v">${rp(Math.abs(s.sisa))}</td></tr></table>
 <div class="ttd"><div><span>&nbsp;</span><br>Mengajukan,<div class="sp"></div><b>${E(c.t1)}</b>${E(c.n1)}</div><div><span>${E(tglP(p.tgl||today()))}</span><br>Mengetahui,<div class="sp"></div><b>${E(c.t2)}</b>${E(c.n2)}</div></div>
-<div class="foot">Dibuat dengan Store Head Kit</div>
+<div class="foot">Store Head Kit by Lukian Prayoga</div>
 <script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
  }
  function pdf(){
@@ -2241,13 +2241,13 @@ BIG.ready.then(function(){
   const R=cocok();if(!R)return;const F=saring(R.arts),m=promo&&promo.meta,E=esc;if(!F.length)return ofaToast('Tidak ada data untuk dicetak');
   const rows=F.map((x,i)=>`<tr${x.s<=0&&x.w>0?' class="g"':''}><td>${i+1}</td><td class="l"><b>${E(x.n)}</b><br><span>${E(x.c)} · ${E(x.g)}</span></td><td>${E(cap(x.l3))}</td><td class="d">${E(dLbl(x))}</td><td class="r">${x.normal?'<s>'+rp(x.normal)+'</s><br>':''}<b>${E(nLbl(x))}</b></td><td class="l">${x.sz.map(o=>E(o.z||'-')+' ('+nf(o.s+o.w+o.o+o.r)+')').join(', ')}</td><td>${nf(x.s)}</td><td>${nf(x.w)}</td><td>${nf(x.o+x.r)}</td><td class="l sm">${E(x.bw||'-')}${x.bo?'<br>'+E(x.bo):''}</td></tr>`).join('');
   const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(fname('pdf').replace(/\.pdf$/,''))}</title><style>
-@page{size:A4 landscape;margin:10mm}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:10mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1{font-size:13pt;margin:0}p{margin:2px 0 8px;font-size:8.5pt;color:#333}table{width:100%;border-collapse:collapse}th,td{border:1px solid #777;padding:3px 5px;text-align:center;vertical-align:middle}
 th{background:#e8eefc;font-size:8pt}td.l{text-align:left}td.r{text-align:right;white-space:nowrap}td.d{font-weight:700;color:#c2410c;white-space:nowrap}td.sm{font-size:7.5pt}td span{color:#555;font-size:7.5pt}s{color:#777}tr.g td{background:#fff4e8}
 thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px;font-size:7pt;color:#888}
 </style></head><body><h1>${E(m?m.judul:'Produk Promo')}</h1><p>${E(ST.reg?ST.reg.site+' · '+ST.reg.toko:'')} · inventory ${E(inv?tgl(inv.date):'')}${m&&m.mulai?' · periode '+E(tgl(m.mulai))+(m.selesai?' – '+E(tgl(m.selesai)):''):''} · ${nf(F.length)} artikel${view.d?' · disc '+view.d+'%':''}${view.cat?' · '+E(cap(view.cat)):''}${view.gudang?' · belum dipajang':''}</p>
 <table><thead><tr><th style="width:3%">No</th><th style="width:25%">Produk</th><th style="width:9%">Kategori</th><th style="width:6%">Disc</th><th style="width:12%">Harga</th><th style="width:17%">Ukuran (stok)</th><th style="width:5%">Toko</th><th style="width:5%">Gudang</th><th style="width:5%">Lain/ rusak</th><th style="width:15%">Lokasi bin gudang / lainnya</th></tr></thead><tbody>${rows}</tbody></table>
-<div class="foot">Baris oranye = stok hanya di gudang (belum dipajang) · Dibuat dengan Store Head Kit</div>
+<div class="foot">Baris oranye = stok hanya di gudang (belum dipajang) · Store Head Kit by Lukian Prayoga</div>
 <script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
   const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
   ofaToast('Pilih "Simpan sebagai PDF" di jendela cetak');if(window.bcLog)bcLog('promoxl',m?m.judul:'','pdf · '+F.length+' artikel');
