@@ -1652,6 +1652,44 @@ BIG.ready.then(function(){
   return name;
  }
 
+ /* ---------- PDF rekap kas (siap cetak & tanda tangan) ---------- */
+ function pdf(R){
+  const c=cfg(),E=esc,title=R.label||'Rekap Kas',BL=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const tg=w=>w?w[2]+' '+BL[w[1]-1]+' '+String(w[0]).slice(2)+' <span>'+p2(w[3])+':'+p2(w[4])+'</span>':'-';
+  const dt=s=>{const p=String(s||'').split('-').map(Number);return p[0]?p[2]+' '+cap(BULAN[p[1]-1])+' '+p[0]:'-'};
+  const n0=v=>v?nf(v):'';
+  const rows=R.rows.map((r,i)=>`<tr${r.dr?' class="in"':''}><td class="c">${i+1}</td><td class="c nw">${tg(r.w)}</td><td class="c sm">${E(r.no)}</td><td>${E(r.rem||'-')}${r.gl?` <span>· ${E(cap(r.gl))}</span>`:''}${r.st&&!/^complete/i.test(r.st)?` <b class="wr">${E(r.st)}</b>`:''}</td><td class="r">${nf(r.bal)}</td><td class="r">${n0(r.dr)}</td><td class="r">${n0(r.cr)}</td></tr>`).join('');
+  const glr=R.gl.map(g=>`<tr><td>${E(cap(g[0]))}</td><td class="c">${g[1]}</td><td class="r">${nf(g[2])}</td><td class="c">${R.out?(Math.round(g[2]/R.out*1000)/10).toLocaleString('id-ID')+'%':''}</td></tr>`).join('');
+  const sig=(t,n)=>`<div><p>${E(t||'')}</p><div class="sp"></div><b>${n?'( '+E(n)+' )':'(______________________)'}</b></div>`;
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E((c.file+' - '+title).replace(/[\\/:*?"<>|]+/g,' '))}</title><style>
+@page{size:A4 portrait;margin:9mm 8mm 10mm}*{box-sizing:border-box}body{margin:0;font:8.6pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:13pt;margin:0 0 2px;letter-spacing:.2px}h2{font-size:10.5pt;margin:0 0 6px}.sub{color:#444;margin:0 0 8px}
+.info{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 10px;margin:0 0 8px;font-size:8.6pt}.info span{color:#444}
+.kpi{display:flex;gap:6px;margin:0 0 8px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 7px}.kpi small{display:block;font-size:7pt;color:#555}.kpi b{font-size:10.5pt}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #888;padding:2px 4px;vertical-align:top;line-height:1.3}td.nw{white-space:nowrap}th{background:#e8eefc;font-size:7.8pt;text-align:center;vertical-align:middle}
+td.c{text-align:center}td.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}td.sm{font-size:7.6pt}td span{color:#555;font-size:7.3pt}
+tr.in td{background:#eef8f0}tr.tot td{background:#d9d9d9;font-weight:700}.wr{color:#b91c1c;font-size:7pt}
+thead{display:table-header-group}tr{page-break-inside:avoid}
+.sig{display:flex;justify-content:space-around;margin-top:10px;page-break-inside:avoid;text-align:center}.sig>div{width:40%}.sig p{margin:0}.sig .sp{height:44px}
+.p2{page-break-before:always}.p2 table{width:70%}.foot{margin-top:8px;font-size:7pt;color:#777}
+</style></head><body>
+<h1>REKAP PENGELUARAN KAS</h1><div class="sub">Periode ${E(cap(title))} (${E(dt(R.from))} – ${E(dt(R.to))})</div>
+<div class="info"><span>Nama Toko</span><b>: ${E(c.store)}</b><span>Date range</span><b>: ${E(R.from)} – ${E(R.to)}</b><span>Nama Pemegang Kas</span><b>: ${E(c.holder)}</b><span>Location</span><b>: ${E(c.loc)}</b><span>No. Rekening Pemegang Kas</span><b>: ${E(c.acct)}</b><span></span><b></b></div>
+<div class="kpi"><div><small>Saldo awal</small><b>Rp${nf(R.open)}</b></div><div><small>Penggantian kas (Debit)</small><b>Rp${nf(R.inn)}</b></div><div><small>Pengeluaran kas (Credit)</small><b>Rp${nf(R.out)}</b></div><div><small>Saldo akhir</small><b>Rp${nf(R.close)}</b></div></div>
+<table><thead><tr><th style="width:3.5%">No</th><th style="width:12%">Transaction date</th><th style="width:12.5%">Transaction no</th><th>Remarks</th><th style="width:9.5%">Opening balance</th><th style="width:8.5%">Debit</th><th style="width:8.5%">Credit</th></tr></thead>
+<tbody>${rows}<tr class="tot"><td colspan="5" class="r">TOTAL</td><td class="r">${nf(R.inn)}</td><td class="r">${nf(R.out)}</td></tr></tbody></table>
+<div class="sig">${sig(c.t1,c.n1)}${sig(c.t2,c.n2)}</div>
+<div class="p2"><h2>RINGKASAN PENGELUARAN KAS PER AKUN — ${E(title)}</h2><div class="sub">${E(c.store)} · ${E(R.from)} – ${E(R.to)}</div>
+<table><thead><tr><th>Cost Item / GL Account</th><th style="width:16%">Jumlah transaksi</th><th style="width:22%">Total (Rp)</th><th style="width:12%">Porsi</th></tr></thead><tbody>${glr}<tr class="tot"><td>TOTAL PENGELUARAN</td><td class="c">${R.nOut}</td><td class="r">${nf(R.out)}</td><td></td></tr></tbody></table>
+<table style="margin-top:10px"><tbody><tr><td>Saldo awal bulan</td><td class="r" style="width:22%">${nf(R.open)}</td></tr><tr><td>Penggantian / penerimaan kas (Debit)</td><td class="r">${nf(R.inn)}</td></tr><tr><td>Pengeluaran kas (Credit)</td><td class="r">${nf(R.out)}</td></tr><tr class="tot"><td>Saldo akhir bulan</td><td class="r">${nf(R.close)}</td></tr></tbody></table>
+<div class="foot">Sumber: ${E(R.file||'')} · ${R.n} transaksi · baris hijau = penggantian/penerimaan kas · Store Head Kit</div></div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  if(window.ofaToast)ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
+  return html;
+ }
+ window.kasPdf=R=>pdf(R||rep);
+
  /* ---------- tampilan kartu ---------- */
  function render(){
   const b=$id('ksBody');if(!b)return;
@@ -1664,7 +1702,7 @@ BIG.ready.then(function(){
    <p class="wk-p" style="margin:14px 0 6px"><b>Per akun biaya</b></p>
    <div class="ks-gl">${R.gl.slice(0,6).map(g=>`<div class="ks-g"><span>${esc(cap(g[0]))}<small>${g[1]} transaksi</small></span><em>${rp(g[2])}</em><i style="width:${(g[2]/mx*100).toFixed(1)}%"></i></div>`).join('')}</div>
    ${R.gl.length>6?`<p class="hint" style="margin-top:6px">+${R.gl.length-6} akun lainnya ada di Excel (lembar Ringkasan).</p>`:''}
-   <div class="ks-act"><button class="btn" type="button" data-ks="xlsx">⬇ Unduh Excel siap tanda tangan</button><button class="btn ghost" type="button" data-ks="list">Lihat transaksi</button></div>
+   <div class="ks-act"><button class="btn" type="button" data-ks="xlsx">⬇ Unduh Excel siap tanda tangan</button><button class="btn ghost" type="button" data-ks="pdf">🖨 Cetak / PDF</button><button class="btn ghost" type="button" data-ks="list">Lihat transaksi</button></div>
    <p class="hint">Sumber: ${esc(R.file||'')} · tanda tangan dikosongkan untuk ${esc([cfg().n1,cfg().n2].filter(Boolean).join(' & ')||'penanda tangan')}.</p>`;
  }
  function showList(){
@@ -1697,7 +1735,8 @@ BIG.ready.then(function(){
  $id('ksUp').onclick=()=>$id('ksFile').click();
  $id('ksFile').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)pick(f)};
  $id('ksCfg').onclick=()=>(window.ofaHeadGate||(g=>g()))(settings);
- box.addEventListener('click',e=>{const a=e.target.closest('[data-ks]');if(!a)return;if(a.dataset.ks==='xlsx'&&rep){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)ofaToast('Isi dulu nama toko & penanda tangan');settings();return}download(rep);if(window.bcLog)bcLog('kas',cap(rep.label||''),rep.n+' transaksi')}if(a.dataset.ks==='list')showList()});
+ box.addEventListener('click',e=>{const a=e.target.closest('[data-ks]');if(!a)return;if(a.dataset.ks==='pdf'&&rep){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)ofaToast('Isi dulu nama toko & penanda tangan');settings();return}pdf(rep);if(window.bcLog)bcLog('kas',cap(rep.label||''),'pdf · '+rep.n+' transaksi');return}
+  if(a.dataset.ks==='xlsx'&&rep){const c=cfg();if(!c.store||!c.n1){if(window.ofaToast)ofaToast('Isi dulu nama toko & penanda tangan');settings();return}download(rep);if(window.bcLog)bcLog('kas',cap(rep.label||''),rep.n+' transaksi')}if(a.dataset.ks==='list')showList()});
  window.kasRender=render;
  render();
 })();
