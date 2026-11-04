@@ -157,6 +157,18 @@ textarea.in{min-height:240px;resize:vertical}
 /* ====== aplikasi mandiri ====== */
 body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);padding:0!important}
 #bc .bc-seg3{grid-template-columns:repeat(3,1fr)}
+#lb .lb-mode{margin-top:10px}.lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:6px}@media(max-width:720px){.lb-grid{grid-template-columns:1fr}}
+.lb-tg{display:flex;gap:8px;align-items:center;font-size:13px;margin:12px 0 4px;cursor:pointer}.lb-l{margin:12px 0 0!important;font-weight:700}
+#lb .bc-seg{margin-top:6px}.lb-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.lb-chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:8px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:left}.lb-chips button.on{background:var(--ink);color:var(--inkfg);border-color:transparent}
+.lb-res{background:var(--bg);border-radius:16px;padding:12px 14px;align-self:start}.lb-res .wk-hero{margin-top:0}
+.lb-kv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin-top:10px;font-size:13px}.lb-kv span{color:var(--mut)}.lb-kv b{text-align:right;font-variant-numeric:tabular-nums}.lb-kv small{grid-column:1/-1;color:var(--mut);font-size:11.5px;margin:-1px 0 4px}
+.lb-t{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}.lb-t th,.lb-t td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}.lb-t th:first-child,.lb-t td:first-child{text-align:left}.lb-t th{font-size:11.5px;color:var(--mut);font-weight:700}.lb-t td small{color:var(--mut)}.lb-t tfoot td{font-weight:800;border-bottom:0}
+.lb-nav{display:flex;align-items:center;gap:10px;margin-top:12px}.lb-nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:18px;cursor:pointer}.lb-nav b{font-size:15px;min-width:130px;text-align:center}
+.lb-emps{display:grid;gap:10px;margin-top:12px}.lb-e{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg)}
+.lb-eh{display:flex;justify-content:space-between;gap:10px}.lb-eh b{font-size:14.5px}.lb-eh small{display:block;font-size:12px;color:var(--mut)}.lb-eh em{font-style:normal;font-weight:800;text-align:right;white-space:nowrap}.lb-eh em small{font-weight:500}
+.lb-ents{display:grid;gap:4px;margin-top:8px}.lb-r{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px dashed var(--line);font-size:13px}.lb-r span{flex:1;min-width:0}.lb-r small{display:block;font-size:11.5px;color:var(--mut)}.lb-r em{font-style:normal;font-weight:700;white-space:nowrap}
+.lb-x{border:0;background:transparent;color:var(--mut);font:inherit;font-size:12px;cursor:pointer;padding:4px 6px;border-radius:8px}.lb-x.on{background:var(--bad-bg,#fde8e8);color:var(--bad-fg,#b42318);font-weight:700}
+.lb-ea{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.lb-ea .btn{padding:8px 14px;font-size:13px}.lb-law{margin-top:14px;font-size:11.5px;line-height:1.5}
 #bc .bc-mc{margin-top:10px}#bc .bc-mc .ks-f{margin-top:10px}#bc .bc-mc .ks-act{margin-top:8px}
 #bc .wk-hero{flex-wrap:wrap}#bc .wk-hero b{white-space:nowrap}
 @media(max-width:420px){#bc .wk-hero b{font-size:27px}#bc .wk-hero em{text-align:left}}
@@ -315,8 +327,8 @@ body.locked{overflow:hidden}
  addEventListener('load',()=>setTimeout(tutup,Math.max(0,min-(Date.now()-t0))));
  setTimeout(tutup,min+2500);})();
 </script>
-<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Display · Kas · Budget · Promo</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
-<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button><button type="button" role="tab" data-tab="bg">Rekap Budget</button><button type="button" role="tab" data-tab="p5">Produk Promo</button></nav>
+<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Display · Kas · Budget · Promo · Lembur</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
+<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button><button type="button" role="tab" data-tab="bg">Rekap Budget</button><button type="button" role="tab" data-tab="p5">Produk Promo</button><button type="button" role="tab" data-tab="lb">Kalkulator Lembur</button></nav>
 <main class="app-main">
   <div class="app-start" id="appStart" hidden><div><b>Mulai di sini: isi data toko</b><span>Nama toko, nama Store Head &amp; atasan yang tercetak di berita acara. Cukup sekali, tersimpan di perangkat ini.</span></div><button class="btn" type="button" id="appSet">⚙ Isi data toko</button></div>
   <div class="pane" data-pane="bc">
@@ -404,6 +416,21 @@ body.locked{overflow:hidden}
     </ol>
   </section>
   </div>
+  <div class="pane" data-pane="lb" hidden>
+  <section class="rs" id="lb" aria-label="Kalkulator lembur">
+    <div class="sh-head"><div><h3>Kalkulator Lembur</h3><p id="lbSub">Hitung upah lembur sesuai PP 35/2021</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="lbCfg" aria-label="Pengaturan kalkulator lembur">⚙</button></div></div>
+    <div id="lbBody"></div>
+  </section>
+  <section class="rs app-help" aria-label="Cara pakai kalkulator lembur">
+    <div class="sh-head"><div><h3>Cara pakai</h3><p>Kalkulator Lembur · sesuai PP 35/2021</p></div></div>
+    <ol>
+      <li><b>Hitung cepat</b>: isi gaji sebulan (atau rinci upah pokok, tunjangan tetap &amp; tidak tetap), pilih 5/6 hari kerja, jenis hari lembur, dan jumlah jam. Hasil muncul langsung beserta pengali tiap jam.</li>
+      <li><b>Rekap karyawan</b>: tambah karyawan sekali, lalu catat setiap lembur (tanggal, jenis hari, jam). Total per bulan dihitung otomatis dan pelanggaran batas 4 jam/hari atau 18 jam/minggu ditandai.</li>
+      <li>Ketuk <b>⚙</b> untuk mengisi UMK daerah (upah lembur tidak boleh dihitung di bawah upah minimum) dan penanda tangan.</li>
+      <li>Unduh rekap sebagai <b>PDF</b> atau <b>Excel</b>. Data upah karyawan hanya tersimpan di perangkat ini.</li>
+    </ol>
+  </section>
+  </div>
   <section class="rs app-help app-privacy" aria-label="Privasi">
     <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya).</p>
   </section>
@@ -450,12 +477,12 @@ const stSave=()=>{try{localStorage.setItem(SK,JSON.stringify(ST))}catch(e){if(!s
 if(ST.reg)stSave();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}
 /* data laporan besar disimpan di IndexedDB (kuota jauh lebih besar dari localStorage) */
-const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas','bcapp_budget','bcapp_promo','bcapp_inv'];let db=null;
+const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas','bcapp_budget','bcapp_promo','bcapp_inv','bcapp_lembur'];let db=null;
  const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},del:k=>{try{localStorage.removeItem(k)}catch(e){}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
  const put=(k,v)=>{if(!db)return ls.set(k,v);try{const t=db.transaction('kv','readwrite');v==null?t.objectStore('kv').delete(k):t.objectStore('kv').put(v,k)}catch(e){}};
  const ready=new Promise(done=>{let fin=false;const ok=()=>{if(fin)return;fin=true;
-   KEYS.forEach(k=>{const v=ls.get(k);if(v!=null){if(!mem.has(k)){mem.set(k,v);put(k,v)}if(db)ls.del(k)}});done()};
-  setTimeout(()=>{db=null;ok()},2500);
+   KEYS.forEach(k=>{const v=ls.get(k);if(v!=null){mem.set(k,v);put(k,v);if(db)ls.del(k)}});done()};
+  setTimeout(()=>{if(!fin){db=null;ok()}},2500);
   try{const r=indexedDB.open('store-head-kit',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onerror=()=>ok();
    r.onsuccess=()=>{db=r.result;try{const q=db.transaction('kv').objectStore('kv').openCursor();q.onsuccess=e=>{const c=e.target.result;if(c){mem.set(c.key,c.value);c.continue()}else ok()};q.onerror=()=>{db=null;ok()}}catch(e){db=null;ok()}}}catch(e){ok()}});
  return {ready,getItem:k=>mem.has(k)?mem.get(k):(db?null:ls.get(k)),setItem:(k,v)=>{v=String(v);mem.set(k,v);put(k,v)},removeItem:k=>{mem.delete(k);put(k,null);ls.del(k)},
@@ -2279,6 +2306,213 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  box.addEventListener('input',e=>{if(e.target.id!=='p5Q')return;view.q=e.target.value;const p=e.target.selectionStart;render();const i=$id('p5Q');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
  document.addEventListener('click',e=>{const t=e.target.closest('.app-tabs [data-tab="p5"]');if(t)sync(false)});
  render();setTimeout(()=>sync(false),1200);
+})();
+
+});
+</script>
+<script>
+BIG.ready.then(function(){
+/* ====== KALKULATOR LEMBUR (PP 35/2021 Pasal 26, 31, 32) ====== */
+(function(){
+ const box=document.getElementById('lb');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const CK='bcapp_lembur';
+ const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const dec=v=>(Number(v)||0).toLocaleString('id-ID',{maximumFractionDigits:2});
+ const p2=n=>('0'+n).slice(-2);
+ const today=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+ const perL=k=>BULAN[+k.slice(5,7)-1]+' '+k.slice(0,4);
+ const tglS=k=>{const p=String(k||'').split('-').map(Number);if(!p[2])return '-';const d=new Date(p[0],p[1]-1,p[2]);return HARI[d.getDay()].slice(0,3)+', '+p[2]+' '+BULAN[p[1]-1].slice(0,3)};
+ const uang=v=>Math.max(0,Math.round(Number(String(v==null?'':v).replace(/[^\d]/g,''))||0));
+ const jamV=v=>{const n=Number(String(v==null?'':v).replace(',','.'));return isFinite(n)&&n>0?Math.round(n*2)/2:0};
+ const uid=()=>Math.random().toString(36).slice(2,9);
+ let db={};try{db=JSON.parse(BIG.getItem(CK)||'null')||{}}catch(e){db={}}
+ db.emp=db.emp||[];db.ent=db.ent||[];db.q=db.q||{gaji:'',pokok:'',tetap:'',tdk:'',rinci:false,skema:'',jenis:'k',jam:'2'};
+ let cur=db.cur||today().slice(0,7),mode=db.mode||'q';
+ const save=()=>{db.cur=cur;db.mode=mode;try{BIG.setItem(CK,JSON.stringify(db))}catch(e){}};
+ const DEF={skema:'6',umk:'',t1:'Store Head',n1:'',t2:'Head of Branch',n2:''};
+ const cfg=()=>{const c=Object.assign({},DEF,db.cfg||{});const r=ST.reg;if(r&&!c.n1)c.n1=String(r.nama||'').toUpperCase();return c};
+
+ /* ---------- aturan PP 35/2021 ---------- */
+ // Pasal 32: dasar upah lembur = upah sebulan; bila ada tunjangan tidak tetap dan (pokok + tetap) < 75% total upah, dasarnya 75% total upah;
+ // tidak boleh di bawah upah minimum. Upah sejam = 1/173 x upah sebulan.
+ function dasar(u){
+  const pokok=uang(u.pokok),tetap=uang(u.tetap),tdk=uang(u.tdk),umk=uang(cfg().umk),tot=pokok+tetap+tdk;
+  let b=pokok+tetap,why='Upah pokok + tunjangan tetap';
+  if(tdk>0&&b<0.75*tot){b=0.75*tot;why='75% dari total upah (pokok + tunjangan tetap kurang dari 75%)'}
+  if(umk&&b<umk){b=umk;why='Upah minimum (upah di bawah UMK)'}
+  return {b:Math.round(b),jam:b/173,why,tot};
+ }
+ const JENIS={k:'Hari kerja',l:'Hari istirahat mingguan / libur resmi',p:'Libur resmi di hari kerja terpendek'};
+ // Pasal 31: pengali per jam lembur
+ function tiers(jenis,skema){
+  if(jenis==='k')return [[1,1.5],[3,2]];
+  if(jenis==='p'&&skema!=='5')return [[5,2],[1,3],[3,4]];
+  return skema==='5'?[[8,2],[1,3],[3,4]]:[[7,2],[1,3],[3,4]];
+ }
+ function hitung(jam,jenis,skema,perJam){
+  const T=tiers(jenis,skema),out=[];let sisa=jam,mulai=0,lebih=0;
+  T.forEach(([h,x],i)=>{if(sisa<=0)return;const ambil=i===T.length-1?sisa:Math.min(sisa,h);if(i===T.length-1&&sisa>h)lebih=sisa-h;out.push({dari:mulai+1,sampai:mulai+ambil,h:ambil,x,v:ambil*x*perJam});mulai+=ambil;sisa-=ambil});
+  const konv=out.reduce((a,t)=>a+t.h*t.x,0),maks=T.reduce((a,t)=>a+t[0],0);
+  const warn=[];
+  if(jenis==='k'&&jam>4)warn.push('Lembur di hari kerja maksimal 4 jam sehari (PP 35/2021 Pasal 26).');
+  if(jenis!=='k'&&lebih>0)warn.push('Lembur hari libur skema ini sampai jam ke-'+maks+'; jam selebihnya dihitung 4× tetapi di luar ketentuan.');
+  return {rows:out,konv,upah:Math.round(konv*perJam),warn};
+ }
+ const pengaliTxt=R=>R.rows.map(t=>(t.h===1?'jam ke-'+dec(t.dari):'jam '+dec(t.dari)+'–'+dec(t.sampai))+' × '+dec(t.x)).join(', ');
+
+ /* ---------- hitung cepat ---------- */
+ function quick(){
+  const q=db.q,c=cfg(),sk=q.skema||c.skema,u=q.rinci?q:{pokok:q.gaji,tetap:0,tdk:0},D=dasar(u),jam=jamV(q.jam),jn=sk==='5'&&q.jenis==='p'?'l':q.jenis;
+  const R=hitung(jam,jn,sk,D.jam);
+  const f=(id,l,v,ph)=>`<label class="ks-f"><span>${l}</span><input class="in" id="${id}" inputmode="numeric" value="${v?nf(uang(v)):''}" placeholder="${ph||'0'}"></label>`;
+  return `<div class="lb-grid"><div>
+   <label class="lb-tg"><input type="checkbox" id="lbRinci"${q.rinci?' checked':''}> Rinci komponen upah (pokok, tunjangan tetap & tidak tetap)</label>
+   ${q.rinci?f('lbPokok','Upah pokok / bulan',q.pokok)+f('lbTetap','Tunjangan tetap / bulan',q.tetap)+f('lbTdk','Tunjangan tidak tetap / bulan',q.tdk,'0 (opsional)'):f('lbGaji','Gaji / upah sebulan',q.gaji,'mis. 2.600.000')}
+   <p class="wk-p lb-l">Hari kerja seminggu</p><div class="bc-seg"><button type="button" data-lbs="6" class="${sk!=='5'?'on':''}">6 hari<small>7 jam/hari · 40 jam/minggu</small></button><button type="button" data-lbs="5" class="${sk==='5'?'on':''}">5 hari<small>8 jam/hari · 40 jam/minggu</small></button></div>
+   <p class="wk-p lb-l">Lembur di</p><div class="lb-chips">${Object.keys(JENIS).filter(k=>k!=='p'||sk!=='5').map(k=>`<button type="button" data-lbj="${k}" class="${jn===k?'on':''}">${JENIS[k]}</button>`).join('')}</div>
+   <label class="ks-f"><span>Jumlah jam lembur</span><input class="in" id="lbJam" inputmode="decimal" value="${esc(q.jam||'')}" placeholder="mis. 2 atau 1,5"></label>
+  </div><div class="lb-res">
+   ${D.b?`<div class="wk-hero"><div><span>Total upah lembur</span><b>${rp(R.upah)}</b></div><em>${dec(jam)} jam<small>= ${dec(R.konv)} jam upah</small></em></div>
+   <div class="lb-kv"><span>Dasar upah lembur</span><b>${rp(D.b)}</b><small>${esc(D.why)}</small><span>Upah sejam (1/173 × upah sebulan)</span><b>${rp(D.jam)}</b></div>
+   ${R.rows.length?`<table class="lb-t"><thead><tr><th>Jam lembur</th><th>Pengali</th><th>Upah</th></tr></thead><tbody>${R.rows.map(t=>`<tr><td>${t.h===1?'Jam ke-'+dec(t.dari):'Jam ke-'+dec(t.dari)+' s.d. '+dec(t.sampai)} <small>(${dec(t.h)} jam)</small></td><td>${dec(t.x)}×</td><td>${rp(t.v)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Total</td><td>${dec(R.konv)}</td><td>${rp(R.upah)}</td></tr></tfoot></table>`:'<p class="hint">Isi jumlah jam lembur.</p>'}
+   ${R.warn.length?`<p class="ks-warn">⚠ ${R.warn.map(esc).join('<br>⚠ ')}</p>`:''}`:'<p class="dp-empty">Isi gaji / upah sebulan untuk menghitung upah lembur.</p>'}
+  </div></div>`;
+ }
+
+ /* ---------- rekap karyawan per bulan ---------- */
+ function hitungEnt(x){const e=db.emp.find(z=>z.id===x.emp);if(!e)return null;const sk=e.skema||cfg().skema,D=dasar(e);return Object.assign({e,D,sk},hitung(jamV(x.j),sk==='5'&&x.t==='p'?'l':x.t,sk,D.jam))}
+ const entBulan=()=>db.ent.filter(x=>String(x.d).slice(0,7)===cur&&db.emp.some(e=>e.id===x.emp)).sort((a,b)=>a.d.localeCompare(b.d));
+ function minggu(d){const p=d.split('-').map(Number),t=new Date(Date.UTC(p[0],p[1]-1,p[2])),w=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-w);return t.toISOString().slice(0,10)}
+ function rekap(){
+  const L=entBulan(),per={};
+  db.emp.forEach(e=>per[e.id]={e,D:dasar(e),n:0,jam:0,konv:0,upah:0,list:[],wk:{}});
+  L.forEach(x=>{const H=hitungEnt(x),o=per[x.emp];if(!H||!o)return;o.n++;o.jam+=jamV(x.j);o.konv+=H.konv;o.upah+=H.upah;o.list.push({x,H});if(x.t==='k'){const w=minggu(x.d);o.wk[w]=(o.wk[w]||0)+jamV(x.j)}});
+  Object.values(per).forEach(o=>{o.warn=[];o.list.forEach(({x,H})=>H.warn.forEach(w=>o.warn.push(tglS(x.d)+': '+w)));Object.keys(o.wk).forEach(w=>{if(o.wk[w]>18)o.warn.push('Minggu mulai '+tglS(w)+': '+dec(o.wk[w])+' jam lembur hari kerja, melebihi 18 jam/minggu (Pasal 26).')})});
+  const A=Object.values(per);return {A,tot:A.reduce((a,o)=>a+o.upah,0),jam:A.reduce((a,o)=>a+o.jam,0),n:L.length};
+ }
+ function team(){
+  const Q=rekap(),c=cfg();
+  return `<div class="vd-nav lb-nav"><button type="button" data-lbm="-1" aria-label="Bulan sebelumnya">‹</button><b>${esc(perL(cur))}</b><button type="button" data-lbm="1" aria-label="Bulan berikutnya">›</button></div>
+   <div class="ks-tiles"><div class="iv-tile"><small>Total upah lembur</small><b>${rp(Q.tot)}</b></div><div class="iv-tile"><small>Total jam lembur</small><b>${dec(Q.jam)} jam</b></div><div class="iv-tile"><small>Catatan lembur</small><b>${nf(Q.n)}</b></div></div>
+   <div class="lb-emps">${Q.A.map(o=>`<div class="lb-e"><div class="lb-eh"><div><b>${esc(o.e.nama)}</b><small>${esc(o.e.jab||'')}${o.e.jab?' · ':''}skema ${esc(o.e.skema||c.skema)} hari · dasar ${rp(o.D.b)} · ${rp(o.D.jam)}/jam</small></div><em>${rp(o.upah)}<small>${dec(o.jam)} jam · ${o.n} hari</small></em></div>
+    ${o.list.length?`<div class="lb-ents">${o.list.map(({x,H})=>`<div class="lb-r"><span><b>${esc(tglS(x.d))}</b> · ${esc(JENIS[x.t==='p'&&H.sk==='5'?'l':x.t])}<small>${dec(jamV(x.j))} jam · ${esc(pengaliTxt(H))}${x.ket?' · '+esc(x.ket):''}</small></span><em>${rp(H.upah)}</em><button type="button" class="lb-x" data-lbd="${x.id}" aria-label="Hapus catatan lembur">✕</button></div>`).join('')}</div>`:'<p class="hint" style="margin:6px 0 0">Belum ada lembur bulan ini.</p>'}
+    ${o.warn.length?`<p class="ks-warn">⚠ ${o.warn.map(esc).join('<br>⚠ ')}</p>`:''}
+    <div class="lb-ea"><button type="button" class="btn" data-lba="${o.e.id}">＋ Lembur</button><button type="button" class="btn ghost" data-lbe="${o.e.id}">Ubah karyawan</button></div></div>`).join('')||'<p class="dp-empty">Tambahkan karyawan dulu (nama, jabatan, upah). Data upah hanya tersimpan di perangkat ini.</p>'}</div>
+   <div class="ks-act"><button type="button" class="btn" id="lbAddE">＋ Tambah karyawan</button>${Q.n?'<button type="button" class="btn ghost" id="lbPdf">🖨 Cetak / PDF</button><button type="button" class="btn ghost" id="lbXl">⬇ Excel</button>':''}</div>`;
+ }
+ function render(){
+  const b=$id('lbBody');if(!b)return;
+  $id('lbSub').textContent=mode==='q'?'Hitung upah lembur sesuai PP 35/2021':'Rekap lembur karyawan · '+perL(cur);
+  b.innerHTML=`<div class="bc-seg lb-mode"><button type="button" data-lbv="q" class="${mode==='q'?'on':''}">Hitung cepat<small>satu kali lembur</small></button><button type="button" data-lbv="t" class="${mode==='t'?'on':''}">Rekap karyawan<small>per bulan · PDF &amp; Excel</small></button></div>
+   ${mode==='q'?quick():team()}
+   <p class="hint lb-law">Dasar: PP 35/2021 Pasal 26 (batas lembur 4 jam/hari &amp; 18 jam/minggu, tidak termasuk lembur di hari istirahat mingguan/libur resmi), Pasal 31 (pengali), Pasal 32 (upah sejam = 1/173 × upah sebulan; 75% bila ada tunjangan tidak tetap; tidak di bawah upah minimum). UU Pelindungan Ketenagakerjaan yang disahkan DPR 6 Okt 2026 baru berlaku setelah masa transisi satu tahun. Bila perusahaan memakai perhitungan yang lebih menguntungkan pekerja, ikuti perhitungan perusahaan.</p>`;
+ }
+
+ /* ---------- form karyawan & lembur ---------- */
+ function formEmp(id){
+  const e=db.emp.find(z=>z.id===id)||{nama:'',jab:'',pokok:'',tetap:'',tdk:'',skema:''},c=cfg();
+  const f=(k,l,ph,num)=>`<label class="ks-f"><span>${l}</span><input class="in" id="lbE_${k}" ${num?'inputmode="numeric"':''} value="${esc(num?(e[k]?nf(uang(e[k])):''):e[k]||'')}" placeholder="${esc(ph||'')}"></label>`;
+  openModal(id?'Ubah karyawan':'Tambah karyawan',`<div class="ks-form">${f('nama','Nama','Nama karyawan')}${f('jab','Jabatan','mis. Sales Advisor')}${f('pokok','Upah pokok / bulan','0',1)}${f('tetap','Tunjangan tetap / bulan','0',1)}${f('tdk','Tunjangan tidak tetap / bulan','0 (opsional)',1)}
+   <label class="ks-f"><span>Hari kerja seminggu</span><select class="in" id="lbE_skema"><option value="">Ikuti pengaturan (${esc(c.skema)} hari)</option><option value="6"${e.skema==='6'?' selected':''}>6 hari (7 jam/hari)</option><option value="5"${e.skema==='5'?' selected':''}>5 hari (8 jam/hari)</option></select></label></div>
+   <p class="hint">Data upah hanya disimpan di perangkat ini, tidak dikirim ke mana pun.</p>
+   <div class="row" style="margin-top:10px"><button class="btn" type="button" id="lbESave">Simpan</button>${id?'<button class="btn ghost" type="button" id="lbEDel">Hapus karyawan</button>':''}</div>`);
+  $id('lbESave').onclick=()=>{const v={id:id||uid()};['nama','jab','pokok','tetap','tdk','skema'].forEach(k=>{const x=$id('lbE_'+k).value.trim();v[k]=['pokok','tetap','tdk'].includes(k)?uang(x):x});
+   if(!v.nama){$id('lbE_nama').focus();return}if(!v.pokok&&!v.tetap){$id('lbE_pokok').focus();return}
+   const i=db.emp.findIndex(z=>z.id===v.id);if(i>=0)db.emp[i]=v;else db.emp.push(v);save();close();render()};
+  const d=$id('lbEDel');if(d)d.onclick=()=>{if(d.dataset.ok!=='1'){d.dataset.ok='1';d.textContent='Yakin hapus? Ketuk lagi';return}db.emp=db.emp.filter(z=>z.id!==id);db.ent=db.ent.filter(x=>x.emp!==id);save();close();render()};
+ }
+ function formEnt(emp){
+  const e=db.emp.find(z=>z.id===emp);if(!e)return;const sk=e.skema||cfg().skema,d0=cur===today().slice(0,7)?today():cur+'-01';
+  openModal('Lembur · '+e.nama,`<div class="ks-form"><label class="ks-f"><span>Tanggal</span><input class="in" type="date" id="lbN_d" value="${d0}"></label>
+   <label class="ks-f"><span>Lembur di</span><select class="in" id="lbN_t">${Object.keys(JENIS).filter(k=>k!=='p'||sk!=='5').map(k=>`<option value="${k}">${JENIS[k]}</option>`).join('')}</select></label>
+   <label class="ks-f"><span>Jumlah jam lembur</span><input class="in" id="lbN_j" inputmode="decimal" value="2" placeholder="mis. 2 atau 1,5"></label>
+   <label class="ks-f"><span>Keterangan (opsional)</span><input class="in" id="lbN_k" maxlength="80" placeholder="mis. stock opname, event promo"></label></div>
+   <p class="hint" id="lbN_p"></p><div class="row" style="margin-top:10px"><button class="btn" type="button" id="lbNSave">Simpan lembur</button></div>`);
+  const pv=()=>{const x={emp,t:$id('lbN_t').value,j:$id('lbN_j').value},H=hitungEnt(x);$id('lbN_p').innerHTML=H?`${esc(pengaliTxt(H))} → <b>${rp(H.upah)}</b>${H.warn.length?'<br>⚠ '+H.warn.map(esc).join('<br>⚠ '):''}`:''};
+  ['lbN_t','lbN_j'].forEach(i=>$id(i).addEventListener('input',pv));$id('lbN_t').addEventListener('change',pv);pv();
+  $id('lbNSave').onclick=()=>{const d=$id('lbN_d').value,j=jamV($id('lbN_j').value);if(!d){$id('lbN_d').focus();return}if(!j){$id('lbN_j').focus();return}
+   db.ent.push({id:uid(),emp,d,t:$id('lbN_t').value,j,ket:$id('lbN_k').value.trim()});cur=d.slice(0,7);save();close();render();if(window.ofaToast)ofaToast('Lembur '+e.nama+' '+tglS(d)+' disimpan')};
+ }
+ function settings(){
+  const c=cfg(),f=(k,l,ph,num)=>`<label class="ks-f"><span>${l}</span><input class="in" id="lbC_${k}" ${num?'inputmode="numeric"':''} value="${esc(num?(c[k]?nf(uang(c[k])):''):c[k]||'')}" placeholder="${esc(ph||'')}"></label>`;
+  openModal('Pengaturan kalkulator lembur',`<div class="ks-form"><label class="ks-f"><span>Hari kerja seminggu (bawaan)</span><select class="in" id="lbC_skema"><option value="6"${c.skema!=='5'?' selected':''}>6 hari (7 jam/hari)</option><option value="5"${c.skema==='5'?' selected':''}>5 hari (8 jam/hari)</option></select></label>
+   ${f('umk','Upah minimum (UMK) daerah toko','mis. 2.500.000 — opsional',1)}
+   <p class="wk-p" style="margin:10px 0 2px"><b>Tanda tangan rekap</b></p>${f('t1','Dibuat oleh (jabatan)')}${f('n1','Nama')}${f('t2','Disetujui oleh (jabatan)')}${f('n2','Nama','kosongkan bila belum tahu')}</div>
+   <div class="row" style="margin-top:12px"><button class="btn" type="button" id="lbCSave">Simpan</button></div>`);
+  $id('lbCSave').onclick=()=>{const v={};['skema','umk','t1','n1','t2','n2'].forEach(k=>{v[k]=$id('lbC_'+k).value.trim()});v.umk=uang(v.umk)||'';db.cfg=v;save();close();render();if(window.ofaToast)ofaToast('Pengaturan lembur disimpan')};
+ }
+
+ /* ---------- PDF & Excel rekap ---------- */
+ function pdf(){
+  const Q=rekap(),c=cfg(),E=esc,r=ST.reg||{},A=Q.A.filter(o=>o.n);if(!A.length)return;
+  const sum=A.map((o,i)=>`<tr><td class="c">${i+1}</td><td><b>${E(o.e.nama)}</b>${o.e.jab?'<br><span>'+E(o.e.jab)+'</span>':''}</td><td class="r">${nf(o.D.b)}</td><td class="r">${nf(o.D.jam)}</td><td class="c">${o.n}</td><td class="c">${dec(o.jam)}</td><td class="c">${dec(o.konv)}</td><td class="r"><b>${nf(o.upah)}</b></td></tr>`).join('');
+  const det=A.map(o=>o.list.map(({x,H})=>`<tr><td class="c nw">${E(tglS(x.d))}</td><td>${E(o.e.nama)}</td><td>${E(JENIS[x.t==='p'&&H.sk==='5'?'l':x.t])}${x.ket?'<br><span>'+E(x.ket)+'</span>':''}</td><td class="c">${dec(jamV(x.j))}</td><td class="sm">${E(pengaliTxt(H))}</td><td class="c">${dec(H.konv)}</td><td class="r">${nf(H.upah)}</td></tr>`).join('')).join('');
+  const W=A.flatMap(o=>o.warn.map(w=>o.e.nama+' — '+w));
+  const sig=(t,n)=>`<div><p>${E(t||'')}</p><div class="sp"></div><b>${n?'( '+E(n)+' )':'(______________________)'}</b></div>`;
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E('Rekap Lembur '+(r.site||'')+' '+perL(cur))}</title><style>
+@page{size:A4 portrait;margin:10mm 9mm 11mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}
+*{box-sizing:border-box}body{margin:0;font:8.6pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:13pt;margin:0}h2{font-size:10pt;margin:12px 0 4px}.sub{color:#444;margin:2px 0 8px}
+.kpi{display:flex;gap:6px;margin:0 0 8px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 7px}.kpi small{display:block;font-size:7pt;color:#555}.kpi b{font-size:11pt}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #888;padding:3px 5px;vertical-align:top;line-height:1.3}th{background:#e8eefc;font-size:7.8pt;text-align:center;vertical-align:middle}
+td.c{text-align:center}td.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}td.sm{font-size:7.6pt}td.nw{white-space:nowrap}td span{color:#555;font-size:7.4pt}tr.tot td{background:#d9d9d9;font-weight:700}
+thead{display:table-header-group}tr{page-break-inside:avoid}.warn{border:1px solid #d97706;background:#fff7ed;padding:5px 7px;margin-top:8px;font-size:7.8pt}
+.sig{display:flex;justify-content:space-around;margin-top:16px;page-break-inside:avoid;text-align:center}.sig>div{width:40%}.sig p{margin:0}.sig .sp{height:48px}
+.law{margin-top:10px;font-size:7pt;color:#555}
+</style></head><body><h1>REKAP UPAH LEMBUR</h1><div class="sub">${E((r.site?r.site+' · ':'')+(r.toko||''))} · periode ${E(perL(cur))}</div>
+<div class="kpi"><div><small>Total upah lembur</small><b>Rp${nf(Q.tot)}</b></div><div><small>Total jam lembur</small><b>${dec(Q.jam)} jam</b></div><div><small>Karyawan lembur</small><b>${A.length}</b></div><div><small>Catatan lembur</small><b>${Q.n}</b></div></div>
+<table><thead><tr><th style="width:4%">No</th><th>Nama / Jabatan</th><th style="width:13%">Dasar upah (Rp)</th><th style="width:11%">Upah sejam (Rp)</th><th style="width:7%">Hari</th><th style="width:8%">Jam lembur</th><th style="width:9%">Jam upah (konversi)</th><th style="width:13%">Upah lembur (Rp)</th></tr></thead><tbody>${sum}<tr class="tot"><td colspan="5" class="r">TOTAL</td><td class="c">${dec(Q.jam)}</td><td class="c">${dec(A.reduce((a,o)=>a+o.konv,0))}</td><td class="r">${nf(Q.tot)}</td></tr></tbody></table>
+<h2>Rincian lembur</h2>
+<table><thead><tr><th style="width:11%">Tanggal</th><th style="width:17%">Nama</th><th>Lembur di</th><th style="width:6%">Jam</th><th style="width:25%">Pengali</th><th style="width:8%">Jam upah</th><th style="width:12%">Upah (Rp)</th></tr></thead><tbody>${det}</tbody></table>
+${W.length?`<div class="warn"><b>Perlu dicek:</b><br>${W.map(E).join('<br>')}</div>`:''}
+<div class="sig">${sig(c.t1,c.n1)}${sig(c.t2,c.n2)}</div>
+<div class="law">Dihitung sesuai PP 35/2021: upah sejam = 1/173 × upah sebulan (Pasal 32); hari kerja: jam ke-1 1,5×, jam berikutnya 2×; hari istirahat mingguan/libur resmi skema 6 hari: jam 1–7 2×, jam ke-8 3×, jam 9–11 4× (libur di hari kerja terpendek: jam 1–5 2×, jam ke-6 3×, jam 7–9 4×); skema 5 hari: jam 1–8 2×, jam ke-9 3×, jam 10–12 4× (Pasal 31). Batas lembur 4 jam/hari &amp; 18 jam/minggu (Pasal 26). · Store Head Kit by Lukian Prayoga</div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  if(window.ofaToast)ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
+  if(window.bcLog)bcLog('lembur',perL(cur),'pdf · '+A.length+' karyawan');
+  return html;
+ }
+ window.lbPdf=pdf;
+ function excel(){
+  const Q=rekap(),A=Q.A.filter(o=>o.n);if(!A.length)return;
+  const R1=[['No','Nama','Jabatan','Skema (hari)','Dasar upah','Upah sejam','Hari lembur','Jam lembur','Jam upah (konversi)','Upah lembur']];
+  A.forEach((o,i)=>R1.push([i+1,o.e.nama,o.e.jab||'',Number(o.e.skema||cfg().skema),o.D.b,Math.round(o.D.jam),o.n,o.jam,o.konv,o.upah]));
+  R1.push(['','TOTAL','','','','',Q.n,Q.jam,A.reduce((a,o)=>a+o.konv,0),Q.tot]);
+  const R2=[['Tanggal','Nama','Lembur di','Jam','Pengali','Jam upah','Upah','Keterangan']];
+  A.forEach(o=>o.list.forEach(({x,H})=>R2.push([x.d,o.e.nama,JENIS[x.t==='p'&&H.sk==='5'?'l':x.t],jamV(x.j),pengaliTxt(H),H.konv,H.upah,x.ket||''])));
+  const r=ST.reg||{},name=('Rekap Lembur '+(r.site?r.site+' ':'')+perL(cur)).replace(/[\\/:*?"<>|]+/g,' ')+'.xlsx';
+  const blob=xlsxSimple([{name:'Rekap',rows:R1,widths:[5,26,18,10,14,12,10,10,14,14],head:1},{name:'Rincian',rows:R2,widths:[12,26,34,7,44,10,13,30],head:1}],'Rekap Lembur');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+  if(window.ofaToast)ofaToast('Excel diunduh: '+name);if(window.bcLog)bcLog('lembur',perL(cur),'excel · '+A.length+' karyawan');
+ }
+
+ /* ---------- event ---------- */
+ box.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-lbv]');if(!t)return;
+  if(t.dataset.lbv){mode=t.dataset.lbv;save();return render()}
+  if(t.dataset.lbs){db.q.skema=t.dataset.lbs;if(t.dataset.lbs==='5'&&db.q.jenis==='p')db.q.jenis='l';save();return render()}
+  if(t.dataset.lbj){db.q.jenis=t.dataset.lbj;save();return render()}
+  if(t.dataset.lbm){const p=cur.split('-').map(Number),d=new Date(p[0],p[1]-1+Number(t.dataset.lbm),1);cur=d.getFullYear()+'-'+p2(d.getMonth()+1);save();return render()}
+  if(t.dataset.lba)return formEnt(t.dataset.lba);
+  if(t.dataset.lbe)return formEmp(t.dataset.lbe);
+  if(t.dataset.lbd){if(t.dataset.ok!=='1'){t.dataset.ok='1';t.textContent='Hapus?';t.classList.add('on');return}db.ent=db.ent.filter(x=>x.id!==t.dataset.lbd);save();return render()}
+  if(t.id==='lbAddE')return formEmp('');
+  if(t.id==='lbPdf'){if(!cfg().n1){if(window.ofaToast)ofaToast('Isi dulu nama penanda tangan');return settings()}return pdf()}
+  if(t.id==='lbXl')return excel();
+ });
+ box.addEventListener('change',e=>{if(e.target.id==='lbRinci'){db.q.rinci=e.target.checked;if(db.q.rinci&&!db.q.pokok&&db.q.gaji)db.q.pokok=db.q.gaji;save();render()}});
+ const MAP={lbGaji:'gaji',lbPokok:'pokok',lbTetap:'tetap',lbTdk:'tdk',lbJam:'jam'};
+ box.addEventListener('input',e=>{const k=MAP[e.target.id];if(!k)return;const el=e.target,id=el.id;
+  if(k!=='jam'){const n=uang(el.value);db.q[k]=n||'';el.value=n?nf(n):''}else db.q.jam=el.value.replace(/[^\d.,]/g,'').slice(0,5);
+  save();clearTimeout(render.t);render.t=setTimeout(()=>{render();const i=$id(id);if(i){i.focus();const L=i.value.length;try{i.setSelectionRange(L,L)}catch(x){}}},350)});
+ document.addEventListener('input',e=>{const i=e.target;if(i.id&&/^lb[EC]_(pokok|tetap|tdk|umk)$/.test(i.id)){const n=uang(i.value);i.value=n?nf(n):''}});
+ $id('lbCfg').onclick=settings;
+ window.lbRender=render;
+ render();
 })();
 
 });
