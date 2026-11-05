@@ -4412,8 +4412,15 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    await loadXlsx();
    const rem=r=>r.jenis==='repeat'?'Repeat '+STORE_NO+' · terjual 30h '+r.q30+' · stok '+r.av:r.jenis==='ukuran'?'Lengkapi ukuran '+STORE_NO:'Warna baru '+STORE_NO;
    const x=await api('pusatExport',{items:P.map(r=>({a:r.k,q:sel[r.k],remark:rem(r)}))});
-   const ws=XLSX.utils.aoa_to_sheet([x.header].concat(x.rows));
-   ws['!cols']=x.header.map((h,i)=>({wch:i===5?34:i===14?36:Math.max(10,String(h).length+2)}));
+   // format ringkas (revisi pengelola stok pusat): tanpa Activity, Gender Group, Story, Product Type;
+   // di paling ujung langsung stok W/H, Order STO Qty, lalu Remark dari toko
+   const nk=h=>String(h||'').toLowerCase().replace(/[^a-z0-9]/g,''),H=x.header.map(nk);
+   const buang=['activity','gendergroup','story','producttype'],ujung=[H.findIndex(h=>h.startsWith('whavailability')),H.indexOf('orderstoqty'),H.indexOf('remark')].filter(i=>i>=0);
+   const urut=H.map((h,i)=>i).filter(i=>!buang.includes(H[i])&&!ujung.includes(i)).concat(ujung);
+   const head=urut.map(i=>x.header[i]),body=x.rows.map(r=>urut.map(i=>r[i]));
+   const ws=XLSX.utils.aoa_to_sheet([head].concat(body));
+   ws['!cols']=head.map(h=>{const k=nk(h);return {wch:k==='articledescription'?34:k==='remark'?36:Math.max(10,String(h).length+2)}});
+   ws['!autofilter']={ref:'A1:'+XLSX.utils.encode_col(head.length-1)+(body.length+1)};
    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Order STO '+STORE_NO);
    const d=new Date(),nm='Order STO '+STORE_NO+' - '+d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear()+'.xlsx';
    XLSX.writeFile(wb,nm);toast('Order STO diunduh · '+x.rows.length+' SKU');
