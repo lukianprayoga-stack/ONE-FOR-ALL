@@ -157,6 +157,9 @@ textarea.in{min-height:240px;resize:vertical}
 /* ====== aplikasi mandiri ====== */
 body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);padding:0!important}
 #bc .bc-seg3{grid-template-columns:repeat(3,1fr)}
+.na-ban{background:var(--ok-bg,#e9f9ef)!important;border-color:color-mix(in srgb,var(--ok-fg,#15803d) 35%,transparent)!important}
+.p5-d.na-d{background:var(--ok-fg,#15803d);font-size:11.5px;letter-spacing:.04em}.na-np{display:inline!important;font-size:11px!important;color:var(--ok-fg,#15803d)!important;font-weight:700}
+#na .p5-pr b{color:var(--fg)}.na-x{opacity:.92;border-style:dashed!important}.na-tabs{margin-top:12px}
 #lb .lb-mode{margin-top:10px}.lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:6px}@media(max-width:720px){.lb-grid{grid-template-columns:1fr}}
 .lb-tg{display:flex;gap:8px;align-items:center;font-size:13px;margin:12px 0 4px;cursor:pointer}.lb-l{margin:12px 0 0!important;font-weight:700}
 #lb .bc-seg{margin-top:6px}.lb-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.lb-chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:8px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:left}.lb-chips button.on{background:var(--ink);color:var(--inkfg);border-color:transparent}
@@ -327,8 +330,8 @@ body.locked{overflow:hidden}
  addEventListener('load',()=>setTimeout(tutup,Math.max(0,min-(Date.now()-t0))));
  setTimeout(tutup,min+2500);})();
 </script>
-<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA Blind Counting · Display · Kas · Budget · Promo · Lembur</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
-<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button><button type="button" role="tab" data-tab="bg">Rekap Budget</button><button type="button" role="tab" data-tab="p5">Produk Promo</button><button type="button" role="tab" data-tab="lb">Kalkulator Lembur</button></nav>
+<header class="app-top"><img src="icons/icon-192.png" alt=""><div><b>Store Head Kit</b><small>BA BC · Display · Kas · Budget · Promo · New Arrival · Lembur</small></div><button type="button" class="app-inst" id="appInst" hidden aria-label="Instal aplikasi" title="Instal aplikasi">⬇</button><button type="button" id="appTh" aria-label="Ganti tema" title="Ganti tema">🌗</button></header>
+<nav class="app-tabs" role="tablist" aria-label="Fitur"><button type="button" role="tab" data-tab="bc">BA Blind Counting</button><button type="button" role="tab" data-tab="kd">Kepatuhan Display</button><button type="button" role="tab" data-tab="kas">Rekap Kas</button><button type="button" role="tab" data-tab="bg">Rekap Budget</button><button type="button" role="tab" data-tab="p5">Produk Promo</button><button type="button" role="tab" data-tab="na">New Arrival</button><button type="button" role="tab" data-tab="lb">Kalkulator Lembur</button></nav>
 <main class="app-main">
   <div class="app-start" id="appStart" hidden><div><b>Mulai di sini: isi data toko</b><span>Nama toko, nama Store Head &amp; atasan yang tercetak di berita acara. Cukup sekali, tersimpan di perangkat ini.</span></div><button class="btn" type="button" id="appSet">⚙ Isi data toko</button></div>
   <div class="pane" data-pane="bc">
@@ -416,6 +419,24 @@ body.locked{overflow:hidden}
     </ol>
   </section>
   </div>
+  <div class="pane" data-pane="na" hidden>
+  <section class="rs" id="na" aria-label="New arrival">
+    <div class="sh-head"><div><h3>New Arrival</h3><p id="naSub">Produk new arrival yang ada di toko Anda</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="naUp">⇪ Upload</button></div></div>
+    <input type="file" id="naFile" accept=".xlsx,.xls,.csv" hidden>
+    <div id="naBody"></div>
+    <div class="iv-status" id="naStatus"></div>
+  </section>
+  <section class="rs app-help" aria-label="Cara pakai new arrival">
+    <div class="sh-head"><div><h3>Cara pakai</h3><p>New Arrival · cek produk baru di toko Anda</p></div></div>
+    <ol>
+      <li>Database new arrival disiapkan oleh pembuat aplikasi dan otomatis terunduh saat aplikasi dibuka.</li>
+      <li>Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b>. File yang sama juga memperbarui Kepatuhan Display &amp; Produk Promo.</li>
+      <li>Lihat produk new arrival di toko: harga normal, stok per ukuran, dan lokasi bin. Dahulukan yang <b>belum dipajang</b>; tab <b>Belum ada di toko</b> berisi artikel new arrival yang belum masuk toko Anda.</li>
+      <li>Produk new arrival dijual <b>harga normal, tidak ikut diskon apa pun</b>. Bila ada SKU yang juga tercantum di database promo, aplikasi memberi peringatan.</li>
+      <li>Unduh daftarnya sebagai <b>Excel</b>, <b>PDF</b>, atau <b>CSV</b> untuk tim.</li>
+    </ol>
+  </section>
+  </div>
   <div class="pane" data-pane="lb" hidden>
   <section class="rs" id="lb" aria-label="Kalkulator lembur">
     <div class="sh-head"><div><h3>Kalkulator Lembur</h3><p id="lbSub">Hitung upah lembur sesuai PP 35/2021</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="lbCfg" aria-label="Pengaturan kalkulator lembur">⚙</button></div></div>
@@ -477,7 +498,7 @@ const stSave=()=>{try{localStorage.setItem(SK,JSON.stringify(ST))}catch(e){if(!s
 if(ST.reg)stSave();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}
 /* data laporan besar disimpan di IndexedDB (kuota jauh lebih besar dari localStorage) */
-const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas','bcapp_budget','bcapp_promo','bcapp_inv','bcapp_lembur'];let db=null;
+const BIG=(function(){const mem=new Map(),KEYS=['bcapp_rep','bcapp_names','bcapp_kd','bcapp_kas','bcapp_budget','bcapp_promo','bcapp_inv','bcapp_lembur','bcapp_na'];let db=null;
  const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},del:k=>{try{localStorage.removeItem(k)}catch(e){}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
  const put=(k,v)=>{if(!db)return ls.set(k,v);try{const t=db.transaction('kv','readwrite');v==null?t.objectStore('kv').delete(k):t.objectStore('kv').put(v,k)}catch(e){}};
  const ready=new Promise(done=>{let fin=false;const ok=()=>{if(fin)return;fin=true;
@@ -2286,7 +2307,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   const st=$id('p5Status');st.className='iv-status';st.textContent='Membaca '+file.name+'…';
   try{inv=await parseInv(file);try{BIG.setItem(IK,JSON.stringify(inv))}catch(e){}
    const R=cocok();st.textContent='✓ Inventory '+tgl(inv.date)+' terbaca · '+nf(inv.items.length)+' SKU'+(R?' · '+nf(R.arts.length)+' artikel promo ada di toko':'');
-   view={d:'',cat:'',gudang:false,q:''};render();
+   view={d:'',cat:'',gudang:false,q:''};render();if(window.naRender)naRender();
    if(!silent){if(window.kdPick)window.kdPick(file);if(window.bcLog)bcLog('promo',promo&&promo.meta?promo.meta.judul:'',R?R.arts.length+' artikel promo':'')}
   }catch(e){st.className='iv-status err';st.textContent='Gagal membaca file: '+(e.message||e)}
  }
@@ -2513,6 +2534,172 @@ ${W.length?`<div class="warn"><b>Perlu dicek:</b><br>${W.map(E).join('<br>')}</d
  $id('lbCfg').onclick=settings;
  window.lbRender=render;
  render();
+})();
+
+});
+</script>
+<script>
+BIG.ready.then(function(){
+/* ====== NEW ARRIVAL (database new arrival dari admin × inventory by bin toko) ====== */
+(function(){
+ const box=document.getElementById('na');if(!box)return;
+ const $id=i=>document.getElementById(i);
+ const NK='bcapp_na',IK='bcapp_inv',PK='bcapp_promo',TTL=10*60e3;
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const p2=n=>('0'+n).slice(-2);
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const tgl=k=>{const p=String(k||'').slice(0,10).split('-').map(Number);return p.length===3&&p[1]?p[2]+' '+BLN[p[1]-1]+' '+p[0]:''};
+ const clean=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+ const cap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+ const catL=s=>cap(String(s||'').replace(/^[A-Z]\d{2}(?=[A-Z])/,''));
+ let na=null,busy=false,err='',view={tab:'ada',cat:'',gudang:false,q:''},invCache=null;
+ try{na=JSON.parse(BIG.getItem(NK)||'null')}catch(e){na=null}
+ const inv=()=>{const s=BIG.getItem(IK);if(!s)return null;if(invCache&&invCache.s===s)return invCache.v;let v=null;try{v=JSON.parse(s)}catch(e){v=null}invCache={s,v};return v};
+ /* ---------- ambil database new arrival dari server ---------- */
+ async function sync(force){
+  if(busy||!window.shkApi||!ST.reg)return render();
+  if(!force&&na&&Date.now()-(na.cek||0)<TTL)return render();
+  busy=true;render();
+  try{
+   const r=await shkApi('bcAppNa',{id:shkDev(),ver:na&&na.meta&&na.meta.ver||''});
+   if(r&&r.blokir)err='Akses perangkat ini dinonaktifkan.';
+   else if(r&&r.daftar===false)err='Perangkat belum tercatat di server. Buka ulang aplikasi sebentar lagi.';
+   else if(r&&r.meta===null){na={meta:null,rows:[],cek:Date.now()};err=''}
+   else if(r&&r.same){na.cek=Date.now();na.meta=r.meta;err=''}
+   else if(r&&r.rows){na={meta:r.meta,rows:r.rows,cek:Date.now()};err=''}
+   try{BIG.setItem(NK,JSON.stringify(na))}catch(e){}
+  }catch(e){err=/tidak dikenal/i.test(e.message||'')?'Database new arrival belum disiapkan pembuat aplikasi.':e.net?(na?'':'Tidak tersambung. Butuh internet untuk mengambil database new arrival pertama kali.'):e.message}
+  finally{busy=false;render()}
+ }
+ /* ---------- cocokkan ---------- */
+ const IF=['k','n','g','c','z','l3','l4','s','w','bs','bw','o','bo','r'];
+ const io=a=>{const o={};IF.forEach((f,i)=>o[f]=a[i]);o.o=Number(o.o)||0;o.r=Number(o.r)||0;o.bo=o.bo||'';return o};
+ // kunci artikel = generic (9 digit) + warna, sama dengan kolom Cross-Site (mis. 910004166.NAV)
+ const artDb=r=>{const x=String(r[3]||'');if(/^\d{9}\.\S+/.test(x))return x.toUpperCase();const pp=String(r[1]||'').split(',').map(clean);return String(r[0]).slice(0,9)+'.'+(pp.length>=3?pp[pp.length-2]:'-').toUpperCase()};
+ function cocok(){
+  const I=inv();if(!na||!na.rows||!na.rows.length||!I)return null;
+  const S=new Map(na.rows.map(r=>[String(r[0]),r])),G=new Map();na.rows.forEach(r=>{const k=artDb(r);if(!G.has(k))G.set(k,r)});
+  const L=[];
+  I.items.forEach(a=>{const o=io(a),ak=String(o.g||o.k).slice(0,9)+'.'+String(o.c||'-').toUpperCase();let r=S.get(o.k),viaArt=false;if(!r){r=G.get(ak);viaArt=!!r}if(!r)return;
+   L.push(Object.assign(o,{ak,harga:viaArt?0:Number(r[2])||0,gr:r[4],viaArt,l3:o.l3||r[5],l4:o.l4||catL(r[6])}))});
+  const A={};L.forEach(o=>{const x=A[o.ak]||(A[o.ak]={k:o.ak,g:o.g,c:o.c,n:o.n,l3:o.l3,l4:o.l4,s:0,w:0,o:0,r:0,sz:[],hMin:Infinity,hMax:0,bw:[],bs:[],bo:[]});
+   x.s+=o.s;x.w+=o.w;x.o+=o.o;x.r+=o.r;x.sz.push(o);if(o.harga){x.hMin=Math.min(x.hMin,o.harga);x.hMax=Math.max(x.hMax,o.harga)}if(o.bw)x.bw.push(o.bw);if(o.bs)x.bs.push(o.bs);if(o.bo)x.bo.push(o.bo)});
+  const uq=a=>[...new Set(a.join(', ').split(', ').filter(Boolean))].join(', ');
+  const arts=Object.values(A).map(x=>Object.assign(x,{bw:uq(x.bw),bs:uq(x.bs),bo:uq(x.bo)}));
+  arts.sort((a,b)=>((a.s<=0&&a.w>0)?0:1)-((b.s<=0&&b.w>0)?0:1)||(a.l3||'').localeCompare(b.l3||'')||a.n.localeCompare(b.n));
+  // artikel new arrival yang belum ada stoknya di toko
+  const ada=new Set(arts.map(x=>x.k)),M={};
+  na.rows.forEach(r=>{const k=artDb(r);if(ada.has(k))return;const pp=String(r[1]||'').split(',').map(clean),x=M[k]||(M[k]={k,g:k.split('.')[0],c:k.split('.').slice(1).join('.'),n:pp.length>=3?pp.slice(0,-2).join(', '):clean(r[1]),l3:r[5],l4:catL(r[6]),harga:Number(r[2])||0,sz:[]});x.sz.push(pp.length>=3?pp[pp.length-1]:'');if(!x.harga)x.harga=Number(r[2])||0});
+  const belum=Object.values(M).sort((a,b)=>(a.l3||'').localeCompare(b.l3||'')||a.n.localeCompare(b.n));
+  // new arrival tidak boleh ikut diskon: cek silang dengan database Produk Promo
+  let P=null;try{P=JSON.parse(BIG.getItem(PK)||'null')}catch(e){P=null}
+  const bentrok=P&&P.rows?P.rows.filter(r=>S.has(String(r[0]))).map(r=>({k:String(r[0]),n:r[1],d:Number(r[2])||0,judul:P.meta&&P.meta.judul||'database promo'})):[];
+  return {L,arts,belum,bentrok};
+ }
+ const hLbl=x=>!isFinite(x.hMin)?'-':x.hMin===x.hMax?rp(x.hMin):rp(x.hMin)+' – '+rp(x.hMax);
+ function saring(list){
+  const q=view.q.toLowerCase().split(/\s+/).filter(Boolean);
+  return list.filter(x=>(!view.cat||(x.l3||'Lainnya')===view.cat)&&(view.tab!=='ada'||!view.gudang||(x.s<=0&&x.w>0))&&q.every(w=>(x.n+' '+x.c+' '+x.g+' '+(x.bw||'')+' '+(x.bs||'')+' '+(x.l4||'')).toLowerCase().includes(w)));
+ }
+ /* ---------- tampilan ---------- */
+ function render(){
+  const b=$id('naBody');if(!b)return;
+  const m=na&&na.meta,I=inv();
+  $id('naSub').textContent=m?m.judul:'Produk new arrival yang ada di toko Anda';
+  const banner=m?`<div class="p5-ban na-ban"><div><b>${esc(m.judul)}</b> <em class="ok">harga normal</em><small>${nf(m.rows)} SKU new arrival${m.mulai?' · mulai '+esc(tgl(m.mulai)):''} · diperbarui ${esc(tgl(m.at))}</small></div><button type="button" class="bg-lnk" data-na="sync">${busy?'Memeriksa…':'Perbarui'}</button></div>`
+   :`<div class="p5-ban none"><div><b>${busy?'Mengambil database new arrival…':err?esc(err):'Database new arrival belum tersedia.'}</b><small>Database new arrival diupload oleh pembuat aplikasi. Setelah tersedia, upload inventory by bin untuk melihat produk new arrival di toko Anda.</small></div>${busy?'':'<button type="button" class="bg-lnk" data-na="sync">Coba lagi</button>'}</div>`;
+  const invTxt=I?`<p class="hint" style="margin:8px 0 0">Inventory ${esc(tgl(I.date))}${I.loc?' · '+esc(I.loc):''} · ${nf(I.items.length)} SKU · <button type="button" class="bg-lnk" data-na="up">ganti file</button></p>`:'';
+  if(!I){b.innerHTML=banner+`<p class="dp-empty">Ketuk <b>⇪ Upload</b> lalu pilih file <b>export inventory by bin</b> (file yang sama dengan Kepatuhan Display &amp; Produk Promo). Produk new arrival di toko Anda langsung muncul, lengkap dengan harga normal, stok per ukuran, dan lokasi bin.</p>`;return}
+  const R=cocok();if(!R){b.innerHTML=banner+invTxt;return}
+  const {L,arts,belum,bentrok}=R,gud=arts.filter(x=>x.s<=0&&x.w>0),pcs=L.reduce((a,o)=>a+o.s+o.w+o.o+o.r,0);
+  const src=view.tab==='ada'?arts:belum,F=saring(src),cats=[...new Set(src.map(x=>x.l3||'Lainnya'))].sort();
+  const warn=bentrok.length?`<div class="ks-warn">⚠ <b>${nf(bentrok.length)} SKU new arrival juga ada di ${esc(bentrok[0].judul)}.</b> Produk new arrival dijual harga normal dan tidak ikut diskon apa pun. Cek ke admin/atasan sebelum dijual dengan diskon: ${bentrok.slice(0,5).map(x=>esc(x.k)+' '+esc(String(x.n).split(',')[0])+' ('+Math.round(x.d*100)+'%)').join(', ')}${bentrok.length>5?', …':''}</div>`:'';
+  const item=x=>view.tab==='ada'?`<div class="p5-a${x.s<=0&&x.w>0?' g':''}"><span class="p5-d na-d">NEW</span><div><b>${esc(x.n)}</b><small>${esc(x.c)} · ${esc(x.g)} · ${esc(cap(x.l3))}${x.l4?' / '+esc(x.l4):''}</small>
+     <div class="p5-pr"><b>${esc(hLbl(x))}</b><small class="na-np">harga normal · tidak ikut diskon</small></div>
+     <div class="p5-sz">${x.sz.sort((a,b)=>a.k.localeCompare(b.k)).map(o=>`<span title="${esc(o.k)}">${esc(o.z||'-')} <b>${nf(o.s+o.w+o.o+o.r)}</b></span>`).join('')}</div>
+     <small>Toko ${nf(x.s)} · gudang ${nf(x.w)}${x.o?' · zona lain '+nf(x.o):''}${x.r?' · rusak '+nf(x.r):''}${x.s<=0&&x.w>0?' · <b class="p5-w">belum dipajang</b>':''}</small>${x.bw?`<small class="kd-bin">📍 Gudang: ${esc(x.bw)}</small>`:''}${x.bs?`<small class="p5-bs">Sales area: ${esc(x.bs)}</small>`:''}${x.bo?`<small class="p5-bs">Lainnya: ${esc(x.bo)}</small>`:''}</div></div>`
+   :`<div class="p5-a na-x"><span class="p5-d na-d">NEW</span><div><b>${esc(x.n)}</b><small>${esc(x.c)} · ${esc(x.g)} · ${esc(cap(x.l3))}${x.l4?' / '+esc(x.l4):''}</small><div class="p5-pr"><b>${x.harga?rp(x.harga):'-'}</b></div><small>Ukuran di database: ${esc(x.sz.filter(Boolean).join(', ')||'-')} · <b>belum ada stok di toko</b></small></div></div>`;
+  b.innerHTML=banner+invTxt+warn+`
+   <div class="bg-sum p5-sum"><div><small>Artikel new arrival di toko</small><b>${nf(arts.length)}</b></div><div class="${gud.length?'over':'ok'}"><small>Belum dipajang</small><b>${nf(gud.length)} artikel</b></div><div><small>Belum ada di toko</small><b>${nf(belum.length)} artikel</b></div></div>
+   <p class="hint" style="margin:6px 0 0">${nf(L.length)} SKU · ${nf(pcs)} pcs new arrival di toko</p>
+   <div class="kd-tabs na-tabs" role="tablist"><button type="button" data-nat="ada" class="${view.tab==='ada'?'on':''}">Ada di toko (${nf(arts.length)})</button><button type="button" data-nat="belum" class="${view.tab==='belum'?'on':''}">Belum ada di toko (${nf(belum.length)})</button></div>
+   <div class="kd-tools" style="margin-top:8px"><input class="in" id="naQ" type="search" placeholder="Cari nama, warna, generic, bin…" value="${esc(view.q)}"><select class="in" id="naCat"><option value="">Semua kategori</option>${cats.map(c=>`<option value="${esc(c)}"${view.cat===c?' selected':''}>${esc(cap(c))}</option>`).join('')}</select></div>
+   ${view.tab==='ada'?`<label class="kd-chk"><input type="checkbox" id="naG"${view.gudang?' checked':''}> Hanya yang belum dipajang (stok di gudang saja)</label>`:'<p class="hint" style="margin:8px 0 0">Artikel new arrival di database yang tidak ada stoknya di inventory toko ini. Bisa jadi bahan permintaan barang.</p>'}
+   <p class="hint" style="margin:6px 0">${nf(F.length)} artikel ditampilkan</p>
+   <div class="p5-list">${F.map(item).join('')||'<p class="dp-empty">Tidak ada yang cocok.</p>'}</div>
+   <div class="ks-act"><button class="btn" type="button" data-na="xlsx">⬇ Unduh Excel</button><button class="btn ghost" type="button" data-na="pdf">🖨 Cetak / Simpan PDF</button><button class="btn ghost" type="button" data-na="csv">CSV</button></div>
+   <p class="hint">Semua stok terdeteksi: sales area, gudang, zona lain (mis. POS/booking), dan barang rusak. Ukuran yang tidak tercantum di database tetap ikut bila generic &amp; warnanya new arrival. Unduhan mengikuti tab &amp; filter yang dipilih.</p>`;
+ }
+ /* ---------- unduhan ---------- */
+ const fname=ext=>{const m=na&&na.meta,I=inv();return ((m?m.judul:'New Arrival')+' '+(ST.reg?ST.reg.site:'')+' '+(I?tgl(I.date):'')).replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim()+'.'+ext};
+ function unduh(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);ofaToast('Diunduh: '+name)}
+ const HA=['No','Kode SKU','Nama Produk','Generic','Warna','Ukuran','Kategori','Sub kategori','Harga normal','Stok sales area','Stok gudang','Stok zona lain','Stok rusak','Total stok','Lokasi bin gudang','Lokasi bin sales area','Lokasi zona lain','Status','Catatan'];
+ const HB=['No','Artikel (generic.warna)','Nama Produk','Kategori','Sub kategori','Harga normal','Ukuran di database','Status'];
+ function data(){
+  const R=cocok();if(!R)return null;
+  if(view.tab==='belum'){const F=saring(R.belum);return {R,head:HB,rows:F.map((x,i)=>[i+1,x.k,x.n,cap(x.l3),x.l4,x.harga||'',x.sz.filter(Boolean).join(', '),'Belum ada stok di toko']),n:F.length}}
+  const F=saring(R.arts),keys=new Set(F.map(x=>x.k));
+  const L=R.L.filter(o=>keys.has(o.ak)).sort((a,b)=>((a.s<=0&&a.w>0)?0:1)-((b.s<=0&&b.w>0)?0:1)||(a.l3||'').localeCompare(b.l3||'')||a.n.localeCompare(b.n)||a.k.localeCompare(b.k));
+  return {R,head:HA,rows:L.map((o,i)=>[i+1,o.k,o.n,o.g,o.c,o.z,cap(o.l3),o.l4,o.harga||'',o.s,o.w,o.o,o.r,o.s+o.w+o.o+o.r,o.bw,o.bs,o.bo,o.s>0?'Sudah di sales area':o.w>0?'Belum dipajang (di gudang)':o.o>0?'Di zona lain':'Hanya stok rusak',(o.viaArt?'Ukuran ikut artikel new arrival · ':'')+'Harga normal, tidak ikut diskon']),n:F.length};
+ }
+ function xlsx(){
+  const D=data();if(!D||!D.rows.length)return ofaToast('Tidak ada data untuk diunduh');const m=na&&na.meta,I=inv(),R=D.R;
+  const sum=[[m?m.judul:'New Arrival'],[(I&&I.loc||'')+' · inventory '+(I?tgl(I.date):'')],[],['SKU new arrival di database',na.rows.length],['Artikel new arrival di toko',R.arts.length],['Artikel belum dipajang',R.arts.filter(x=>x.s<=0&&x.w>0).length],['Artikel belum ada di toko',R.belum.length],['SKU juga ada di database promo',R.bentrok.length],[],['Produk new arrival dijual harga normal (tidak ikut diskon apa pun).'],['Store Head Kit by Lukian Prayoga']];
+  const sheets=[{name:view.tab==='belum'?'Belum Ada di Toko':'New Arrival di Toko',rows:[D.head].concat(D.rows),widths:view.tab==='belum'?[5,18,40,14,18,13,28,22]:[5,14,40,12,10,9,14,18,13,10,10,10,9,9,34,34,26,24,30],head:1},{name:'Ringkasan',rows:sum,widths:[36,40],title:1}];
+  if(R.bentrok.length)sheets.push({name:'Cek Diskon',rows:[['Kode SKU','Nama','Database promo','Disc']].concat(R.bentrok.map(x=>[x.k,x.n,x.judul,Math.round(x.d*100)+'%'])),widths:[14,44,28,8],head:1});
+  unduh(xlsxSimple(sheets,m?m.judul:'New Arrival'),fname('xlsx'));if(window.bcLog)bcLog('naxl',m?m.judul:'','excel · '+D.rows.length+' baris');
+ }
+ function csv(){
+  const D=data();if(!D||!D.rows.length)return ofaToast('Tidak ada data untuk diunduh');
+  const txt=[D.head].concat(D.rows).map(r=>r.map(v=>{v=String(v==null?'':v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\n');
+  unduh(new Blob(['﻿'+txt],{type:'text/csv'}),fname('csv'));if(window.bcLog)bcLog('naxl',na&&na.meta?na.meta.judul:'','csv · '+D.rows.length+' baris');
+ }
+ function pdf(){
+  const R=cocok();if(!R)return;const m=na&&na.meta,I=inv(),E=esc,ada=view.tab==='ada',F=saring(ada?R.arts:R.belum);if(!F.length)return ofaToast('Tidak ada data untuk dicetak');
+  const rows=ada?F.map((x,i)=>`<tr${x.s<=0&&x.w>0?' class="g"':''}><td>${i+1}</td><td class="l"><b>${E(x.n)}</b><br><span>${E(x.c)} · ${E(x.g)}</span></td><td>${E(cap(x.l3))}<br><span>${E(x.l4||'')}</span></td><td class="r">${E(hLbl(x))}</td><td class="l">${x.sz.map(o=>E(o.z||'-')+' ('+nf(o.s+o.w+o.o+o.r)+')').join(', ')}</td><td>${nf(x.s)}</td><td>${nf(x.w)}</td><td>${nf(x.o+x.r)}</td><td class="l sm">${E(x.bw||'-')}${x.bo?'<br>'+E(x.bo):''}</td><td class="bx"><i></i></td></tr>`).join('')
+   :F.map((x,i)=>`<tr><td>${i+1}</td><td class="l"><b>${E(x.n)}</b><br><span>${E(x.c)} · ${E(x.g)}</span></td><td>${E(cap(x.l3))}<br><span>${E(x.l4||'')}</span></td><td class="r">${x.harga?rp(x.harga):'-'}</td><td class="l">${E(x.sz.filter(Boolean).join(', ')||'-')}</td></tr>`).join('');
+  const head=ada?'<th style="width:3%">No</th><th style="width:25%">Produk</th><th style="width:11%">Kategori</th><th style="width:10%">Harga normal</th><th style="width:17%">Ukuran (stok)</th><th style="width:5%">Toko</th><th style="width:5%">Gudang</th><th style="width:5%">Lain/ rusak</th><th style="width:16%">Lokasi bin gudang / lainnya</th><th style="width:3%">✓</th>'
+   :'<th style="width:4%">No</th><th style="width:40%">Produk</th><th style="width:16%">Kategori</th><th style="width:12%">Harga normal</th><th>Ukuran di database</th>';
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(fname('pdf').replace(/\.pdf$/,''))}</title><style>
+@page{size:A4 landscape;margin:10mm}@page{@bottom-right{content:"Store Head Kit by Lukian Prayoga";font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}body{margin:0;font:8.5pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:13pt;margin:0}p{margin:2px 0 8px;font-size:8.5pt;color:#333}table{width:100%;border-collapse:collapse}th,td{border:1px solid #777;padding:3px 5px;text-align:center;vertical-align:middle}
+th{background:#e8f5ec;font-size:8pt}td.l{text-align:left}td.r{text-align:right;white-space:nowrap;font-weight:700}td.sm{font-size:7.5pt}td span{color:#555;font-size:7.5pt}tr.g td{background:#fff4e8}
+td.bx i{display:inline-block;width:10px;height:10px;border:1.2px solid #000;border-radius:2px}.np{display:inline-block;border:1px solid #15803d;color:#15803d;border-radius:3px;padding:0 4px;font-size:7.5pt;font-weight:700}
+thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px;font-size:7pt;color:#888}
+</style></head><body><h1>${E(m?m.judul:'New Arrival')} ${ada?'— di toko':'— belum ada di toko'}</h1><p>${E(ST.reg?ST.reg.site+' · '+ST.reg.toko:'')} · inventory ${E(I?tgl(I.date):'')} · ${nf(F.length)} artikel${view.cat?' · '+E(cap(view.cat)):''}${ada&&view.gudang?' · belum dipajang':''} · <span class="np">HARGA NORMAL · TIDAK IKUT DISKON</span></p>
+<table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>
+<div class="foot">${ada?'Baris oranye = stok hanya di gudang (belum dipajang), dahulukan untuk dipajang. ':''}Produk new arrival dijual harga normal, tidak ikut diskon apa pun. · Store Head Kit by Lukian Prayoga</div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  ofaToast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');if(window.bcLog)bcLog('naxl',m?m.judul:'','pdf · '+F.length+' artikel');
+  return html;
+ }
+ window.naPdf=pdf;
+ /* ---------- upload (inventory yang sama dipakai Kepatuhan Display & Produk Promo) ---------- */
+ async function pick(file){
+  const st=$id('naStatus');st.className='iv-status';st.textContent='Membaca '+file.name+'…';
+  try{
+   if(!window.p5Pick)throw new Error('Pembaca inventory belum siap, coba lagi.');
+   await window.p5Pick(file,true);if(window.kdPick)window.kdPick(file);
+   const I=inv();if(!I||I.file!==file.name)throw new Error('File bukan export inventory by bin.');
+   view.q='';view.cat='';view.gudang=false;const R=cocok();render();
+   st.textContent='✓ Inventory '+tgl(I.date)+' terbaca · '+nf(I.items.length)+' SKU'+(R?' · '+nf(R.arts.length)+' artikel new arrival ada di toko':'');
+   if(window.bcLog)bcLog('na',na&&na.meta?na.meta.judul:'',R?R.arts.length+' artikel new arrival':'');
+  }catch(e){st.className='iv-status err';st.textContent='Gagal membaca file: '+(e.message||e)}
+ }
+ $id('naUp').onclick=()=>$id('naFile').click();
+ $id('naFile').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)pick(f)};
+ box.addEventListener('click',e=>{
+  const t=e.target.closest('[data-nat]');if(t){view.tab=t.dataset.nat;view.cat='';return render()}
+  const a=e.target.closest('[data-na]');if(!a)return;const k=a.dataset.na;
+  if(k==='sync')return sync(true);if(k==='up')return $id('naFile').click();
+  if(k==='xlsx')return xlsx();if(k==='csv')return csv();if(k==='pdf')return pdf();
+ });
+ box.addEventListener('change',e=>{if(e.target.id==='naCat'){view.cat=e.target.value;render()}if(e.target.id==='naG'){view.gudang=e.target.checked;render()}});
+ box.addEventListener('input',e=>{if(e.target.id!=='naQ')return;view.q=e.target.value;const p=e.target.selectionStart;render();const i=$id('naQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
+ document.addEventListener('click',e=>{const t=e.target.closest('.app-tabs [data-tab="na"]');if(t)sync(false)});
+ window.naRender=render;
+ render();setTimeout(()=>sync(false),1500);
 })();
 
 });

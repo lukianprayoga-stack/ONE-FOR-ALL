@@ -1498,6 +1498,7 @@ i.ab-in,i.ab-out{display:inline-block;width:10px;height:10px;border-radius:3px;f
 .bcu-log time{flex:none;width:72px;font-size:11px;color:var(--mut);line-height:1.35;font-variant-numeric:tabular-nums}
 .bcu-log p{margin:0;font-size:13px;line-height:1.35;min-width:0}.bcu-log small{color:var(--mut);font-size:11.5px}
 .bcu-note{margin-top:12px;font-size:12px;color:var(--mut)}
+.bcu-na{border-color:color-mix(in srgb,var(--ok-fg,#15803d) 35%,transparent)!important;background:var(--ok-bg,#e9f9ef)!important}.bcu-na h4{color:var(--ok-fg,#15803d)!important}
 .bcu-promo{margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid color-mix(in srgb,var(--orange,#f26a1b) 35%,transparent);background:var(--orange-bg,#fff1e7)}
 .bcu-ph{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.bcu-ph h4{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--orange,#f26a1b)}
 .bcu-ph p{margin:0;font-size:13px;line-height:1.5}.bcu-ph small{color:var(--mut)}.bcu-ph em{font-style:normal;font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px;background:var(--line);margin-left:4px}.bcu-ph em.ok{background:var(--ok-bg,#e9f9ef);color:var(--ok-fg,#15803d)}.bcu-ph em.bad{background:var(--bad-bg,#fdecec);color:var(--bad-fg,#c62828)}
@@ -6947,7 +6948,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   {n:'Promo',need:['promoKatalogStatus'],latest:['promoKatalogUpload'],peran:'Promo katalog website (daftar artikel promo)'},
   {n:'PromoAnalisis',need:['promoAnalisis'],latest:[],peran:'Analisis promo & strategi promo (dari DSR)'},
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (di bawah semua file, kecuali BcApp)'},
-  {n:'BcApp',need:['bcAppPengguna'],latest:['bcAppAtur'],peran:'Pendaftaran & pengguna Store Head Kit (paling bawah, di bawah Akun)'}
+  {n:'BcApp',need:['bcAppPengguna'],latest:['bcAppNa'],peran:'Pendaftaran, pengguna, database promo & new arrival Store Head Kit (paling bawah, di bawah Akun)'}
  ];
  const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
  let data=null,busy=false,err='',ver='';
@@ -8101,6 +8102,7 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
     <div><small>Aktif 7 hari</small><b>${nf(s.a7)}</b><span>toko</span></div><div><small>Upload file BC</small><b>${nf(s.up)}</b><span>total</span></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b><span>total</span></div></div>
    <div class="bcu-share"><code>${esc(APP)}</code><button type="button" class="btn ghost" data-bcu="copy">Salin link aplikasi</button></div>
    ${promoHtml()}
+   ${naHtml()}
    <div class="bcu-bar"><input class="in" id="bcuQ" type="search" placeholder="Cari site, toko, nama…" value="${esc(q)}"><div class="bcu-tabs" role="tablist"><button type="button" role="tab" data-bct="u" class="${tab==='u'?'on':''}">Pengguna (${U.length})</button><button type="button" role="tab" data-bct="l" class="${tab==='l'?'on':''}">Aktivitas</button></div></div>
    <div class="bcu-cols"><section class="bcu-col${tab==='u'?' on':''}"><h4>Pengguna</h4>${users}</section><section class="bcu-col${tab==='l'?' on':''}"><h4>Aktivitas terbaru</h4>${log}</section></div>
    <div class="vd-links"><button type="button" data-bcu="reload">Muat ulang</button>${data.sheetUrl?`<a href="${esc(data.sheetUrl)}" target="_blank" rel="noopener">Buka spreadsheet ↗</a>`:''}<a href="${esc(APP)}" target="_blank" rel="noopener">Buka aplikasi ↗</a></div>
@@ -8156,6 +8158,58 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
    catch(e){btn.disabled=false;btn.textContent='Upload ke Store Head Kit';toast(missing(e)?'Tempel BcApp.gs terbaru lalu deploy versi baru':e.message)}
   };
  }
+ /* ---------- database new arrival untuk fitur New Arrival di Store Head Kit ---------- */
+ function naHtml(){
+  const m=data&&data.na;
+  return `<section class="bcu-promo bcu-na"><div class="bcu-ph"><div><h4>Database new arrival untuk Store Head Kit</h4><p>${m?`<b>${esc(m.judul)}</b> <em class="ok">harga normal</em> · ${nf(m.rows)} SKU${m.mulai?' · mulai '+esc(tglS(m.mulai)):''}<br><small>Diupload ${esc(lalu(m.at))} · ${esc(m.file||'')}</small>`:'Belum ada. Upload daftar produk new arrival (kolom <b>Kode, Nama, Cross-Site, Lv3/Lv4-Description, Loc Amount</b>), lalu semua toko bisa mencocokkan dengan inventory by bin masing-masing.'}</p></div>
+   <div class="bcu-pa"><button type="button" class="btn" data-bcu="nup">⇪ ${m?'Ganti':'Upload'} database new arrival</button>${m?'<button type="button" class="bcu-lnk" data-bcu="ndel">Hapus</button>':''}</div></div><input type="file" id="bcuNF" accept=".xlsx,.xls,.csv" hidden><div class="iv-status" id="bcuNS"></div></section>`;
+ }
+ async function naParse(file){
+  await loadX();
+  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});
+  const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,''),sku=v=>typeof v==='number'?String(Math.round(v)):String(v==null?'':v).trim().replace(/\.0+$/,'');
+  for(const name of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:''});
+   let hi=-1,h=null;
+   for(let i=0;i<Math.min(10,rows.length);i++){const n=(rows[i]||[]).map(norm);if((n.includes('kode')||n.includes('sku')||n.includes('skucode'))&&(n.includes('crosssite')||n.includes('locamount')||n.includes('lv3description'))){hi=i;h=n;break}}
+   if(hi<0)continue;
+   const ix=(...a)=>{for(const x of a){const i=h.indexOf(x);if(i>=0)return i}return -1};
+   const c=[ix('kode','sku','skucode'),ix('nama','skuname'),ix('crosssite'),ix('fashgrade'),ix('merchcat'),ix('lv2description','mclv2'),ix('lv3description','mclv3'),ix('lv4description','mclv4'),ix('locamount','harga','price','hargajual')];
+   const out=new Map();
+   for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[],k=sku(row[c[0]]);if(!/^\d{6,}$/.test(k)||out.has(k))continue;out.set(k,c.map((ci,j)=>j===0?k:ci<0?'':row[ci]))}
+   return {sheet:name,rows:[...out.values()]};
+  }
+  throw new Error('Kolom Kode dan Cross-Site / Loc Amount tidak ditemukan. Pakai format daftar new arrival (Kode, Nama, Cross-Site, …, Loc Amount).');
+ }
+ function naForm(file,P){
+  const BL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],d=new Date();
+  const C={};P.rows.forEach(r=>{const k=String(r[6]||'Lainnya');C[k]=(C[k]||0)+1});
+  const art=new Set(P.rows.map(r=>String(r[2]||r[0].slice(0,9)))).size;
+  openModal('Upload database new arrival',`<p class="hint" style="margin:0 0 8px">${esc(file.name)} · lembar ${esc(P.sheet)} · <b>${nf(P.rows.length)} SKU</b> · ${nf(art)} artikel</p>
+   <div class="bcu-chips">${Object.keys(C).sort((a,b)=>C[b]-C[a]).map(k=>`<span>${esc(k)} · ${nf(C[k])}</span>`).join('')}</div>
+   <label class="ks-f"><span>Judul (tampil di aplikasi toko)</span><input class="in" id="bcuNJ" value="${esc('New Arrival '+BL[d.getMonth()]+' '+d.getFullYear())}"></label>
+   <label class="ks-f"><span>Mulai berlaku (opsional)</span><input class="in" type="date" id="bcuNM" value=""></label>
+   <p class="hint">Database new arrival lama diganti. Produk new arrival tampil di toko sebagai harga normal (tidak ikut diskon).</p>
+   <div class="row" style="margin-top:10px"><button class="btn" type="button" id="bcuNGo">Upload ke Store Head Kit</button></div>`);
+  $id('bcuNGo').onclick=async()=>{
+   const btn=$id('bcuNGo'),meta={judul:$id('bcuNJ').value.trim()||'New Arrival',mulai:$id('bcuNM').value,file:file.name};
+   btn.disabled=true;
+   try{const CH=2000;let res=null;
+    for(let a=0;a<P.rows.length;a+=CH){btn.textContent='Mengupload '+nf(Math.min(a+CH,P.rows.length))+' / '+nf(P.rows.length)+'…';
+     res=await api('bcAppNaSimpan',Object.assign({start:a,rows:P.rows.slice(a,a+CH),akhir:a+CH>=P.rows.length,total:P.rows.length},meta))}
+    if(data)data.na=res&&res.meta;close();toast('Database new arrival diupload: '+nf(P.rows.length)+' SKU');load(true)}
+   catch(e){btn.disabled=false;btn.textContent='Upload ke Store Head Kit';toast(missing(e)?'Tempel BcApp.gs terbaru lalu deploy versi baru':e.message)}
+  };
+ }
+ async function naPick(file){
+  const st=$id('bcuNS');if(st){st.className='iv-status';st.textContent='Membaca '+file.name+'…'}
+  try{const P=await naParse(file);if(st)st.textContent='';naForm(file,P)}catch(e){if(st){st.className='iv-status err';st.textContent='Gagal: '+(e.message||e)}}
+ }
+ async function naHapus(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent='Yakin hapus? Ketuk lagi';return}
+  try{await api('bcAppNaHapus',{});if(data)data.na=null;toast('Database new arrival dihapus');renderAll()}catch(e){toast(e.message)}
+ }
+ document.addEventListener('change',e=>{if(e.target.id!=='bcuNF')return;const f=e.target.files&&e.target.files[0];e.target.value='';if(f)naPick(f)});
  async function promoPick(file){
   const st=$id('bcuPS');if(st){st.className='iv-status';st.textContent='Membaca '+file.name+'…'}
   try{const P=await promoParse(file);if(st)st.textContent='';promoForm(file,P)}catch(e){if(st){st.className='iv-status err';st.textContent='Gagal: '+(e.message||e)}}
@@ -8181,6 +8235,8 @@ const HUB_API_URL='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iW
   if(t.dataset.bcu==='reload')return load(true);
   if(t.dataset.bcu==='pup'){const f=$id('bcuPF');if(f)f.click();return}
   if(t.dataset.bcu==='pdel')return promoHapus(t);
+  if(t.dataset.bcu==='nup'){const f=$id('bcuNF');if(f)f.click();return}
+  if(t.dataset.bcu==='ndel')return naHapus(t);
   if(t.dataset.bct){tab=t.dataset.bct;return renderPage()}
   if(t.dataset.bcb)return atur(t);
  },true);
