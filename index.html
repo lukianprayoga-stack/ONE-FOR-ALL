@@ -1815,6 +1815,57 @@ html.scrolled header{border-bottom-color:var(--line)}
  .deck-tabs button{flex:1 0 auto;padding:9px 13px}
  #mt>.sh-head{flex-wrap:wrap}#mt>.sh-head>div:first-child{flex:1 1 100%}#mt>.sh-head .ks-hbtn{display:flex;gap:6px}
 }
+#bcj .bcj-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}#bcj .bcj-kpi>div{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg)}
+#bcj .bcj-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}#bcj .bcj-kpi b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}#bcj .bcj-kpi span{font-size:11.5px;color:var(--mut)}
+#bcj .bcj-kpi .warn{background:var(--warn-bg);border-color:var(--warn-bd)}#bcj .bcj-kpi .warn b{color:var(--warn-fg)}#bcj .bcj-kpi .ok b{color:var(--ok-fg)}#bcj .bcj-kpi .bad b,#bcj .bcj-kpi .bad span{color:var(--bad-fg)}
+#bcj .bcj-seg{margin-top:14px}
+#bcj .bcj-nav{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}#bcj .bcj-nav>div{flex:1;min-width:150px;text-align:center}#bcj .bcj-nav>div b{display:block;font-size:15px}#bcj .bcj-nav>div small{color:var(--mut);font-size:12px}
+#bcj .bcj-nav .btn{flex:none;padding:8px 14px;font-size:15px;line-height:1}#bcj .bcj-nav .bcj-today{font-size:13px}#bcj .bcj-date{width:auto;flex:none;padding:7px 10px;font-size:13px;min-height:0}
+#bcj .bcj-src{margin:6px 0 0;text-align:center;font-size:12px}
+#bcj .bcj-tasks{display:grid;gap:10px;margin-top:10px}
+#bcj .bcj-t{border:1px solid var(--card-bd,var(--line));border-radius:14px;background:var(--bg);overflow:hidden}#bcj .bcj-t.s-selesai{border-color:color-mix(in srgb,var(--ok-fg) 45%,transparent)}#bcj .bcj-t.s-selisih{border-color:color-mix(in srgb,var(--bad-fg) 45%,transparent)}
+#bcj .bcj-th{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:11px 14px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+#bcj .bcj-mc{flex:none;font-weight:800;font-size:13px;padding:5px 8px;border-radius:9px;background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8);font-variant-numeric:tabular-nums}
+#bcj .bcj-nm{flex:1;min-width:0}#bcj .bcj-nm b{display:block;font-size:14px}#bcj .bcj-nm b i{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:999px;background:var(--card);color:var(--mut);vertical-align:2px}
+#bcj .bcj-nm small{display:block;color:var(--mut);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bcj .bcj-st{flex:none;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--warn-bg);color:var(--warn-fg)}#bcj .s-selesai .bcj-st{background:var(--ok-bg);color:var(--ok-fg)}#bcj .s-selisih .bcj-st{background:var(--bad-bg);color:var(--bad-fg)}
+#bcj .bcj-sum{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 14px 8px;font-size:12.5px;color:var(--mut)}#bcj .bcj-sum b{color:var(--fg);font-variant-numeric:tabular-nums}
+#bcj .bcj-q{margin:0 14px 8px;width:calc(100% - 28px);padding:8px 10px;font-size:13px;min-height:0}
+#bcj .bcj-list{max-height:460px;overflow-y:auto;border-top:1px solid var(--line)}
+#bcj .bcj-r{display:grid;grid-template-columns:minmax(120px,1fr) minmax(120px,1fr) minmax(0,2.4fr) 64px;gap:10px;align-items:start;padding:7px 14px;border-bottom:1px solid var(--line);font-size:12.5px;line-height:1.4}
+#bcj .bcj-list.bcj-ed .bcj-r{grid-template-columns:minmax(110px,1fr) minmax(110px,1fr) minmax(0,2.2fr) 56px 104px}
+#bcj .bcj-h{position:sticky;top:0;z-index:1;background:var(--card);font-size:11px;font-weight:800;color:var(--mut);padding-top:6px;padding-bottom:6px}
+#bcj .bcj-r .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}#bcj .bcj-r small{color:var(--mut)}#bcj .bcj-r em{color:var(--mut);font-style:normal}
+#bcj .bcj-r .bw{font-weight:700}#bcj .bcj-r .ln{font-weight:500}
+#bcj .bcj-r .pr b{display:block;font-variant-numeric:tabular-nums}
+#bcj .bcj-r .n .in{width:100%;padding:5px 8px;font-size:13px;min-height:0;text-align:right}#bcj .bcj-r .n em{display:block;font-size:11.5px;font-weight:800}
+#bcj .bcj-r.df{background:var(--bad-bg)}#bcj em.up,#bcj .up{color:var(--ok-fg)!important}#bcj em.dn,#bcj .dn{color:var(--bad-fg)!important}
+#bcj .bcj-t>.ks-act,#bcj .bcj-t>.hint,#bcj .bcj-cat,#bcj .bcj-res{margin-left:14px;margin-right:14px}#bcj .bcj-t>.ks-act{margin-bottom:12px}#bcj .bcj-t>.hint{margin-top:8px}
+#bcj .bcj-cat{display:block;margin-top:10px;font-size:12px;font-weight:700;color:var(--mut)}#bcj .bcj-cat .in{margin-top:3px;font-size:14px;min-height:0;padding:8px 10px;color:var(--fg)}
+#bcj .bcj-ok{background:#17703a;color:#fff}#bcj .bcj-bad{background:var(--bad-fg);color:#fff}
+#bcj .bcj-res{margin-top:10px;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.5}#bcj .bcj-res.ok{background:var(--ok-bg);color:var(--ok-fg)}#bcj .bcj-res.bad{background:var(--bad-bg)}#bcj .bcj-res.bad>b{color:var(--bad-fg)}
+#bcj .bcj-res ul{margin:4px 0 0;padding-left:18px;color:var(--fg)}#bcj .bcj-res p{margin:4px 0 0;color:var(--fg)}
+#bcj .bcj-lw{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bad-bg);display:flex;flex-wrap:wrap;gap:6px;align-items:center}#bcj .bcj-lw b{flex:1 1 100%;color:var(--bad-fg);font-size:13px}
+#bcj .bcj-lw button{border:1px solid color-mix(in srgb,var(--bad-fg) 35%,transparent);background:var(--bg);color:var(--fg);border-radius:999px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer}
+#bcj .bcj-flt{display:flex;gap:6px;margin-top:12px}#bcj .bcj-flt .in{width:auto;padding:8px 10px;font-size:13px;min-height:0}
+#bcj .bcj-tw{margin-top:10px;overflow:auto;border:1px solid var(--line);border-radius:12px}#bcj .bcj-tw2{max-height:420px}
+#bcj .bcj-tb{width:100%;border-collapse:collapse;font-size:12.5px}#bcj .bcj-tb th{position:sticky;top:0;background:var(--card);text-align:left;padding:7px 8px;font-size:11.5px;white-space:nowrap}
+#bcj .bcj-tb td{padding:6px 8px;border-top:1px solid var(--line);white-space:nowrap}#bcj .bcj-tb td:last-child{white-space:normal;min-width:140px}#bcj .bcj-tb .n{text-align:right;font-variant-numeric:tabular-nums}#bcj .bcj-tb td.bad{color:var(--bad-fg);font-weight:800}
+#bcj .bcj-tb tr.clk{cursor:pointer}#bcj .bcj-tb tr.clk:hover td{background:var(--card)}
+#bcj .bcj-pill{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--warn-bg);color:var(--warn-fg)}#bcj .bcj-pill.selesai{background:var(--ok-bg);color:var(--ok-fg)}#bcj .bcj-pill.selisih,#bcj .bcj-pill.lw{background:var(--bad-bg);color:var(--bad-fg)}
+#bcj .bcj-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;margin-top:12px;font-size:12px;color:var(--mut)}#bcj .bcj-sw{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--fg);cursor:pointer}
+#bcj .bcj-empty{margin-top:10px;padding:16px;border-radius:14px;border:1px dashed var(--line);background:var(--bg)}#bcj .bcj-empty p{margin:6px 0 10px;color:var(--mut);font-size:13px}
+@media(max-width:760px){
+ #bcj .bcj-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #bcj .bcj-r{grid-template-columns:minmax(0,1fr) 52px;gap:2px 10px}#bcj .bcj-list.bcj-ed .bcj-r{grid-template-columns:minmax(0,1fr) 44px 84px}
+ #bcj .bcj-r .pr{grid-column:1/-1;grid-row:1;margin-bottom:2px}#bcj .bcj-r .bw{grid-column:1;grid-row:2}#bcj .bcj-r .bs{grid-column:1;grid-row:3}
+ #bcj .bcj-r>span:nth-child(4){grid-column:2;grid-row:2/4}#bcj .bcj-r>span:nth-child(5){grid-column:3;grid-row:2/4}
+ #bcj .bcj-r .bw,#bcj .bcj-r .bs{white-space:nowrap}#bcj .bcj-r .ln{white-space:normal}#bcj .bcj-h{display:none}
+ #bcj .bcj-r .bw::before{content:"Gdg ";font-weight:500;color:var(--mut);font-size:11px}#bcj .bcj-r .bs::before{content:"SA ";color:var(--mut);font-size:11px}
+ #bcj .bcj-date{order:9;flex:1 1 100%}
+}
+
+#bcj>.sh-head{flex-wrap:wrap}@media(max-width:760px){#bcj>.sh-head>div:first-child{flex:1 1 100%}#bcj>.sh-head .ks-hbtn{display:flex;gap:6px}}
 /* ====== AKSEN WARNA BIRU & ORANYE (garis & tulisan lebih tegas) ====== */
 :root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
@@ -1870,7 +1921,7 @@ html.scrolled header{border-bottom-color:var(--line)}
   <p class="side-h">Dashboard</p>
   <button type="button" data-pg="0"><span>⌂</span>Hari Ini<kbd>1</kbd></button>
   <button type="button" data-pg="1"><span>▤</span>Laporan<kbd>2</kbd></button>
-  <button type="button" data-pg="2"><span>▣</span>Stok<kbd>3</kbd></button>
+  <button type="button" data-pg="2" data-bcjb><span>▣</span>Stok<kbd>3</kbd></button>
   <button type="button" data-pg="3"><span>◫</span>Display<kbd>4</kbd></button>
   <button type="button" data-pg="4" data-mtb><span>⇄</span>Mutasi Barang<kbd>5</kbd></button>
   <button type="button" data-pg="5" data-shkb><span>◉</span>Store Head Kit<kbd>6</kbd></button>
@@ -1913,7 +1964,7 @@ html.scrolled header{border-bottom-color:var(--line)}
     <div class="pg-alert" id="pgAlert" role="status" hidden></div>
     <div class="pg-alert rp-alert" id="rpAlert" role="status" hidden></div>
     <div class="deck" id="deck">
-      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false" data-mtb>Mutasi</button><button type="button" role="tab" data-pg="5" aria-selected="false" data-shkb>SH Kit</button><button type="button" role="tab" data-pg="6" aria-selected="false">Admin</button></div>
+      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false" data-bcjb>Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false" data-mtb>Mutasi</button><button type="button" role="tab" data-pg="5" aria-selected="false" data-shkb>SH Kit</button><button type="button" role="tab" data-pg="6" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
       <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
         <div class="pg-col">
@@ -2006,6 +2057,10 @@ html.scrolled header{border-bottom-color:var(--line)}
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Stok">
+        <section class="rs span-all" id="bcj" aria-label="Blind counting harian">
+          <div class="sh-head"><div><h3>Blind Counting Harian</h3><p>Jadwal BC per MC Level 4 · stok, SKU &amp; kode bin dari Inventory by Bin</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" data-bcjh="print" title="Cetak lembar hitung tanggal ini">🖨 Cetak</button><button class="btn ghost" type="button" data-bcjh="up" title="Upload file jadwal blind counting">⇪ Jadwal</button><button class="btn ghost" type="button" data-bcjh="reload" aria-label="Muat ulang">⟳</button></div></div>
+          <div id="bcjBody"></div>
+        </section>
         <section class="inv" id="inv" aria-label="Kepatuhan display">
           <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
           <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
@@ -7303,6 +7358,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   {n:'Akun',need:['akunStatus'],latest:['akunOnline'],flag:'akun',peran:'Login akun (di bawah semua file, kecuali BcApp)'},
   {n:'BcApp',need:['bcAppPengguna'],latest:['bcAppDbHub'],peran:'Pendaftaran, pengguna, database promo & new arrival Store Head Kit (paling bawah, di bawah Akun)'},
   {n:'StokKeluar',need:['getStokKeluar'],latest:[],peran:'Stok & barang keluar per minggu/bulan (di atas Akun)'},
+  {n:'BlindJadwal',need:['bcjList'],latest:[],peran:'Jadwal blind counting harian + stok & bin per MC Level 4 (di bawah Inventory)'},
   {n:'MutasiToko',need:['mutasiList'],latest:[],peran:'Permintaan barang EA / retur dari toko lain, barang masuk & keluar (paling bawah, di bawah Akun)'}
  ];
  const GO={bin:'inv',sku:'inv',tx:'inv',pusat:'ps'};
@@ -11155,6 +11211,221 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  render();setTimeout(()=>load(false),2600);
  setInterval(()=>{if(document.visibilityState==='visible')load(false)},TTL+5e3);
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load(false)});
+})();
+</script>
+<script>
+/* ====== BLIND COUNTING HARIAN: jadwal BC per MC Level 4 + stok & bin dari Inventory by Bin ====== */
+(function(){
+ const box=document.getElementById('bcj');if(!box)return;
+ const $id=i=>document.getElementById(i),CK='ofa_bcj',TTL=10*60e3;
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),sg=v=>(v>0?'+':v<0?'−':'')+nf(Math.abs(v));
+ const p2=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()),hari=()=>iso(new Date());
+ const dOf=k=>{const p=String(k).split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+ const tglP=k=>{if(!/^\d{4}-\d{2}-\d{2}/.test(k||''))return k||'';const d=dOf(k.slice(0,10));return HARI[d.getDay()]+', '+d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear()};
+ const tglS=k=>{if(!/^\d{4}-\d{2}-\d{2}/.test(k||''))return k||'';const d=dOf(k.slice(0,10));return d.getDate()+' '+BLN[d.getMonth()]};
+ const blnL=k=>BLN[+k.slice(5,7)-1]+' '+k.slice(0,4);
+ const toast=t=>window.ofaToast&&window.ofaToast(t),configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
+ const C={id:0,tg:1,mc4:2,mc4n:3,mc2:4,mc2n:5,qty:6,nik:7,nama:8,st:9,cat:10,sel:11,sis:12,fis:13,oleh:14,at:15};
+ let data=null,busy=false,err='',sel=hari(),mode='h',open={},items={},ibusy=false,ierr='',form={},blind=false,fst='',q={};
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ try{mode=localStorage.getItem('ofa_bcj_mode')||'h';blind=localStorage.getItem('ofa_bcj_blind')==='1'}catch(e){}
+ const rows=()=>data&&data.rows||[];
+ async function load(force,bulan){
+  if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return render();
+  const b=bulan||(data&&data.bulan&&!force?data.bulan:sel.slice(0,7));
+  if(!force&&data&&data.bulan===b&&Date.now()-(data.at||0)<TTL)return render(),loadItems(false);
+  busy=true;render();
+  try{const r=await window.hubApi('bcjList',{bulan:b});data=Object.assign(r,{at:Date.now()});err='';try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}}
+  catch(e){err=/tidak dikenal/i.test(e.message||'')?'missing':e.message}
+  finally{busy=false;render()}
+  loadItems(force);
+ }
+ window.ofaBcjReload=()=>load(true);
+ const hariIni=()=>rows().filter(x=>x[C.tg]===sel);
+ async function loadItems(force){
+  const ids=hariIni().map(x=>x[C.id]).filter(id=>force||!items[id]);
+  if(!ids.length||ibusy||mode!=='h')return;
+  ibusy=true;ierr='';render();
+  try{const r=await window.hubApi('bcjItems',{ids});Object.keys(r.items).forEach(id=>{items[id]={L:r.items[id],inv:r.invDate,sd:r.stockDate,at:Date.now()}})}
+  catch(e){ierr=e.message||String(e)}
+  finally{ibusy=false;render()}
+ }
+ // angka di tab Stok: jadwal BC hari ini yang belum dikerjakan
+ function badge(){const t=hari(),n=rows().filter(x=>x[C.tg]===t&&x[C.st]==='BELUM').length;
+  document.querySelectorAll('[data-bcjb]').forEach(b=>{let i=b.querySelector('.bcj-bdg');if(!n){if(i)i.remove();return}
+   if(!i){i=document.createElement('i');i.className='mt-bdg bcj-bdg';const k=b.querySelector('kbd');b.insertBefore(i,k||null)}i.textContent=String(n);i.title=n+' jadwal blind counting hari ini belum selesai'})}
+ const selisihOf=x=>{try{return JSON.parse(x[C.sel]||'[]')}catch(e){return []}};
+ const netSel=x=>selisihOf(x).reduce((s,o)=>s+(o.fisik-o.sistem),0);
+ const binTxt=L=>L.map(b=>E(b[0])+(blind?'':' <small>('+nf(b[1])+')</small>')).join('<br>');
+ function kpi(){
+  const R=rows(),t=hari(),T=R.filter(x=>x[C.tg]===t),M=R.filter(x=>x[C.tg].slice(0,7)===data.bulan),lw=R.filter(x=>x[C.tg]<t&&x[C.st]==='BELUM');
+  const dn=M.filter(x=>x[C.st]!=='BELUM').length,sl=M.filter(x=>x[C.st]==='SELISIH');
+  const td=T.filter(x=>x[C.st]!=='BELUM').length;
+  return `<div class="bcj-kpi">
+   <div class="${T.length&&td<T.length?'warn':T.length?'ok':''}"><small>Jadwal hari ini</small><b>${T.length?td+'/'+T.length:'–'}</b><span>${T.length?(T.length-td?T.length-td+' belum dihitung':'semua selesai ✓'):'tidak ada jadwal'}</span></div>
+   <div><small>Progres ${E(blnL(data.bulan))}</small><b>${M.length?Math.round(dn/M.length*100)+'%':'–'}</b><span>${nf(dn)} dari ${nf(M.length)} jadwal</span></div>
+   <div class="${sl.length?'bad':''}"><small>Selisih ${E(BLN[+data.bulan.slice(5)-1])}</small><b>${nf(sl.length)}</b><span>${sl.length?'net '+sg(sl.reduce((s,x)=>s+netSel(x),0))+' pcs':'jadwal dengan selisih'}</span></div>
+   <div class="${lw.length?'bad':''}"><small>Terlewat</small><b>${nf(lw.length)}</b><span>${lw.length?'jadwal lewat tanggal, belum dihitung':'tidak ada'}</span></div></div>`;
+ }
+ function taskHtml(x){
+  const id=x[C.id],it=items[id],st=x[C.st],f=form[id],isOpen=open[id]!==false,qq=(q[id]||'').toLowerCase();
+  const L=it?it.L:null,sis=L?L.reduce((s,r)=>s+r[2],0):null,sa=L?L.reduce((s,r)=>s+r[3],0):0,wh=L?L.reduce((s,r)=>s+r[4],0):0;
+  const V=L?L.filter(r=>!qq||(r[0]+' '+r[1]+' '+r[6].map(b=>b[0]).join(' ')+' '+r[7].map(b=>b[0]).join(' ')).toLowerCase().includes(qq)):[];
+  const S=selisihOf(x);
+  let list='';
+  if(!L)list=`<p class="dp-empty">${ibusy?'Memuat stok & bin…':ierr?'Gagal memuat stok: '+E(ierr):'Stok belum dimuat.'}</p>`;
+  else if(!L.length)list='<p class="dp-empty">Tidak ada stok untuk MC Level 4 ini di data inventory terakhir.</p>';
+  else list=`${L.length>12?`<input class="in bcj-q" type="search" data-bcjq="${E(id)}" value="${E(q[id]||'')}" placeholder="Cari SKU, produk, bin…" aria-label="Cari di daftar ${E(x[C.mc4n])}">`:''}
+   <div class="bcj-list${f?' bcj-ed':''}${blind?' blind':''}"><div class="bcj-r bcj-h"><span>Bin gudang</span><span>Bin sales area</span><span>Produk</span><span class="n">Sistem</span>${f?'<span class="n">Fisik</span>':''}</div>
+   ${V.map(r=>{const v=f?f.fis[r[0]]:undefined,d=v!==undefined&&v!==''?Number(v)-r[2]:0;return `<div class="bcj-r${d?' df':''}"><span class="bw">${r[7].length?binTxt(r[7]):'<em>–</em>'}${r[8].length?'<br><small class="ln">'+r[8].map(b=>E(b[0])+(blind?'':' ('+nf(b[1])+')')).join(', ')+'</small>':''}</span><span class="bs">${r[6].length?binTxt(r[6]):'<em>–</em>'}</span><span class="pr"><b>${E(r[0])}</b>${E(r[1])}</span><span class="n">${blind?'•':nf(r[2])}</span>${f?`<span class="n"><input class="in" type="number" min="0" inputmode="numeric" data-fis="${E(id)}|${E(r[0])}" value="${v==null?'':E(v)}" placeholder="${blind?'':nf(r[2])}" aria-label="Fisik ${E(r[0])}">${d?`<em class="${d>0?'up':'dn'}">${sg(d)}</em>`:''}</span>`:''}</div>`}).join('')}</div>`;
+  const diffs=f&&L?L.filter(r=>f.fis[r[0]]!==undefined&&f.fis[r[0]]!==''&&Number(f.fis[r[0]])!==r[2]):[];
+  let act='';
+  if(f)act=`<label class="bcj-cat">Catatan selisih<textarea class="in" data-bcjcat="${E(id)}" rows="2" placeholder="mis. 1 pcs ditemukan di bin lain, 1 pcs belum ketemu">${E(f.cat)}</textarea></label>
+   <p class="hint">Isi kolom Fisik hanya untuk SKU yang jumlahnya beda. ${diffs.length?`<b>${diffs.length} SKU selisih · net ${sg(diffs.reduce((s,r)=>s+Number(f.fis[r[0]])-r[2],0))} pcs</b>`:''}</p>
+   <div class="ks-act"><button type="button" class="btn bcj-bad" data-bcj="simpanSel" data-id="${E(id)}">Simpan selisih</button><button type="button" class="btn ghost" data-bcj="batalSel" data-id="${E(id)}">Batal</button></div>`;
+  else if(st==='BELUM')act=`<div class="ks-act"><button type="button" class="btn bcj-ok" data-bcj="done" data-id="${E(id)}"${L?'':' disabled'}>✓ Done, sesuai</button><button type="button" class="btn ghost" data-bcj="sel" data-id="${E(id)}"${L?'':' disabled'}>⚠ Ada selisih</button></div>`;
+  else act=`<div class="bcj-res ${st==='SELISIH'?'bad':'ok'}"><b>${st==='SELISIH'?'⚠ Selisih':'✓ Selesai, sesuai'}</b> · ${E(x[C.oleh]||'')} · ${E(tglS(x[C.at]))} ${E(String(x[C.at]).slice(11,16))}
+    ${S.length?'<ul>'+S.map(o=>`<li><b>${E(o.sku)}</b> ${E(o.nama)} · sistem ${nf(o.sistem)} → fisik ${nf(o.fisik)} <em class="${o.fisik>o.sistem?'up':'dn'}">(${sg(o.fisik-o.sistem)})</em></li>`).join('')+'</ul>':''}${x[C.cat]?`<p>${E(x[C.cat])}</p>`:''}</div>
+    <div class="ks-act"><button type="button" class="btn ghost" data-bcj="ulang" data-id="${E(id)}">↺ Buka lagi</button></div>`;
+  return `<article class="bcj-t s-${st.toLowerCase()}">
+   <button type="button" class="bcj-th" data-bcj="tog" data-id="${E(id)}" aria-expanded="${isOpen}"><span class="bcj-mc">${E(x[C.mc4])}</span><span class="bcj-nm"><b>${E(x[C.mc4n])}${x[C.mc2n]?` <i>${E(x[C.mc2n])}</i>`:''}</b><small>${E(x[C.nama]||'–')} · ${E(id)}${x[C.tg]!==sel?' · jadwal '+E(tglS(x[C.tg])):''}</small></span><span class="bcj-st">${st==='BELUM'?'Belum':st==='SELESAI'?'✓ Done':'⚠ Selisih'}</span></button>
+   ${isOpen?`<div class="bcj-sum"><span>Qty jadwal <b>${blind?'•':nf(x[C.qty])}</b></span>${L?`<span>Stok sistem sekarang <b>${blind?'•':nf(sis)}</b></span><span>SKU <b>${nf(L.length)}</b></span><span>Sales area <b>${blind?'•':nf(sa)}</b></span><span>Gudang <b>${blind?'•':nf(wh)}</b></span>`:''}</div>${list}${act}`:''}
+  </article>`;
+ }
+ function dayHtml(){
+  const T=hariIni(),t=hari(),lw=sel===t?rows().filter(x=>x[C.tg]<t&&x[C.st]==='BELUM'):[];
+  const ds=[...new Set(rows().map(x=>x[C.tg]))].sort();
+  const it=T.map(x=>items[x[C.id]]).find(Boolean);
+  return `<div class="bcj-nav"><button type="button" class="btn ghost" data-bcj="prev" aria-label="Hari sebelumnya">‹</button><div><b>${E(tglP(sel))}</b><small>${sel===t?'Hari ini':ds.length?(T.length?T.length+' jadwal':'Tidak ada jadwal'):''}</small></div><button type="button" class="btn ghost" data-bcj="next" aria-label="Hari berikutnya">›</button>${sel!==t?'<button type="button" class="btn ghost bcj-today" data-bcj="today">Hari ini</button>':''}<input class="in bcj-date" type="date" id="bcjDate" value="${E(sel)}" aria-label="Pilih tanggal"></div>
+   ${it?`<p class="hint bcj-src">Stok &amp; bin dari upload Inventory by Bin ${E(it.inv||'terakhir')}${it.sd?' · stok sistem dari Stock Database '+E(it.sd):''}.</p>`:''}
+   <div class="bcj-tasks">${T.length?T.map(taskHtml).join(''):'<p class="dp-empty">Tidak ada jadwal blind counting di tanggal ini.</p>'}</div>
+   ${lw.length?`<div class="bcj-lw"><b>${lw.length} jadwal terlewat belum dihitung</b>${lw.slice(0,8).map(x=>`<button type="button" data-bcj="goto" data-d="${E(x[C.tg])}">${E(tglS(x[C.tg]))} · ${E(x[C.mc4n])}${x[C.mc2n]?' '+E(x[C.mc2n]):''} · ${E(x[C.nama])}</button>`).join('')}</div>`:''}`;
+ }
+ function monthHtml(){
+  const t=hari(),M=rows().filter(x=>x[C.tg].slice(0,7)===data.bulan&&(!fst||x[C.st]===fst||(fst==='LEWAT'&&x[C.st]==='BELUM'&&x[C.tg]<t)));
+  const P={};rows().filter(x=>x[C.tg].slice(0,7)===data.bulan).forEach(x=>{const p=P[x[C.nama]||'–']||(P[x[C.nama]||'–']={n:0,d:0,s:0,l:0,q:0});p.n++;p.q+=+x[C.qty]||0;if(x[C.st]!=='BELUM')p.d++;if(x[C.st]==='SELISIH')p.s++;if(x[C.st]==='BELUM'&&x[C.tg]<t)p.l++});
+  const opts=(data.bulanAda||[]).concat(data.bulan).filter((v,i,a)=>a.indexOf(v)===i).sort().reverse();
+  return `<div class="bcj-flt"><select class="in" id="bcjBln">${opts.map(m=>`<option value="${m}"${m===data.bulan?' selected':''}>${E(blnL(m))}</option>`).join('')}</select><select class="in" id="bcjFst"><option value="">Semua status</option><option value="BELUM"${fst==='BELUM'?' selected':''}>Belum</option><option value="LEWAT"${fst==='LEWAT'?' selected':''}>Terlewat</option><option value="SELESAI"${fst==='SELESAI'?' selected':''}>Done</option><option value="SELISIH"${fst==='SELISIH'?' selected':''}>Selisih</option></select></div>
+   <div class="bcj-tw"><table class="bcj-tb"><thead><tr><th>Karyawan</th><th class="n">Jadwal</th><th class="n">Qty</th><th class="n">Done</th><th class="n">Selisih</th><th class="n">Terlewat</th></tr></thead><tbody>${Object.keys(P).sort((a,b)=>P[b].n-P[a].n).map(k=>`<tr><td>${E(k)}</td><td class="n">${P[k].n}</td><td class="n">${nf(P[k].q)}</td><td class="n">${P[k].d}</td><td class="n${P[k].s?' bad':''}">${P[k].s}</td><td class="n${P[k].l?' bad':''}">${P[k].l}</td></tr>`).join('')||'<tr><td colspan="6">Belum ada jadwal.</td></tr>'}</tbody></table></div>
+   <div class="bcj-tw bcj-tw2"><table class="bcj-tb"><thead><tr><th>Tanggal</th><th>MC4</th><th>Kategori</th><th>Karyawan</th><th class="n">Qty</th><th>Status</th><th class="n">Selisih</th><th>Catatan</th></tr></thead><tbody>${M.map(x=>{const lw=x[C.st]==='BELUM'&&x[C.tg]<t;return `<tr data-bcj="goto" data-d="${E(x[C.tg])}" class="clk"><td>${E(tglS(x[C.tg]))}</td><td>${E(x[C.mc4])}</td><td>${E(x[C.mc4n])}${x[C.mc2n]?' · '+E(x[C.mc2n]):''}</td><td>${E(x[C.nama])}</td><td class="n">${nf(x[C.qty])}</td><td><span class="bcj-pill ${lw?'lw':x[C.st].toLowerCase()}">${lw?'Terlewat':x[C.st]==='BELUM'?'Belum':x[C.st]==='SELESAI'?'Done':'Selisih'}</span></td><td class="n">${x[C.st]==='SELISIH'?sg(netSel(x)):''}</td><td>${E(x[C.cat])}</td></tr>`}).join('')||'<tr><td colspan="8">Tidak ada jadwal.</td></tr>'}</tbody></table></div>
+   <div class="ks-act"><button type="button" class="btn ghost" data-bcj="xlsx">⬇ Excel rekap</button></div>`;
+ }
+ function render(){
+  badge();const b=$id('bcjBody');if(!b)return;
+  if(!configured()){b.innerHTML='<p class="dp-empty">Hub belum tersambung ke Apps Script.</p>';return}
+  if(err==='missing'){b.innerHTML='<p class="dp-empty">Fitur ini butuh file <b>BlindJadwal.gs</b> di Apps Script (di bawah Inventory), lalu Deploy versi baru.</p>';return}
+  if(!data){b.innerHTML=`<p class="dp-empty">${busy?'Memuat jadwal…':err?'Gagal memuat: '+E(err):'Belum dimuat.'}</p>`;return}
+  const fokus=document.activeElement&&box.contains(document.activeElement)?document.activeElement:null,fk=fokus?(fokus.id||fokus.dataset.fis||fokus.dataset.bcjq||fokus.dataset.bcjcat||''):'',pos=fokus&&fokus.selectionStart;
+  if(!data.rows.length&&!(data.bulanAda||[]).length){b.innerHTML=`<div class="bcj-empty"><b>Belum ada jadwal blind counting.</b><p>Upload file <b>Tools Jadwal Blind Counting</b> (.xlsm / .xlsx). Hub membaca sheet <b>Database Blind Counting</b>: tanggal, MC Level 4, MC Level 2, BC ID &amp; karyawan.</p><button type="button" class="btn" data-bcj="up">⇪ Upload jadwal</button></div><div class="iv-status" id="bcjStatus"></div>`;return}
+  b.innerHTML=kpi()+`<div class="bc-seg bcj-seg"><button type="button" data-bcjm="h" class="${mode==='h'?'on':''}">Per hari<small>stok, SKU &amp; bin per jadwal</small></button><button type="button" data-bcjm="m" class="${mode==='m'?'on':''}">Rekap bulan<small>status per karyawan &amp; jadwal</small></button></div>
+   ${mode==='h'?dayHtml():monthHtml()}
+   <div class="bcj-foot"><label class="bcj-sw"><input type="checkbox" id="bcjBlind"${blind?' checked':''}> Mode blind (sembunyikan qty sistem)</label><span>${data.meta?'Jadwal: '+E(data.meta.file||'')+' · diupload '+E(tglS(data.meta.at))+' '+E(String(data.meta.at||'').slice(11,16)):''}</span></div>
+   <div class="iv-status" id="bcjStatus"></div>`;
+  if(fk){const el=box.querySelector(`#${CSS.escape(fk)},[data-fis="${CSS.escape(fk)}"],[data-bcjq="${CSS.escape(fk)}"],[data-bcjcat="${CSS.escape(fk)}"]`);if(el){el.focus();try{if(pos!=null)el.setSelectionRange(pos,pos)}catch(e){}}}
+ }
+ const status=(t,bad)=>{const s=$id('bcjStatus');if(s){s.className='iv-status'+(bad?' err':'');s.textContent=t}};
+ async function simpan(id,st,extra){
+  const x=rows().find(r=>r[C.id]===id);if(!x)return;const it=items[id],L=it?it.L:[];
+  const sis=L.reduce((s,r)=>s+r[2],0),arg=Object.assign({id,status:st,sistem:sis,fisik:sis},extra||{});
+  status('Menyimpan…');
+  try{const r=await window.hubApi('bcjSet',arg);const i=data.rows.findIndex(z=>z[C.id]===id);if(i>=0)data.rows[i]=r.row;delete form[id];try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}
+   render();const msg=st==='SELESAI'?'✓ '+x[C.mc4n]+' selesai, sesuai':st==='SELISIH'?'Selisih '+x[C.mc4n]+' tercatat':'Jadwal dibuka lagi';status(msg);toast(msg)}
+  catch(e){status('Gagal menyimpan: '+(e.message||e),true)}
+ }
+ /* ---------- upload file jadwal ---------- */
+ function loadX(){if(window.XLSX)return Promise.resolve();return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)})}
+ const nrm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+ // tanggal di file jadwal kadang tertukar hari/bulan (tgl 1–12 terbaca bulan Jan–Des); bulan & tahun yang benar ada di BC ID (BC + site + yyyymm + urut)
+ function tglJadwal(v,id){
+  let y,m,d;const k=String(id||'').match(/^BC\d{4}(20\d{2})(\d{2})/),ky=k?+k[1]:0,km=k?+k[2]:0;
+  if(typeof v==='number'&&v>20000&&v<80000){const t=new Date(Math.round((v-25569)*864e5));y=t.getUTCFullYear();m=t.getUTCMonth()+1;d=t.getUTCDate()}
+  else if(v instanceof Date&&!isNaN(v)){y=v.getFullYear();m=v.getMonth()+1;d=v.getDate()}
+  else{const s=String(v||'').trim();let x=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(x){y=+x[1];m=+x[2];d=+x[3]}else{x=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);if(!x)return '';d=+x[1];m=+x[2];y=+x[3]<100?2000+ +x[3]:+x[3]}}
+  if(km&&m!==km&&d===km&&m<=12){const t=m;m=d;d=t}
+  if(!y||!m||!d||m>12||d>31)return '';
+  return y+'-'+p2(m)+'-'+p2(d);
+ }
+ async function upload(f){
+  status('Membaca '+f.name+'…');
+  try{await loadX()}catch(e){status(e.message,true);return}
+  let wb;try{wb=XLSX.read(await f.arrayBuffer(),{type:'array'})}catch(e){status('File tidak bisa dibaca: '+e.message,true);return}
+  let best=[];
+  wb.SheetNames.forEach(n=>{
+   const A=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:true});
+   for(let i=0;i<Math.min(A.length,30);i++){
+    const h=A[i].map(nrm),f1=(...k)=>h.findIndex(x=>k.includes(x));
+    const c={tg:f1('date','tanggal'),mc4:f1('mclvl4','mclevel4'),mc4n:f1('mc4name','namakategori','namamc4'),mc2:f1('mclvl2','mclevel2'),mc2n:f1('mc2name','namamc2'),qty:f1('quantity','qty'),id:f1('blindcountingid','bcid'),nik:f1('nik'),nama:f1('namakaryawan','nama')};
+    if(c.id<0||c.mc4<0||c.tg<0)continue;
+    const out=[];
+    A.slice(i+1).forEach(r=>{const id=String(r[c.id]||'').trim().toUpperCase();if(!/^BC/.test(id))return;const tgl=tglJadwal(r[c.tg],id);if(!tgl)return;
+     const v=k=>c[k]>=0?String(r[c[k]]==null?'':r[c[k]]).trim():'';
+     out.push({id,tgl,mc4:v('mc4'),mc4n:v('mc4n'),mc2:v('mc2').length<=2?v('mc2'):'',mc2n:v('mc2n')||(v('mc2').length>2?v('mc2'):''),qty:Number(v('qty'))||0,nik:v('nik').replace(/\.0+$/,''),nama:v('nama')})});
+    if(out.length>best.length||(out.length===best.length&&out.length&&out.filter(o=>o.mc2n).length>best.filter(o=>o.mc2n).length))best=out;
+    break;
+   }
+  });
+  if(!best.length){status('Tidak menemukan jadwal (kolom Date, MC Lvl 4 & Blind Counting ID) di file ini.',true);return}
+  status('Mengupload '+best.length+' jadwal…');
+  try{const r=await window.hubApi('bcjUpload',{rows:best,fileName:f.name});items={};
+   const first=best.map(o=>o.tgl).sort()[0],t=hari();if(!rows().length||!best.some(o=>o.tgl.slice(0,7)===sel.slice(0,7)))sel=best.some(o=>o.tgl===t)?t:first;
+   await load(true,sel.slice(0,7));status('✓ '+r.baru+' jadwal baru'+(r.ubah?', '+r.ubah+' diperbarui':'')+' · total '+r.total+' jadwal.');toast('Jadwal blind counting diupload')}
+  catch(e){status('Gagal upload: '+(e.message||e),true)}
+ }
+ /* ---------- cetak lembar hitung ---------- */
+ function cetak(){
+  const T=hariIni();if(!T.length)return toast('Tidak ada jadwal di tanggal ini');
+  const w=window.open('','_blank');if(!w)return toast('Izinkan pop-up untuk mencetak');
+  const sec=T.map(x=>{const L=(items[x[C.id]]||{}).L||[];return `<section><h2>${E(x[C.mc4])} · ${E(x[C.mc4n])}${x[C.mc2n]?' · '+E(x[C.mc2n]):''}</h2><p>${E(x[C.id])} · ${E(x[C.nama])} · ${E(tglP(x[C.tg]))} · Qty jadwal ${blind?'–':nf(x[C.qty])} · ${L.length} SKU</p>
+   <table><thead><tr><th>No</th><th>Bin gudang</th><th>Bin sales area</th><th>SKU</th><th>Produk</th>${blind?'':'<th>Sistem</th>'}<th>Fisik</th><th>Ket.</th></tr></thead><tbody>${L.map((r,i)=>`<tr><td>${i+1}</td><td>${r[7].map(b=>E(b[0])+(blind?'':' ('+b[1]+')')).join('<br>')}</td><td>${r[6].map(b=>E(b[0])+(blind?'':' ('+b[1]+')')).join('<br>')}</td><td>${E(r[0])}</td><td>${E(r[1])}</td>${blind?'':`<td class="n">${nf(r[2])}</td>`}<td></td><td></td></tr>`).join('')}</tbody></table>
+   <div class="ttd"><div>Dihitung oleh<br><br><br>( ${E(x[C.nama])} )</div><div>Diperiksa<br><br><br>( ............................ )</div></div></section>`}).join('');
+  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Lembar Blind Counting ${E(sel)}</title><style>
+   body{font:11px/1.35 system-ui,Arial,sans-serif;color:#111;margin:18px}h1{font-size:15px;margin:0 0 2px}h2{font-size:13px;margin:16px 0 2px}p{margin:0 0 6px;color:#444}
+   table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:3px 5px;vertical-align:top;text-align:left}th{background:#eef1f6;font-size:10px}td.n{text-align:right}td:nth-child(7),td:nth-child(8){min-width:46px}
+   section{break-inside:auto;page-break-after:always}section:last-of-type{page-break-after:auto}.ttd{display:flex;gap:60px;margin-top:14px}.ttd div{text-align:center;min-width:160px}
+   .rm{position:fixed;bottom:6px;right:12px;font-size:8.5px;color:#888}@page{size:A4;margin:12mm}</style></head><body>
+   <h1>Lembar Blind Counting · ${E(tglP(sel))}</h1><p>Stok &amp; bin dari upload Inventory by Bin ${E(((items[T[0][C.id]]||{}).inv)||'')}${blind?' · mode blind: qty sistem disembunyikan':''}</p>${sec}<div class="rm">OFA Hub by Lukian Prayoga</div>
+   <script>setTimeout(()=>print(),300)<\/script></body></html>`);w.document.close();
+ }
+ function excel(){
+  if(!data||!window.xlsxSimple)return;
+  const R=rows().filter(x=>x[C.tg].slice(0,7)===data.bulan),S=[];
+  R.forEach(x=>selisihOf(x).forEach(o=>S.push([x[C.tg],x[C.id],x[C.mc4],x[C.mc4n],x[C.mc2n],x[C.nama],o.sku,o.nama,o.sistem,o.fisik,o.fisik-o.sistem])));
+  const blob=xlsxSimple([{name:'Jadwal',head:1,widths:[12,18,8,22,16,18,8,10,14,26,10,10,18,16],rows:[['Tanggal','BC ID','MC4','Nama MC4','MC2','Karyawan','Qty jadwal','Status','Selisih (net)','Catatan','Sistem saat cek','Fisik','Oleh','Waktu']].concat(R.map(x=>[x[C.tg],x[C.id],x[C.mc4],x[C.mc4n],x[C.mc2n],x[C.nama],+x[C.qty]||0,x[C.st],x[C.st]==='SELISIH'?netSel(x):'',x[C.cat],x[C.sis]===''?'':+x[C.sis],x[C.fis]===''?'':+x[C.fis],x[C.oleh],x[C.at]]))},
+   {name:'Selisih per SKU',head:1,widths:[12,18,8,22,16,18,15,36,9,9,9],rows:[['Tanggal','BC ID','MC4','Nama MC4','MC2','Karyawan','SKU','Produk','Sistem','Fisik','Selisih']].concat(S)}],'Blind Counting');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Blind Counting 7014 '+blnL(data.bulan)+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel diunduh');
+ }
+ const fileIn=document.createElement('input');fileIn.type='file';fileIn.accept='.xlsx,.xlsm,.xls';fileIn.hidden=true;box.appendChild(fileIn);
+ fileIn.onchange=()=>{const f=fileIn.files[0];fileIn.value='';if(f)upload(f)};
+ function geser(n){const d=dOf(sel);d.setDate(d.getDate()+n);pindah(iso(d))}
+ function pindah(k){if(!/^\d{4}-\d{2}-\d{2}$/.test(k))return;const ganti=k.slice(0,7)!==sel.slice(0,7);sel=k;mode='h';if(ganti)load(true,k.slice(0,7));else{render();loadItems(false)}}
+ box.addEventListener('click',e=>{
+  const m=e.target.closest('[data-bcjm]');if(m){mode=m.dataset.bcjm;try{localStorage.setItem('ofa_bcj_mode',mode)}catch(x){}render();return loadItems(false)}
+  const h=e.target.closest('[data-bcjh]');if(h){if(h.dataset.bcjh==='up')return fileIn.click();if(h.dataset.bcjh==='print')return cetak();if(h.dataset.bcjh==='reload'){items={};return load(true)}}
+  const b=e.target.closest('[data-bcj]');if(!b)return;const a=b.dataset.bcj,id=b.dataset.id;
+  if(a==='up')return fileIn.click();if(a==='prev')return geser(-1);if(a==='next')return geser(1);if(a==='today')return pindah(hari());if(a==='goto')return pindah(b.dataset.d);
+  if(a==='xlsx')return excel();
+  if(a==='tog'){open[id]=open[id]===false;return render()}
+  if(a==='done')return simpan(id,'SELESAI');
+  if(a==='sel'){form[id]={fis:{},cat:''};open[id]=true;return render()}
+  if(a==='batalSel'){delete form[id];return render()}
+  if(a==='ulang'){if(confirm('Buka lagi jadwal ini? Hasil hitung sebelumnya dihapus.'))simpan(id,'BELUM');return}
+  if(a==='simpanSel'){const f=form[id],L=(items[id]||{}).L||[],D=L.filter(r=>f.fis[r[0]]!==undefined&&f.fis[r[0]]!==''&&Number(f.fis[r[0]])!==r[2]);
+   if(!D.length&&!f.cat.trim())return status('Isi kolom Fisik untuk SKU yang selisih, atau tulis catatan selisih.',true);
+   const sis=L.reduce((s,r)=>s+r[2],0);return simpan(id,'SELISIH',{catatan:f.cat,selisih:D.map(r=>({sku:r[0],nama:r[1],sistem:r[2],fisik:Number(f.fis[r[0]])})),sistem:sis,fisik:sis+D.reduce((s,r)=>s+Number(f.fis[r[0]])-r[2],0)})}
+ });
+ box.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset.fis){const [id,sku]=t.dataset.fis.split('|');if(form[id]){form[id].fis[sku]=t.value;clearTimeout(box._t);box._t=setTimeout(render,500)}return}
+  if(t.dataset.bcjcat){if(form[t.dataset.bcjcat])form[t.dataset.bcjcat].cat=t.value;return}
+  if(t.dataset.bcjq){q[t.dataset.bcjq]=t.value;clearTimeout(box._t);box._t=setTimeout(render,250)}});
+ box.addEventListener('change',e=>{const t=e.target;
+  if(t.id==='bcjDate')return pindah(t.value);
+  if(t.id==='bcjBlind'){blind=t.checked;try{localStorage.setItem('ofa_bcj_blind',blind?'1':'0')}catch(x){}return render()}
+  if(t.id==='bcjBln')return load(true,t.value);
+  if(t.id==='bcjFst'){fst=t.value;return render()}});
+ render();setTimeout(()=>load(false,hari().slice(0,7)),2400);
+ setInterval(()=>{if(document.visibilityState==='visible'&&!Object.keys(form).length)load(false)},TTL+5e3);
 })();
 </script>
 </body>
