@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Permintaan Barang</title>
+<meta name="description" content="Form permintaan barang EA / retur antar toko">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../icons/favicon-32.png">
+<meta name="theme-color" content="#10275e">
+<style>
+:root{color-scheme:light;--bg:#f4f6fa;--card:#fff;--fg:#0f1729;--mut:#556070;--line:#d6dce6;--ink:#1d4ed8;--inkfg:#fff;--title:#10275e;--soft:#eaf1ff;--ok:#14642f;--okbg:#e3f4e8;--bad:#b42318;--badbg:#fde8e8;--warn:#8a4b00;--warnbg:#fff4e5;--orange:#f26a1b}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0d1220;--card:#161d2e;--fg:#e8ecf4;--mut:#9aa5b8;--line:#2a3348;--ink:#5b8cff;--inkfg:#06102a;--title:#c9d8ff;--soft:#1b2744;--ok:#8fe0ad;--okbg:#123222;--bad:#ffb3b0;--badbg:#3a1616;--warn:#ffd59e;--warnbg:#3a2a10}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0d1220;--card:#161d2e;--fg:#e8ecf4;--mut:#9aa5b8;--line:#2a3348;--ink:#5b8cff;--inkfg:#06102a;--title:#c9d8ff;--soft:#1b2744;--ok:#8fe0ad;--okbg:#123222;--bad:#ffb3b0;--badbg:#3a1616;--warn:#ffd59e;--warnbg:#3a2a10}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 40px}
+header.top{padding:22px 4px 14px}
+header.top small{display:block;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--orange)}
+header.top h1{margin:4px 0 4px;font-size:clamp(22px,5.5vw,28px);line-height:1.2;color:var(--title)}
+header.top p{margin:0;color:var(--mut)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin:6px 0 14px}
+.tabs button{border:0;background:transparent;border-radius:11px;padding:10px;font:inherit;font-weight:700;color:var(--mut);cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--inkfg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.card h2{margin:0 0 10px;font-size:16px;color:var(--title)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:13px;font-weight:700;color:var(--mut)}
+label .opt{font-weight:500}
+.in{display:block;width:100%;margin-top:4px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;padding:11px 12px;font:inherit;font-size:16px}
+.in:focus{outline:2px solid var(--ink);outline-offset:1px;border-color:transparent}
+textarea.in{min-height:76px;resize:vertical}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px}
+.seg button{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;padding:10px;font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.3}
+.seg button small{display:block;font-weight:500;color:var(--mut);font-size:12px}
+.seg button.on{border-color:var(--ink);background:var(--soft);box-shadow:inset 0 0 0 1px var(--ink)}
+.items{display:grid;gap:8px}
+.it{display:grid;grid-template-columns:1fr 84px 40px;gap:6px;align-items:start;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.it .in{margin-top:0;background:var(--card)}
+.it .nm{grid-column:1/-1;font-size:13px;color:var(--mut);min-height:0}
+.it .nm b{color:var(--fg)}.it .nm.err{color:var(--bad)}
+.x{border:0;background:transparent;color:var(--mut);font-size:20px;line-height:1;cursor:pointer;padding:10px 0;border-radius:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:999px;padding:13px 22px;background:var(--ink);color:var(--inkfg);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.wide{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mt{margin-top:10px}
+.hint{color:var(--mut);font-size:13px;margin:8px 0 0}
+.msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:600}
+.msg.err{background:var(--badbg);color:var(--bad)}.msg.ok{background:var(--okbg);color:var(--ok)}
+.done{text-align:center;padding:24px 16px}
+.done .ic{width:56px;height:56px;border-radius:50%;background:var(--okbg);color:var(--ok);display:grid;place-items:center;font-size:28px;margin:0 auto 10px}
+.done h2{color:var(--ok)}
+.list{list-style:none;padding:0;margin:12px 0 0;text-align:left}
+.list li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.list li span{color:var(--mut);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:12px;color:var(--mut);padding:6px 6px;border-bottom:1px solid var(--line)}
+td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+td small{display:block;color:var(--mut)}
+.st{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;white-space:nowrap;background:var(--soft);color:var(--ink)}
+.st.MENUNGGU{background:var(--warnbg);color:var(--warn)}.st.ok{background:var(--okbg);color:var(--ok)}.st.bad{background:var(--badbg);color:var(--bad)}
+footer{text-align:center;color:var(--mut);font-size:12px;margin-top:22px}
+.hide{display:none!important}
+@media(max-width:480px){.g2{grid-template-columns:1fr}.it{grid-template-columns:1fr 70px 34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header class="top"><small>Permintaan barang antar toko</small><h1 id="judul">Permintaan Barang</h1><p id="sub">Isi barang yang dibutuhkan. Toko akan mengonfirmasi ketersediaannya.</p></header>
+ <div class="tabs" role="tablist"><button type="button" class="on" data-tab="form" role="tab">Buat permintaan</button><button type="button" data-tab="cek" role="tab">Cek status</button></div>
+
+ <form id="fForm" autocomplete="on" novalidate>
+  <section class="card">
+   <h2>Toko peminta</h2>
+   <div class="g2">
+    <label>No. site<input class="in" id="site" list="sites" inputmode="numeric" placeholder="mis. 2327" required></label>
+    <label>Nama toko<input class="in" id="nama" placeholder="mis. ST EG WONOGIRI" required></label>
+    <label>Branch <span class="opt">(opsional)</span><input class="in" id="branch" placeholder="mis. JATENG 01"></label>
+    <label>Regional <span class="opt">(opsional)</span><input class="in" id="regional" placeholder="mis. REG 03"></label>
+   </div>
+   <datalist id="sites"></datalist>
+   <label class="mt">Nama pemohon<input class="in" id="pemohon" placeholder="Nama yang bisa dihubungi" required></label>
+  </section>
+
+  <section class="card">
+   <h2>Permintaan</h2>
+   <label>Jenis</label>
+   <div class="seg" id="jenis"><button type="button" class="on" data-v="EA">EA<small>Endless aisle / pesanan customer</small></button><button type="button" data-v="RETUR">RETUR<small>Permintaan barang retur</small></button></div>
+   <label class="mt">Pengiriman</label>
+   <div class="seg" id="kirim"><button type="button" class="on" data-v="DELIV">Dikirim<small>Barang dikirim ke toko peminta</small></button><button type="button" data-v="PICK UP">Diambil<small>Toko peminta ambil sendiri</small></button></div>
+   <label class="mt">Alasan kebutuhan<textarea class="in" id="alasan" placeholder="mis. Customer pesan ukuran M, stok toko kosong" required></textarea></label>
+  </section>
+
+  <section class="card">
+   <h2>Barang yang diminta</h2>
+   <div class="items" id="items"></div>
+   <div class="row"><button type="button" class="btn ghost" id="tambah">＋ Tambah barang</button></div>
+   <p class="hint">Bisa menempel beberapa SKU sekaligus (satu per baris) di kolom SKU pertama.</p>
+   <label class="mt">Link dokumentasi <span class="opt">(opsional: foto / bukti order)</span><input class="in" id="dok" type="url" placeholder="https://…"></label>
+  </section>
+
+  <div id="fMsg" class="msg err hide" role="alert"></div>
+  <button type="submit" class="btn wide mt" id="kirimBtn">Kirim permintaan</button>
+  <p class="hint" id="aturan">Barang yang ready disimpan 2 hari. Tanpa kejelasan, barang dikembalikan ke bin asal.</p>
+ </form>
+
+ <section class="card done hide" id="fDone" aria-live="polite"></section>
+
+ <section class="hide" id="fCek">
+  <div class="card">
+   <h2>Cek status permintaan</h2>
+   <div class="row" style="margin-top:0"><input class="in" id="cekSite" inputmode="numeric" placeholder="No. site toko Anda" style="flex:1;min-width:0;margin-top:0"><button type="button" class="btn" id="cekBtn">Cek</button></div>
+   <div id="cekOut"></div>
+  </div>
+ </section>
+ <footer>OFA Hub by Lukian Prayoga</footer>
+</div>
+<script>
+(function(){
+ const API='https://script.google.com/macros/s/AKfycbz8RsEb4k8Gn-CCwhQ7iWJ__7MoJRCP7y7jrtOfGMerTFef5hY2zZZfSCZ27dugMZ1C/exec';
+ const $=i=>document.getElementById(i),E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],tgl=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})(?: (\d{2}:\d{2}))?/);return m?(+m[3])+' '+BLN[m[2]-1]+' '+m[1]+(m[4]?', '+m[4]:''):String(s||'')};
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const LS={g:k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+ async function api(fn,arg){
+  let r;try{r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args:[arg||{}]})})}catch(e){throw new Error('Tidak tersambung. Periksa koneksi internet.')}
+  let j;try{j=await r.json()}catch(e){throw new Error('Server tidak merespons dengan benar. Coba lagi.')}
+  if(!j.ok)throw new Error(/tidak dikenal/i.test(j.error||'')?'Form permintaan belum diaktifkan oleh toko tujuan.':j.error||'Gagal');return j.result;
+ }
+ let sites={},jenis='EA',kirim='DELIV',batasHari=2;
+ const prod={};
+ const mem=LS.g('ofa_minta')||{};
+ ['site','nama','branch','regional','pemohon'].forEach(k=>{if(mem[k])$(k).value=mem[k]});
+ if(mem.site)$('cekSite').value=mem.site;
+ // pilihan segmen
+ function seg(id,set){$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;[...$(id).children].forEach(x=>x.classList.toggle('on',x===b));set(b.dataset.v)})}
+ seg('jenis',v=>jenis=v);seg('kirim',v=>kirim=v);
+ if(mem.kirim==='PICK UP')$('kirim').children[1].click();
+ // info toko tujuan & daftar site
+ api('mintaInfo').then(d=>{
+  if(d.toko){$('judul').textContent='Permintaan Barang ke '+d.toko;document.title='Permintaan Barang · '+d.toko}
+  batasHari=d.batasHari||2;$('aturan').textContent='Barang yang ready disimpan '+batasHari+' hari. Tanpa kejelasan, barang dikembalikan ke bin asal.';
+  (d.sites||[]).forEach(s=>{sites[String(s[0]).toUpperCase()]=s});
+  $('sites').innerHTML=Object.values(sites).map(s=>`<option value="${E(s[0])}">${E(s[0])} · ${E(s[1])}</option>`).join('');
+ }).catch(e=>showMsg(e.message));
+ $('site').addEventListener('input',()=>{const s=sites[$('site').value.trim().toUpperCase()];if(s){$('nama').value=s[1]||'';if(s[2])$('branch').value=s[2];if(s[3])$('regional').value=s[3]}});
+ // baris barang
+ function addRow(sku,qty){
+  if($('items').children.length>=20)return showMsg('Maksimal 20 barang per permintaan.');
+  const d=document.createElement('div');d.className='it';
+  d.innerHTML=`<input class="in sku" inputmode="numeric" placeholder="SKU (12 digit)" aria-label="SKU" value="${E(sku||'')}"><input class="in qty" type="number" min="1" max="100" inputmode="numeric" value="${E(qty||1)}" aria-label="Jumlah"><button type="button" class="x" aria-label="Hapus baris">×</button><div class="nm"></div>`;
+  $('items').appendChild(d);return d;
+ }
+ $('tambah').onclick=()=>{const d=addRow();d&&d.querySelector('.sku').focus()};
+ $('items').addEventListener('click',e=>{if(e.target.classList.contains('x')){e.target.parentNode.remove();if(!$('items').children.length)addRow()}});
+ $('items').addEventListener('paste',e=>{
+  if(!e.target.classList.contains('sku'))return;const t=(e.clipboardData||window.clipboardData).getData('text');if(!/\n/.test(t.trim()))return;
+  e.preventDefault();const L=t.split(/\r?\n/).map(l=>l.trim().split(/[\s,;\t]+/)).filter(p=>/^\d{9,16}$/.test(p[0]));
+  L.forEach((p,i)=>{const row=i===0?e.target.parentNode:addRow();if(!row)return;row.querySelector('.sku').value=p[0];if(Number(p[1])>0)row.querySelector('.qty').value=Math.round(Number(p[1]))});cari();
+ });
+ let tc=null;$('items').addEventListener('input',e=>{if(e.target.classList.contains('sku')){clearTimeout(tc);tc=setTimeout(cari,700)}});
+ const clean=v=>String(v||'').replace(/\D/g,'');
+ async function cari(){
+  const rows=[...$('items').children],need=[...new Set(rows.map(r=>clean(r.querySelector('.sku').value)).filter(s=>/^\d{9,16}$/.test(s)&&!(s in prod)))];
+  if(need.length){try{const r=await api('mintaProduk',{skus:need});need.forEach(s=>{prod[s]=r.produk[s]||null})}catch(e){}}
+  rows.forEach(r=>{const s=clean(r.querySelector('.sku').value),n=r.querySelector('.nm');
+   if(!s){n.textContent='';n.className='nm';return}
+   if(!/^\d{9,16}$/.test(s)){n.textContent='SKU harus berupa angka (9–16 digit).';n.className='nm err';return}
+   const p=prod[s];if(p===undefined){n.textContent='Mencari…';n.className='nm';return}
+   n.className='nm'+(p&&p.nama?'':' err');n.innerHTML=p&&p.nama?`<b>${E(p.nama)}</b>${p.harga?' · Rp'+nf(p.harga):''}`:'SKU tidak ditemukan di data toko. Periksa lagi, tetap bisa dikirim.';});
+ }
+ addRow();
+ function showMsg(t,ok){const m=$('fMsg');m.textContent=t;m.className='msg '+(ok?'ok':'err');m.classList.toggle('hide',!t)}
+ $('fForm').addEventListener('submit',async e=>{
+  e.preventDefault();showMsg('');
+  const v=k=>$(k).value.trim(),items=[...$('items').children].map(r=>({sku:clean(r.querySelector('.sku').value),qty:Math.round(Number(r.querySelector('.qty').value)||0)})).filter(x=>x.sku);
+  if(!v('site'))return showMsg('Isi nomor site toko Anda.'),$('site').focus();
+  if(!v('nama'))return showMsg('Isi nama toko Anda.'),$('nama').focus();
+  if(!v('pemohon'))return showMsg('Isi nama pemohon.'),$('pemohon').focus();
+  if(!v('alasan'))return showMsg('Isi alasan kebutuhan.'),$('alasan').focus();
+  if(!items.length)return showMsg('Isi minimal satu SKU.');
+  const bad=items.find(x=>!/^\d{9,16}$/.test(x.sku)||x.qty<1||x.qty>100);if(bad)return showMsg('Periksa SKU '+(bad.sku||'')+': SKU 9–16 digit dan jumlah 1–100.');
+  const dok=v('dok');if(dok&&!/^https?:\/\//i.test(dok))return showMsg('Link dokumentasi harus diawali https://');
+  const arg={site:v('site'),nama:v('nama'),branch:v('branch'),regional:v('regional'),pemohon:v('pemohon'),alasan:v('alasan'),jenis,kirim,dok,items};
+  LS.s('ofa_minta',{site:arg.site,nama:arg.nama,branch:arg.branch,regional:arg.regional,pemohon:arg.pemohon,kirim});
+  const b=$('kirimBtn');b.disabled=true;b.textContent='Mengirim…';
+  try{
+   const r=await api('mintaKirim',arg);
+   $('fForm').classList.add('hide');const d=$('fDone');d.classList.remove('hide');
+   d.innerHTML=`<div class="ic">✓</div><h2>Permintaan terkirim</h2><p>Toko akan mengonfirmasi ketersediaan barang. Cek statusnya di tab <b>Cek status</b>.</p><p class="hint">Bila ready, barang disimpan sampai <b>${E(tgl(r.batas))}</b>.</p>
+    <ul class="list">${r.items.map(x=>`<li><div><b>${E(x.sku)}</b>${x.nama?'<br><small>'+E(x.nama)+'</small>':''}</div><span>${nf(x.qty)} pcs</span></li>`).join('')}</ul>
+    <div class="row" style="justify-content:center"><button type="button" class="btn" id="lagi">Buat permintaan lain</button><button type="button" class="btn ghost" id="keCek">Cek status</button></div>`;
+   $('lagi').onclick=()=>{$('items').innerHTML='';addRow();$('alasan').value='';$('dok').value='';d.classList.add('hide');$('fForm').classList.remove('hide');window.scrollTo(0,0)};
+   $('keCek').onclick=()=>{$('cekSite').value=arg.site;tabTo('cek');cek()};
+   window.scrollTo(0,0);
+  }catch(err){showMsg(err.message)}
+  finally{b.disabled=false;b.textContent='Kirim permintaan'}
+ });
+ // tab & cek status
+ function tabTo(t){document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('on',x.dataset.tab===t));$('fCek').classList.toggle('hide',t!=='cek');
+  const done=!$('fDone').classList.contains('hide');$('fForm').classList.toggle('hide',t!=='form'||done);$('fDone').classList.toggle('hide',t!=='form'||!done)}
+ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){tabTo(b.dataset.tab);if(b.dataset.tab==='cek'&&$('cekSite').value)cek()}});
+ const cls=s=>/DIKIRIM|DIAMBIL|SELESAI/.test(s)?'ok':/BATAL|TIDAK/.test(s)?'bad':s;
+ const lbl={MENUNGGU:'Menunggu konfirmasi',READY:'Ready','TIDAK READY':'Tidak ready','SUDAH DIKIRIM':'Sudah dikirim','SUDAH DIAMBIL':'Sudah diambil',BATAL:'Batal',SELESAI:'Selesai'};
+ async function cek(){
+  const s=$('cekSite').value.trim(),o=$('cekOut');if(!s){o.innerHTML='<div class="msg err">Isi nomor site.</div>';return}
+  o.innerHTML='<p class="hint">Memuat…</p>';
+  try{const r=await api('mintaCek',{site:s});
+   o.innerHTML=r.rows.length?`<div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>Tanggal</th><th>Barang</th><th>Qty</th><th>Status</th></tr></thead><tbody>${r.rows.map(x=>`<tr><td>${E(tgl(x[1]))}<small>${E(x[3])} · ${E(x[9]==='PICK UP'?'Diambil':'Dikirim')}</small></td><td><b>${E(x[4])}</b><small>${E(x[5])}</small></td><td>${nf(x[6])}</td><td><span class="st ${E(cls(x[7]))}">${E(lbl[x[7]]||x[7])}</span>${x[8]?'<small>STO '+E(x[8])+'</small>':''}${x[7]==='READY'?'<small>Simpan s/d '+E(tgl(x[2]))+'</small>':''}</td></tr>`).join('')}</tbody></table></div><p class="hint">Permintaan 60 hari terakhir.</p>`:'<p class="hint">Belum ada permintaan dari site ini dalam 60 hari terakhir.</p>';
+  }catch(e){o.innerHTML='<div class="msg err">'+E(e.message)+'</div>'}
+ }
+ $('cekBtn').onclick=cek;$('cekSite').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();cek()}});
+ if(/[?&]cek\b/.test(location.search)){tabTo('cek');if($('cekSite').value)cek()}
+})();
+</script>
+</body>
+</html>
