@@ -1864,6 +1864,7 @@ html.scrolled header{border-bottom-color:var(--line)}
  #bcj .bcj-r .bw::before{content:"Gdg ";font-weight:500;color:var(--mut);font-size:11px}#bcj .bcj-r .bs::before{content:"SA ";color:var(--mut);font-size:11px}
  #bcj .bcj-date{order:9;flex:1 1 100%}
 }
+#bcj .bcj-out{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--card)}#bcj .bcj-out span{font-size:12px;font-weight:800;color:var(--mut);margin-right:2px}#bcj .bcj-out .in{width:auto;flex:1 1 220px;padding:7px 10px;font-size:13px;min-height:0}#bcj .bcj-out .btn{flex:none;padding:8px 12px;font-size:13px}
 
 #bcj>.sh-head{flex-wrap:wrap}@media(max-width:760px){#bcj>.sh-head>div:first-child{flex:1 1 100%}#bcj>.sh-head .ks-hbtn{display:flex;gap:6px}}
 .side [data-bcjb]{white-space:nowrap}.side .bcj-bdg{margin-left:auto;margin-right:6px}
@@ -11234,7 +11235,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  const C={id:0,tg:1,mc4:2,mc4n:3,mc2:4,mc2n:5,qty:6,nik:7,nama:8,st:9,cat:10,sel:11,sis:12,fis:13,oleh:14,at:15};
  let data=null,busy=false,err='',sel=hari(),mode='h',open={},items={},ibusy=false,ierr='',form={},blind=false,fst='',q={};
  try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
- try{mode=localStorage.getItem('ofa_bcj_mode')||'h';blind=localStorage.getItem('ofa_bcj_blind')==='1'}catch(e){}
+ let fmt='v2';try{fmt=localStorage.getItem('ofa_bcj_fmt')||'v2';mode=localStorage.getItem('ofa_bcj_mode')||'h';blind=localStorage.getItem('ofa_bcj_blind')==='1'}catch(e){}
  const rows=()=>data&&data.rows||[];
  async function load(force,bulan){
   if(busy||!configured()||!localStorage.getItem('salesTrackingPin'))return render();
@@ -11305,6 +11306,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   return `<div class="bcj-nav"><button type="button" class="btn ghost" data-bcj="prev" aria-label="Hari sebelumnya">‹</button><div><b>${E(tglP(sel))}</b><small>${sel===t?'Hari ini':ds.length?(T.length?T.length+' jadwal':'Tidak ada jadwal'):''}</small></div><button type="button" class="btn ghost" data-bcj="next" aria-label="Hari berikutnya">›</button>${sel!==t?'<button type="button" class="btn ghost bcj-today" data-bcj="today">Hari ini</button>':''}<input class="in bcj-date" type="date" id="bcjDate" value="${E(sel)}" aria-label="Pilih tanggal"></div>
    ${it?`<p class="hint bcj-src">Stok &amp; bin dari upload Inventory by Bin ${E(it.inv||'terakhir')}${it.sd?' · stok sistem dari Stock Database '+E(it.sd):''}.</p>`:''}
    <div class="bcj-tasks">${T.length?T.map(taskHtml).join(''):'<p class="dp-empty">Tidak ada jadwal blind counting di tanggal ini.</p>'}</div>
+   ${T.length?`<div class="bcj-out"><span>Lembar hitung</span><select class="in" id="bcjFmt" aria-label="Format cetak"><option value="v2"${fmt!=='v1'?' selected':''}>Versi 2 · ringkas (hemat kertas)</option><option value="v1"${fmt==='v1'?' selected':''}>Versi 1 · per jadwal + tanda tangan</option></select><button type="button" class="btn ghost" data-bcj="print">🖨 Cetak</button><button type="button" class="btn ghost" data-bcj="xlsHari">⬇ Excel BC</button></div>`:''}
    ${lw.length?`<div class="bcj-lw"><b>${lw.length} jadwal terlewat belum dihitung</b>${lw.slice(0,8).map(x=>`<button type="button" data-bcj="goto" data-d="${E(x[C.tg])}">${E(tglS(x[C.tg]))} · ${E(x[C.mc4n])}${x[C.mc2n]?' '+E(x[C.mc2n]):''} · ${E(x[C.nama])}</button>`).join('')}</div>`:''}`;
  }
  function monthHtml(){
@@ -11379,7 +11381,36 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   catch(e){status('Gagal upload: '+(e.message||e),true)}
  }
  /* ---------- cetak lembar hitung ---------- */
- function cetak(){
+ function cetak(){if(fmt==='v1')return cetakV1();cetakV2()}
+ /* versi 2 (ringkas): satu baris per SKU per bin, urut kode bin, semua jadwal dalam satu tabel bersambung, hemat kertas */
+ function barisV2(x){const L=(items[x[C.id]]||{}).L||[],out=[];
+  L.forEach(r=>{const z=[...r[7].map(b=>[b[0],b[1]]),...r[6].map(b=>[b[0],b[1]]),...r[8].map(b=>[String(b[0]).split(' · ')[0],b[1]])];if(!z.length)z.push(['-',r[2]]);
+   z.forEach(b=>out.push([r[1],r[0],b[0],r[9]||x[C.mc2n]||'',r[10]||'',x[C.mc4n],b[1]]))});
+  return out.sort((a,b)=>a[2]<b[2]?-1:a[2]>b[2]?1:a[0]<b[0]?-1:a[0]>b[0]?1:0)}
+ function cetakV2(){
+  const T=hariIni();if(!T.length)return toast('Tidak ada jadwal di tanggal ini');
+  const w=window.open('','_blank');if(!w)return toast('Izinkan pop-up untuk mencetak');
+  let n=0;const blok=T.map(x=>{const B=barisV2(x);n+=B.length;return `<tbody class="cap"><tr><td colspan="${blind?7:8}"><b>${E(x[C.mc4])} · ${E(x[C.mc4n])}${x[C.mc2n]?' · '+E(x[C.mc2n]):''}</b> &nbsp;${E(x[C.nama])} · ${E(x[C.id])}${blind?'':' · qty jadwal '+nf(x[C.qty])} · ${B.length} baris</td></tr></tbody><tbody>${B.map(r=>`<tr><td>${E(r[0])}</td><td>${E(r[1])}</td><td></td><td>${E(r[2])}</td><td>${E(r[3])}</td><td>${E(r[4])}</td><td>${E(r[5])}</td>${blind?'':`<td class="n">${nf(r[6])}</td>`}</tr>`).join('')}</tbody>`}).join('');
+  const pic=[...new Set(T.map(x=>x[C.nama]).filter(Boolean))].join(', ');
+  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>BC ${E(sel)} (ringkas)</title><style>
+   body{font:7.6pt/1.2 Calibri,Arial,sans-serif;color:#000;margin:0}h1{font-size:10pt;margin:0}.sub{margin:1px 0 4px;color:#444;font-size:7.4pt}
+   table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:.5pt solid #9aa;padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+   th{background:#dde5f0;text-align:left;font-size:7pt}td.n{text-align:right}tbody.cap td{background:#f2f4f7;border-top:1pt solid #555;padding:2px 3px}
+   col.a{width:${blind?'34%':'31%'}}col.b{width:11.5%}col.c{width:6%}col.d{width:12%}col.e{width:${blind?'13%':'12%'}}col.f{width:${blind?'10%':'9%'}}col.g{width:${blind?'13.5%':'12.5%'}}col.h{width:6%}
+   .ttd{display:flex;gap:50px;margin-top:10px;break-inside:avoid}.ttd div{min-width:150px}.ttd i{display:block;height:28px}
+   .rm{position:fixed;bottom:0;right:0;font-size:6.5pt;color:#888}@page{size:A4 portrait;margin:8mm}</style></head><body>
+   <h1>Blind Counting · ${E(tglP(sel))}</h1><p class="sub">${T.length} jadwal · ${n} baris · stok &amp; bin dari Inventory by Bin ${E(((items[T[0][C.id]]||{}).inv)||'')}${blind?' · mode blind':''} · kolom C diisi hasil hitung fisik</p>
+   <table><colgroup><col class="a"><col class="b"><col class="c"><col class="d"><col class="e"><col class="f"><col class="g">${blind?'':'<col class="h">'}</colgroup><thead><tr><th>SKU Name</th><th>SKU Code</th><th>Fisik</th><th>Bin Code</th><th>MC LV2</th><th>MC LV3</th><th>MC LV4</th>${blind?'':'<th>Qty</th>'}</tr></thead>${blok}</table>
+   <div class="ttd"><div>Dihitung oleh<i></i>( ${E(pic)} )</div><div>Diperiksa<i></i>( ............................ )</div></div><div class="rm">OFA Hub by Lukian Prayoga</div>
+   <script>setTimeout(()=>print(),300)<\/script></body></html>`);w.document.close();
+ }
+ function excelHari(){
+  const T=hariIni();if(!T.length||!window.xlsxSimple)return toast('Tidak ada jadwal di tanggal ini');
+  const used={},nm=x=>{let s=(x[C.mc4]+' '+(x[C.mc4n]||'')+(x[C.mc2n]?' '+x[C.mc2n].slice(0,3):'')).replace(/[\\\/?*\[\]:]/g,' ').slice(0,28).trim();while(used[s])s=s.slice(0,26)+'_'+(used[s]++);used[s]=1;return s};
+  const blob=xlsxSimple(T.map(x=>({name:nm(x),head:1,widths:blind?[40,15,8,15,16,12,16]:[40,15,8,15,16,12,16,6],rows:[['SKU Name','SKU Code','Fisik','Bin Code','MC LV2','MC LV3','MC LV4'].concat(blind?[]:['Qty'])].concat(barisV2(x).map(r=>[r[0],r[1],'',r[2],r[3],r[4],r[5]].concat(blind?[]:[r[6]])))})),'Blind Counting '+sel);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='BC 7014 '+sel+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel BC diunduh');
+ }
+ function cetakV1(){
   const T=hariIni();if(!T.length)return toast('Tidak ada jadwal di tanggal ini');
   const w=window.open('','_blank');if(!w)return toast('Izinkan pop-up untuk mencetak');
   const sec=T.map(x=>{const L=(items[x[C.id]]||{}).L||[];return `<section><h2>${E(x[C.mc4])} · ${E(x[C.mc4n])}${x[C.mc2n]?' · '+E(x[C.mc2n]):''}</h2><p>${E(x[C.id])} · ${E(x[C.nama])} · ${E(tglP(x[C.tg]))} · Qty jadwal ${blind?'–':nf(x[C.qty])} · ${L.length} SKU</p>
@@ -11410,7 +11441,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   const h=e.target.closest('[data-bcjh]');if(h){if(h.dataset.bcjh==='up')return fileIn.click();if(h.dataset.bcjh==='print')return cetak();if(h.dataset.bcjh==='reload'){items={};return load(true)}}
   const b=e.target.closest('[data-bcj]');if(!b)return;const a=b.dataset.bcj,id=b.dataset.id;
   if(a==='up')return fileIn.click();if(a==='prev')return geser(-1);if(a==='next')return geser(1);if(a==='today')return pindah(hari());if(a==='goto')return pindah(b.dataset.d);
-  if(a==='xlsx')return excel();
+  if(a==='xlsx')return excel();if(a==='print')return cetak();if(a==='xlsHari')return excelHari();
   if(a==='tog'){open[id]=open[id]===false;return render()}
   if(a==='done')return simpan(id,'SELESAI');
   if(a==='sel'){form[id]={fis:{},cat:''};open[id]=true;return render()}
@@ -11428,7 +11459,8 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   if(t.id==='bcjDate')return pindah(t.value);
   if(t.id==='bcjBlind'){blind=t.checked;try{localStorage.setItem('ofa_bcj_blind',blind?'1':'0')}catch(x){}return render()}
   if(t.id==='bcjBln')return load(true,t.value);
-  if(t.id==='bcjFst'){fst=t.value;return render()}});
+  if(t.id==='bcjFst'){fst=t.value;return render()}
+  if(t.id==='bcjFmt'){fmt=t.value;try{localStorage.setItem('ofa_bcj_fmt',fmt)}catch(x){}}});
  render();setTimeout(()=>load(false,hari().slice(0,7)),2400);
  setInterval(()=>{if(document.visibilityState==='visible'&&!Object.keys(form).length)load(false)},TTL+5e3);
 })();
