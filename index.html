@@ -1868,6 +1868,16 @@ html.scrolled header{border-bottom-color:var(--line)}
 
 #bcj>.sh-head{flex-wrap:wrap}@media(max-width:760px){#bcj>.sh-head>div:first-child{flex:1 1 100%}#bcj>.sh-head .ks-hbtn{display:flex;gap:6px}}
 .side [data-bcjb]{white-space:nowrap}.side .bcj-bdg{margin-left:auto;margin-right:6px}
+/* ====== SUB-MENU HALAMAN ====== */
+.subnav{position:sticky;top:var(--hdr,64px);z-index:3;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;margin:0 0 14px;border-radius:999px;background:color-mix(in srgb,var(--card) 97%,transparent);backdrop-filter:blur(12px);box-shadow:0 4px 14px rgba(0,0,0,.06);grid-column:1/-1;flex:0 0 100%;max-width:100%}
+.subnav::-webkit-scrollbar{display:none}
+.subnav button{flex:none;border:1px solid transparent;background:transparent;color:var(--mut);border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.subnav button:hover{color:var(--fg);background:var(--bg)}
+.subnav button.on{background:var(--ink,#1d4ed8);color:var(--inkfg,#fff)}
+.subnav button small{font-weight:600;opacity:.75;margin-left:5px}
+.sub-off{display:none!important}
+.deck-pg.cur>.subnav{margin:0}
+@media(max-width:760px){.subnav{position:relative;top:auto;margin:12px 0 4px;border-radius:14px}.subnav button{padding:7px 12px;font-size:13px}}
 /* ====== AKSEN WARNA BIRU & ORANYE (garis & tulisan lebih tegas) ====== */
 :root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
@@ -2034,33 +2044,35 @@ html.scrolled header{border-bottom-color:var(--line)}
         </div>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Laporan">
-        <section class="rs" id="wk" aria-label="Laporan mingguan">
+        <nav class="subnav" data-sub="lap" aria-label="Sub menu Laporan"><button type="button" data-subk="all">Semua</button><button type="button" data-subk="jual">Penjualan</button><button type="button" data-subk="kas">Kas</button><button type="button" data-subk="tim">Tim</button></nav>
+        <section class="rs" id="wk" data-subg="jual" aria-label="Laporan mingguan">
           <div class="sh-head"><div><h3>Laporan Mingguan</h3><p id="wkSub">Ringkasan minggu lalu untuk Store Manager</p></div></div>
           <div id="wkBody"></div>
         </section>
-        <section class="rs" id="mb" aria-label="Laporan bulanan dan PICA">
+        <section class="rs" id="mb" data-subg="jual" aria-label="Laporan bulanan dan PICA">
           <div class="sh-head"><div><h3>Laporan Bulanan &amp; PICA</h3><p id="mbSub">Evaluasi bulan ini dan rencana perbaikan bulan depan</p></div></div>
           <div id="mbBody"></div>
         </section>
-        <section class="rs pa-card" id="pac" aria-label="Analisis promo">
+        <section class="rs pa-card" id="pac" data-subg="jual" aria-label="Analisis promo">
           <div class="sh-head"><div><h3>Analisis Promo</h3><p id="pacSub">Promo paling sering dipakai customer</p></div></div>
           <div id="pacBody"></div>
         </section>
-        <section class="rs co-card" id="cop" aria-label="Cash opname internal">
+        <section class="rs co-card" id="cop" data-subg="kas" aria-label="Cash opname internal">
           <div class="sh-head"><div><h3>Cash Opname Internal</h3><p>Berita acara pemeriksaan kas</p></div></div>
           <div id="copBody"></div>
         </section>
-        <section class="rs" id="rp" aria-label="Rapor pengembangan RA">
+        <section class="rs" id="rp" data-subg="tim" aria-label="Rapor pengembangan RA">
           <div class="sh-head"><div><h3 id="rpTitle">Rapor Pengembangan RA</h3><p id="rpSub">Evaluasi bulanan yang dikirim ke akun masing-masing RA</p></div></div>
           <div id="rpBody"></div>
         </section>
-        <section class="rs" id="ls" aria-label="Lost sales dan retur">
+        <section class="rs" id="ls" data-subg="jual" aria-label="Lost sales dan retur">
           <div class="sh-head"><div><h3>Lost Sales &amp; Retur</h3><p id="lsSub">Permintaan Endless Aisle dan barang yang diretur</p></div></div>
           <div id="lsBody"></div>
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Stok">
-        <section class="inv" id="inv" aria-label="Kepatuhan display">
+        <nav class="subnav" data-sub="stok" aria-label="Sub menu Stok"><button type="button" data-subk="all">Semua</button><button type="button" data-subk="disp">Display &amp; Produk</button><button type="button" data-subk="rst">Restock &amp; Pusat</button><button type="button" data-subk="arus">Barang Masuk &amp; Keluar</button></nav>
+        <section class="inv" id="inv" data-subg="disp" aria-label="Kepatuhan display">
           <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
           <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
           <div id="ivBody"></div>
@@ -2068,47 +2080,47 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="iv-sku" id="ivSku"></div>
           <div id="ctBox"></div>
         </section>
-        <section class="perf" id="perf" aria-label="Performa produk">
+        <section class="perf" id="perf" data-subg="disp" aria-label="Performa produk">
           <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
           <div id="pfBody"></div>
         </section>
-        <section class="perf" id="ssr" aria-label="Stock to sales ratio">
+        <section class="perf" id="ssr" data-subg="rst" aria-label="Stock to sales ratio">
           <div class="sh-head"><div><h3>Stock to Sales Ratio</h3><p id="ssSub">Stok dibanding rata-rata penjualan 4 bulan</p></div><button class="btn ghost" type="button" id="ssCfg" aria-label="Atur SSR (Store Head)">⚙</button></div>
           <div id="ssBody"></div>
         </section>
-        <section class="rs" id="rs" aria-label="Permintaan restock">
+        <section class="rs" id="rs" data-subg="rst" aria-label="Permintaan restock">
           <div class="sh-head"><div><h3>Permintaan Restock</h3><p id="rsSub">Produk laku yang stoknya menipis</p></div><button class="btn ghost" type="button" id="rsCfg" aria-label="Atur aturan restock (Store Head)">⚙</button></div>
           <div id="rsBody"></div>
         </section>
-        <section class="rs" id="bm" aria-label="Barang masuk">
+        <section class="rs" id="bm" data-subg="arus" aria-label="Barang masuk">
           <div class="sh-head"><div><h3>Barang Masuk</h3><p id="bmSub">Riwayat setiap barang datang ke toko</p></div></div>
           <div id="bmBody"></div>
         </section>
-        <section class="rs" id="bdv" aria-label="Video barang datang">
+        <section class="rs" id="bdv" data-subg="arus" aria-label="Video barang datang">
           <div class="sh-head"><div><h3>Video Barang Datang</h3><p id="bdvSub">SOP penerimaan barang</p></div></div>
           <div id="bdvBody"></div>
         </section>
-        <section class="rs" id="ps" aria-label="Stok pusat">
+        <section class="rs" id="ps" data-subg="rst" aria-label="Stok pusat">
           <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
           <div id="psBody"></div>
         </section>
-        <section class="rs span-all" id="sk" aria-label="Stok dan barang keluar">
+        <section class="rs span-all" id="sk" data-subg="arus" aria-label="Stok dan barang keluar">
           <div class="sh-head"><div><h3>Stok &amp; Barang Keluar</h3><p id="skSub">Total stok, barang masuk &amp; keluar per minggu dan bulan</p></div></div>
           <div id="skBody"></div>
         </section>
-        <section class="rs span-all" id="p5" aria-label="Produk promo">
+        <section class="rs span-all" id="p5" data-subg="disp" aria-label="Produk promo">
           <div class="sh-head"><div><h3>Produk Promo</h3><p id="p5Sub">Produk promo yang ada di toko</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="p5Hub" title="Muat ulang stok dari Hub">⟳ Stok</button><button class="btn ghost" type="button" id="p5Up" title="Pakai file inventory by bin lain">⇪ File</button></div></div>
           <input type="file" id="p5File" accept=".xlsx,.xls,.csv" hidden>
           <div id="p5Body"></div>
           <div class="iv-status" id="p5Status"></div>
         </section>
-        <section class="rs span-all" id="na" aria-label="New arrival">
+        <section class="rs span-all" id="na" data-subg="disp" aria-label="New arrival">
           <div class="sh-head"><div><h3>New Arrival</h3><p id="naSub">Produk new arrival yang ada di toko</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="naHub" title="Muat ulang stok dari Hub">⟳ Stok</button><button class="btn ghost" type="button" id="naUp" title="Pakai file inventory by bin lain">⇪ File</button></div></div>
           <input type="file" id="naFile" accept=".xlsx,.xls,.csv" hidden>
           <div id="naBody"></div>
           <div class="iv-status" id="naStatus"></div>
         </section>
-        <section class="rs ab-card span-all" id="ab" aria-label="Arus barang">
+        <section class="rs ab-card span-all" id="ab" data-subg="arus" aria-label="Arus barang">
           <div class="sh-head"><div><h3>Arus Barang: Masuk · Terjual · Pusat</h3><p id="abSub">Perbandingan barang masuk, terjual, stok toko, dan stok pusat</p></div></div>
           <div id="abBody"></div>
         </section>
@@ -2144,25 +2156,26 @@ html.scrolled header{border-bottom-color:var(--line)}
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Admin">
-        <section class="rs" id="sys" aria-label="Status sistem">
+        <nav class="subnav" data-sub="adm" aria-label="Sub menu Admin"><button type="button" data-subk="all">Semua</button><button type="button" data-subk="sis">Sistem</button><button type="button" data-subk="uang">Keuangan</button><button type="button" data-subk="kry">Karyawan</button></nav>
+        <section class="rs" id="sys" data-subg="sis" aria-label="Status sistem">
           <div class="sh-head"><div><h3>Status Sistem</h3><p id="sysSub">File Apps Script & kesegaran data</p></div></div>
           <div id="sysBody"></div>
         </section>
-        <section class="rs" id="kas" aria-label="Rekap kas">
+        <section class="rs" id="kas" data-subg="uang" aria-label="Rekap kas">
           <div class="sh-head"><div><h3>Rekap Kas</h3><p id="ksSub">Laporan pengeluaran kas bulanan siap tanda tangan</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="ksCfg" aria-label="Pengaturan rekap kas (Store Head)">⚙</button><button class="btn ghost" type="button" id="ksUp">⇪ Upload</button></div></div>
           <input type="file" id="ksFile" accept=".xlsx,.xls,.csv" hidden>
           <div id="ksBody"></div>
           <div class="iv-status" id="ksStatus"></div>
         </section>
-        <section class="rs" id="bg" aria-label="Rekap budget">
+        <section class="rs" id="bg" data-subg="uang" aria-label="Rekap budget">
           <div class="sh-head"><div><h3>Rekap Budget</h3><p id="bgSub">Pengajuan &amp; realisasi budget bulanan kas regional</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="bgCfg" aria-label="Pengaturan rekap budget">⚙</button></div></div>
           <div id="bgBody"></div>
         </section>
-        <section class="rs span-all" id="lb" aria-label="Kalkulator lembur">
+        <section class="rs span-all" id="lb" data-subg="kry" aria-label="Kalkulator lembur">
           <div class="sh-head"><div><h3>Kalkulator Lembur</h3><p id="lbSub">Hitung upah lembur sesuai PP 35/2021</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="lbCfg" aria-label="Pengaturan kalkulator lembur">⚙</button></div></div>
           <div id="lbBody"></div>
         </section>
-        <section class="rs" id="pgCard" aria-label="Pengingat data">
+        <section class="rs" id="pgCard" data-subg="sis" aria-label="Pengingat data">
           <div class="sh-head"><div><h3>Pengingat Data</h3><p id="pgSub">Inventory by bin, by SKU &amp; SKU transaction history</p></div></div>
           <div id="pgBody"></div>
         </section>
@@ -7317,7 +7330,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   if(pg.dataset.mas===sig&&pg.classList.contains('mas'))return;
   pg.dataset.mas=sig;
   const ae=document.activeElement,keep=ae&&pg.contains(ae)?ae:null;
-  pg.querySelectorAll(':scope>.mcol').forEach(c=>c.remove());
+  pg.querySelectorAll(':scope>.mcol').forEach(c=>{[...c.children].forEach(s=>pg.appendChild(s));c.remove()});
   const frag=document.createDocumentFragment();
   col.forEach(c=>{const d=document.createElement('div');d.className='mcol';c.s.forEach(s=>d.appendChild(s));frag.appendChild(d)});
   pg.classList.add('mas');pg.insertBefore(frag,pg.firstChild);
@@ -11463,6 +11476,38 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   if(t.id==='bcjFmt'){fmt=t.value;try{localStorage.setItem('ofa_bcj_fmt',fmt)}catch(x){}}});
  render();setTimeout(()=>load(false,hari().slice(0,7)),2400);
  setInterval(()=>{if(document.visibilityState==='visible'&&!Object.keys(form).length)load(false)},TTL+5e3);
+})();
+</script>
+<script>
+/* ====== SUB-MENU HALAMAN: Stok, Laporan, Admin ====== */
+(function(){
+ const LS={g:k=>{try{return localStorage.getItem(k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+ const navs=[...document.querySelectorAll('.subnav[data-sub]')];if(!navs.length)return;
+ const pgOf=n=>n.closest('.deck-pg'),secs=pg=>[...pg.querySelectorAll('section[data-subg]')];
+ function count(nav){const pg=pgOf(nav),S=secs(pg),vis=s=>!s.hidden;
+  nav.querySelectorAll('[data-subk]').forEach(b=>{const k=b.dataset.subk,n=S.filter(s=>vis(s)&&(k==='all'||s.dataset.subg===k)).length;
+   b.hidden=k!=='all'&&!n;let i=b.querySelector('small');if(!i){i=document.createElement('small');b.appendChild(i)}i.textContent=n})}
+ function pilih(nav,k,simpan){
+  const pg=pgOf(nav);if(!nav.querySelector(`[data-subk="${k}"]`)||nav.querySelector(`[data-subk="${k}"]`).hidden)k='all';
+  nav.querySelectorAll('[data-subk]').forEach(b=>{const on=b.dataset.subk===k;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  secs(pg).forEach(s=>s.classList.toggle('sub-off',k!=='all'&&s.dataset.subg!==k));
+  pg.dataset.subon=k;if(simpan)LS.s('ofa_sub_'+nav.dataset.sub,k);
+ }
+ navs.forEach(nav=>{
+  const pg=pgOf(nav);count(nav);pilih(nav,LS.g('ofa_sub_'+nav.dataset.sub)||'all',false);
+  nav.addEventListener('click',e=>{const b=e.target.closest('[data-subk]');if(!b)return;pilih(nav,b.dataset.subk,true);
+   b.scrollIntoView({inline:'nearest',block:'nearest'});
+   const top=pg.getBoundingClientRect().top+scrollY-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr'))||64)-70;if(scrollY>top)scrollTo({top:Math.max(0,top),behavior:'smooth'})});
+  // susunan kolom desktop memindahkan kartu: sub-menu tetap paling atas
+  new MutationObserver(()=>{if(pg.firstElementChild!==nav)pg.insertBefore(nav,pg.firstElementChild)}).observe(pg,{childList:true});
+  // kartu yang disembunyikan menurut peran (hidden) ikut memengaruhi jumlah
+  new MutationObserver(()=>{count(nav);const k=pg.dataset.subon||'all',b=nav.querySelector(`[data-subk="${k}"]`);if(b&&b.hidden)pilih(nav,'all',false)}).observe(pg,{attributes:true,attributeFilter:['hidden'],subtree:true});
+ });
+ // membuka kartu lewat tombol / notifikasi: tampilkan kelompoknya
+ const asli=window.ofaDeckShow;
+ window.ofaDeckShow=function(id){const el=document.getElementById(id),s=el&&el.closest('section[data-subg]');
+  if(s&&s.classList.contains('sub-off')){const pg=pgOf(s),nav=pg&&pg.querySelector(':scope>.subnav');if(nav)pilih(nav,s.dataset.subg,false)}
+  return asli?asli.apply(this,arguments):undefined};
 })();
 </script>
 </body>
