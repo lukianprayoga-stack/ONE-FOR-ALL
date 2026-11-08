@@ -1805,6 +1805,16 @@ html.scrolled header{border-bottom-color:var(--line)}
 @media(max-width:760px){#mt .mt-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}#mt .mt-fg{grid-template-columns:1fr 1fr}#mt .mt-flt{grid-template-columns:1fr 1fr}#mt .mt-flt .in[type=search]{grid-column:1/-1}#mt .mt-li{flex-basis:100%}#mt .mt-bin{width:110px}}
 #mt .mt-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
 :root[data-theme=dark] #mt .mt-tag.out{color:#ffb48a}@media(prefers-color-scheme:dark){:root:not([data-theme=light]) #mt .mt-tag.out{color:#ffb48a}}
+/* ====== HALAMAN MUTASI & SH KIT ====== */
+.shk-card .bcu-body{max-width:none}.shk-card .bcu-kpi{margin-top:6px}
+.deck-tabs [data-mtb],.side [data-mtb]{position:relative}
+.mt-bdg{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:5px;border-radius:999px;background:var(--orange,#f26a1b);color:#fff;font:800 10.5px/1 system-ui,sans-serif;font-style:normal;vertical-align:1px}
+.side [data-mtb]{white-space:nowrap}.side .mt-bdg{margin-left:auto;margin-right:6px}.side [data-mtb] kbd{margin-left:0}
+@media(max-width:760px){
+ .deck-tabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;box-shadow:inset 0 0 0 1px var(--card-bd,var(--line)),0 0 0 8px var(--bg)!important}.deck-tabs::-webkit-scrollbar{display:none}.deck-tabs::before{display:none}
+ .deck-tabs button{flex:1 0 auto;padding:9px 13px}
+ #mt>.sh-head{flex-wrap:wrap}#mt>.sh-head>div:first-child{flex:1 1 100%}#mt>.sh-head .ks-hbtn{display:flex;gap:6px}
+}
 /* ====== AKSEN WARNA BIRU & ORANYE (garis & tulisan lebih tegas) ====== */
 :root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
@@ -1862,19 +1872,20 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button type="button" data-pg="1"><span>▤</span>Laporan<kbd>2</kbd></button>
   <button type="button" data-pg="2"><span>▣</span>Stok<kbd>3</kbd></button>
   <button type="button" data-pg="3"><span>◫</span>Display<kbd>4</kbd></button>
-  <button type="button" data-pg="4"><span>✎</span>Admin<kbd>5</kbd></button>
+  <button type="button" data-pg="4" data-mtb><span>⇄</span>Mutasi Barang<kbd>5</kbd></button>
+  <button type="button" data-pg="5" data-shkb><span>◉</span>Store Head Kit<kbd>6</kbd></button>
+  <button type="button" data-pg="6"><span>✎</span>Admin<kbd>7</kbd></button>
   <p class="side-h">Alat</p>
   <button type="button" data-sd="stok"><span>⌕</span>Cek stok<kbd>/</kbd></button>
   <button type="button" data-sd="katalog"><span>◈</span>Kelola Katalog</button>
   <button type="button" data-sd="sdr"><span>▥</span>Sales Harian</button>
   <button type="button" data-sd="pa"><span>%</span>Analisis Promo</button>
   <button type="button" data-sd="co"><span style="font-size:10.5px;font-weight:800;letter-spacing:-.3px">Rp</span>Cash Opname</button>
-  <button type="button" data-sd="bcu"><span>◉</span>Pengguna SH Kit</button>
   <button type="button" data-sd="tools"><span>▦</span>Semua tools</button>
   <button type="button" data-sd="tim"><span>☺</span>Store Head &amp; Tim</button>
   <button type="button" data-sd="add"><span>＋</span>Tambah tool</button>
   <div class="side-theme" role="radiogroup" aria-label="Tema"><button type="button" role="radio" data-th="auto">Otomatis</button><button type="button" role="radio" data-th="light">Terang</button><button type="button" role="radio" data-th="dark">Gelap</button></div>
-  <p class="side-foot">Tekan <b>1–5</b> untuk pindah halaman dashboard, <b>/</b> untuk cek stok.</p>
+  <p class="side-foot">Tekan <b>1–7</b> untuk pindah halaman dashboard, <b>/</b> untuk cek stok.</p>
 </aside>
 <div id="gate" hidden></div>
 <div class="bar">ONE FOR ALL Hub. Semua tool toko dalam satu tempat.</div>
@@ -1902,7 +1913,7 @@ html.scrolled header{border-bottom-color:var(--line)}
     <div class="pg-alert" id="pgAlert" role="status" hidden></div>
     <div class="pg-alert rp-alert" id="rpAlert" role="status" hidden></div>
     <div class="deck" id="deck">
-      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false">Admin</button></div>
+      <div class="deck-tabs" id="deckTabs" role="tablist" aria-label="Bagian dashboard"><button type="button" role="tab" data-pg="0" aria-selected="true" class="on">Hari Ini</button><button type="button" role="tab" data-pg="1" aria-selected="false">Laporan</button><button type="button" role="tab" data-pg="2" aria-selected="false">Stok</button><button type="button" role="tab" data-pg="3" aria-selected="false">Display</button><button type="button" role="tab" data-pg="4" aria-selected="false" data-mtb>Mutasi</button><button type="button" role="tab" data-pg="5" aria-selected="false" data-shkb>SH Kit</button><button type="button" role="tab" data-pg="6" aria-selected="false">Admin</button></div>
       <div class="deck-track" id="deckTrack">
       <div class="deck-pg" role="tabpanel" aria-label="Hari Ini">
         <div class="pg-col">
@@ -2027,10 +2038,6 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="sh-head"><div><h3>Stok Pusat (HO)</h3><p id="psSub">Stok gudang Head Office untuk order repeat</p></div></div>
           <div id="psBody"></div>
         </section>
-        <section class="rs span-all" id="mt" aria-label="Permintaan dan mutasi barang">
-          <div class="sh-head"><div><h3>Permintaan &amp; Mutasi Barang</h3><p id="mtSub">EA / retur dari toko lain, barang masuk &amp; keluar</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" data-mth="share" title="Link form untuk toko peminta">🔗 Link toko</button><button class="btn ghost" type="button" data-mth="form" title="Catat barang masuk / keluar">＋ Catat</button></div></div>
-          <div id="mtBody"></div>
-        </section>
         <section class="rs span-all" id="sk" aria-label="Stok dan barang keluar">
           <div class="sh-head"><div><h3>Stok &amp; Barang Keluar</h3><p id="skSub">Total stok, barang masuk &amp; keluar per minggu dan bulan</p></div></div>
           <div id="skBody"></div>
@@ -2058,6 +2065,18 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="dp-list" id="dpList"></div>
         </section>
       </div>
+      <div class="deck-pg" role="tabpanel" aria-label="Mutasi">
+        <section class="rs span-all" id="mt" aria-label="Permintaan dan mutasi barang">
+          <div class="sh-head"><div><h3>Permintaan &amp; Mutasi Barang</h3><p id="mtSub">EA / retur dari toko lain, barang masuk &amp; keluar</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" data-mth="share" title="Link form untuk toko peminta">🔗 Link toko</button><button class="btn ghost" type="button" data-mth="form" title="Catat barang masuk / keluar">＋ Catat</button></div></div>
+          <div id="mtBody"></div>
+        </section>
+      </div>
+      <div class="deck-pg" role="tabpanel" aria-label="SH Kit">
+        <section class="rs span-all shk-card" id="shk" aria-label="Monitoring Store Head Kit">
+          <div class="sh-head"><div><h3>Monitoring Store Head Kit</h3><p id="bcuSub">Aplikasi untuk Store Head toko lain</p></div></div>
+          <div class="bcu-body" id="bcuBody"></div>
+        </section>
+      </div>
       <div class="deck-pg" role="tabpanel" aria-label="Admin">
         <section class="rs" id="sys" aria-label="Status sistem">
           <div class="sh-head"><div><h3>Status Sistem</h3><p id="sysSub">File Apps Script & kesegaran data</p></div></div>
@@ -2082,10 +2101,6 @@ html.scrolled header{border-bottom-color:var(--line)}
           <input type="file" id="bcFile" accept=".xlsx,.xls,.csv" hidden>
           <div id="bcBody"></div>
           <div class="iv-status" id="bcStatus"></div>
-        </section>
-        <section class="rs bcu-card" id="bcuc" aria-label="Pengguna Store Head Kit">
-          <div class="sh-head"><div><h3>Aplikasi Store Head Kit</h3><p>Dipakai Store Head toko lain · siapa saja yang sudah mendaftar</p></div></div>
-          <div id="bcucBody"></div>
         </section>
         <section class="rs" id="pgCard" aria-label="Pengingat data">
           <div class="sh-head"><div><h3>Pengingat Data</h3><p id="pgSub">Inventory by bin, by SKU &amp; SKU transaction history</p></div></div>
@@ -2131,10 +2146,6 @@ html.scrolled header{border-bottom-color:var(--line)}
   <button data-go="add" class="bn-add"><span>+</span>Tambah</button>
 </nav>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" type="button">Batalkan</button></div>
-<div class="kt bcu-pg" id="bcuPg" role="dialog" aria-modal="true" aria-label="Pengguna Store Head Kit">
-  <div class="kt-top"><button class="kt-back" id="bcuBack" type="button" aria-label="Kembali">←</button><div><b>Pengguna Store Head Kit</b><small id="bcuSub">Aplikasi untuk toko lain</small></div></div>
-  <div class="kt-body bcu-body" id="bcuBody"></div>
-</div>
 <div class="kt pa-pg" id="paPg" role="dialog" aria-modal="true" aria-label="Analisis promo">
   <div class="kt-top"><button class="kt-back" id="paBack" type="button" aria-label="Kembali">←</button><div><b>Analisis Promo</b><small id="paSub">Promo paling sering dipakai &amp; strategi promo</small></div></div>
   <div class="kt-body pa-body" id="paBody"></div>
@@ -5950,7 +5961,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  if(rep&&missing()&&applyNames())save();
  render();
 })();
-/* ====== DASHBOARD GESER (5 halaman) ====== */
+/* ====== DASHBOARD GESER (7 halaman) ====== */
 (function(){
  const deck=document.getElementById('deck'),track=document.getElementById('deckTrack');if(!deck||!track)return;
  const tabs=[...document.querySelectorAll('#deckTabs [data-pg]')],pages=[...track.children],hdr=document.querySelector('header');
@@ -5966,6 +5977,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   const changed=i!==cur;cur=i;
   tabs.forEach((t,j)=>{t.classList.toggle('on',j===i);t.setAttribute('aria-selected',j===i?'true':'false')});
   pages.forEach((p,j)=>p.classList.toggle('cur',j===i));
+  {const tb=tabs[i],bar=tb&&tb.parentNode;if(bar&&bar.scrollWidth>bar.clientWidth+2)bar.scrollTo({left:tb.offsetLeft-(bar.clientWidth-tb.offsetWidth)/2,behavior:'smooth'})}
   document.querySelectorAll('#side [data-pg]').forEach(b=>b.classList.toggle('on',+b.dataset.pg===i));
   fit();
   if(changed){try{sessionStorage.setItem('ofa_deck',String(i))}catch(e){}if(fromSwipe)keepTop()}
@@ -6002,12 +6014,12 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  // tandai menu Katalog saat layar Kelola Katalog terbuka
  const kt=document.getElementById('kt'),kb=side.querySelector('[data-sd="katalog"]');
  if(kt&&kb)new MutationObserver(()=>{const o=kt.classList.contains('open');kb.classList.toggle('on',o);side.classList.toggle('kt-open',o)}).observe(kt,{attributes:true,attributeFilter:['class']});
- // pintasan keyboard di desktop: 1–5 halaman dashboard, / cek stok
+ // pintasan keyboard di desktop: 1–7 halaman dashboard, / cek stok
  addEventListener('keydown',e=>{
   if(!matchMedia('(min-width:761px)').matches||e.ctrlKey||e.metaKey||e.altKey)return;
   const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
   if(document.querySelector('.ov.open,.kt.open,#ck.open,.ck.open'))return;
-  if(/^[1-5]$/.test(e.key)){e.preventDefault();page(+e.key-1)}
+  if(/^[1-7]$/.test(e.key)){e.preventDefault();page(+e.key-1)}
   else if(e.key==='/'){e.preventDefault();window.ofaOpenStock&&window.ofaOpenStock()}
  });
 })();
@@ -7322,7 +7334,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
    else if(lama.length||!flag){st='lama';ket='Versi lama. Tempel ulang kode terbaru lalu Deploy → New version.'}
    return Object.assign({},x,{st,ket,kurang,lama})});
  }
- function dot(){const R=data&&data.apis?cek():[],bad=R.some(r=>r.st!=='ok')||((data&&data.data)||[]).some(x=>x.stale);document.querySelectorAll('.side [data-pg="4"],#deckTabs [data-pg="4"]').forEach(b=>b.classList.toggle('sys-dot',!!bad&&window.ofaRole!=='staf'))}
+ function dot(){const R=data&&data.apis?cek():[],bad=R.some(r=>r.st!=='ok')||((data&&data.data)||[]).some(x=>x.stale);document.querySelectorAll('.side [data-pg="6"],#deckTabs [data-pg="6"]').forEach(b=>b.classList.toggle('sys-dot',!!bad&&window.ofaRole!=='staf'))}
  function render(){
   const b=$id('sysBody');if(!b)return;
   if(err==='missing'){
@@ -8370,7 +8382,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
 })();
 /* ====== PENGGUNA STORE HEAD KIT (toko lain) ====== */
 (function(){
- const pg=document.getElementById('bcuPg');if(!pg)return;
+ const pg=document.getElementById('shk');if(!pg)return;
  const $id=i=>document.getElementById(i);
  const CK='ofa_bcu',TTL=5*60e3;
  const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL);
@@ -8448,13 +8460,15 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
    ${share}<div class="co-acts"><button type="button" class="btn" data-bcu="open">Lihat pengguna &amp; aktivitas</button></div>`;
  }
  /* ---------- halaman penuh ---------- */
- function buka(){if(!owner())return toast('Menu ini khusus pemilik');pg.classList.add('open');document.body.classList.add('kt-on');pg.scrollTop=0;sideOn(true);renderPage();load(false)}
+ function buka(){if(!owner())return toast('Menu ini khusus pemilik');if(window.ofaDeckShow)ofaDeckShow('shk');renderPage();load(false)}
  function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
  function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="bcu"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('.kt.open:not(#bcuPg)'))}
- function renderAll(){renderCard();if(pg.classList.contains('open'))renderPage()}
+ function renderAll(){renderCard();renderPage()}
  function cocok(u){if(!q)return true;const s=(u.site+' '+u.toko+' '+u.nama+' '+u.jabatan+' '+(u.k||'')+' '+(u.p||'')).toLowerCase();return q.toLowerCase().split(/\s+/).every(w=>s.includes(w))}
  function renderPage(){
-  const el=$id('bcuBody'),sub=$id('bcuSub');
+  const el=$id('bcuBody'),sub=$id('bcuSub');if(!el)return;
+  if(!owner()){el.innerHTML='<p class="dp-empty">Halaman ini khusus pemilik toko.</p>';return}
+  if(!configured()){el.innerHTML='<p class="dp-empty">Hubungkan Hub ke Apps Script terlebih dahulu.</p>';return}
   if(err==='missing'){el.innerHTML=pesanMissing;return}
   if(!data||!data.users){el.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
   const s=ringkas();
@@ -8617,7 +8631,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  },true);
  document.addEventListener('input',e=>{if(e.target.id!=='bcuQ')return;q=e.target.value.trim();const p=e.target.selectionStart;renderPage();const i=$id('bcuQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&pg.classList.contains('open')&&!$id('ov').classList.contains('open'))tutup()});
- function peran(){const s=document.querySelector('#side [data-sd="bcu"]');if(s)s.hidden=!owner();renderCard();lompat()}
+ function peran(){document.querySelectorAll('[data-shkb]').forEach(s=>{s.hidden=!owner()});renderAll();lompat()}
  // tautan langsung: .../#pengguna-bc membuka halaman ini
  function lompat(){if(location.hash==='#pengguna-bc'&&!pg.classList.contains('open')){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}buka()}}
  addEventListener('hashchange',lompat);
@@ -10958,6 +10972,10 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   const bins=t=>String(t||'').split(/,\s*/).map(x=>{const k=x.match(/^(.*) \((\d+)\)$/);return k?[k[1],+k[2]]:null}).filter(Boolean);
   m[String(z[1])]={nm:a[2]+(a[1]?' '+a[1]:'')+(z[0]&&z[0]!=='-'?' '+z[0]:''),av:+z[2]||0,sa:+z[3]||0,wh:+z[4]||0,bs:bins(z[5]),bw:bins(z[6])}}));return m}
  const rows=()=>data&&data.rows||[];
+ // angka di tab / menu Mutasi: barang yang masih menunggu konfirmasi
+ function badge(){const n=rows().filter(x=>x[C.st]==='MENUNGGU').length;
+  document.querySelectorAll('[data-mtb]').forEach(b=>{let i=b.querySelector('.mt-bdg');if(!n){if(i)i.remove();return}
+   if(!i){i=document.createElement('i');i.className='mt-bdg';const k=b.querySelector('kbd');b.insertBefore(i,k||null)}i.textContent=n>99?'99+':String(n);i.title=n+' barang menunggu konfirmasi'})}
  const gkey=x=>/^[RM].*-\d+$/.test(x[C.id])?x[C.id].replace(/-\d+$/,''):String(x[C.tg]).slice(0,10)+'|'+x[C.site]+'|'+x[C.jn]+'|'+x[C.arah];
  function groups(L){const g={},o=[];L.forEach(x=>{const k=gkey(x);if(!g[k]){g[k]={k,rows:[]};o.push(g[k])}g[k].rows.push(x)});return o}
  function kpi(){
@@ -11026,7 +11044,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
    <div class="ks-act"><a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Kirim via WhatsApp</a><a class="btn ghost" href="${E(u)}" target="_blank" rel="noopener">Buka form</a><button type="button" class="btn ghost" data-mt="tutupShare">Tutup</button></div></div>`;
  }
  function render(){
-  const b=$id('mtBody');if(!b)return;
+  badge();const b=$id('mtBody');if(!b)return;
   if(!configured()){b.innerHTML='<p class="dp-empty">Hub belum tersambung ke Apps Script.</p>';return}
   if(err==='missing'){b.innerHTML='<p class="dp-empty">Fitur ini butuh file <b>MutasiToko.gs</b> di Apps Script (paling bawah, di bawah Akun). Jalankan <b>mutasiSetup</b> sekali, lalu Deploy versi baru.</p>';return}
   if(!data){b.innerHTML=busy?'<p class="dp-empty">Memuat permintaan barang…</p>':`<p class="dp-empty">${err?'Gagal memuat: '+E(err):'Belum dimuat.'}</p><div class="ks-act"><button type="button" class="btn ghost" data-mt="reload">⟳ Muat</button></div>`;return}
@@ -11135,7 +11153,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  box.addEventListener('input',e=>{if(e.target.id==='mtQ'){q=e.target.value;lim=150;clearTimeout(box._t);box._t=setTimeout(render,250)}});
  box.addEventListener('change',e=>{if(e.target.id==='mtBln'){bln=e.target.value;lim=150;render()}if(e.target.id==='mtArah'){arahF=e.target.value;lim=150;render()}});
  render();setTimeout(()=>load(false),2600);
- setInterval(()=>{if(document.visibilityState==='visible'&&box.offsetParent)load(false)},TTL+5e3);
+ setInterval(()=>{if(document.visibilityState==='visible')load(false)},TTL+5e3);
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load(false)});
 })();
 </script>
