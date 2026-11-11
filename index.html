@@ -1770,6 +1770,9 @@ html.scrolled header{border-bottom-color:var(--line)}
 #sk .sk-t{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}#sk .sk-t th{position:sticky;top:0;background:var(--card);font-size:11.5px;color:var(--mut);text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
 #sk .sk-t td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}#sk .sk-t th:first-child,#sk .sk-t td:first-child{text-align:left}#sk .sk-t td small{color:var(--mut)}#sk .sk-t td.ok{color:var(--ok-fg);font-weight:700}#sk .sk-t td.bad{color:var(--bad-fg);font-weight:700}
 @media(max-width:820px){#sk .sk-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}#sk .sk-leg em{margin-left:0;width:100%}}
+#sk .sk-wl{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--warn-bg);border:1px solid var(--warn-bd)}#sk .sk-wl>b{color:var(--warn-fg)}#sk .sk-wl>small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+#sk .sk-wl ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}#sk .sk-wl li{display:flex;justify-content:space-between;gap:10px;font-size:13px;border-top:1px dashed var(--warn-bd);padding-top:4px}#sk .sk-wl li em{font-style:normal;color:var(--mut);white-space:nowrap}
+#sk .sk-few{display:block;color:var(--warn-fg);font-weight:700}
 #mt .mt-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}#mt .mt-kpi>div{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg)}
 #mt .mt-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}#mt .mt-kpi b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}#mt .mt-kpi span{font-size:11.5px;color:var(--mut)}
 #mt .mt-kpi .warn{background:var(--warn-bg);border-color:var(--warn-bd)}#mt .mt-kpi .warn b{color:var(--warn-fg)}#mt .mt-kpi .bad{background:var(--bad-bg)}#mt .mt-kpi .bad b,#mt .mt-kpi .bad span{color:var(--bad-fg)}
@@ -10944,18 +10947,22 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  // sell-through = terjual / (stok awal + barang masuk)
  const st=o=>o.stokAwal!=null&&o.stokAwal+o.masuk>0?o.jual/(o.stokAwal+o.masuk):null;
  const kdc=o=>o.kd?o.kd.c:null;
+ const E=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ // analisis display: hanya penjualan walk-in (customer melihat display, dilayani dari stok gudang)
+ const wk=o=>o.walk!=null?o.walk:o.jual;
+ const stW=o=>o.stokAwal!=null&&o.stokAwal+o.masuk>0?wk(o)/(o.stokAwal+o.masuk):null;
  const perL=o=>mode==='m'?BLN[+o.k.slice(5,7)-1]+' '+o.k.slice(2,4):tgl(o.from)+'–'+tgl(o.to);
- function korelasi(P){const a=P.filter(o=>kdc(o)!=null&&st(o)!=null);if(a.length<4)return null;
-  const x=a.map(kdc),y=a.map(st),mx=x.reduce((s,v)=>s+v,0)/x.length,my=y.reduce((s,v)=>s+v,0)/y.length;
+ function korelasi(P){const a=P.filter(o=>kdc(o)!=null&&stW(o)!=null);if(a.length<6)return null;
+  const x=a.map(kdc),y=a.map(stW),mx=x.reduce((s,v)=>s+v,0)/x.length,my=y.reduce((s,v)=>s+v,0)/y.length;
   let n=0,dx=0,dy=0;x.forEach((v,i)=>{n+=(v-mx)*(y[i]-my);dx+=(v-mx)**2;dy+=(y[i]-my)**2});return dx&&dy?{r:n/Math.sqrt(dx*dy),n:a.length}:null}
- function grup(P){const A=P.filter(o=>kdc(o)!=null),f=L=>{const s=L.filter(o=>st(o)!=null);return {n:L.length,jual:L.length?L.reduce((t,o)=>t+o.jual/Math.max(1,o.hari)*7,0)/L.length:null,st:s.length?s.reduce((t,o)=>t+st(o),0)/s.length:null}};
+ function grup(P){const A=P.filter(o=>kdc(o)!=null),f=L=>{const s=L.filter(o=>stW(o)!=null);return {n:L.length,jual:L.length?L.reduce((t,o)=>t+wk(o)/Math.max(1,o.hari)*7,0)/L.length:null,st:s.length?s.reduce((t,o)=>t+stW(o),0)/s.length:null}};
   // pakai target 95% bila ada minggu di atas & di bawah target; selain itu bandingkan di atas vs di bawah median kepatuhan
   let cut=TGT,lbl='≥95%',lbl2='&lt;95%';
   if(!(A.some(o=>kdc(o)>=TGT)&&A.some(o=>kdc(o)<TGT))){const v=A.map(kdc).sort((a,b)=>a-b),md=v[Math.floor(v.length/2)];if(v.length<2||v[0]===v[v.length-1])return {hi:f([]),lo:f(A)};cut=md>v[0]?md:v.find(x=>x>v[0]);lbl='≥'+p1(cut);lbl2='&lt;'+p1(cut)}
   return {hi:f(A.filter(o=>kdc(o)>=cut)),lo:f(A.filter(o=>kdc(o)<cut)),lbl,lbl2,tgt:cut===TGT}}
  function artikel(){const A=(data.art||[]).filter(x=>x.hari>=3);if(!A.length)return null;
-  const s=k=>A.reduce((t,x)=>{const g=x[k];t.n+=g.n;t.pcs+=g.pcs/x.hari*7;t.laku+=g.laku;t.stok+=g.stok;return t},{n:0,pcs:0,laku:0,stok:0});
-  return {snap:A.length,last:A[A.length-1],disp:s('disp'),wh:s('wh')}}
+  const s=k=>{const t=A.reduce((t,x)=>{const g=x[k];t.n+=g.n;t.pcs+=g.pcs/x.hari*7;t.raw+=g.pcs;t.laku+=g.laku;t.stok+=g.stok;t.gw+=g.gw||0;t.gp+=g.gp||0;t.gpw+=(g.gp||0)/x.hari*7;t.p0+=g.p0||0;return t},{n:0,pcs:0,raw:0,laku:0,stok:0,gw:0,gp:0,gpw:0,p0:0});t.gwA=t.gw/A.length;return t};
+  return {snap:A.length,last:A[A.length-1],disp:s('disp'),wh:s('wh'),lain:A.reduce((t,x)=>t+(x.lain||0),0)}}
  function bars(P){
   const useSt=false,val=o=>Math.max(0,o.jual);
   const mx=Math.max(1e-9,...P.map(o=>val(o)||0));
@@ -10979,12 +10986,17 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   const G=grup(data.weeks),KR=korelasi(data.weeks),AR=artikel();
   const kes=[];
   if(G.hi.n&&G.lo.n){const d=G.hi.st!=null&&G.lo.st!=null?G.hi.st/G.lo.st-1:G.lo.jual?G.hi.jual/G.lo.jual-1:null;
-   kes.push(`<li><b>Minggu dengan kepatuhan warna ${G.lbl}</b> (${G.hi.n} minggu): rata-rata terjual <b>${nf(G.hi.jual)} pcs/minggu</b>${G.hi.st!=null?', sell-through <b>'+p1(G.hi.st)+'</b>':''}. <b>Minggu ${G.lbl2}</b> (${G.lo.n} minggu): <b>${nf(G.lo.jual)} pcs/minggu</b>${G.lo.st!=null?', sell-through <b>'+p1(G.lo.st)+'</b>':''}.${d!=null?` Selisih <b class="${d>=0?'up':'dn'}">${d>=0?'+':''}${(d*100).toLocaleString('id-ID',{maximumFractionDigits:0})}%</b>.`:''}${G.tgt?'':' <small>(belum ada minggu yang mencapai target 95%, jadi dibandingkan dengan nilai tengah kepatuhan)</small>'}</li>`)}
+   kes.push(`<li><b>Minggu dengan kepatuhan warna ${G.lbl}</b> (${G.hi.n} minggu): rata-rata terjual <b>${nf(G.hi.jual)} pcs/minggu</b>${G.hi.st!=null?', sell-through <b>'+p1(G.hi.st)+'</b>':''}. <b>Minggu ${G.lbl2}</b> (${G.lo.n} minggu): <b>${nf(G.lo.jual)} pcs/minggu</b>${G.lo.st!=null?', sell-through <b>'+p1(G.lo.st)+'</b>':''}.${d!=null?` Selisih <b class="${d>=0?'up':'dn'}">${d>=0?'+':''}${(d*100).toLocaleString('id-ID',{maximumFractionDigits:0})}%</b>.`:''}${G.tgt?'':' <small>(belum ada minggu yang mencapai target 95%, jadi dibandingkan dengan nilai tengah kepatuhan)</small>'}${G.hi.n<3||G.lo.n<3?' <small class="sk-few">Data baru '+(G.hi.n+G.lo.n)+' minggu, belum bisa disimpulkan.</small>':''}</li>`)}
   else kes.push(`<li>Perbandingan minggu kepatuhan tinggi vs rendah butuh data kepatuhan di kedua kelompok. Saat ini ${data.kd.length} kali upload inventory by bin${data.kd.length?' ('+tgl(data.kd[0].d)+' – '+tgl(data.kd[data.kd.length-1].d)+')':''}. Upload inventory by bin rutin tiap minggu.</li>`);
-  if(KR)kes.push(`<li>Korelasi kepatuhan warna dengan sell-through mingguan: <b>r = ${KR.r.toLocaleString('id-ID',{maximumFractionDigits:2})}</b> dari ${KR.n} minggu (${Math.abs(KR.r)<.2?'hampir tidak ada hubungan':KR.r>0?(KR.r>=.5?'hubungan positif kuat':'hubungan positif lemah–sedang'):'hubungan negatif'}).</li>`);
-  if(AR){const x=AR.disp,y=AR.wh,px=x.n?x.pcs/x.n:0,py=y.n?y.pcs/y.n:0,k=py?px/py:null;
-   kes.push(`<li><b>Per artikel</b> (${AR.snap} kali upload inventory, penjualan 7 hari sesudahnya): artikel yang <b>dipajang</b> terjual rata-rata <b>${px.toLocaleString('id-ID',{maximumFractionDigits:2})} pcs/minggu</b> (${p1(x.n?x.laku/x.n:0)} artikel laku), artikel yang <b>hanya di gudang</b> <b>${py.toLocaleString('id-ID',{maximumFractionDigits:2})} pcs/minggu</b> (${p1(y.n?y.laku/y.n:0)} laku)${k?(k>=1.05?` → yang dipajang <b>${k.toLocaleString('id-ID',{maximumFractionDigits:1})}× lebih cepat</b> keluar`:k<=.95?` → yang dipajang justru lebih lambat (${k.toLocaleString('id-ID',{maximumFractionDigits:1})}×); cek apakah barang di gudang adalah barang laku yang belum sempat dipajang`:' → hampir sama'):''}.</li>`)}
-  else kes.push('<li>Analisis per artikel (dipajang vs hanya di gudang) muncul setelah ada penjualan minimal 3 hari sesudah upload inventory by bin.</li>');
+  if(KR)kes.push(`<li>Korelasi kepatuhan warna dengan sell-through walk-in mingguan: <b>r = ${KR.r.toLocaleString('id-ID',{maximumFractionDigits:2})}</b> dari ${KR.n} minggu (${Math.abs(KR.r)<.2?'hampir tidak ada hubungan':KR.r>0?(KR.r>=.5?'hubungan positif kuat':'hubungan positif lemah–sedang'):'hubungan negatif'}).</li>`);
+  let ART='';
+  if(AR){const x=AR.disp,y=AR.wh,tot=x.raw+y.raw,sh=tot?x.raw/tot:null,
+    rx=x.gw?x.gpw/x.gw:null,ry=y.gw?y.gpw/y.gw:null,k=rx!=null&&ry?rx/ry:null,pc=v=>v==null?'–':(v*100).toLocaleString('id-ID',{maximumFractionDigits:1})+'%';
+   if(rx!=null)kes.push(`<li><b>Stok gudang keluar mengikuti display.</b> Artikel yang <b>dipajang</b>: stok gudangnya terjual <b>${pc(rx)} per minggu</b> (${nf(AR.last.disp.gp||0)} dari ${nf(AR.last.disp.gw||0)} pcs dalam ${AR.last.hari} hari sesudah upload ${tgl(AR.last.d)}). Artikel yang <b>tidak dipajang</b>: hanya <b>${pc(ry)} per minggu</b> (${nf(AR.last.wh.gp||0)} dari ${nf(AR.last.wh.gw||0)} pcs)${k?(k>=1.05?` → stok gudang artikel yang dipajang keluar <b>${k.toLocaleString('id-ID',{maximumFractionDigits:1})}× lebih cepat</b>`:k<=.95?' → belum terlihat bedanya, cek daftar di bawah':' → hampir sama'):ry===0&&rx>0?' → stok gudang artikel yang tidak dipajang <b>tidak keluar sama sekali</b>':''}.</li>`);
+   if(sh!=null)kes.push(`<li><b>${p1(sh)}</b> dari ${nf(tot)} pcs penjualan walk-in berasal dari artikel yang dipajang, padahal artikel tidak dipajang menyimpan <b>${nf(AR.last.wh.gw||0)} pcs</b> di gudang (upload ${tgl(AR.last.d)}).${x.p0?` ${nf(x.p0)} pcs terjual dari artikel yang tinggal display (stok gudang sudah habis, display terakhir yang diberikan).`:''}</li>`);
+   const wl=(AR.last&&AR.last.whLaku)||[];
+   if(wl.length)ART=`<div class="sk-wl"><b>Laku tapi tidak dipajang</b> <small>upload ${tgl(AR.last.d)} · penjualan walk-in ${AR.last.hari} hari sesudahnya. Pajang ulang supaya stok gudangnya ikut keluar.</small><ul>${wl.slice(0,8).map(r=>`<li><span>${E(r[1])}</span><em>${nf(r[2])} pcs terjual · ${nf(r[3])} di gudang</em></li>`).join('')}</ul></div>`;}
+  else kes.push('<li>Analisis per artikel (dipajang vs tidak dipajang) muncul setelah ada penjualan minimal 3 hari sesudah upload inventory by bin.</li>');
   const rows=P.map(o=>`<tr><td>${perL(o)}${o.hari<(mode==='m'?28:7)?' <small>(berjalan)</small>':''}</td><td>${o.stokAwal==null?'–':nf(o.stokAwal)}</td><td>${o.mutasi?nf(o.masuk):'–'}</td><td><b>${nf(o.jual)}</b></td><td>${o.mutasi?nf(o.sto+o.out):'–'}</td><td>${o.mutasi?nf(o.adj):'–'}</td><td>${o.stokAkhir==null?'–':nf(o.stokAkhir)}</td><td><b>${p1(st(o))}</b></td><td class="${kdc(o)==null?'':kdc(o)>=TGT?'ok':'bad'}">${o.kd?p1(o.kd.g)+' / '+p1(o.kd.c):'–'}</td></tr>`).reverse().join('');
   b.innerHTML=`${warn.map(w=>`<p class="ks-warn">⚠ ${w}</p>`).join('')}
    <div class="sk-kpi"><div><small>Barang terjual ${data.tahun}</small><b>${nf(ytd)} pcs</b><span>sejak 1 Jan</span></div><div><small>Rata-rata terjual</small><b>${nf(avgW)} pcs</b><span>per minggu</span></div>
@@ -10993,8 +11005,8 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
     <div class="${lk?(lk.c>=TGT?'ok':'bad'):''}"><small>Kepatuhan display terakhir</small><b>${lk?p1(lk.c):'–'}</b><span>${lk?'warna · generic '+p1(lk.g)+' · '+tgl(lk.d):'upload inventory by bin'}</span></div></div>
    <div class="sk-tg"><div class="bc-seg" role="group" aria-label="Periode"><button type="button" data-skm="w" class="${mode==='w'?'on':''}">Per minggu</button><button type="button" data-skm="m" class="${mode==='m'?'on':''}">Per bulan</button></div></div>
    ${bars(P)}
-   <section class="sk-an"><h4>Apakah kepatuhan display berpengaruh pada cepatnya barang keluar?</h4><ul>${kes.join('')}</ul>
-    <p class="hint">Hubungan ini belum tentu sebab-akibat: promo, musim, dan barang baru juga ikut memengaruhi. Semakin rutin inventory by bin diupload (mis. tiap Senin), semakin kuat bukti perbandingannya.</p></section>
+   <section class="sk-an"><h4>Apakah kepatuhan display berpengaruh pada cepatnya barang keluar?</h4><ul>${kes.join('')}</ul>${ART}
+    <p class="hint">Analisis display hanya memakai penjualan <b>walk-in</b>${AR&&AR.lain?' (wholesale, endless aisle &amp; online sebanyak '+nf(AR.lain)+' pcs di periode yang sama tidak dihitung karena tidak dipicu display)':'; wholesale, endless aisle &amp; online tidak dihitung karena tidak dipicu display'}. Promo, musim dan barang baru juga ikut memengaruhi. Semakin rutin inventory by bin diupload (mis. tiap Senin), semakin kuat bukti perbandingannya.</p></section>
    <div class="sk-tw"><table class="sk-t"><thead><tr><th>${mode==='m'?'Bulan':'Minggu'}</th><th>Stok awal</th><th>Masuk</th><th>Terjual</th><th>STO/keluar lain</th><th>Adjust</th><th>Stok akhir</th><th>Sell-through</th><th>Kepatuhan generic / warna</th></tr></thead><tbody>${rows}</tbody></table></div>
    <div class="ks-act"><button type="button" class="btn ghost" data-skx="xlsx">⬇ Excel</button><button type="button" class="btn ghost" data-skx="reload">${busy?'Memuat…':'⟳ Muat ulang'}</button></div>
    <p class="hint">Terjual = penjualan offline dari SKU Transaction History (bila belum ada: Database DSR). Stok per minggu dihitung mundur dari Stock Database terakhir memakai mutasi harian. Kepatuhan = rata-rata upload inventory by bin di periode itu.</p>`;
@@ -11002,8 +11014,9 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  function excel(){
   if(!data||!window.xlsxSimple)return;
   const sh=(L,nm,lbl)=>({name:nm,head:1,widths:[16,12,12,12,10,12,12,12,10,12,13,15,15],rows:[[lbl,'Dari','Sampai','Stok awal','Masuk','Terjual','STO keluar','Keluar lain','Adjust','Stok akhir','Sell-through','Kepatuhan generic','Kepatuhan warna']].concat(L.map(o=>[o.k,o.from,o.to,o.stokAwal==null?'':o.stokAwal,o.masuk,o.jual,o.sto,o.out,o.adj,o.stokAkhir==null?'':o.stokAkhir,st(o)==null?'':st(o),o.kd?o.kd.g:'',o.kd?o.kd.c:''])),pct:L.flatMap((o,i)=>[[i+2,11],[i+2,12],[i+2,13]])});
-  const A=(data.art||[]).map(x=>[x.d,x.hari,x.disp.n,x.disp.pcs,x.disp.laku,x.wh.n,x.wh.pcs,x.wh.laku]);
-  const blob=xlsxSimple([sh(data.weeks,'Per Minggu','Minggu (Senin)'),sh(data.months,'Per Bulan','Bulan'),{name:'Dipajang vs Gudang',head:1,widths:[14,8,14,14,14,14,14,14],rows:[['Tanggal inventory','Hari penjualan','Artikel dipajang','Terjual (dipajang)','Laku (dipajang)','Artikel hanya gudang','Terjual (gudang)','Laku (gudang)']].concat(A)}],'Stok & Barang Keluar');
+  const A=(data.art||[]).map(x=>[x.d,x.hari,x.disp.n,x.disp.pcs,x.disp.laku,x.wh.n,x.wh.pcs,x.wh.laku,x.disp.gw||0,x.disp.gp||0,x.wh.gw||0,x.wh.gp||0,x.disp.p0||0,x.lain||0]);
+  const WL=(data.art||[]).flatMap(x=>(x.whLaku||[]).map(r=>[x.d,r[0],r[1],r[2],r[3]]));
+  const blob=xlsxSimple([sh(data.weeks,'Per Minggu','Minggu (Senin)'),sh(data.months,'Per Bulan','Bulan'),{name:'Dipajang vs Tidak',head:1,widths:[14,8,14,14,14,14,14,14,14,16,14,14,14,16],rows:[['Tanggal inventory','Hari penjualan','Artikel dipajang','Terjual walk-in (dipajang)','Laku (dipajang)','Artikel tidak dipajang','Terjual walk-in (tidak dipajang)','Laku (tidak dipajang)','Stok gudang (dipajang)','Terjual dari stok gudang (dipajang)','Stok gudang (tidak dipajang)','Terjual (tidak dipajang)','Terjual dari display terakhir','Non walk-in (tidak dihitung)']].concat(A)},{name:'Laku tidak dipajang',head:1,widths:[14,16,36,12,12],rows:[['Tanggal inventory','Generic|Warna','Artikel','Terjual walk-in 7 hari','Stok gudang']].concat(WL)}],'Stok & Barang Keluar');
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Stok & Barang Keluar 7014 '+data.tahun+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel diunduh');
  }
  box.addEventListener('click',e=>{const m=e.target.closest('[data-skm]');if(m){mode=m.dataset.skm;try{localStorage.setItem('ofa_sk_mode',mode)}catch(x){}return render()}
