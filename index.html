@@ -8489,12 +8489,16 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   catch(e){err=missing(e)?'missing':e.message}
   finally{busy=false;renderAll()}
  }
+ // satu toko satu akun: semua perangkat dengan kode site yang sama = satu akun
+ const akKey=u=>String(u.site||'-').toUpperCase();
+ const unm=u=>String(u.user||u.nama||'').replace(/\s+/g,' ').trim();
  function ringkas(){
   const U=data.users||[],now=Date.now(),aktif=U.filter(u=>u.status!=='blokir');
-  const sites=new Set(aktif.map(u=>u.site));
+  const sites=new Set(aktif.map(u=>u.site)),akun=new Set(aktif.map(akKey));
   const a7=new Set(aktif.filter(u=>now-new Date(u.aktif)<7*864e5).map(u=>u.site));
   const dl=U.reduce((a,u)=>a+u.unduh,0),up=U.reduce((a,u)=>a+u.upload,0);
-  return{toko:sites.size,orang:aktif.length,a7:a7.size,dl,up,blok:U.length-aktif.length};
+  const blokAk=new Set(U.filter(u=>u.status==='blokir').map(akKey));
+  return{toko:sites.size,orang:akun.size,alat:aktif.length,a7:a7.size,dl,up,blok:blokAk.size};
  }
  /* ---------- peringkat pemakaian: per pengguna & per toko ---------- */
  const FITUR={ba:'BA Blind Counting',kd:'Kepatuhan Display',kas:'Rekap Kas',bg:'Rekap Budget',promo:'Produk Promo',na:'New Arrival',lembur:'Lembur'};
@@ -8506,18 +8510,26 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
    t.orang.push(u);t.n+=u.n;t.n30+=u.n30||0;t.buka+=u.buka;Object.keys(u.f).forEach(x=>t.f[x]=(t.f[x]||0)+u.f[x]);if(new Date(u.aktif)>new Date(t.aktif)){t.aktif=u.aktif;t.toko=u.toko}});
   const toko=Object.values(T).map(t=>Object.assign(t,{fit:Object.keys(FITUR).filter(k=>t.f[k]).sort((a,b)=>t.f[b]-t.f[a])})).sort((a,b)=>b.n-a.n||new Date(b.aktif)-new Date(a.aktif));
   const tf={};us.forEach(u=>Object.keys(u.f).forEach(k=>{if(k!=='buka')tf[k]=(tf[k]||0)+u.f[k]}));
-  return {us,toko,tf,ada:!!S};
+  // gabungkan perangkat (HP, laptop) milik akun yang sama
+  const A={};us.forEach(u=>{const k=akKey(u);let a=A[k];
+   if(!a){a=A[k]=Object.assign({},u,{key:k,alat:[],ids:[],un:new Map(),f:{},n:0,n30:S?0:null,hari:S?0:null,buka:0,upload:0,unduh:0,periode:''})}
+   a.alat.push(u.perangkat||'Perangkat');a.un.set(unm(u).toLowerCase(),unm(u));a.ids.push(u.id);a.n+=u.n;if(S){a.n30+=u.n30||0;a.hari=Math.max(a.hari,u.hari||0)}
+   a.buka+=u.buka;a.upload+=u.upload;a.unduh+=u.unduh;Object.keys(u.f).forEach(x=>a.f[x]=(a.f[x]||0)+u.f[x]);
+   if(new Date(u.aktif)>new Date(a.aktif)){a.aktif=u.aktif;a.toko=u.toko;a.nama=u.nama;a.jabatan=u.jabatan}
+   if(new Date(u.daftar)<new Date(a.daftar))a.daftar=u.daftar;if(u.periode&&!a.periode)a.periode=u.periode;if(u.status!=='blokir')a.status='aktif'});
+  const ak=Object.values(A).map(a=>Object.assign(a,{fit:Object.keys(FITUR).filter(k=>a.f[k]).sort((x,y)=>a.f[y]-a.f[x])})).sort((a,b)=>b.n-a.n||new Date(b.aktif)-new Date(a.aktif));
+  return {us,ak,toko,tf,ada:!!S};
  }
  const fitChips=(o,max)=>o.fit.filter(k=>k!=='buka').slice(0,max||7).map(k=>`<span>${esc(FITUR[k])} <b>${nf(o.f[k])}</b></span>`).join('');
  function tokoHtml(P,max){
   const L=P.toko.slice(0,max||P.toko.length);
   return L.length?`<div class="bcu-rank">${L.map((t,i)=>`<div class="bcu-r"><em class="${i<3?'top':''}">${i+1}</em><div class="bcu-r-m"><b><span class="bcu-site">${esc(t.site)}</span> ${esc(t.toko)}</b>
-    <small>${t.orang.map(u=>esc(u.nama)+' ('+esc(u.jabatan)+')').join(', ')}</small>${P.ada&&t.fit.some(k=>k!=='buka')?`<div class="bcu-fit">${fitChips(t,max?3:7)}</div>`:''}</div>
+    <small>${[...new Map(t.orang.map(u=>[akKey(u),u])).values()].map(u=>esc(u.nama)+' ('+esc(u.jabatan)+')').join(', ')}${t.orang.length>1?' · '+t.orang.length+' perangkat':''}</small>${P.ada&&t.fit.some(k=>k!=='buka')?`<div class="bcu-fit">${fitChips(t,max?3:7)}</div>`:''}</div>
     <div class="bcu-r-n"><b>${nf(t.n)}</b><small>aktivitas</small>${P.ada?`<small>${nf(t.n30)} dalam 30 hari</small>`:''}<small>buka ${nf(t.buka)}× · ${esc(lalu(t.aktif))}</small></div></div>`).join('')}</div>`:'<p class="dp-empty">Belum ada toko yang memakai.</p>';
  }
  function csvPengguna(){
-  const P=pakai(),rows=[['Peringkat','Kode site','Nama toko','Nama','Jabatan','Total aktivitas','Aktivitas 30 hari','Hari aktif','Buka aplikasi'].concat(Object.values(FITUR)).concat(['Terdaftar','Terakhir aktif','Status'])];
-  P.us.forEach((u,i)=>rows.push([i+1,u.site,u.toko,u.nama,u.jabatan,u.n,u.n30==null?'':u.n30,u.hari==null?'':u.hari,u.buka].concat(Object.keys(FITUR).map(k=>u.f[k]||0)).concat([tgl(u.daftar),tgl(u.aktif)+' '+jam(u.aktif),u.status])));
+  const P=pakai(),rows=[['Peringkat','Kode site','Nama toko','Username','Nama','Jabatan','Perangkat','Total aktivitas','Aktivitas 30 hari','Hari aktif','Buka aplikasi'].concat(Object.values(FITUR)).concat(['Terdaftar','Terakhir aktif','Status'])];
+  P.ak.forEach((u,i)=>rows.push([i+1,u.site,u.toko,[...u.un.values()].join(' / '),u.nama,u.jabatan,u.alat.join(' | '),u.n,u.n30==null?'':u.n30,u.hari==null?'':u.hari,u.buka].concat(Object.keys(FITUR).map(k=>u.f[k]||0)).concat([tgl(u.daftar),tgl(u.aktif)+' '+jam(u.aktif),u.status])));
   const txt=rows.map(r=>r.map(v=>{v=String(v==null?'':v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+txt],{type:'text/csv'}));a.download='Pengguna Store Head Kit '+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);toast('CSV pengguna diunduh');
  }
@@ -8531,8 +8543,8 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   if(err==='missing'){b.innerHTML=pesanMissing+share;return}
   if(!data||!data.users){b.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>'+share;return}
   const s=ringkas(),last=(data.log||[])[0];
-  b.innerHTML=`<div class="bcu-mini"><div><small>Toko terdaftar</small><b>${nf(s.toko)}</b></div><div><small>Pengguna</small><b>${nf(s.orang)}</b></div><div><small>Aktif 7 hari</small><b>${nf(s.a7)} toko</b></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b></div></div>
-   ${(()=>{const P=pakai();return P.toko.length?`<p class="wk-p bcu-ttl"><b>Toko paling sering memakai</b><span>${nf(P.toko.length)} toko · ${nf(P.us.length)} pengguna</span></p>${tokoHtml(P,5)}${P.toko.length>5?`<p class="hint" style="margin:6px 0 0">+${nf(P.toko.length-5)} toko lain di halaman pengguna.</p>`:''}`:''})()}
+  b.innerHTML=`<div class="bcu-mini"><div><small>Toko terdaftar</small><b>${nf(s.toko)}</b></div><div><small>Akun</small><b>${nf(s.orang)}</b></div><div><small>Aktif 7 hari</small><b>${nf(s.a7)} toko</b></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b></div></div>
+   ${(()=>{const P=pakai();return P.toko.length?`<p class="wk-p bcu-ttl"><b>Toko paling sering memakai</b><span>${nf(P.toko.length)} toko · ${nf(P.ak.length)} akun · ${nf(P.us.length)} perangkat</span></p>${tokoHtml(P,5)}${P.toko.length>5?`<p class="hint" style="margin:6px 0 0">+${nf(P.toko.length-5)} toko lain di halaman pengguna.</p>`:''}`:''})()}
    ${last?`<p class="bcu-last">Terakhir: <b>${esc(last.nama)}</b> · ${esc(last.site)} ${esc(last.toko)} · ${esc(last.k)}${last.p?' '+esc(last.p):''} · ${esc(lalu(last.w))}</p>`:'<p class="bcu-last">Belum ada yang mendaftar. Bagikan link di bawah ke Store Head lain.</p>'}
    ${share}<div class="co-acts"><button type="button" class="btn" data-bcu="open">Lihat pengguna &amp; aktivitas</button></div>`;
  }
@@ -8541,7 +8553,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  function tutup(){pg.classList.remove('open');if(!document.querySelector('.kt.open'))document.body.classList.remove('kt-on');sideOn(false)}
  function sideOn(o){const s=$id('side');if(!s)return;const b=s.querySelector('[data-sd="bcu"]');if(b)b.classList.toggle('on',o);s.classList.toggle('kt-open',o||!!document.querySelector('.kt.open:not(#bcuPg)'))}
  function renderAll(){renderCard();renderPage()}
- function cocok(u){if(!q)return true;const s=(u.site+' '+u.toko+' '+u.nama+' '+u.jabatan+' '+(u.k||'')+' '+(u.p||'')).toLowerCase();return q.toLowerCase().split(/\s+/).every(w=>s.includes(w))}
+ function cocok(u){if(!q)return true;const s=(u.site+' '+u.toko+' '+(u.user||'')+' '+u.nama+' '+u.jabatan+' '+(u.k||'')+' '+(u.p||'')).toLowerCase();return q.toLowerCase().split(/\s+/).every(w=>s.includes(w))}
  function renderPage(){
   const el=$id('bcuBody'),sub=$id('bcuSub');if(!el)return;
   if(!owner()){el.innerHTML='<p class="dp-empty">Halaman ini khusus pemilik toko.</p>';return}
@@ -8549,28 +8561,28 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   if(err==='missing'){el.innerHTML=pesanMissing;return}
   if(!data||!data.users){el.innerHTML='<p class="dp-empty">'+(busy?'Memuat…':err?'Gagal memuat: '+esc(err):'Belum ada data.')+'</p>';return}
   const s=ringkas();
-  sub.textContent=nf(s.toko)+' toko · '+nf(s.orang)+' pengguna'+(busy?' · memuat…':' · diperbarui '+jam(new Date(data.at).toISOString()));
-  const P=pakai(),rk=new Map(P.us.map((u,i)=>[u.id,i+1]));
-  const U=(urut==='baru'?P.us.slice().sort((a,b)=>new Date(b.aktif)-new Date(a.aktif)):P.us).filter(cocok);
+  sub.textContent=nf(s.toko)+' toko · '+nf(s.orang)+' akun · '+nf(s.alat)+' perangkat'+(busy?' · memuat…':' · diperbarui '+jam(new Date(data.at).toISOString()));
+  const P=pakai(),rk=new Map(P.ak.map((u,i)=>[u.key,i+1]));
+  const U=(urut==='baru'?P.ak.slice().sort((a,b)=>new Date(b.aktif)-new Date(a.aktif)):P.ak).filter(cocok);
   const L=(data.log||[]).filter(cocok).slice(0,150);
   const users=U.length?U.map(u=>`<div class="bcu-u${u.status==='blokir'?' off':''}">
-    <div class="bcu-u-h"><em class="bcu-no" title="Peringkat pemakaian">#${rk.get(u.id)}</em><span class="bcu-site">${esc(u.site)}</span><div><b>${esc(u.toko)}</b><small>${esc(u.nama)} · ${esc(u.jabatan)}${u.status==='blokir'?' · <em>dinonaktifkan</em>':''}</small></div><span class="bcu-when" title="${esc(tgl(u.aktif)+' '+jam(u.aktif))}">${esc(lalu(u.aktif))}</span></div>
+    <div class="bcu-u-h"><em class="bcu-no" title="Peringkat pemakaian">#${rk.get(u.key)}</em><span class="bcu-site">${esc(u.site)}</span><div><b>${esc(u.toko)}</b><small>username ${esc([...u.un.values()].join(' / '))} · ${esc(u.nama)} · ${esc(u.jabatan)}${u.status==='blokir'?' · <em>dinonaktifkan</em>':''}</small></div><span class="bcu-when" title="${esc(tgl(u.aktif)+' '+jam(u.aktif))}">${esc(lalu(u.aktif))}</span></div>
     <div class="bcu-u-n"><span>Total aktivitas <b>${nf(u.n)}</b></span>${u.n30!=null?`<span>30 hari <b>${nf(u.n30)}</b></span>`:''}${u.hari!=null?`<span>Hari aktif <b>${nf(u.hari)}</b></span>`:''}<span>Buka <b>${nf(u.buka)}</b></span><span>Upload <b>${nf(u.upload)}</b></span><span>Unduh BA <b>${nf(u.unduh)}</b></span>${u.periode?`<span>Periode terakhir <b>${esc(u.periode)}</b></span>`:''}</div>
     ${u.fit.some(k=>k!=='buka')?`<div class="bcu-fit">${fitChips(u)}</div>`:''}
-    <div class="bcu-u-f"><small>Terdaftar ${esc(tgl(u.daftar))}${u.perangkat?' · '+esc(u.perangkat):''}</small><button type="button" class="bcu-lnk" data-bcb="${esc(u.id)}" data-st="${u.status==='blokir'?'aktif':'blokir'}">${u.status==='blokir'?'Aktifkan lagi':'Nonaktifkan'}</button></div>
+    <div class="bcu-u-f"><small>Terdaftar ${esc(tgl(u.daftar))} · ${u.alat.length>1?u.alat.length+' perangkat: ':''}${esc(u.alat.join(', '))}</small><button type="button" class="bcu-lnk" data-bcb="${esc(u.ids[0])}" data-st="${u.status==='blokir'?'aktif':'blokir'}">${u.status==='blokir'?'Aktifkan lagi':'Nonaktifkan'}</button></div>
    </div>`).join(''):'<p class="dp-empty">'+(q?'Tidak ada yang cocok.':'Belum ada yang mendaftar.')+'</p>';
   const log=L.length?'<div class="bcu-log">'+L.map(x=>`<div><time>${esc(tgl(x.w))}<br>${esc(jam(x.w))}</time><p><b>${esc(x.k)}</b>${x.p?' · '+esc(x.p):''}<br><small>${esc(x.site)} ${esc(x.toko)} · ${esc(x.nama)}${x.x?' · '+esc(x.x):''}</small></p></div>`).join('')+'</div>':'<p class="dp-empty">Belum ada aktivitas.</p>';
-  el.innerHTML=`<div class="bcu-kpi"><div class="bcu-big"><small>Toko terdaftar</small><b>${nf(s.toko)}</b><span>${nf(s.orang)} pengguna${s.blok?' · '+nf(s.blok)+' dinonaktifkan':''}</span></div>
+  el.innerHTML=`<div class="bcu-kpi"><div class="bcu-big"><small>Toko terdaftar</small><b>${nf(s.toko)}</b><span>${nf(s.orang)} akun · ${nf(s.alat)} perangkat${s.blok?' · '+nf(s.blok)+' akun dinonaktifkan':''}</span></div>
     <div><small>Aktif 7 hari</small><b>${nf(s.a7)}</b><span>toko</span></div><div><small>Upload file BC</small><b>${nf(s.up)}</b><span>total</span></div><div><small>BA diunduh</small><b>${nf(s.dl)}</b><span>total</span></div></div>
    <div class="bcu-share"><code>${esc(APP)}</code><button type="button" class="btn ghost" data-bcu="copy">Salin link aplikasi</button></div>
-   <section class="bcu-sec"><div class="bcu-sh"><h4>Peringkat toko · paling sering memakai</h4><button type="button" class="bcu-lnk2" data-bcu="csv">Unduh CSV pengguna</button></div>${P.ada?'':'<p class="hint" style="margin:0 0 8px">Tempel BcApp.gs terbaru agar rincian per fitur, aktivitas 30 hari &amp; hari aktif ikut tampil. Sementara peringkat memakai jumlah buka + upload + unduh.</p>'}${tokoHtml(P)}
+   <section class="bcu-sec"><div class="bcu-sh"><h4>Peringkat toko · paling sering memakai</h4><button type="button" class="bcu-lnk2" data-bcu="csv">Unduh CSV akun</button></div>${P.ada?'':'<p class="hint" style="margin:0 0 8px">Tempel BcApp.gs terbaru agar rincian per fitur, aktivitas 30 hari &amp; hari aktif ikut tampil. Sementara peringkat memakai jumlah buka + upload + unduh.</p>'}${tokoHtml(P)}
     ${P.ada&&Object.keys(P.tf).length?`<p class="wk-p" style="margin:12px 0 6px"><b>Fitur paling sering dipakai</b></p><div class="bcu-ft">${(()=>{const K=Object.keys(P.tf).sort((a,b)=>P.tf[b]-P.tf[a]),mx=P.tf[K[0]]||1;return K.map(k=>`<div><span>${esc(FITUR[k])}</span><i><i style="width:${(P.tf[k]/mx*100).toFixed(1)}%"></i></i><b>${nf(P.tf[k])}</b></div>`).join('')})()}</div>`:''}</section>
    ${promoHtml()}
    ${naHtml()}
-   <div class="bcu-bar"><input class="in" id="bcuQ" type="search" placeholder="Cari site, toko, nama…" value="${esc(q)}"><div class="bcu-tabs" role="tablist"><button type="button" role="tab" data-bct="u" class="${tab==='u'?'on':''}">Pengguna (${U.length})</button><button type="button" role="tab" data-bct="l" class="${tab==='l'?'on':''}">Aktivitas</button></div></div>
-   <div class="bcu-cols"><section class="bcu-col${tab==='u'?' on':''}"><div class="bcu-sh"><h4>Pengguna</h4><select class="in bcu-urut" id="bcuUrut"><option value="n"${urut==='n'?' selected':''}>Paling sering memakai</option><option value="baru"${urut==='baru'?' selected':''}>Terakhir aktif</option></select></div>${users}</section><section class="bcu-col${tab==='l'?' on':''}"><h4>Aktivitas terbaru</h4>${log}</section></div>
+   <div class="bcu-bar"><input class="in" id="bcuQ" type="search" placeholder="Cari site, toko, nama…" value="${esc(q)}"><div class="bcu-tabs" role="tablist"><button type="button" role="tab" data-bct="u" class="${tab==='u'?'on':''}">Akun toko (${U.length})</button><button type="button" role="tab" data-bct="l" class="${tab==='l'?'on':''}">Aktivitas</button></div></div>
+   <div class="bcu-cols"><section class="bcu-col${tab==='u'?' on':''}"><div class="bcu-sh"><h4>Akun toko</h4><select class="in bcu-urut" id="bcuUrut"><option value="n"${urut==='n'?' selected':''}>Paling sering memakai</option><option value="baru"${urut==='baru'?' selected':''}>Terakhir aktif</option></select></div>${users}</section><section class="bcu-col${tab==='l'?' on':''}"><h4>Aktivitas terbaru</h4>${log}</section></div>
    <div class="vd-links"><button type="button" data-bcu="reload">Muat ulang</button>${data.sheetUrl?`<a href="${esc(data.sheetUrl)}" target="_blank" rel="noopener">Buka spreadsheet ↗</a>`:''}<a href="${esc(APP)}" target="_blank" rel="noopener">Buka aplikasi ↗</a></div>
-   <p class="bcu-note">Yang tercatat hanya pendaftaran (site, toko, nama, jabatan) dan aktivitas (buka, upload, unduh laporan beserta periodenya). Isi data stock toko lain tidak dikirim ke Hub.</p>`;
+   <p class="bcu-note">Satu toko satu akun: semua HP &amp; laptop dengan kode site yang sama digabung jadi satu akun. Yang tercatat hanya pendaftaran (site, username, toko, nama, jabatan) dan aktivitas (buka, upload, unduh laporan beserta periodenya). Isi data stock toko lain tidak dikirim ke Hub.</p>`;
  }
  /* ---------- database promo untuk fitur Produk Promo di Store Head Kit ---------- */
  const tglS=k=>{if(!k)return '';const p=String(k).slice(0,10).split('-');return p.length===3?+p[2]+' '+BLN[+p[1]-1]+' '+p[0]:k};
@@ -8688,7 +8700,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  async function atur(btn){
   if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent=btn.dataset.st==='blokir'?'Yakin nonaktifkan? Ketuk lagi':'Ketuk lagi untuk mengaktifkan';return}
   btn.disabled=true;btn.textContent='Menyimpan…';
-  try{simpan(await api('bcAppAtur',{id:btn.dataset.bcb,status:btn.dataset.st}));toast(btn.dataset.st==='blokir'?'Akses pengguna dinonaktifkan':'Akses pengguna diaktifkan');renderAll()}
+  try{simpan(await api('bcAppAtur',{id:btn.dataset.bcb,status:btn.dataset.st}));toast(btn.dataset.st==='blokir'?'Akses akun dinonaktifkan (semua perangkat)':'Akses akun diaktifkan');renderAll()}
   catch(e){btn.disabled=false;btn.dataset.ok='';toast(e.message);renderAll()}
  }
  document.addEventListener('click',e=>{

@@ -302,6 +302,10 @@ body.locked{overflow:hidden}
 .reg-card #regSite{text-transform:uppercase;letter-spacing:.06em;font-weight:700}
 .reg-card #regSite::placeholder{text-transform:none;letter-spacing:0;font-weight:500}
 .reg-card [hidden]{display:none!important}
+.reg-card .reg-hint{display:block;font-weight:500;font-size:12px;color:var(--mut);margin-top:1px}
+.reg-card fieldset{border:0;border-top:1px dashed var(--line);margin:14px 0 0;padding:4px 0 0;min-width:0}
+.reg-card legend{padding:0 8px 0 0;font-size:12.5px;font-weight:700;color:var(--mut)}
+.app-reg .reg-user{font-weight:700}
 .reg-note{margin:14px 0 0;padding:10px 12px;border-radius:12px;background:var(--blue-bg,#eaf1ff);font-size:12.5px;line-height:1.5;color:var(--fg)}
 .reg-err{min-height:18px;margin:8px 0 4px;font-size:13px;font-weight:700;color:var(--bad-fg,#c62828)}
 .reg-card .btn{width:100%;justify-content:center;margin-top:6px;padding:12px;font-size:15px}
@@ -453,21 +457,24 @@ body.locked{overflow:hidden}
   </section>
   </div>
   <section class="rs app-help app-privacy" aria-label="Privasi">
-    <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya).</p>
+    <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, username, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya).</p>
   </section>
 </main>
 <footer class="app-foot"><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
 <div class="reg" id="reg" hidden>
   <form class="reg-card" id="regForm" novalidate autocomplete="on">
     <img src="icons/icon-192.png" alt="">
-    <h1 id="regH">Daftar dulu</h1>
-    <p id="regP">Isi kode site &amp; nama toko sebelum memakai Store Head Kit. Cukup sekali di perangkat ini.</p>
+    <h1 id="regH">Masuk / daftar</h1>
+    <p id="regP"></p>
     <label><span>Kode site</span><input class="in" id="regSite" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="mis. 7014"></label>
+    <label><span>Username <small class="reg-hint">Sama di HP &amp; laptop. Satu toko satu username.</small></span><input class="in" id="regUser" maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="mis. budi"></label>
+    <fieldset id="regBaru"><legend id="regLeg">Akun baru? Isi juga:</legend>
     <label><span>Nama toko</span><input class="in" id="regToko" maxlength="80" autocomplete="organization" placeholder="mis. Eiger Store Soekarno Solo Baru"></label>
     <label><span>Nama Anda</span><input class="in" id="regNama" maxlength="60" autocomplete="name" placeholder="Nama lengkap"></label>
     <label><span>Jabatan</span><select class="in" id="regJab"><option>Store Head</option><option>Asst. Store Head</option><option>Admin Toko</option><option>Head of Branch</option><option>Area Manager</option><option>Lainnya</option></select></label>
+    </fieldset>
     <div class="reg-err" id="regErr" role="alert"></div>
-    <button class="btn" type="submit" id="regGo">Daftar &amp; mulai</button>
+    <button class="btn" type="submit" id="regGo">Masuk / daftar</button>
     <button class="btn ghost" type="button" id="regBatal" hidden>Batal</button>
     <p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p>
   </form>
@@ -2734,38 +2741,49 @@ appStart();
   Object.keys(kb).forEach(k=>{if(!q[k]||q[k]===ko[k]||(k==='t1'&&q[k]==='Store Head')||(k==='file'&&q[k]==='REKAP PENGELUARAN KAS'))q[k]=kb[k]});ST.kasCfg=q}
  function kunci(id){['reg','blok'].forEach(x=>$(x).hidden=x!==id);document.body.classList.toggle('locked',!!id)}
  function regInfo(){const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
-  el.innerHTML='Terdaftar: <b>'+esc(r.nama)+'</b> · '+esc(r.jabatan)+' · site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' <button type="button" id="regUbah">Ubah</button> · <button type="button" id="regKeluar">Keluar</button>'}
- function bukaForm(edit){const r=edit&&ST.reg||{};$('regSite').value=r.site||'';$('regToko').value=r.toko||'';$('regNama').value=r.nama||'';$('regJab').value=r.jabatan||'Store Head';
-  $('regH').textContent=edit?'Ubah data pendaftaran':'Daftar dulu';$('regP').textContent=edit?'Perubahan juga dipakai di pengaturan berita acara.':'Isi kode site & nama toko sebelum memakai Store Head Kit. Cukup sekali di perangkat ini.';
-  $('regGo').textContent=edit?'Simpan':'Daftar & mulai';$('regBatal').hidden=!edit;$('regErr').textContent='';kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
+  el.innerHTML='Akun toko: site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' · username <span class="reg-user">'+esc(r.user||r.nama)+'</span> · '+esc(r.nama)+' ('+esc(r.jabatan)+') <button type="button" id="regUbah">Ubah</button> · <button type="button" id="regKeluar">Keluar</button>'}
+ // data akun dari server (perangkat lain bisa mengubahnya) dipakai juga di perangkat ini
+ function pakaiReg(g){if(!g||!g.site)return;const lama=ST.reg||null,v={site:String(g.site),toko:String(g.toko||''),nama:String(g.nama||''),jabatan:String(g.jabatan||'Store Head'),user:String(g.user||g.nama||'')};
+  if(lama&&['site','toko','nama','jabatan','user'].every(k=>String(lama[k]||'')===v[k]))return;
+  ST.reg=Object.assign({},lama||{},v,{at:g.at||lama&&lama.at||new Date().toISOString()});isiCfg(v,lama);stSave();regInfo();if(window.bcRender)bcRender();if(window.kasRender)kasRender()}
+ function bukaForm(edit){const r=edit&&ST.reg||{};$('regSite').value=r.site||'';$('regUser').value=r.user||r.nama||'';$('regToko').value=r.toko||'';$('regNama').value=r.nama||'';$('regJab').value=r.jabatan||'Store Head';
+  $('regH').textContent=edit?'Ubah data akun':'Masuk / daftar';$('regP').textContent=edit?'Perubahan berlaku di semua HP & laptop akun toko ini, juga di pengaturan berita acara.':'Satu toko satu akun. Sudah memakai di HP atau laptop lain? Cukup isi kode site & username yang sama, data toko terisi otomatis.';
+  $('regLeg').textContent=edit?'Data toko':'Akun baru? Isi juga:';
+  $('regGo').textContent=edit?'Simpan':'Masuk / daftar';$('regBatal').hidden=!edit;$('regErr').textContent='';kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
  let busy=false;
  async function flush(){if(busy||!ST.reg||ST.blokir&&!ST.cekBlok)return;busy=true;
   try{for(let n=0;n<6;n++){
-   if(!ST.regSync){const r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},ST.reg));if(r&&r.blokir){blokir();break}ST.regSync=true;stSave()}
+   if(!ST.regSync){let r;try{r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},ST.reg))}catch(x){if(!x.net){bukaForm(true);$('regErr').textContent=x.message}throw x}
+    if(r&&r.blokir){blokir();break}ST.regSync=true;stSave();if(r&&r.reg)pakaiReg(r.reg)}
    const kirim=(ST.q||[]).slice(0,30);
    if(!kirim.length&&!ST.cekBlok)break;
    const r=await api('bcAppCatat',{id:devId(),ev:kirim,v:VER});
    if(r&&r.blokir){blokir();break}
    if(r&&r.daftar===false){ST.regSync=false;stSave();continue}
+   if(r&&r.reg)pakaiReg(r.reg);
    if(ST.blokir){ST.blokir=false;kunci(null)}ST.cekBlok=false;
    ST.q=(ST.q||[]).slice(kirim.length);stSave();
   }}catch(e){if(!e.net&&ST.cekBlok){ST.cekBlok=false}}finally{busy=false}}
  function blokir(){ST.blokir=true;ST.cekBlok=false;stSave();kunci('blok')}
  window.bcLog=(k,p,x)=>{if(!ST.reg)return;ST.q=(ST.q||[]).concat([{k,p:p||'',x:x||'',w:new Date().toISOString()}]).slice(-100);stSave();flush()};
  $('regForm').addEventListener('submit',async e=>{e.preventDefault();
-  const v={site:$('regSite').value.trim().toUpperCase(),toko:$('regToko').value.trim().replace(/\s+/g,' '),nama:$('regNama').value.trim().replace(/\s+/g,' '),jabatan:$('regJab').value};
+  let v={site:$('regSite').value.trim().toUpperCase(),user:$('regUser').value.trim().replace(/\s+/g,' '),toko:$('regToko').value.trim().replace(/\s+/g,' '),nama:$('regNama').value.trim().replace(/\s+/g,' '),jabatan:$('regJab').value};
   const er=$('regErr'),b=$('regGo'),edit=!!ST.reg;er.textContent='';
   if(!/^[A-Z0-9]{3,8}$/.test(v.site)){er.textContent='Kode site 3–8 huruf/angka, mis. 7014.';return $('regSite').focus()}
-  if(v.toko.length<3){er.textContent='Nama toko wajib diisi.';return $('regToko').focus()}
-  if(v.nama.length<2){er.textContent='Nama wajib diisi.';return $('regNama').focus()}
-  b.disabled=true;b.textContent=edit?'Menyimpan…':'Mendaftar…';
-  let sync=true;
-  try{const r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},v));if(r&&r.blokir){b.disabled=false;return blokir()}}
-  catch(x){if(!x.net){er.textContent=x.message;b.disabled=false;b.textContent=edit?'Simpan':'Daftar & mulai';return}sync=false}
-  const lama=ST.reg;ST.reg=Object.assign({},v,{at:lama&&lama.at||new Date().toISOString()});ST.regSync=sync;isiCfg(v,lama);stSave();
+  if(v.user.length<3){er.textContent='Username minimal 3 huruf.';return $('regUser').focus()}
+  const cekBaru=()=>{if(v.toko.length<3){er.textContent='Akun baru: nama toko wajib diisi.';$('regToko').focus();return false}if(v.nama.length<2){er.textContent='Akun baru: nama Anda wajib diisi.';$('regNama').focus();return false}return true};
+  if(edit&&!cekBaru())return;
+  b.disabled=true;b.textContent=edit?'Menyimpan…':'Memeriksa akun…';
+  let sync=true,res=null;const ulang=()=>{b.disabled=false;b.textContent=edit?'Simpan':'Masuk / daftar'};
+  try{res=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},v));if(res&&res.blokir){ulang();return blokir()}}
+  catch(x){if(!x.net){er.textContent=x.message;ulang();if(/nama toko/i.test(x.message))$('regToko').focus();else if(/nama Anda/i.test(x.message))$('regNama').focus();else if(/username/i.test(x.message))$('regUser').focus();return}
+   // offline: hanya bisa membuat akun baru (akun yang sudah ada dicek saat online)
+   if(!cekBaru()){er.textContent='Tidak tersambung ke server. '+er.textContent;ulang();return}sync=false}
+  if(res&&res.reg)v=Object.assign(v,res.reg);
+  const lama=ST.reg;ST.reg=Object.assign({},v,{at:res&&res.reg&&res.reg.at||lama&&lama.at||new Date().toISOString()});ST.regSync=sync;isiCfg(v,lama);stSave();
   b.disabled=false;kunci(null);regInfo();if(window.bcRender)bcRender();if(window.kasRender)kasRender();
   if(!edit){ST.lastBuka=Date.now();window.bcLog('buka','','pertama')}
-  ofaToast(edit?'Data pendaftaran disimpan':sync?'Terdaftar. Selamat memakai!':'Terdaftar di perangkat ini. Akan dikirim saat online.');flush()});
+  ofaToast(edit?'Data akun disimpan':res&&res.gabung?'Masuk ke akun toko '+v.site+'. File & rekap tetap tersimpan per perangkat.':sync?'Akun toko dibuat. Selamat memakai!':'Terdaftar di perangkat ini. Akan dikirim saat online.');flush()});
  $('regBatal').onclick=()=>kunci(null);
  $('blokCek').onclick=()=>{ST.cekBlok=true;flush().then(()=>{if(ST.blokir)ofaToast('Akses masih dinonaktifkan')})};
  document.addEventListener('click',e=>{if(e.target.id==='regUbah')bukaForm(true);if(e.target.id==='regKeluar')keluar();if(e.target.id==='klGo')keluarYa(e.target)});
@@ -2782,7 +2800,7 @@ appStart();
  // mulai
  if(!ST.reg)bukaForm(false);
  else if(ST.blokir){kunci('blok');ST.cekBlok=true;flush()}
- else{regInfo();if(!ST.kasCfg||!ST.kasCfg.store){isiCfg(ST.reg,ST.reg);stSave();if(window.kasRender)kasRender()}ST.cekBlok=true;if(Date.now()-(ST.lastBuka||0)>30*60e3){ST.lastBuka=Date.now();window.bcLog('buka')}else flush()}
+ else{if(!ST.reg.user){ST.reg.user=ST.reg.nama;stSave()}regInfo();if(!ST.kasCfg||!ST.kasCfg.store){isiCfg(ST.reg,ST.reg);stSave();if(window.kasRender)kasRender()}ST.cekBlok=true;if(Date.now()-(ST.lastBuka||0)>30*60e3){ST.lastBuka=Date.now();window.bcLog('buka')}else flush()}
 })();
 </script>
 </body>
