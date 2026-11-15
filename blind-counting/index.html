@@ -188,6 +188,28 @@ body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);pa
 .app-note{margin-top:10px;font-size:12.5px;color:var(--mut)}
 .app-foot{padding:18px 16px 26px;text-align:center;font-size:12.5px;color:var(--mut);border-top:1px solid var(--line)}
 .app-foot b{color:var(--title,var(--fg))}
+/* kirim masukan */
+.fb-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:11px 16px;background:var(--orange,#f26a1b);color:#fff;font:inherit;font-weight:700;font-size:14px;box-shadow:0 10px 26px rgba(242,106,27,.38);cursor:pointer}
+.fb-fab svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fb-fab:active{transform:scale(.97)}body.locked .fb-fab{display:none}
+.fb-dot{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--bad-fg,#b42318);color:#fff;font-style:normal;font-size:11px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg,#fff)}
+.fb-dot[hidden]{display:none}
+.app-foot .fb-link{display:inline-block;margin:0 0 10px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.fb-l{display:block;font-weight:700;font-size:13.5px;margin:14px 0 6px}.fb-l small{font-weight:500;color:var(--mut)}
+.fb-seg{display:flex;flex-wrap:wrap;gap:6px}.fb-seg button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.fb-seg button.on{background:var(--ink);border-color:var(--ink);color:var(--inkfg)}
+.fb-star{display:flex;gap:4px}.fb-star button{border:0;background:none;font-size:28px;line-height:1;padding:2px;cursor:pointer;color:var(--line);filter:grayscale(1)}.fb-star button.on{color:#f5a524;filter:none}
+.fb-ta{width:100%;min-height:120px;resize:vertical;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:12px 14px;font:inherit;font-size:16px;line-height:1.45}
+.fb-sel{width:100%;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:11px 12px;font:inherit;font-size:15px}
+.fb-n{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:4px}
+.fb-err{color:var(--bad-fg,#b42318);font-size:13px;font-weight:600;min-height:18px;margin-top:6px}
+.fb-his{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}.fb-his h3{margin:0 0 8px;font-size:14px}
+.fb-it{border:1px solid var(--card-bd,var(--line));border-radius:12px;padding:10px 12px;margin-top:8px;background:var(--bg)}
+.fb-it header{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mut)}.fb-it p{margin:4px 0 0;font-size:13.5px;white-space:pre-line;word-break:break-word}
+.fb-st{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:999px;background:var(--card);color:var(--mut)}
+.fb-st.s-Dibaca{background:var(--blue-bg,#eaf1ff);color:var(--ink)}.fb-st.s-Diproses{background:var(--warn-bg);color:var(--warn-fg)}.fb-st.s-Selesai{background:var(--ok-bg);color:var(--ok-fg)}
+.fb-re{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--ok-bg);color:var(--ok-fg);font-size:13px;white-space:pre-line}.fb-re b{display:block;font-size:12px}
+.fb-re.new{outline:2px solid var(--ok-fg)}
 .app-inst[hidden],.app-start[hidden]{display:none}
 .pane[hidden]{display:none}
 /* ====== layar pembuka ====== */
@@ -457,10 +479,10 @@ body.locked{overflow:hidden}
   </section>
   </div>
   <section class="rs app-help app-privacy" aria-label="Privasi">
-    <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, username, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya).</p>
+    <p class="app-note">🔒 File stock diolah langsung di perangkat ini dan tidak dikirim ke mana pun. Yang dicatat untuk pembuat aplikasi hanya data pendaftaran (kode site, username, nama toko, nama, jabatan) dan aktivitas (buka aplikasi, upload file, unduh laporan beserta periodenya), serta isi masukan yang Anda kirim lewat tombol Masukan.</p>
   </section>
 </main>
-<footer class="app-foot"><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
+<footer class="app-foot"><button type="button" class="fb-link" id="fbFoot">💬 Kirim masukan / laporkan masalah</button><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
 <div class="reg" id="reg" hidden>
   <form class="reg-card" id="regForm" novalidate autocomplete="on">
     <img src="icons/icon-192.png" alt="">
@@ -483,6 +505,7 @@ body.locked{overflow:hidden}
   <div class="reg-card"><img src="icons/icon-192.png" alt=""><h1>Akses dinonaktifkan</h1><p>Akses perangkat ini ke Store Head Kit sedang dinonaktifkan oleh pembuat aplikasi. Hubungi Lukian Prayoga bila ini keliru.</p><button class="btn" type="button" id="blokCek">Cek lagi</button><p class="reg-by">Dibuat oleh <b>Lukian Prayoga</b></p></div>
 </div>
 <div class="ov" id="ov"><div class="panel" role="dialog" aria-modal="true"><div class="ph"><h2 id="pt"></h2><button class="x" id="px" aria-label="Tutup">✕</button></div><div id="pb"></div></div></div>
+<button type="button" class="fb-fab" id="fbFab" aria-label="Kirim masukan" hidden><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>Masukan<i class="fb-dot" id="fbDot" hidden></i></button>
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span></div>
 <script>
 const esc=v=>String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -2740,7 +2763,7 @@ appStart();
   const q=Object.assign({},ST.kasCfg||{}),kb=turunanKas(v),ko=lama?turunanKas(lama):{};
   Object.keys(kb).forEach(k=>{if(!q[k]||q[k]===ko[k]||(k==='t1'&&q[k]==='Store Head')||(k==='file'&&q[k]==='REKAP PENGELUARAN KAS'))q[k]=kb[k]});ST.kasCfg=q}
  function kunci(id){['reg','blok'].forEach(x=>$(x).hidden=x!==id);document.body.classList.toggle('locked',!!id)}
- function regInfo(){const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
+ function regInfo(){fbBadge();const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
   el.innerHTML='Akun toko: site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' · username <span class="reg-user">'+esc(r.user||r.nama)+'</span> · '+esc(r.nama)+' ('+esc(r.jabatan)+') <button type="button" id="regUbah">Ubah</button> · <button type="button" id="regKeluar">Keluar</button>'}
  // data akun dari server (perangkat lain bisa mengubahnya) dipakai juga di perangkat ini
  function pakaiReg(g){if(!g||!g.site)return;const lama=ST.reg||null,v={site:String(g.site),toko:String(g.toko||''),nama:String(g.nama||''),jabatan:String(g.jabatan||'Store Head'),user:String(g.user||g.nama||'')};
@@ -2761,10 +2784,49 @@ appStart();
    if(r&&r.blokir){blokir();break}
    if(r&&r.daftar===false){ST.regSync=false;stSave();continue}
    if(r&&r.reg)pakaiReg(r.reg);
+   if(r&&Array.isArray(r.masukan)){ST.ms=r.masukan;stSave();fbBadge()}
    if(ST.blokir){ST.blokir=false;kunci(null)}ST.cekBlok=false;
    ST.q=(ST.q||[]).slice(kirim.length);stSave();
-  }}catch(e){if(!e.net&&ST.cekBlok){ST.cekBlok=false}}finally{busy=false}}
+  }}catch(e){if(!e.net&&ST.cekBlok){ST.cekBlok=false}}finally{busy=false;if((ST.fbq||[]).length&&ST.regSync&&!ST.blokir)fbFlush()}}
  function blokir(){ST.blokir=true;ST.cekBlok=false;stSave();kunci('blok')}
+ /* ---------- kirim masukan ---------- */
+ const FB_KAT=['Saran fitur','Ada masalah','Pertanyaan','Lainnya'],FB_FIT=['Umum','BA Blind Counting','Kepatuhan Display','Produk Promo','New Arrival','Rekap Kas','Budget','Lembur'];
+ const fbTgl=w=>{try{return new Date(w).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}};
+ function fbBaru(){const s=ST.msSeen||'';return (ST.ms||[]).filter(m=>m.balasan&&m.dibalas&&m.dibalas>s).length}
+ function fbBadge(){const n=fbBaru(),d=$('fbDot');if(d){d.hidden=!n;d.textContent=n}const f=$('fbFab');if(f)f.hidden=!ST.reg}
+ function fbHis(){const L=ST.ms||[],s=ST.msSeen||'';if(!L.length)return '';
+  return '<div class="fb-his"><h3>Masukan dari toko ini</h3>'+L.map(m=>'<div class="fb-it"><header><span>'+esc(m.kategori)+' · '+esc(m.fitur)+' · '+esc(fbTgl(m.w))+'</span><span class="fb-st s-'+esc(m.status)+'">'+esc(m.status)+'</span></header><p>'+esc(m.pesan)+'</p>'+
+   (m.balasan?'<div class="fb-re'+(m.dibalas>s?' new':'')+'"><b>Balasan Lukian · '+esc(fbTgl(m.dibalas))+'</b>'+esc(m.balasan)+'</div>':'')+'</div>').join('')+'</div>'}
+ function fbOpen(){if(!ST.reg)return;const d=ST.fbDraft||{};
+  openModal('Kirim masukan',`<p class="hint" style="margin-top:0">Saran fitur, laporan masalah, atau pertanyaan tentang Store Head Kit. Dibaca langsung oleh pembuat aplikasi; balasan muncul di sini.</p>
+  <span class="fb-l">Jenis</span><div class="fb-seg" id="fbKat">${FB_KAT.map(k=>`<button type="button" data-fbk="${k}" class="${(d.k||'Saran fitur')===k?'on':''}">${k}</button>`).join('')}</div>
+  <label class="fb-l" for="fbFit">Fitur terkait</label><select class="fb-sel" id="fbFit">${FB_FIT.map(f=>`<option${(d.f||'Umum')===f?' selected':''}>${f}</option>`).join('')}</select>
+  <label class="fb-l" for="fbTxt">Pesan</label><textarea class="fb-ta" id="fbTxt" maxlength="1000" placeholder="Contoh: Lembar BA ingin ada kolom tanda tangan ASH. / Saat upload file BC muncul tulisan error …">${esc(d.t||'')}</textarea>
+  <div class="fb-n"><span>Jangan tulis data pelanggan.</span><span id="fbCnt">${(d.t||'').length}/1000</span></div>
+  <span class="fb-l">Seberapa membantu Store Head Kit untuk toko Anda? <small>(opsional)</small></span><div class="fb-star" id="fbStar">${[1,2,3,4,5].map(i=>`<button type="button" data-fbn="${i}" aria-label="${i} bintang" class="${(d.n||0)>=i?'on':''}">★</button>`).join('')}</div>
+  <div class="fb-err" id="fbErr" role="alert"></div>
+  <div class="row" style="margin-top:8px"><button class="btn" type="button" id="fbGo">Kirim masukan</button><button class="btn ghost" type="button" onclick="close()">Batal</button></div>
+  <p class="hint">Dikirim bersama kode site ${esc(ST.reg.site)} &amp; username ${esc(ST.reg.user||ST.reg.nama)} agar bisa ditindaklanjuti.</p>${fbHis()}`);
+  const t=$('fbTxt');t.addEventListener('input',()=>{$('fbCnt').textContent=t.value.length+'/1000';fbSimpanDraft()});$('fbFit').onchange=fbSimpanDraft;
+  const top=(ST.ms||[]).reduce((a,m)=>m.dibalas&&m.dibalas>a?m.dibalas:a,ST.msSeen||'');if(top!==(ST.msSeen||'')){ST.msSeen=top;stSave();fbBadge()}}
+ function fbVal(){const k=document.querySelector('#fbKat .on'),n=document.querySelectorAll('#fbStar .on').length;return {k:k?k.dataset.fbk:'Saran fitur',f:$('fbFit').value,t:$('fbTxt').value,n}}
+ function fbSimpanDraft(){if(!$('fbTxt'))return;ST.fbDraft=fbVal();stSave()}
+ async function fbKirim(btn){const v=fbVal(),er=$('fbErr');er.textContent='';
+  if(v.t.trim().length<5){er.textContent='Tulis masukan minimal 5 huruf.';return $('fbTxt').focus()}
+  const arg={id:devId(),kategori:v.k,fitur:v.f,nilai:v.n,pesan:v.t.trim(),v:VER,perangkat:alat()};
+  btn.disabled=true;btn.textContent='Mengirim…';
+  try{const r=await api('bcAppMasukan',arg);
+   if(r&&r.blokir){close();return blokir()}
+   if(r&&r.daftar===false){ST.regSync=false;stSave();throw new Error('Perangkat belum terdaftar di server. Coba lagi sebentar.')}
+   if(r&&r.masukan)ST.ms=r.masukan;ST.fbDraft=null;stSave();close();fbBadge();ofaToast('Terima kasih, masukan terkirim')}
+  catch(x){if(x.net){ST.fbq=(ST.fbq||[]).concat([arg]).slice(-10);ST.fbDraft=null;stSave();close();ofaToast('Belum tersambung. Masukan disimpan & dikirim otomatis saat online.')}
+   else{er.textContent=x.message;btn.disabled=false;btn.textContent='Kirim masukan'}}}
+ async function fbFlush(){while((ST.fbq||[]).length){try{const r=await api('bcAppMasukan',ST.fbq[0]);if(r&&r.masukan)ST.ms=r.masukan}catch(x){if(x.net)return;}ST.fbq=ST.fbq.slice(1);stSave();fbBadge()}}
+ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#fbFab,#fbFoot,#fbGo,[data-fbk],[data-fbn]');if(!t)return;
+  if(t.id==='fbFab'||t.id==='fbFoot')return fbOpen();
+  if(t.id==='fbGo')return fbKirim(t);
+  if(t.dataset.fbk){document.querySelectorAll('#fbKat button').forEach(b=>b.classList.toggle('on',b===t));return fbSimpanDraft()}
+  if(t.dataset.fbn){const n=+t.dataset.fbn,cur=document.querySelectorAll('#fbStar .on').length,m=cur===n?0:n;document.querySelectorAll('#fbStar button').forEach((b,i)=>b.classList.toggle('on',i<m));fbSimpanDraft()}});
  window.bcLog=(k,p,x)=>{if(!ST.reg)return;ST.q=(ST.q||[]).concat([{k,p:p||'',x:x||'',w:new Date().toISOString()}]).slice(-100);stSave();flush()};
  $('regForm').addEventListener('submit',async e=>{e.preventDefault();
   let v={site:$('regSite').value.trim().toUpperCase(),user:$('regUser').value.trim().replace(/\s+/g,' '),toko:$('regToko').value.trim().replace(/\s+/g,' '),nama:$('regNama').value.trim().replace(/\s+/g,' '),jabatan:$('regJab').value};
