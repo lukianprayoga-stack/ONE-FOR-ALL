@@ -8514,7 +8514,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   return{toko:sites.size,orang:akun.size,alat:aktif.length,a7:a7.size,dl,up,blok:blokAk.size};
  }
  /* ---------- peringkat pemakaian: per pengguna & per toko ---------- */
- const FITUR={ba:'BA Blind Counting',kd:'Kepatuhan Display',kas:'Rekap Kas',bg:'Rekap Budget',promo:'Produk Promo',na:'New Arrival',lembur:'Lembur'};
+ const FITUR={ba:'BA Blind Counting',kd:'Kepatuhan Display',kas:'Rekap Kas',bg:'Rekap Budget',promo:'Produk Promo',na:'New Arrival',lembur:'Lembur',ra:'Performa RA'};
  function pakai(){
   const U=data.users||[],S=data.stat||null;
   const us=U.map(u=>{const st=S&&S[u.id],f=st?st.f||{}:{};return Object.assign({},u,{n:st?st.n:(u.buka+u.upload+u.unduh),n30:st?st.n30:null,hari:st?st.hari:null,f,
