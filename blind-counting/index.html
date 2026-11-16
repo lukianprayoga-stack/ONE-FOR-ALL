@@ -6,6 +6,8 @@
 <title>Store Head Kit</title>
 <meta name="description" content="Store Head Kit: BA Blind Counting, Kepatuhan Display & Rekap Kas dari file export sistem. Dibuat oleh Lukian Prayoga.">
 <meta name="author" content="Lukian Prayoga">
+<meta name="copyright" content="© 2026 Lukian Prayoga. Hak cipta dilindungi undang-undang.">
+<meta name="author" content="Lukian Prayoga">
 <meta name="theme-color" content="#0b2a7a">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
@@ -299,6 +301,7 @@ body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,A
 @media(max-width:720px){.ra-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.ra-kpi>div:last-child{grid-column:1/-1}.ra-kv{grid-template-columns:repeat(3,minmax(0,1fr));padding-left:14px}}
 .app-foot{padding:18px 16px 26px;text-align:center;font-size:12.5px;color:var(--mut);border-top:1px solid var(--line)}
 .app-foot b{color:var(--title,var(--fg))}
+.app-copy{display:block;margin-top:6px;font-size:11.5px;opacity:.8}
 /* kirim masukan */
 .fb-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:11px 16px;background:var(--orange,#f26a1b);color:#fff;font:inherit;font-weight:700;font-size:14px;box-shadow:0 10px 26px rgba(242,106,27,.38);cursor:pointer}
 .fb-fab svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -620,7 +623,7 @@ body.locked{overflow:hidden}
  <button type="button" data-more><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg>Lainnya<i id="bnDot" hidden></i></button>
 </nav>
 <div class="msheet" id="msheet" hidden><div class="msheet-bg" data-mclose></div><div class="msheet-c" role="dialog" aria-modal="true" aria-label="Fitur lainnya"><div class="msheet-grab"></div><h2>Fitur lainnya</h2><div class="hm-grid" id="msGrid"></div></div></div>
-<footer class="app-foot"><button type="button" class="fb-link" id="fbFoot">💬 Kirim masukan / laporkan masalah</button><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru</footer>
+<footer class="app-foot"><button type="button" class="fb-link" id="fbFoot">💬 Kirim masukan / laporkan masalah</button><p class="app-reg" id="appReg"></p>Dibuat oleh <b>Lukian Prayoga</b> · Store Head EIGER Store Soekarno Solo Baru<br><small class="app-copy">Store Head Kit © 2026 Lukian Prayoga. Hak cipta dilindungi; dilarang menyalin atau mengklaim aplikasi ini tanpa izin.</small></footer>
 <div class="reg" id="reg" hidden>
   <form class="reg-card" id="regForm" novalidate autocomplete="on">
     <img src="icons/icon-192.png" alt="">
