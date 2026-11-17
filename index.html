@@ -11793,7 +11793,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  }
  function foot(D){
   const r=D&&D.r;
-  return `<div class="ks-act tk-act"><button class="btn" type="button" data-tk="inv">⇪ Upload inventory by bin</button>${r&&D.rows.length?'<button class="btn ghost" type="button" data-tk="xlsx">⤓ Excel</button>':''}${r&&D.rows.some(x=>x.done)?'<button class="btn ghost" type="button" data-tk="reset">Ulangi centang</button>':''}<button class="btn ghost" type="button" data-tk="manage">Kelola daftar</button></div>
+  return `<div class="ks-act tk-act"><button class="btn" type="button" data-tk="inv">⇪ Upload inventory by bin</button>${r&&D.rows.length?'<button class="btn ghost" type="button" data-tk="pdf">⎙ Cetak PDF</button><button class="btn ghost" type="button" data-tk="xlsx">⤓ Excel</button>':''}${r&&D.rows.some(x=>x.done)?'<button class="btn ghost" type="button" data-tk="reset">Ulangi centang</button>':''}<button class="btn ghost" type="button" data-tk="manage">Kelola daftar</button></div>
    ${r?`<p class="tk-src">Inventory: ${E(r.file)} · ${E(tgl(r.date))}${r.loc?' · '+E(r.loc):''} · dicek ${E(tgl(r.at))}</p>`:''}`;
  }
  function excel(){
@@ -11804,6 +11804,58 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   const B=[['Generic','Artikel','Tipe','Area Jual','Gudang','Lainnya','Total','Lokasi']].concat(Object.values(G).sort((a,b)=>(b.j+b.w+b.o)-(a.j+a.w+a.o)).map(g=>[g.g,g.nm,g.tipe,g.j,g.w,g.o,g.j+g.w+g.o,Object.keys(g.b).map(k=>k+' ('+g.b[k]+')').join(', ')]));
   const blob=xlsxSimple([{name:'Per Lokasi',head:1,widths:[5,16,13,15,15,38,12,14,6,14,13],rows:A},{name:'Per Artikel',head:1,widths:[12,34,14,10,9,9,8,50],rows:B}],'Take Out Artikel');
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Take Out Artikel 7014 '+String(D.r.date).slice(0,10)+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel take out diunduh');
+ }
+
+ function pdf(){
+  const D=data();if(!D.r||!D.rows.length)return toast('Tidak ada data untuk dicetak');
+  const zl={all:'Semua zona',jual:'Area jual',gdg:'Gudang',lain:'Lainnya (POS, booking, rusak)'};
+  const qs=view.q.trim().toLowerCase(),sum=a=>a.reduce((s,x)=>s+x.q,0);
+  let rows=D.rows.filter(x=>view.z==='all'||grp(x.z)===view.z);if(qs)rows=rows.filter(x=>(x.nm+' '+x.sku+' '+x.bin+' '+x.desc+' '+x.tipe).toLowerCase().includes(qs));
+  if(!rows.length)return toast('Tidak ada data untuk dicetak');
+  const bx=x=>`<td class="c bx"><i class="${x.done?'on':''}"></i></td>`,dmg=x=>/damage/i.test(x.cat)?' <span class="dm">rusak</span>':'';
+  let body='',no=0,head;
+  if(view.by==='bin'){
+   head='<th style="width:5%">No</th><th>Nama Artikel</th><th style="width:15%">SKU Code</th><th style="width:13%">Tipe</th><th style="width:7%">Qty</th><th style="width:8%">Diambil</th>';
+   const G={};rows.forEach(x=>{(G[x.bin]||(G[x.bin]={bin:x.bin,z:x.z,a:[]})).a.push(x)});
+   Object.values(G).sort((a,b)=>zona(a.z)[1]-zona(b.z)[1]||a.bin.localeCompare(b.bin)).forEach(g=>{
+    body+=`<tr class="gh"><td colspan="6"><b>${E(g.bin)}</b> · ${E(zona(g.z)[0])}<span class="gq">${nf(sum(g.a))} pcs</span></td></tr>`;
+    g.a.sort((a,b)=>a.nm.localeCompare(b.nm)).forEach(x=>{body+=`<tr${x.done?' class="dn"':''}><td class="c">${++no}</td><td>${E(x.nm||x.desc)}${dmg(x)}</td><td class="c">${E(x.sku)}</td><td class="c sm">${E(x.tipe||'-')}</td><td class="c q">${nf(x.q)}</td>${bx(x)}</tr>`});
+   });
+  }else{
+   head='<th style="width:5%">No</th><th>Warna / ukuran</th><th style="width:15%">SKU Code</th><th style="width:15%">Lokasi Bin</th><th style="width:11%">Zona</th><th style="width:7%">Qty</th><th style="width:8%">Diambil</th>';
+   const G={};rows.forEach(x=>{(G[x.g]||(G[x.g]={g:x.g,nm:x.desc||x.nm.split(',')[0],tipe:x.tipe,a:[]})).a.push(x)});
+   Object.values(G).sort((a,b)=>sum(b.a)-sum(a.a)||a.nm.localeCompare(b.nm)).forEach(g=>{
+    body+=`<tr class="gh"><td colspan="7"><b>${E(g.nm)}</b> · ${E(g.g)}${g.tipe?' · '+E(g.tipe):''}<span class="gq">${nf(sum(g.a))} pcs</span></td></tr>`;
+    g.a.sort((a,b)=>zona(a.z)[1]-zona(b.z)[1]||a.bin.localeCompare(b.bin)).forEach(x=>{const v=x.nm.split(',').slice(1).join(',').trim()||x.nm;
+     body+=`<tr${x.done?' class="dn"':''}><td class="c">${++no}</td><td>${E(v)}${dmg(x)}</td><td class="c">${E(x.sku)}</td><td class="c"><b>${E(x.bin)}</b></td><td class="c sm">${E(zona(x.z)[0])}</td><td class="c q">${nf(x.q)}</td>${bx(x)}</tr>`});
+   });
+  }
+  const tot=sum(rows),done=sum(rows.filter(x=>x.done)),bins=new Set(rows.map(x=>x.bin)).size,arts=new Set(rows.map(x=>x.g)).size;
+  const lists=D.t.lists.map(l=>E(l.nama)+(l.alasan?' ('+E(l.alasan)+')':'')).join('; ');
+  const sig=t=>`<div><p>${E(t)}</p><div class="sp"></div><b>(______________________)</b><small>Tanggal: ____ / ____ / ________</small></div>`;
+  const title=('Take Out Artikel 7014 '+String(D.r.date).slice(0,10)).replace(/[\\/:*?"<>|]+/g,' ');
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>${E(title)}</title><style>
+@page{size:A4 portrait;margin:10mm 9mm 11mm}@page{@bottom-right{content:"OFA Hub by Lukian Prayoga · hal. " counter(page);font:6.5pt Arial,Helvetica,sans-serif;color:#888;vertical-align:top;padding-top:1.5mm}}*{box-sizing:border-box}
+body{margin:0;font:8.8pt Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:14pt;margin:0;letter-spacing:.2px}.sub{margin:2px 0 8px;color:#333}
+.info{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 8px}.info span{color:#555}
+.kpi{display:flex;gap:6px;margin:0 0 9px}.kpi div{flex:1;border:1px solid #999;border-radius:4px;padding:4px 8px}.kpi small{display:block;font-size:7.2pt;color:#555}.kpi b{font-size:12pt}.kpi .r b{color:#b91c1c}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #888;padding:3px 5px;vertical-align:middle;line-height:1.3}th{background:#fde8e8;font-size:8pt}
+td.c{text-align:center}td.sm{font-size:7.8pt}td.q{font-weight:700;font-size:10pt}tr.gh td{background:#eef1f6;padding:5px 6px;font-size:9pt}tr.gh b{font-size:10pt;letter-spacing:.3px}.gq{float:right;font-weight:700;color:#b91c1c}
+tr.dn td{color:#777}tr.dn td:nth-child(2){text-decoration:line-through}.dm{display:inline-block;margin-left:4px;border:1px solid #b91c1c;color:#b91c1c;border-radius:3px;padding:0 3px;font-size:7pt;font-weight:700}
+td.bx i{display:inline-block;width:12px;height:12px;border:1.3px solid #000;border-radius:2px;position:relative}td.bx i.on::after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #000;border-width:0 1.8px 1.8px 0;transform:rotate(45deg)}
+thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-after:avoid}
+.note{margin:8px 0 0;font-size:7.8pt;color:#333}.sig{display:flex;justify-content:space-around;margin-top:14px;page-break-inside:avoid;text-align:center}.sig>div{width:38%}.sig p{margin:0}.sig .sp{height:48px}.sig small{display:block;margin-top:4px;color:#555;font-size:7.5pt}
+</style></head><body>
+<h1>TAKE OUT ARTIKEL — TIDAK BOLEH DIJUAL</h1><div class="sub">Barang harus ditarik dari area jual maupun gudang lalu diretur sesuai instruksi</div>
+<div class="info"><span>Toko</span><b>${E(D.r.loc||'7014')}</b><span>Daftar artikel</span><b>${lists}</b><span>Inventory</span><b>${E(D.r.file)} · ${E(tgl(D.r.date))}</b><span>Tampilan</span><b>${E(zl[view.z]||'Semua zona')} · ${view.by==='bin'?'per lokasi bin':'per artikel'}${qs?' · cari "'+E(view.q.trim())+'"':''}</b><span>Dicetak</span><b>${E(tgl(now()))}</b></div>
+<div class="kpi"><div class="r"><small>Harus di take out</small><b>${nf(tot)} pcs</b></div><div><small>Artikel</small><b>${nf(arts)}</b></div><div><small>Lokasi bin</small><b>${nf(bins)}</b></div><div><small>Sudah diambil</small><b>${nf(done)} pcs</b></div></div>
+<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+<p class="note">Centang kolom "Diambil" saat barang sudah ditarik. Hitung ulang jumlah fisik sebelum barang diserahkan untuk retur.</p>
+<div class="sig">${sig('Diambil oleh')}${sig('Diperiksa oleh (Store Head)')}</div>
+<script>window.onload=()=>setTimeout(()=>{window.focus();window.print()},250)<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');document.body.appendChild(fr);fr.srcdoc=html;setTimeout(()=>fr.remove(),120000);
+  window.__tkPdf=html;toast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
  }
 
  /* ---------- event ---------- */
@@ -11819,6 +11871,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
   if(k==='list')return gate(()=>listIn.click());
   if(k==='manage')return gate(manage);
   if(k==='xlsx')return excel();
+  if(k==='pdf')return pdf();
   if(k==='reset'){if(!confirm('Hapus semua centang "sudah diambil"?'))return;const t=T();if(t.res){t.res.done={};save(t)}return render()}
  });
  box.addEventListener('change',e=>{
