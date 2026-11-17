@@ -3115,7 +3115,7 @@ document.getElementById('appSet').onclick=()=>document.getElementById('bcCfg').c
   if(scroll)scrollTo({top:0})}
  function tile(t,i){const o=(ST.open||{})[t.k];
   return '<button type="button" class="hm-t" data-go="'+t.k+'" style="--i:'+i+'"><span class="hm-ic">'+svg(t.k)+'</span><b>'+esc(t.n)+'</b><small>'+esc(t.d)+'</small><em class="'+(o?'on':'')+'">'+(o?'Dibuka '+lalu(o):'Belum pernah dibuka')+'</em></button>'}
- const WN='2026-11-16';
+ const WN='2026-11-17';
  function home(){const el=$('homeBody');if(!el)return;const r=ST.reg||{},now=new Date(),h=now.getHours();
   const sapa=h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';
   const nm=String(r.nama||'').trim().split(/\s+/)[0]||'';const nmT=nm?nm.charAt(0).toUpperCase()+nm.slice(1).toLowerCase():'';
@@ -3125,11 +3125,11 @@ document.getElementById('appSet').onclick=()=>document.getElementById('bcCfg').c
   let seen='';try{seen=localStorage.getItem('shk_wn')||''}catch(e){}
   const first=!sessionStorage.getItem('shk_hm');try{sessionStorage.setItem('shk_hm','1')}catch(e){}
   el.innerHTML='<section class="hm-hero">'+topo()+'<p class="hm-date">'+esc(tgl)+'</p><h1>'+esc(sapa)+(nmT?', '+esc(nmT):'')+'</h1>'+
-   (r.toko?'<p class="hm-store"><b>'+esc(r.toko)+'</b> · site '+esc(r.site)+'</p>':'')+
+   (r.toko?'<p class="hm-store"><b>'+esc(r.toko)+'</b> · site '+esc(r.site)+'</p>':'')+(r.site&&window.shkKomHero?shkKomHero():'')+
    (lt?'<button type="button" class="hm-cont" data-go="'+lt+'"><span class="hm-ic">'+svg(lt)+'</span><span><small>Terakhir dibuka '+lalu((ST.open||{})[lt])+'</small><b>'+esc(NAMA[lt])+'</b></span><i>Lanjutkan</i></button>':
     '<button type="button" class="hm-cont" data-go="bc"><span class="hm-ic">'+svg('bc')+'</span><span><small>Mulai dari sini</small><b>BA Blind Counting</b></span><i>Buka</i></button>')+
    '</section>'+
-   (seen!==WN?'<div class="hm-new"><div><b>Yang baru di Store Head Kit</b><ul><li>HP dan laptop bisa memakai akun toko yang sama: cukup isi kode site dan username yang sama.</li><li>Tombol Masukan untuk kirim saran atau laporkan kendala, dan balasannya muncul di aplikasi.</li></ul></div><button type="button" data-wn aria-label="Tutup info">×</button></div>':'')+
+   (seen!==WN?'<div class="hm-new"><div><b>Yang baru di Store Head Kit</b><ul><li>Komunitas: lihat berapa toko yang memakai Store Head Kit, siapa yang sedang online, dan kirim pesan ke Store Head toko lain atau ke grup semua toko.</li><li>Performa RA: upload DSR untuk melihat sales, UPT, ATV dan member tiap RA.</li></ul></div><button type="button" data-wn aria-label="Tutup info">×</button></div>':'')+
    '<h2 class="hm-h">Alat kerja</h2><div class="hm-grid'+(first?' hm-in':'')+'">'+TOOLS.map((t,i)=>tile(t,i)).join('').replace(neverUsed?'class="hm-t" data-go="bc"':'\u0000','class="hm-t first" data-go="bc"')+'</div>'+
    '<button type="button" class="hm-fb" id="fbHome"><span class="hm-ic">'+svg('fb')+'</span><span><b>Ada saran atau kendala?</b>Kirim masukan, dibaca langsung oleh pembuat aplikasi.</span></button>';
   const sub=$('appSub');if(sub)sub.textContent=r.toko?r.toko+' · '+r.site:'Alat kerja harian Store Head'}
@@ -3139,7 +3139,7 @@ document.getElementById('appSet').onclick=()=>document.getElementById('bcCfg').c
   for(let i=0;i<11;i++){const R=22+i*19;let pts=[];for(let a=0;a<=64;a++){const t=a/64*Math.PI*2;const k=1+.16*Math.sin(3*t+i*.45)+.07*Math.sin(5*t+1.3+i*.2)+.04*Math.cos(7*t);pts.push([(cx+Math.cos(t)*R*k*1.35).toFixed(1),(cy+Math.sin(t)*R*k*.82).toFixed(1)])}
    d+='<path'+(i===1?' class="pk"':'')+' d="M'+pts.map(p=>p.join(' ')).join('L')+'Z"/>'}
   TOPO='<svg class="hm-topo" viewBox="0 0 520 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+d+'</svg>';return TOPO}
- function sheet(on){const m=$('msheet');if(!m)return;if(on){$('msGrid').innerHTML=TOOLS.filter(t=>MORE.includes(t.k)).map((t,i)=>tile(t,i)).join('')+'<button type="button" class="hm-t" id="fbSheet" style="--i:5"><span class="hm-ic" style="color:var(--so)">'+svg('fb')+'</span><b>Kirim masukan</b><small>Saran fitur atau laporkan kendala</small></button>';m.hidden=false}else m.hidden=true}
+ function sheet(on){const m=$('msheet');if(!m)return;if(on){$('msGrid').innerHTML=TOOLS.filter(t=>MORE.includes(t.k)).map((t,i)=>tile(t,i)).join('')+'<button type="button" class="hm-t" data-kom="open" style="--i:5"><span class="hm-ic" style="color:var(--kbf)"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><b>Komunitas</b><small>Pengguna online &amp; chat antar toko</small></button><button type="button" class="hm-t" id="fbSheet" style="--i:6"><span class="hm-ic" style="color:var(--so)">'+svg('fb')+'</span><b>Kirim masukan</b><small>Saran fitur atau laporkan kendala</small></button>';m.hidden=false}else m.hidden=true}
  window.shkHome=()=>{if(cur==='home')home()};window.shkTab=t=>pilih(t,true);
  document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-tab],[data-go],[data-more],[data-mclose],[data-wn],#fbHome,#fbSheet');if(!t)return;
   if(t.dataset.wn!=null){try{localStorage.setItem('shk_wn',WN)}catch(x){}const n=t.closest('.hm-new');if(n)n.remove();return}
@@ -3274,6 +3274,216 @@ appStart();
  if(!ST.reg)bukaForm(false);
  else if(ST.blokir){kunci('blok');ST.cekBlok=true;flush()}
  else{if(!ST.reg.user){ST.reg.user=ST.reg.nama;stSave()}regInfo();if(!ST.kasCfg||!ST.kasCfg.store){isiCfg(ST.reg,ST.reg);stSave();if(window.kasRender)kasRender()}ST.cekBlok=true;if(Date.now()-(ST.lastBuka||0)>30*60e3){ST.lastBuka=Date.now();window.bcLog('buka')}else flush()}
+})();
+</script>
+<script>/* ====== KOMUNITAS: jumlah pengguna, status online, chat pribadi & grup ====== */
+(function(){
+ const $=i=>document.getElementById(i),E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const LS='bcapp_kom',BL=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const css=`
+.hm-kom{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:10px 12px;background:rgba(9,20,52,.35);color:#fff;font:inherit;text-align:left;cursor:pointer;transition:background .15s}
+.hm-kom:hover{background:rgba(9,20,52,.5)}.hm-kom>span:nth-child(2){flex:1;min-width:0}.hm-kom b{display:block;font-size:14.5px}.hm-kom small{display:flex;align-items:center;gap:6px;font-size:12.5px;color:rgba(255,255,255,.78);margin-top:1px}
+.hm-kom em{font-style:normal;font-weight:800;font-size:12.5px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.14);white-space:nowrap}.hm-kom em.nw{background:var(--so);color:#fff}
+.kom-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.22);flex:none}.kom-dot.off{background:#94a3b8;box-shadow:none}
+.kom-stk{display:flex;flex:none}.kom-stk .kom-av{width:30px;height:30px;font-size:11px;border:2px solid var(--nv);margin-left:-9px}.kom-stk .kom-av:first-child{margin-left:0}
+.kom-av{position:relative;flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;font-weight:800;font-size:13.5px;color:#fff;background:var(--av,#475569);letter-spacing:.3px}
+.kom-av .kom-dot{position:absolute;right:-1px;bottom:-1px;border:2px solid var(--card);box-shadow:none;width:11px;height:11px}
+.kom-av.grp{background:var(--nv)}.kom-av.grp svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kom{position:fixed;inset:0;z-index:60;display:flex;justify-content:flex-end}.kom[hidden]{display:none}
+.kom-bg{position:absolute;inset:0;background:rgba(5,12,30,.45);animation:komF .18s ease}
+.kom-pn{position:relative;display:flex;flex-direction:column;width:min(440px,100%);height:100%;background:var(--card);box-shadow:-12px 0 40px rgba(0,0,0,.25);animation:komS .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes komF{from{opacity:0}}@keyframes komS{from{transform:translateX(40px);opacity:.4}}
+@media (prefers-reduced-motion:reduce){.kom-bg,.kom-pn{animation:none}}
+.kom-hd{display:flex;align-items:center;gap:10px;padding:14px 14px 12px;border-bottom:1px solid var(--line);padding-top:calc(14px + env(safe-area-inset-top,0px))}
+.kom-hd h2{margin:0;font-size:17px;line-height:1.2}.kom-hd p{margin:1px 0 0;font-size:12.5px;color:var(--mut);display:flex;align-items:center;gap:6px}.kom-hd>div{flex:1;min-width:0}.kom-hd>div h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kom-x{flex:none;width:38px;height:38px;border:0;border-radius:12px;background:var(--bg);color:var(--fg);font:inherit;font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.kom-x svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.kom-tabs{display:flex;gap:4px;margin:10px 14px 0;padding:4px;border-radius:14px;background:var(--bg)}
+.kom-tabs button{flex:1;border:0;border-radius:11px;padding:8px;background:none;font:inherit;font-size:13.5px;font-weight:700;color:var(--mut);cursor:pointer}.kom-tabs button.on{background:var(--card);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.kom-tabs i{font-style:normal;margin-left:5px;font-size:11px;font-weight:800;padding:1px 6px;border-radius:999px;background:var(--so);color:#fff}
+.kom-bd{flex:1;overflow-y:auto;padding:6px 6px 14px;overscroll-behavior:contain}
+.kom-note{margin:8px 10px 4px;font-size:12px;color:var(--mut);line-height:1.45}
+.kom-q{display:block;width:calc(100% - 20px);margin:8px 10px 4px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--fg);font:inherit;font-size:14px}
+.kom-h{margin:12px 10px 4px;font-size:11.5px;font-weight:800;color:var(--mut);letter-spacing:.2px}
+.kom-row{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:14px;padding:9px 10px;background:none;color:var(--fg);font:inherit;text-align:left;cursor:pointer}
+.kom-row:hover{background:var(--bg)}.kom-row>span:nth-child(2){flex:1;min-width:0}
+.kom-row b{display:block;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kom-row small{display:block;font-size:12.5px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kom-row .kom-r{flex:none;text-align:right;font-size:11.5px;color:var(--mut)}.kom-row .kom-r i{display:inline-block;margin-top:3px;min-width:20px;padding:2px 6px;border-radius:999px;background:var(--so);color:#fff;font-style:normal;font-weight:800;text-align:center}
+.kom-row.nw b,.kom-row.nw small{color:var(--fg);font-weight:700}
+.kom-on{color:#15803d;font-weight:700}
+.kom-empty{margin:28px 18px;text-align:center;color:var(--mut);font-size:13.5px;line-height:1.5}.kom-empty b{display:block;color:var(--fg);font-size:15px;margin-bottom:4px}
+.kom-msgs{flex:1;overflow-y:auto;padding:12px 14px 8px;display:flex;flex-direction:column;gap:3px;overscroll-behavior:contain;background:var(--bg)}
+.kom-day{align-self:center;margin:10px 0 6px;font-size:11.5px;font-weight:700;color:var(--mut);background:var(--card);padding:3px 10px;border-radius:999px}
+.kom-m{max-width:82%;align-self:flex-start;display:flex;flex-direction:column}.kom-m.me{align-self:flex-end;align-items:flex-end}
+.kom-m .kom-who{font-size:11.5px;font-weight:800;margin:8px 0 2px 4px;color:var(--av,#475569)}.kom-m .kom-who span{font-weight:600;color:var(--mut)}
+.kom-b{padding:8px 11px 6px;border-radius:16px 16px 16px 5px;background:var(--card);font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.kom-m.me .kom-b{background:var(--nv);color:#fff;border-radius:16px 16px 5px 16px}
+.kom-b time{display:block;margin-top:2px;font-size:10.5px;opacity:.6;text-align:right}
+.kom-m.pend .kom-b{opacity:.65}.kom-m.err .kom-b{background:#b91c1c}
+.kom-m .kom-retry{margin-top:3px;border:0;background:none;color:#b91c1c;font:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:0}
+.kom-cp{border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card)}
+.kom-cp>div{display:flex;gap:8px;align-items:flex-end}
+.kom-ta{flex:1;min-height:42px;max-height:130px;resize:none;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--bg);color:var(--fg);font:inherit;font-size:14.5px;line-height:1.4}
+.kom-ta:focus,.kom-q:focus{outline:2px solid var(--kb);outline-offset:0;border-color:transparent}
+.kom-send{flex:none;width:44px;height:44px;border:0;border-radius:14px;background:var(--kb);color:#fff;cursor:pointer;display:grid;place-items:center}.kom-send:disabled{opacity:.45;cursor:default}
+.kom-send svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.kom-cp p{margin:6px 2px 0;font-size:11px;color:var(--mut)}
+.kom-fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:11px 16px 11px 13px;background:var(--nv);color:#fff;font:inherit;font-size:13.5px;font-weight:800;box-shadow:0 10px 26px rgba(16,39,94,.35);cursor:pointer}
+.kom-fab[hidden]{display:none}.kom-fab svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.kom-fab i{font-style:normal;background:var(--so);border-radius:999px;padding:1px 7px;font-size:12px}
+@media(min-width:721px){.kom-fab{bottom:24px}}
+.kom-err{margin:8px 12px;padding:8px 11px;border-radius:10px;background:rgba(185,28,28,.1);color:#b91c1c;font-size:12.5px;font-weight:600}`;
+ const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+ const IC={x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',back:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',send:'<svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg>',
+  grp:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14c2.6.1 4.4 1.7 5 4.5"/></svg>',chat:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>'};
+ let D={pesan:[],read:{},since:0,info:null,init:false};
+ try{D=Object.assign(D,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){}
+ const simpan=()=>{try{localStorage.setItem(LS,JSON.stringify({pesan:D.pesan.slice(-600),read:D.read,since:D.since,init:D.init,info:D.info&&{total:D.info.total,online:D.info.online,kontak:D.info.kontak,saya:D.info.saya}}))}catch(e){}};
+ let open=false,view={tab:'chat',room:null,q:''},busy=false,timer=null,err='',belumAda=false;
+ const aktif=()=>!!(typeof ST!=='undefined'&&ST.reg&&!ST.blokir&&!document.hidden&&window.shkApi&&window.shkDev);
+ const info=()=>D.info||{total:0,online:0,kontak:[],saya:{}};
+ /* ---------- util ---------- */
+ const PAL=['#2563eb','#0f766e','#b45309','#7c3aed','#be123c','#0369a1','#4d7c0f','#c2410c','#4338ca','#0e7490'];
+ const warna=id=>{let h=0;String(id).split('').forEach(c=>{h=(h*31+c.charCodeAt(0))>>>0});return PAL[h%PAL.length]};
+ const inisial=n=>{const w=String(n||'?').trim().split(/\s+/);return ((w[0]||'?')[0]+(w[1]?w[1][0]:'')).toUpperCase()};
+ const av=(id,nm,on,cls)=>`<span class="kom-av${cls?' '+cls:''}" style="--av:${warna(id)}">${E(inisial(nm))}${on==null?'':`<i class="kom-dot${on?'':' off'}"></i>`}</span>`;
+ const p2=n=>String(n).padStart(2,'0');
+ const jam=w=>{const d=new Date(w);return p2(d.getHours())+'.'+p2(d.getMinutes())};
+ const hari=w=>{const d=new Date(w),n=new Date(),k=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),t=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+  return t===k?'Hari ini':t===k-864e5?'Kemarin':d.getDate()+' '+BL[d.getMonth()]+(d.getFullYear()!==n.getFullYear()?' '+d.getFullYear():'')};
+ const singkat=w=>{const h=hari(w);return h==='Hari ini'?jam(w):h};
+ const lalu=w=>{if(!w)return 'belum pernah aktif';const m=Math.floor((Date.now()-w)/6e4);if(m<2)return 'baru saja';if(m<60)return m+' menit lalu';const h=Math.floor(m/60);if(h<24)return h+' jam lalu';const d=Math.floor(h/24);return d===1?'kemarin':d<30?d+' hari lalu':hari(w)};
+ const kontak=id=>info().kontak.find(k=>k.id===id);
+ function lawan(room){
+  if(room==='grup')return {nm:'Grup semua toko',sub:info().total+' toko anggota',grp:true};
+  const id=room.slice(3);if(id==='pembuat')return {id,nm:'Pembuat aplikasi',sub:'Store Head Kit',pembuat:true};
+  const k=kontak(id);if(k)return {id,nm:k.nama,sub:k.toko+' · site '+k.site,on:k.on,last:k.last};
+  const m=D.pesan.find(x=>x.r===room&&!x.saya);return {id,nm:m?m.nm:'Pengguna',sub:m?m.toko+(m.site?' · site '+m.site:''):''};
+ }
+ const belum=room=>D.pesan.filter(m=>m.r===room&&!m.saya&&m.w>(D.read[room]||0)).length;
+ const totalBelum=()=>{const r={};D.pesan.forEach(m=>{if(!m.saya&&m.w>(D.read[m.r]||0))r[m.r]=1});return Object.keys(r).reduce((s,k)=>s+belum(k),0)};
+ function gabung(list){
+  const ada={};D.pesan.forEach((m,i)=>{ada[m.id]=i});
+  (list||[]).forEach(m=>{if(ada[m.id]!=null)D.pesan[ada[m.id]]=m;else D.pesan.push(m);if(m.w>D.since)D.since=m.w});
+  D.pesan.sort((a,b)=>a.w-b.w);if(D.pesan.length>800)D.pesan=D.pesan.slice(-800);
+  if(!D.init){D.init=true;D.pesan.forEach(m=>{if(m.w>(D.read[m.r]||0))D.read[m.r]=m.w})}
+ }
+ /* ---------- server ---------- */
+ async function kabar(){
+  if(busy||!aktif())return plan();busy=true;
+  try{const r=await shkApi('bcAppKabar',{id:shkDev(),since:D.since});
+   D.info={total:r.total,online:r.online,kontak:r.kontak||[],saya:r.saya||{}};gabung(r.pesan);err='';simpan();
+   if(open&&view.room){D.read[view.room]=Math.max(D.read[view.room]||0,...D.pesan.filter(m=>m.r===view.room).map(m=>m.w),0);simpan()}
+   belumAda=false;
+  }catch(e){err=e.net?'Tidak tersambung. Status & pesan diperbarui saat online.':String(e.message||e);
+   // server belum diperbarui (BcApp v8 belum dipasang): sembunyikan fitur, coba lagi 10 menit kemudian
+   if(/tidak dikenal/i.test(err)){belumAda=true;busy=false;cat();clearTimeout(timer);timer=setTimeout(kabar,6e5);return}}
+  busy=false;cat();plan();
+ }
+ function plan(){clearTimeout(timer);timer=setTimeout(kabar,open?12000:30000)}
+ /* ---------- tampilan beranda ---------- */
+ window.shkKomHero=()=>{
+  if(belumAda)return '<span class="hm-kom" hidden></span>';
+  const I=info(),n=totalBelum(),on=I.kontak.filter(k=>k.on).slice(0,3);
+  if(!I.total)return `<button type="button" class="hm-kom" data-kom="open"><span class="kom-av grp">${IC.grp}</span><span><b>Komunitas Store Head Kit</b><small>Lihat siapa yang online dan kirim pesan</small></span><em${n?' class="nw"':''}>${n?n+' pesan baru':'Buka'}</em></button>`;
+  return `<button type="button" class="hm-kom" data-kom="open">${on.length?`<span class="kom-stk">${on.map(k=>av(k.id,k.nama)).join('')}</span>`:`<span class="kom-av grp">${IC.grp}</span>`}<span><b>${I.total} toko memakai Store Head Kit</b><small><i class="kom-dot${I.online?'':' off'}"></i>${I.online} online sekarang</small></span><em${n?' class="nw"':''}>${n?n+' pesan baru':'Chat'}</em></button>`;
+ };
+ function cat(){
+  const n=totalBelum();
+  const h=document.querySelector('.hm-kom');if(h&&window.shkKomHero){const t=document.createElement('div');t.innerHTML=shkKomHero();h.replaceWith(t.firstChild)}
+  let f=$('komFab');if(!f){f=document.createElement('button');f.type='button';f.id='komFab';f.className='kom-fab';f.dataset.kom='open';document.body.appendChild(f)}
+  f.innerHTML=IC.chat+'Pesan baru<i>'+n+'</i>';f.hidden=!n||open||typeof ST==='undefined'||!ST.reg;
+  document.title=(n?'('+n+') ':'')+document.title.replace(/^\(\d+\) /,'');
+  if(open)paint();
+ }
+ /* ---------- panel ---------- */
+ const box=document.createElement('div');box.className='kom';box.id='kom';box.hidden=true;box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('aria-label','Komunitas Store Head Kit');
+ box.innerHTML='<div class="kom-bg" data-kom="close"></div><div class="kom-pn" id="komPn"></div>';document.body.appendChild(box);
+ function buka(room){const sh=$('msheet');if(sh)sh.hidden=true;open=true;box.hidden=false;view.room=room||null;if(room)tandai(room);document.body.style.overflow='hidden';paint(true);cat();kabar();
+  setTimeout(()=>{const t=$('komTa')||$('komQ');if(t&&matchMedia('(min-width:721px)').matches)t.focus()},60)}
+ function tutup(){open=false;box.hidden=true;document.body.style.overflow='';view.room=null;cat();plan()}
+ function tandai(room){D.read[room]=Math.max(Date.now(),...D.pesan.filter(m=>m.r===room).map(m=>m.w));simpan()}
+ function ruangList(){
+  const R={};D.pesan.forEach(m=>{R[m.r]=m});
+  const dm=Object.keys(R).filter(r=>r!=='grup').sort((a,b)=>R[b].w-R[a].w);
+  return {last:R,dm};
+ }
+ function rowRuang(room,last){
+  const L=lawan(room),n=belum(room),m=last;
+  const pre=m?(m.saya?'Anda: ':room==='grup'?m.nm.split(' ')[0]+': ':'')+m.t.replace(/\s+/g,' '):room==='grup'?'Obrolan bersama semua Store Head':'';
+  return `<button type="button" class="kom-row${n?' nw':''}" data-kroom="${E(room)}">${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,L.pembuat?null:!!L.on)}<span><b>${E(L.nm)}</b><small>${E(pre||L.sub)}</small></span><span class="kom-r">${m?E(singkat(m.w)):''}${n?`<br><i>${n}</i>`:''}</span></button>`;
+ }
+ function paintList(){
+  const I=info(),R=ruangList(),nDm=R.dm.reduce((s,r)=>s+belum(r),0)+belum('grup');
+  let bd='';
+  if(view.tab==='chat'){
+   bd=rowRuang('grup',R.last.grup)+(R.dm.length?'<p class="kom-h">Pribadi</p>'+R.dm.map(r=>rowRuang(r,R.last[r])).join(''):`<div class="kom-empty"><b>Belum ada obrolan pribadi</b>Buka tab Pengguna lalu pilih Store Head toko lain untuk mulai chat.</div>`);
+  }else{
+   const q=view.q.trim().toLowerCase();
+   const K=I.kontak.filter(k=>!q||(k.nama+' '+k.toko+' '+k.site).toLowerCase().includes(q)).sort((a,b)=>(b.on-a.on)||(b.last-a.last));
+   const on=K.filter(k=>k.on),off=K.filter(k=>!k.on);
+   const row=k=>`<button type="button" class="kom-row" data-kroom="dm:${E(k.id)}">${av(k.id,k.nama,k.on)}<span><b>${E(k.nama)}</b><small>${E(k.toko)} · site ${E(k.site)}</small></span><span class="kom-r">${k.on?'<span class="kom-on">Online</span>':(k.last?'Aktif ':'')+E(lalu(k.last))}</span></button>`;
+   bd=`<input class="kom-q" id="komQ" type="search" placeholder="Cari nama, toko atau site" value="${E(view.q)}" aria-label="Cari pengguna">
+    <p class="kom-note">${I.saya&&I.saya.pembuat?'Akun Anda (pembuat aplikasi) tidak terlihat oleh pengguna lain. ':''}Status online terlihat oleh semua pengguna Store Head Kit.</p>
+    ${on.length?'<p class="kom-h">Online · '+on.length+'</p>'+on.map(row).join(''):''}${off.length?'<p class="kom-h">Offline · '+off.length+'</p>'+off.map(row).join(''):''}
+    ${!K.length?`<div class="kom-empty">${q?'Tidak ada yang cocok.':'Belum ada pengguna lain.'}</div>`:''}`;
+  }
+  $('komPn').innerHTML=`<div class="kom-hd"><div><h2>Komunitas</h2><p><i class="kom-dot${I.online?'':' off'}"></i>${I.total} toko pengguna · ${I.online} online</p></div><button type="button" class="kom-x" data-kom="close" aria-label="Tutup">${IC.x}</button></div>
+   <div class="kom-tabs" role="tablist"><button type="button" role="tab" data-ktab="chat" class="${view.tab==='chat'?'on':''}">Obrolan${nDm?'<i>'+nDm+'</i>':''}</button><button type="button" role="tab" data-ktab="user" class="${view.tab==='user'?'on':''}">Pengguna · ${I.kontak.length}</button></div>
+   ${err?`<div class="kom-err">${E(err)}</div>`:''}<div class="kom-bd" id="komBd">${bd}</div>`;
+ }
+ function msgsHtml(room){
+  const M=D.pesan.filter(m=>m.r===room);
+  if(!M.length)return `<div class="kom-empty"><b>${room==='grup'?'Mulai obrolan grup':'Mulai obrolan'}</b>${room==='grup'?'Pesan di sini dibaca semua Store Head yang memakai aplikasi.':'Pesan ini hanya untuk kalian berdua.'}</div>`;
+  let h='',hr='',prev=null;
+  M.forEach(m=>{const d=hari(m.w);if(d!==hr){h+=`<span class="kom-day">${E(d)}</span>`;hr=d;prev=null}
+   const who=room==='grup'&&!m.saya&&(!prev||prev.dari!==m.dari||m.w-prev.w>6e5);
+   h+=`<div class="kom-m${m.saya?' me':''}${m.pend?' pend':''}${m.gagal?' err':''}" style="--av:${warna(m.dari)}">${who?`<span class="kom-who">${E(m.nm)} <span>· ${E(m.toko)}</span></span>`:''}<div class="kom-b">${E(m.t)}<time>${m.pend?'mengirim…':jam(m.w)}</time></div>${m.gagal?`<button type="button" class="kom-retry" data-kretry="${E(m.id)}">Gagal terkirim · coba lagi</button>`:''}</div>`;prev=m});
+  return h;
+ }
+ function paintRoom(first){
+  const room=view.room,L=lawan(room),ms=$('komMsgs');
+  const st=L.grp?`${info().online} online`:L.pembuat?'Store Head Kit':L.on?'<i class="kom-dot"></i>Online':'<i class="kom-dot off"></i>Aktif '+E(lalu(L.last));
+  const head=`<button type="button" class="kom-x" data-kom="back" aria-label="Kembali">${IC.back}</button>${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,null)}<div><h2>${E(L.nm)}</h2><p>${L.grp?E(L.sub)+' · '+st:E(L.sub)+(L.pembuat?'':' · '+st)}</p></div><button type="button" class="kom-x" data-kom="close" aria-label="Tutup">${IC.x}</button>`;
+  if(!first&&ms){
+   const bawah=ms.scrollHeight-ms.scrollTop-ms.clientHeight<80;$('komHd').innerHTML=head;ms.innerHTML=msgsHtml(room);if(bawah)ms.scrollTop=ms.scrollHeight;const e=$('komE');if(e)e.textContent=err;return}
+  $('komPn').innerHTML=`<div class="kom-hd" id="komHd">${head}</div><div class="kom-msgs" id="komMsgs" aria-live="polite">${msgsHtml(room)}</div>
+   <div class="kom-cp"><div><textarea class="kom-ta" id="komTa" rows="1" maxlength="1000" placeholder="Tulis pesan" aria-label="Tulis pesan">${E((D.draft||{})[room]||'')}</textarea><button type="button" class="kom-send" id="komSend" aria-label="Kirim">${IC.send}</button></div>
+   <p>Pesan tersimpan di server aplikasi dan bisa dibaca pengelola aplikasi. Jangan kirim data pelanggan.</p><p class="kom-err" id="komE" style="${err?'':'display:none'}">${E(err)}</p></div>`;
+  const ms2=$('komMsgs');ms2.scrollTop=ms2.scrollHeight;tinggi();
+ }
+ function paint(first){if(!open)return;if(view.room)paintRoom(first);else{const q=document.activeElement&&document.activeElement.id==='komQ'?document.activeElement.selectionStart:null;paintList();if(q!=null){const i=$('komQ');i.focus();try{i.setSelectionRange(q,q)}catch(e){}}}}
+ function tinggi(){const t=$('komTa');if(!t)return;t.style.height='auto';t.style.height=Math.min(130,t.scrollHeight+2)+'px'}
+ async function kirim(teks,ulang){
+  const room=view.room;teks=String(teks||'').trim();if(!room||!teks)return;
+  const tmp=ulang||{id:'tmp'+Date.now()+Math.random().toString(36).slice(2,6),r:room,w:Date.now(),saya:true,dari:'saya',nm:ST.reg.nama,toko:ST.reg.toko,t:teks};
+  tmp.pend=true;tmp.gagal=false;if(!ulang)D.pesan.push(tmp);paint();const ms=$('komMsgs');if(ms)ms.scrollTop=ms.scrollHeight;
+  try{const r=await shkApi('bcAppPesan',{id:shkDev(),ke:room==='grup'?'grup':room.slice(3),t:teks});
+   D.pesan=D.pesan.filter(m=>m.id!==tmp.id);gabung([r.pesan]);D.read[room]=Math.max(D.read[room]||0,r.pesan.w);err='';simpan();
+  }catch(e){tmp.pend=false;tmp.gagal=true;err=e.net?'Tidak tersambung. Pesan belum terkirim.':String(e.message||e)}
+  paint();const ms3=$('komMsgs');if(ms3)ms3.scrollTop=ms3.scrollHeight;
+ }
+ /* ---------- event ---------- */
+ document.addEventListener('click',e=>{
+  const k=e.target.closest('[data-kom]');
+  if(k){const a=k.dataset.kom;if(a==='open')return buka(null);if(a==='close')return tutup();if(a==='back'){view.room=null;err='';return paint(true)}}
+  if(!open)return;
+  const t=e.target.closest('[data-ktab]');if(t){view.tab=t.dataset.ktab;return paint()}
+  const r=e.target.closest('[data-kroom]');if(r){view.room=r.dataset.kroom;tandai(view.room);cat();paint(true);setTimeout(()=>{const ta=$('komTa');if(ta&&matchMedia('(min-width:721px)').matches)ta.focus()},40);return}
+  const rt=e.target.closest('[data-kretry]');if(rt){const m=D.pesan.find(x=>x.id===rt.dataset.kretry);if(m)kirim(m.t,m);return}
+  if(e.target.closest('#komSend')){const ta=$('komTa'),v=ta.value;if(!v.trim())return;ta.value='';(D.draft=D.draft||{})[view.room]='';tinggi();kirim(v);ta.focus()}
+ });
+ document.addEventListener('input',e=>{
+  if(e.target.id==='komQ'){view.q=e.target.value;paint()}
+  if(e.target.id==='komTa'){(D.draft=D.draft||{})[view.room]=e.target.value;tinggi()}
+ });
+ document.addEventListener('keydown',e=>{
+  if(!open)return;if(e.key==='Escape'){if(view.room){view.room=null;paint(true)}else tutup();return}
+  if(e.target.id==='komTa'&&e.key==='Enter'&&!e.shiftKey&&matchMedia('(min-width:721px)').matches){e.preventDefault();$('komSend').click()}
+ });
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)kabar()});
+ addEventListener('online',kabar);
+ window.shkKom=buka;
+ setTimeout(kabar,1500);cat();
 })();
 </script>
 </body>
