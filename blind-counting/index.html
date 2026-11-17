@@ -631,6 +631,7 @@ body.locked{overflow:hidden}
     <p id="regP"></p>
     <label><span>Kode site</span><input class="in" id="regSite" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="mis. 7014"></label>
     <label><span>Username <small class="reg-hint">Sama di HP &amp; laptop. Satu toko satu username.</small></span><input class="in" id="regUser" maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="mis. budi"></label>
+    <label id="regPinL"><span>PIN akun <small class="reg-hint" id="regPinH">Akun baru: buat PIN 4–6 angka. Sudah punya akun: isi PIN yang sama.</small></span><input class="in" id="regPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="current-password" placeholder="4–6 angka"></label>
     <fieldset id="regBaru"><legend id="regLeg">Akun baru? Isi juga:</legend>
     <label><span>Nama toko</span><input class="in" id="regToko" maxlength="80" autocomplete="organization" placeholder="mis. Eiger Store Soekarno Solo Baru"></label>
     <label><span>Nama Anda</span><input class="in" id="regNama" maxlength="60" autocomplete="name" placeholder="Nama lengkap"></label>
@@ -3175,20 +3176,25 @@ appStart();
   Object.keys(kb).forEach(k=>{if(!q[k]||q[k]===ko[k]||(k==='t1'&&q[k]==='Store Head')||(k==='file'&&q[k]==='REKAP PENGELUARAN KAS'))q[k]=kb[k]});ST.kasCfg=q}
  function kunci(id){['reg','blok'].forEach(x=>$(x).hidden=x!==id);document.body.classList.toggle('locked',!!id)}
  function regInfo(){fbBadge();if(window.shkHome)shkHome();const r=ST.reg,el=$('appReg');if(!r){el.innerHTML='';return}
-  el.innerHTML='Akun toko: site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' · username <span class="reg-user">'+esc(r.user||r.nama)+'</span> · '+esc(r.nama)+' ('+esc(r.jabatan)+') <button type="button" id="regUbah">Ubah</button> · <button type="button" id="regKeluar">Keluar</button>'}
+  el.innerHTML='Akun toko: site <b>'+esc(r.site)+'</b> '+esc(r.toko)+' · username <span class="reg-user">'+esc(r.user||r.nama)+'</span> · '+esc(r.nama)+' ('+esc(r.jabatan)+') <button type="button" id="regUbah">Ubah</button> · '+(typeof ST.pinAda==='boolean'?'<button type="button" id="regPinB">'+(ST.pinAda?'Ubah PIN':'Buat PIN')+'</button> · ':'')+'<button type="button" id="regKeluar">Keluar</button>'}
  // data akun dari server (perangkat lain bisa mengubahnya) dipakai juga di perangkat ini
  function pakaiReg(g){if(!g||!g.site)return;const lama=ST.reg||null,v={site:String(g.site),toko:String(g.toko||''),nama:String(g.nama||''),jabatan:String(g.jabatan||'Store Head'),user:String(g.user||g.nama||'')};
   if(lama&&['site','toko','nama','jabatan','user'].every(k=>String(lama[k]||'')===v[k]))return;
-  ST.reg=Object.assign({},lama||{},v,{at:g.at||lama&&lama.at||new Date().toISOString()});isiCfg(v,lama);stSave();regInfo();if(window.bcRender)bcRender();if(window.kasRender)kasRender()}
+  ST.reg=Object.assign({},lama||{},v,{at:g.at||lama&&lama.at||new Date().toISOString()});if(ST.regSync!==false)delete ST.reg.pin;isiCfg(v,lama);stSave();regInfo();if(window.bcRender)bcRender();if(window.kasRender)kasRender()}
  function bukaForm(edit){const r=edit&&ST.reg||{};$('regSite').value=r.site||'';$('regUser').value=r.user||r.nama||'';$('regToko').value=r.toko||'';$('regNama').value=r.nama||'';$('regJab').value=r.jabatan||'Store Head';
   $('regH').textContent=edit?'Ubah data akun':'Masuk / daftar';$('regP').textContent=edit?'Perubahan berlaku di semua HP & laptop akun toko ini, juga di pengaturan berita acara.':'Satu toko satu akun. Sudah memakai di HP atau laptop lain? Cukup isi kode site & username yang sama, data toko terisi otomatis.';
   $('regLeg').textContent=edit?'Data toko':'Akun baru? Isi juga:';
-  $('regGo').textContent=edit?'Simpan':'Masuk / daftar';$('regBatal').hidden=!edit;$('regErr').textContent='';kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
+  $('regGo').textContent=edit?'Simpan':'Masuk / daftar';$('regBatal').hidden=!edit;$('regErr').textContent='';
+  $('regPin').value='';$('regPinH').textContent=edit?'Wajib diisi bila mengganti kode site atau username.':'Akun baru: buat PIN 4–6 angka. Sudah punya akun: isi PIN yang sama.';pinTampil();kunci('reg');setTimeout(()=>$('regSite').focus(),50)}
+ // saat mengubah data akun, PIN hanya diminta bila kode site / username diganti
+ function pinGanti(){const r=ST.reg;return !r||$('regSite').value.trim().toUpperCase()!==String(r.site||'').toUpperCase()||$('regUser').value.trim().replace(/\s+/g,' ').toLowerCase()!==String(r.user||r.nama||'').toLowerCase()}
+ function pinTampil(paksa){$('regPinL').hidden=!(paksa||!ST.reg||pinGanti())}
+ ['regSite','regUser'].forEach(i=>$(i).addEventListener('input',()=>pinTampil()));
  let busy=false;
  async function flush(){if(busy||!ST.reg||ST.blokir&&!ST.cekBlok)return;busy=true;
   try{for(let n=0;n<6;n++){
-   if(!ST.regSync){let r;try{r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},ST.reg))}catch(x){if(!x.net){bukaForm(true);$('regErr').textContent=x.message}throw x}
-    if(r&&r.blokir){blokir();break}ST.regSync=true;stSave();if(r&&r.reg)pakaiReg(r.reg)}
+   if(!ST.regSync){let r;try{r=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},ST.reg))}catch(x){if(!x.net){bukaForm(true);$('regErr').textContent=x.message;if(/PIN/.test(x.message))pinTampil(true)}throw x}
+    if(r&&r.blokir){blokir();break}ST.regSync=true;delete ST.reg.pin;if(r&&typeof r.pin==='boolean')ST.pinAda=r.pin;stSave();if(r&&r.reg)pakaiReg(r.reg)}
    const kirim=(ST.q||[]).slice(0,30);
    if(!kirim.length&&!ST.cekBlok)break;
    const r=await api('bcAppCatat',{id:devId(),ev:kirim,v:VER});
@@ -3196,6 +3202,7 @@ appStart();
    if(r&&r.daftar===false){ST.regSync=false;stSave();continue}
    if(r&&r.reg)pakaiReg(r.reg);
    if(r&&Array.isArray(r.masukan)){ST.ms=r.masukan;stSave();fbBadge()}
+   if(r&&typeof r.pin==='boolean'){const blm=ST.pinAda!==r.pin;ST.pinAda=r.pin;stSave();if(blm)regInfo();if(!r.pin)pinMinta()}
    if(ST.blokir){ST.blokir=false;kunci(null)}ST.cekBlok=false;
    ST.q=(ST.q||[]).slice(kirim.length);stSave();
   }}catch(e){if(!e.net&&ST.cekBlok){ST.cekBlok=false}}finally{busy=false;if((ST.fbq||[]).length&&ST.regSync&&!ST.blokir)fbFlush()}}
@@ -3242,6 +3249,7 @@ appStart();
  $('regForm').addEventListener('submit',async e=>{e.preventDefault();
   let v={site:$('regSite').value.trim().toUpperCase(),user:$('regUser').value.trim().replace(/\s+/g,' '),toko:$('regToko').value.trim().replace(/\s+/g,' '),nama:$('regNama').value.trim().replace(/\s+/g,' '),jabatan:$('regJab').value};
   const er=$('regErr'),b=$('regGo'),edit=!!ST.reg;er.textContent='';
+  const pin=$('regPin').value.trim();if(!$('regPinL').hidden){if(!/^\d{4,6}$/.test(pin)){er.textContent='PIN akun harus 4–6 angka.';return $('regPin').focus()}v.pin=pin}
   if(!/^[A-Z0-9]{3,8}$/.test(v.site)){er.textContent='Kode site 3–8 huruf/angka, mis. 7014.';return $('regSite').focus()}
   if(v.user.length<3){er.textContent='Username minimal 3 huruf.';return $('regUser').focus()}
   const cekBaru=()=>{if(v.toko.length<3){er.textContent='Akun baru: nama toko wajib diisi.';$('regToko').focus();return false}if(v.nama.length<2){er.textContent='Akun baru: nama Anda wajib diisi.';$('regNama').focus();return false}return true};
@@ -3249,17 +3257,34 @@ appStart();
   b.disabled=true;b.textContent=edit?'Menyimpan…':'Memeriksa akun…';
   let sync=true,res=null;const ulang=()=>{b.disabled=false;b.textContent=edit?'Simpan':'Masuk / daftar'};
   try{res=await api('bcAppDaftar',Object.assign({id:devId(),perangkat:alat(),v:VER},v));if(res&&res.blokir){ulang();return blokir()}}
-  catch(x){if(!x.net){er.textContent=x.message;ulang();if(/nama toko/i.test(x.message))$('regToko').focus();else if(/nama Anda/i.test(x.message))$('regNama').focus();else if(/username/i.test(x.message))$('regUser').focus();return}
+  catch(x){if(!x.net){er.textContent=x.message;ulang();if(/PIN/.test(x.message)){pinTampil(true);$('regPin').value='';$('regPin').focus()}else if(/nama toko/i.test(x.message))$('regToko').focus();else if(/nama Anda/i.test(x.message))$('regNama').focus();else if(/username/i.test(x.message))$('regUser').focus();return}
    // offline: hanya bisa membuat akun baru (akun yang sudah ada dicek saat online)
    if(!cekBaru()){er.textContent='Tidak tersambung ke server. '+er.textContent;ulang();return}sync=false}
-  if(res&&res.reg)v=Object.assign(v,res.reg);
+  if(res&&res.reg)v=Object.assign(v,res.reg);if(sync)delete v.pin;if(res&&typeof res.pin==='boolean')ST.pinAda=res.pin;
   const lama=ST.reg;ST.reg=Object.assign({},v,{at:res&&res.reg&&res.reg.at||lama&&lama.at||new Date().toISOString()});ST.regSync=sync;isiCfg(v,lama);stSave();
   b.disabled=false;kunci(null);regInfo();if(window.bcRender)bcRender();if(window.kasRender)kasRender();
   if(!edit){ST.lastBuka=Date.now();window.bcLog('buka','','pertama')}
   ofaToast(edit?'Data akun disimpan':res&&res.gabung?'Masuk ke akun toko '+v.site+'. File & rekap tetap tersimpan per perangkat.':sync?'Akun toko dibuat. Selamat memakai!':'Terdaftar di perangkat ini. Akan dikirim saat online.');flush()});
  $('regBatal').onclick=()=>kunci(null);
  $('blokCek').onclick=()=>{ST.cekBlok=true;flush().then(()=>{if(ST.blokir)ofaToast('Akses masih dinonaktifkan')})};
- document.addEventListener('click',e=>{if(e.target.id==='regUbah')bukaForm(true);if(e.target.id==='regKeluar')keluar();if(e.target.id==='klGo')keluarYa(e.target)});
+ document.addEventListener('click',e=>{if(e.target.id==='regUbah')bukaForm(true);if(e.target.id==='regPinB')pinForm(false);if(e.target.id==='pinGo')pinSimpan(e.target);if(e.target.id==='pinNanti'){try{sessionStorage.setItem('shk_pinlater','1')}catch(x){}close()}if(e.target.id==='regKeluar')keluar();if(e.target.id==='klGo')keluarYa(e.target)});
+ /* ---------- PIN akun ---------- */
+ function pinMinta(){if(!ST.reg||ST.blokir)return;let s='';try{s=sessionStorage.getItem('shk_pinlater')||''}catch(e){}if(s||document.getElementById('ov').classList.contains('open')||!$('reg').hidden)return;pinForm(true)}
+ function pinForm(minta){const ada=ST.pinAda!==false;
+  openModal(ada?'Ubah PIN akun':'Buat PIN akun',`${minta?'<p class="wk-p">Akun toko kini memakai PIN. PIN diminta saat akun ini dibuka di HP atau laptop baru, supaya orang lain tidak bisa masuk hanya dengan kode site &amp; username.</p>':`<p class="wk-p">PIN berlaku untuk akun toko site <b>${esc(ST.reg.site)}</b> di semua perangkat. Perangkat yang sudah masuk tidak ditanya PIN lagi.</p>`}
+  ${ada?'<label class="fb-l" for="pinLama">PIN sekarang</label><input class="in" id="pinLama" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="current-password">':''}
+  <label class="fb-l" for="pinBaru">PIN baru (4–6 angka)</label><input class="in" id="pinBaru" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="new-password">
+  <label class="fb-l" for="pinUlang">Ulangi PIN baru</label><input class="in" id="pinUlang" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="new-password">
+  <div class="fb-err" id="pinErr" role="alert"></div>
+  <div class="row" style="margin-top:8px"><button class="btn" type="button" id="pinGo">Simpan PIN</button>${minta?'<button class="btn ghost" type="button" id="pinNanti">Nanti</button>':'<button class="btn ghost" type="button" onclick="close()">Batal</button>'}</div>
+  <p class="hint">Hindari angka sama atau berurutan (1111, 1234). Lupa PIN? Kirim masukan agar PIN direset pembuat aplikasi.</p>`);
+  setTimeout(()=>{const f=$(ada?'pinLama':'pinBaru');if(f)f.focus()},60)}
+ async function pinSimpan(btn){const er=$('pinErr'),lama=$('pinLama')?$('pinLama').value.trim():'',baru=$('pinBaru').value.trim(),ul=$('pinUlang').value.trim();er.textContent='';
+  if(!/^\d{4,6}$/.test(baru)){er.textContent='PIN baru harus 4–6 angka.';return $('pinBaru').focus()}
+  if(baru!==ul){er.textContent='Ulangi PIN belum sama.';return $('pinUlang').focus()}
+  btn.disabled=true;btn.textContent='Menyimpan…';
+  try{const r=await api('bcAppPinAtur',{id:devId(),lama,baru});if(r&&r.blokir){close();return blokir()}ST.pinAda=true;stSave();close();regInfo();ofaToast('PIN akun disimpan')}
+  catch(x){btn.disabled=false;btn.textContent='Simpan PIN';er.textContent=x.net?'Tidak tersambung. Coba lagi saat online.':x.message}}
  function keluar(){openModal('Keluar dari Store Head Kit',`<p class="wk-p">Keluar dari perangkat ini sebagai <b>${esc(ST.reg.nama)}</b> (site ${esc(ST.reg.site)})?</p>
   <p class="hint">Pendaftaran dan data yang tersimpan di perangkat ini (BA Blind Counting, Kepatuhan Display, Rekap Kas, pengaturan) akan dihapus, lalu layar daftar muncul lagi. File Excel yang sudah diunduh tidak terpengaruh.</p>
   <div class="row" style="margin-top:12px"><button class="btn" type="button" id="klGo">Keluar</button><button class="btn ghost" type="button" onclick="close()">Batal</button></div>`)}

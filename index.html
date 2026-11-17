@@ -8560,7 +8560,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   // gabungkan perangkat (HP, laptop) milik akun yang sama
   const A={};us.forEach(u=>{const k=akKey(u);let a=A[k];
    if(!a){a=A[k]=Object.assign({},u,{key:k,alat:[],ids:[],un:new Map(),f:{},n:0,n30:S?0:null,hari:S?0:null,buka:0,upload:0,unduh:0,periode:''})}
-   a.alat.push(u.perangkat||'Perangkat');a.un.set(unm(u).toLowerCase(),unm(u));a.ids.push(u.id);a.n+=u.n;if(S){a.n30+=u.n30||0;a.hari=Math.max(a.hari,u.hari||0)}
+   a.alat.push(u.perangkat||'Perangkat');if(u.pin)a.pin=true;a.un.set(unm(u).toLowerCase(),unm(u));a.ids.push(u.id);a.n+=u.n;if(S){a.n30+=u.n30||0;a.hari=Math.max(a.hari,u.hari||0)}
    a.buka+=u.buka;a.upload+=u.upload;a.unduh+=u.unduh;Object.keys(u.f).forEach(x=>a.f[x]=(a.f[x]||0)+u.f[x]);
    if(new Date(u.aktif)>new Date(a.aktif)){a.aktif=u.aktif;a.toko=u.toko;a.nama=u.nama;a.jabatan=u.jabatan}
    if(new Date(u.daftar)<new Date(a.daftar))a.daftar=u.daftar;if(u.periode&&!a.periode)a.periode=u.periode;if(u.status!=='blokir')a.status='aktif'});
@@ -8617,7 +8617,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
     <div class="bcu-u-h"><em class="bcu-no" title="Peringkat pemakaian">#${rk.get(u.key)}</em><span class="bcu-site">${esc(u.site)}</span><div><b>${esc(u.toko)}</b><small>username ${esc([...u.un.values()].join(' / '))} · ${esc(u.nama)} · ${esc(u.jabatan)}${u.status==='blokir'?' · <em>dinonaktifkan</em>':''}</small></div><span class="bcu-when" title="${esc(tgl(u.aktif)+' '+jam(u.aktif))}">${esc(lalu(u.aktif))}</span></div>
     <div class="bcu-u-n"><span>Total aktivitas <b>${nf(u.n)}</b></span>${u.n30!=null?`<span>30 hari <b>${nf(u.n30)}</b></span>`:''}${u.hari!=null?`<span>Hari aktif <b>${nf(u.hari)}</b></span>`:''}<span>Buka <b>${nf(u.buka)}</b></span><span>Upload <b>${nf(u.upload)}</b></span><span>Unduh BA <b>${nf(u.unduh)}</b></span>${u.periode?`<span>Periode terakhir <b>${esc(u.periode)}</b></span>`:''}</div>
     ${u.fit.some(k=>k!=='buka')?`<div class="bcu-fit">${fitChips(u)}</div>`:''}
-    <div class="bcu-u-f"><small>Terdaftar ${esc(tgl(u.daftar))} · ${u.alat.length>1?u.alat.length+' perangkat: ':''}${esc(u.alat.join(', '))}</small><button type="button" class="bcu-lnk" data-bcb="${esc(u.ids[0])}" data-st="${u.status==='blokir'?'aktif':'blokir'}">${u.status==='blokir'?'Aktifkan lagi':'Nonaktifkan'}</button></div>
+    <div class="bcu-u-f"><small>Terdaftar ${esc(tgl(u.daftar))} · ${u.alat.length>1?u.alat.length+' perangkat: ':''}${esc(u.alat.join(', '))} · PIN ${u.pin?'aktif':'<em>belum dibuat</em>'}</small>${u.pin?`<button type="button" class="bcu-lnk" data-bcpin="${esc(u.ids[0])}">Reset PIN</button>`:''}<button type="button" class="bcu-lnk" data-bcb="${esc(u.ids[0])}" data-st="${u.status==='blokir'?'aktif':'blokir'}">${u.status==='blokir'?'Aktifkan lagi':'Nonaktifkan'}</button></div>
    </div>`).join(''):'<p class="dp-empty">'+(q?'Tidak ada yang cocok.':'Belum ada yang mendaftar.')+'</p>';
   const log=L.length?'<div class="bcu-log">'+L.map(x=>`<div><time>${esc(tgl(x.w))}<br>${esc(jam(x.w))}</time><p><b>${esc(x.k)}</b>${x.p?' · '+esc(x.p):''}<br><small>${esc(x.site)} ${esc(x.toko)} · ${esc(x.nama)}${x.x?' · '+esc(x.x):''}</small></p></div>`).join('')+'</div>':'<p class="dp-empty">Belum ada aktivitas.</p>';
   el.innerHTML=`<div class="bcu-kpi"><div class="bcu-big"><small>Toko terdaftar</small><b>${nf(s.toko)}</b><span>${nf(s.orang)} akun · ${nf(s.alat)} perangkat${s.blok?' · '+nf(s.blok)+' akun dinonaktifkan':''}</span></div>
@@ -8774,6 +8774,12 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
  }
  document.addEventListener('change',e=>{if(e.target.id!=='bcuPF')return;const f=e.target.files&&e.target.files[0];e.target.value='';if(f)promoPick(f)});
  async function salin(){try{await navigator.clipboard.writeText(APP);toast('Link aplikasi disalin')}catch(e){prompt('Salin link ini:',APP)}}
+ async function pinReset(btn){
+  if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent='Yakin reset PIN? Ketuk lagi';return}
+  btn.disabled=true;btn.textContent='Mereset…';
+  try{simpan(await api('bcAppPinReset',{id:btn.dataset.bcpin}));toast('PIN direset. Minta toko membuat PIN baru di aplikasi.');renderAll()}
+  catch(e){btn.disabled=false;btn.dataset.ok='';toast(e.message);renderAll()}
+ }
  async function atur(btn){
   if(btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent=btn.dataset.st==='blokir'?'Yakin nonaktifkan? Ketuk lagi':'Ketuk lagi untuk mengaktifkan';return}
   btn.disabled=true;btn.textContent='Menyimpan…';
@@ -8781,6 +8787,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   catch(e){btn.disabled=false;btn.dataset.ok='';toast(e.message);renderAll()}
  }
  document.addEventListener('click',e=>{
+  const pz=e.target.closest('[data-bcpin]');if(pz)return pinReset(pz);
   const t=e.target.closest('[data-bcu],[data-bcb],[data-bct],#bcuBack,.side button,.bnav button,#deckTabs button');if(!t)return;
   if(t.matches('.side button,.bnav button,#deckTabs button')){if(t.dataset.sd==='bcu'){e.stopPropagation();buka()}else if(pg.classList.contains('open')&&!t.dataset.th)tutup();return}
   if(t.id==='bcuBack')return tutup();
