@@ -1896,6 +1896,33 @@ html.scrolled header{border-bottom-color:var(--line)}
 .sub-off{display:none!important}
 .deck-pg.cur>.subnav{margin:0}
 @media(max-width:760px){.subnav{position:relative;top:auto;margin:12px 0 4px;border-radius:14px}.subnav button{padding:7px 12px;font-size:13px}}
+#tko .tk-empty{text-align:left;padding:16px;border:1px dashed var(--line);border-radius:14px;margin-top:10px}#tko .tk-empty b{display:block;font-size:15px;margin-bottom:4px}#tko .tk-empty p{margin:0 0 12px;color:var(--mut);font-size:13px;line-height:1.5;max-width:62ch}
+#tko .tk-ok{margin-top:10px;padding:14px 16px;border-radius:14px;background:var(--ok-bg);text-align:left}#tko .tk-ok b{color:var(--ok-fg);display:block;margin-bottom:2px}#tko .tk-ok p{margin:0;font-size:13px;color:var(--mut)}
+#tko .tk-kpi{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;margin-top:10px}#tko .tk-kpi>div{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg)}
+#tko .tk-kpi small{display:block;font-size:11.5px;color:var(--mut);font-weight:700}#tko .tk-kpi b{display:block;font-size:21px;margin:2px 0;font-variant-numeric:tabular-nums}#tko .tk-kpi span{font-size:11.5px;color:var(--mut)}
+#tko .tk-kpi .bad{background:var(--bad-bg);border-color:transparent}#tko .tk-kpi .bad b{color:var(--bad-fg)}#tko .tk-kpi .ok b{color:var(--ok-fg)}
+#tko .tk-warn{margin:10px 0 0;padding:8px 11px;border-radius:10px;background:var(--warn-bg);color:var(--warn-fg);font-size:12.5px;font-weight:600}
+#tko .tk-seg{margin-top:12px;max-width:none;grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
+#tko .tk-flt{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}#tko .tk-flt .in{flex:1 1 200px;min-width:0}
+#tko .tk-by{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none}#tko .tk-by button{border:0;background:transparent;color:var(--mut);font:inherit;font-size:12.5px;font-weight:700;padding:8px 12px;cursor:pointer}#tko .tk-by button.on{background:var(--fg);color:var(--bg)}
+#tko .tk-list{display:grid;gap:10px;margin-top:10px;max-height:680px;overflow-y:auto;padding-right:2px}
+#tko .tk-g{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px 4px;background:var(--bg)}#tko .tk-g.alldone{opacity:.62}
+#tko .tk-gh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:6px}#tko .tk-gh b{font-size:14px}#tko .tk-gh small{color:var(--mut);font-size:12px}#tko .tk-gh em{margin-left:auto;font-style:normal;font-weight:800;font-size:13px;color:var(--bad-fg);font-variant-numeric:tabular-nums}#tko .tk-g.alldone .tk-gh em{color:var(--ok-fg)}
+#tko .tk-bin{font-family:inherit;font-weight:800;letter-spacing:.2px;font-variant-numeric:tabular-nums}#tko .tk-bin.big{font-size:15px;padding:3px 9px;border-radius:8px;background:var(--fg);color:var(--bg)}
+#tko .tk-z{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:999px;background:var(--card);color:var(--mut)}#tko .tk-z.z0{background:var(--bad-bg);color:var(--bad-fg)}#tko .tk-z.z1{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+#tko .tk-g ul{list-style:none;margin:0;padding:0}
+#tko .tk-g li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px dashed var(--line)}#tko .tk-g li.done .tk-it b{text-decoration:line-through;color:var(--mut)}#tko .tk-g li.done .tk-q{color:var(--mut)}
+#tko .tk-it{flex:1;min-width:0;font-size:13px;line-height:1.4}#tko .tk-it b{display:block;font-weight:700;overflow-wrap:anywhere}#tko .tk-it small{display:block;color:var(--mut);font-size:12px}
+#tko .tk-q{flex:none;text-align:right;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;min-width:44px}#tko .tk-q small{display:block;font-size:10.5px;font-weight:700;color:var(--mut)}
+#tko .tk-tag{display:inline-block;margin-top:4px;margin-right:4px;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;background:var(--card);color:var(--mut)}#tko .tk-tag.sni{background:var(--warn-bg);color:var(--warn-fg)}#tko .tk-tag.rc{background:var(--bad-bg);color:var(--bad-fg)}
+#tko .tk-ck{flex:none;position:relative;width:26px;height:26px;cursor:pointer}#tko .tk-ck input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+#tko .tk-ck span{position:absolute;inset:0;border:2px solid var(--line);border-radius:8px;background:var(--bg);transition:background .15s,border-color .15s}
+#tko .tk-ck input:checked+span{background:var(--ok-fg);border-color:var(--ok-fg)}#tko .tk-ck input:checked+span::after{content:'';position:absolute;left:8px;top:3px;width:6px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+#tko .tk-ck input:focus-visible+span{outline:2px solid var(--blue,#1d4ed8);outline-offset:2px}
+#tko .tk-act{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}#tko .tk-src{margin:8px 0 0;font-size:11.5px;color:var(--mut);overflow-wrap:anywhere}
+.tk-lb{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:8px 0 0}.tk-lb .in{margin-top:4px;width:100%}
+.tk-ml{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:8px}.tk-ml li{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:9px 11px}.tk-ml b{display:block;font-size:13.5px}.tk-ml small{display:block;color:var(--mut);font-size:12px;margin-top:2px}.tk-ml .btn{flex:none}
+@media (max-width:560px){#tko .tk-kpi{grid-template-columns:1fr 1fr}#tko .tk-kpi>div:first-child{grid-column:span 2}#tko .tk-kpi b{font-size:19px}}
 /* ====== AKSEN WARNA BIRU & ORANYE (garis & tulisan lebih tegas) ====== */
 :root{--ink:#1d4ed8;--inkfg:#fff;--line:#d3d8e1;--mut:#525a69;--blue:#1d4ed8;--blue-bg:#eaf1ff;--orange:#f26a1b;--orange-bg:#fff1e7;--title:#10275e;--num:#173a8f;--card-bd:#dde2ea}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#3b82f6;--inkfg:#fff;--line:#363946;--mut:#aab0bd;--blue:#60a5fa;--blue-bg:#16233f;--orange:#fb923c;--orange-bg:#3a2210;--title:#dbe6ff;--num:#a5c3ff;--card-bd:#2c2f3a}}
@@ -2090,7 +2117,7 @@ html.scrolled header{border-bottom-color:var(--line)}
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="Stok">
-        <nav class="subnav" data-sub="stok" aria-label="Sub menu Stok"><button type="button" data-subk="all">Semua</button><button type="button" data-subk="disp">Display &amp; Produk</button><button type="button" data-subk="rst">Restock &amp; Pusat</button><button type="button" data-subk="arus">Barang Masuk &amp; Keluar</button></nav>
+        <nav class="subnav" data-sub="stok" aria-label="Sub menu Stok"><button type="button" data-subk="all">Semua</button><button type="button" data-subk="disp">Display &amp; Produk</button><button type="button" data-subk="rst">Restock &amp; Pusat</button><button type="button" data-subk="arus">Barang Masuk &amp; Keluar</button><button type="button" data-subk="tko">Take Out</button></nav>
         <section class="inv" id="inv" data-subg="disp" aria-label="Kepatuhan display">
           <div class="sh-head"><div><h3>Kepatuhan Display</h3><p id="ivSub">Target 95% by generic &amp; by color</p></div><button class="btn ghost" type="button" id="ivUp">⇪ Upload</button></div>
           <input type="file" id="ivFile" accept=".xlsx,.xls,.csv" multiple hidden>
@@ -2098,6 +2125,10 @@ html.scrolled header{border-bottom-color:var(--line)}
           <div class="iv-status" id="ivStatus"></div>
           <div class="iv-sku" id="ivSku"></div>
           <div id="ctBox"></div>
+        </section>
+        <section class="rs span-all" id="tko" data-subg="tko" aria-label="Take out artikel wajib SNI dan recall">
+          <div class="sh-head"><div><h3>Take Out Artikel</h3><p id="tkSub">Barang wajib SNI / recall yang tidak boleh dijual</p></div></div>
+          <div id="tkBody"></div>
         </section>
         <section class="perf" id="perf" data-subg="disp" aria-label="Performa produk">
           <div class="sh-head"><div><h3>Performa Produk</h3><p id="pfSub">Stok dibanding penjualan 30 hari</p></div><button class="btn ghost" type="button" id="pfCfg" aria-label="Atur batas performa (Store Head)">⚙</button></div>
@@ -4156,7 +4187,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}
   status('Mengunggah inventory by bin ('+nf(body.length)+' baris) dan menghitung… ±30 detik');
   const res=await api('uploadInventory',{rows:[NEED,...body],fileName:f.name});
   if(res.message)throw new Error(res.message);
-  setData(res,true);if(res.meta&&res.meta.sku)setSku(res.meta.sku);loadPlc(true);loadSSR(true);
+  setData(res,true);if(res.meta&&res.meta.sku)setSku(res.meta.sku);loadPlc(true);loadSSR(true);if(window.ofaTkBin)window.ofaTkBin(rows,hi,f);
   return 'Inventory by bin '+tgl(res.meta.date)+' ✓ ('+nf(res.meta.rows)+' baris)';
  }
  async function upSku(rows,hi,f){
@@ -11581,6 +11612,224 @@ thead{display:table-header-group}tr{page-break-inside:avoid}.foot{margin-top:8px
  window.ofaDeckShow=function(id){const el=document.getElementById(id),s=el&&el.closest('section[data-subg]');
   if(s&&s.classList.contains('sub-off')){const pg=pgOf(s),nav=pg&&pg.querySelector(':scope>.subnav');if(nav)pilih(nav,s.dataset.subg,false)}
   return asli?asli.apply(this,arguments):undefined};
+})();
+</script>
+<script>
+/* ====== TAKE OUT ARTIKEL (wajib SNI / recall): daftar artikel + inventory by bin -> barang & lokasi yang harus ditarik ====== */
+(function(){
+ const box=document.getElementById('tko');if(!box)return;
+ const $id=i=>document.getElementById(i),body=$id('tkBody'),sub=$id('tkSub');
+ const INV='ofa_tk_inv',BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID');
+ const norm=v=>String(v==null?'':v).toLowerCase().replace(/[^a-z0-9]/g,'');
+ const code=v=>String(v==null?'':v).replace(/\.0+$/,'').replace(/^'/,'').replace(/\s+/g,'').trim();
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+ const tgl=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}:\d{2}))?/);return m?(+m[3])+' '+BLN[m[2]-1]+' '+m[1]+(m[4]?' '+m[4]:''):String(s||'')};
+ const now=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())};
+ const ZONA={'sales area':['Area jual',0],'warehouse':['Gudang',1],'pos':['Kasir (POS)',2],'booking area':['Booking',3],'damage':['Barang rusak',4]};
+ const zona=z=>(ZONA[String(z||'').toLowerCase()]||[z||'Lainnya',5]);
+ const grp=z=>{const i=zona(z)[1];return i===0?'jual':i===1?'gdg':'lain'};
+ let view={z:'all',by:'bin',q:''},busy=false,msg='',bad=false;
+ try{view=Object.assign(view,JSON.parse(localStorage.getItem('ofa_tk_view')||'{}'),{q:''})}catch(e){}
+ const T=()=>{if(typeof meta!=='object'||!meta)return {lists:[]};const t=meta.__tko||{};if(!Array.isArray(t.lists))t.lists=[];return t};
+ const save=t=>{meta.__tko=t;ls.set('ofa_meta',meta)};
+ const gate=fn=>window.ofaHeadGate?window.ofaHeadGate(fn):fn();
+
+ /* ---------- baca Excel ---------- */
+ function loadXlsx(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Pembaca Excel gagal dimuat. Periksa koneksi.'));document.head.appendChild(s)});
+ }
+ async function readRows(f){
+  await loadXlsx();
+  const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
+  let best=[];wb.SheetNames.forEach(n=>{const r=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:''})||[];if(r.length>best.length)best=r});
+  return best;
+ }
+ const fileDate=f=>{const m=String(f.name||'').match(/(\d{2})(\d{2})(20\d{2})[_-]?(\d{2})(\d{2})/);if(m&&+m[2]>=1&&+m[2]<=12)return m[3]+'-'+m[2]+'-'+m[1]+' '+m[4]+':'+m[5];
+  const d=new Date(f.lastModified||Date.now()),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())};
+
+ /* ---------- daftar artikel ---------- */
+ const KODE=['genericarticle','genericcode','generic','article','artikel','kodeartikel','skucode','sku','materialcode','material'];
+ function parseList(rows,f){
+  const hi=rows.findIndex(r=>r.some(v=>KODE.includes(norm(v))&&norm(v)!=='material'));
+  if(hi<0)throw new Error('kolom kode artikel (GENERIC ARTICLE / SKU Code) tidak ditemukan');
+  const h=rows[hi].map(norm),ix=a=>{for(const k of a){const i=h.indexOf(k);if(i>=0)return i}return -1};
+  const c={kode:ix(KODE),nm:ix(['description','deskripsi','skuname','namaartikel','nama','articlename','productname']),
+   tipe:ix(['producttype','tipe','type','lv4','mghlv4name']),kat:ix(['mghlv2','mclv2','kategori','category']),hg:ix(['price','harga','retailprice'])};
+  let judul='';for(let i=0;i<hi&&!judul;i++)(rows[i]||[]).some(v=>{const s=String(v||'').trim();if(s.length>3&&!/^\d+$/.test(s)){judul=s;return true}return false});
+  const seen={},items=[];
+  rows.slice(hi+1).forEach(r=>{const k=code(r[c.kode]);if(!/^\d{6,13}$/.test(k)||seen[k])return;seen[k]=1;
+   items.push([k,String(c.nm>=0?r[c.nm]:'').trim(),String(c.tipe>=0?r[c.tipe]:'').trim(),String(c.kat>=0?r[c.kat]:'').trim(),Number(c.hg>=0?r[c.hg]:0)||0])});
+  if(!items.length)throw new Error('tidak ada kode artikel yang terbaca di bawah header');
+  const nama=(judul||String(f.name||'Daftar artikel').replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ')).replace(/\s+/g,' ').slice(0,80);
+  return {nama,items};
+ }
+ function addList(f){
+  if(busy)return;busy=true;msg='Membaca '+f.name+'…';bad=false;render();
+  readRows(f).then(rows=>{
+   const p=parseList(rows,f);busy=false;msg='';
+   const close2=()=>{close();render()};
+   openModal('Simpan daftar take out',`<p class="hint" style="margin:0 0 8px">${nf(p.items.length)} artikel terbaca dari <b>${E(f.name)}</b>.</p>
+    <label class="tk-lb">Nama daftar<input class="in" id="tkNm" value="${E(p.nama)}" maxlength="80"></label>
+    <label class="tk-lb">Alasan<select class="in" id="tkAl"><option>Wajib SNI</option><option>Recall</option><option>Lainnya</option></select></label>
+    <p class="hint">Barang dari daftar ini tidak boleh dijual dan harus ditarik dari area jual maupun gudang.</p>
+    <div class="row"><button class="btn" type="button" id="tkOk">Simpan daftar</button></div>`);
+   const al=$id('tkAl');if(/recall/i.test(p.nama+f.name)&&!/sni/i.test(p.nama))al.value='Recall';else if(!/sni/i.test(p.nama+f.name))al.value='Lainnya';
+   $id('tkOk').onclick=()=>{
+    const t=T(),nm=$id('tkNm').value.trim()||p.nama;
+    t.lists=t.lists.filter(l=>l.nama!==nm).concat([{id:'L'+Date.now().toString(36),nama:nm,alasan:al.value,file:String(f.name).slice(0,120),at:now(),items:p.items}]).slice(-8);
+    save(t);const ok=recalc(true);
+    if(!ok&&t.res){msg='Daftar baru tersimpan. Upload ulang inventory by bin di perangkat ini agar artikel daftar baru ikut dicek.';bad=false}
+    close2();toast('Daftar "'+nm+'" tersimpan · '+nf(p.items.length)+' artikel');
+   };
+  }).catch(e=>{busy=false;msg='Daftar gagal dibaca: '+(e.message||e);bad=true;render()});
+ }
+ function manage(){
+  const t=T();
+  openModal('Daftar artikel take out',`${t.lists.length?`<ul class="tk-ml">${t.lists.map(l=>`<li><div><b>${E(l.nama)}</b><small>${E(l.alasan||'')} · ${nf(l.items.length)} artikel · diupload ${E(tgl(l.at))}</small></div><button class="btn ghost" type="button" data-tkdel="${E(l.id)}">Hapus</button></li>`).join('')}</ul>`:'<p class="hint">Belum ada daftar.</p>'}
+   <div class="row"><button class="btn" type="button" id="tkAdd">⇪ Upload daftar baru</button></div>
+   <p class="hint">Format: file Excel dengan kolom GENERIC ARTICLE (9 digit) atau SKU Code (12 digit). Kolom DESCRIPTION dan PRODUCT TYPE ikut dibaca bila ada. Daftar dengan nama sama akan diganti.</p>`);
+  $id('tkAdd').onclick=()=>{close();listIn.click()};
+  $id('pb').querySelectorAll('[data-tkdel]').forEach(b=>b.onclick=()=>{
+   const t2=T(),l=t2.lists.find(x=>x.id===b.dataset.tkdel);if(!l||!confirm('Hapus daftar "'+l.nama+'"?'))return;
+   t2.lists=t2.lists.filter(x=>x!==l);save(t2);recalc(true);close();manage();render();
+  });
+ }
+
+ /* ---------- inventory by bin ---------- */
+ function parseInv(rows,hi){
+  const h=rows[hi].map(norm),ix=k=>h.indexOf(k);
+  const c={nm:ix('skuname'),sku:ix('skucode'),g:ix('genericcode'),bin:ix('bincode'),z:ix('zonecode'),cat:ix('bincategory'),q:ix('totalqty'),loc:ix('location')};
+  if(c.sku<0||c.bin<0||c.q<0)throw new Error('kolom SKU Code / Bin Code / Total Qty tidak ditemukan');
+  let loc='';const out=[];
+  rows.slice(hi+1).forEach(r=>{const sku=code(r[c.sku]),q=Number(String(r[c.q]).replace(/[^\d.-]/g,''))||0;if(!sku||q<=0)return;
+   if(!loc&&c.loc>=0)loc=String(r[c.loc]||'').trim();
+   out.push([sku,String(c.nm>=0?r[c.nm]:'').trim(),c.g>=0?code(r[c.g]):'',String(r[c.bin]||'').trim(),String(c.z>=0?r[c.z]:'').trim(),String(c.cat>=0?r[c.cat]:'').trim(),q])});
+  return {loc,rows:out};
+ }
+ function match(inv,lists){
+  const byG={},byS={};
+  lists.forEach((l,li)=>l.items.forEach(it=>{const m=it[0].length>=12?byS:byG;(m[it[0]]||(m[it[0]]=[])).push(li)}));
+  const res=[];
+  inv.forEach(r=>{const [sku,,g]=r,hit=new Set([...(byS[sku]||[]),...(byG[sku.slice(0,9)]||[]),...(g&&g!==sku.slice(0,9)?byG[g]||[]:[])]);
+   if(hit.size)res.push(r.concat([[...hit].map(i=>lists[i].id).join(',')]))});
+  return res;
+ }
+ function apply(inv,f,silent){
+  const t=T();
+  try{localStorage.setItem(INV,JSON.stringify({file:f.file,date:f.date,loc:inv.loc,rows:inv.rows}))}catch(e){}
+  if(!t.lists.length){if(!silent){msg='Inventory terbaca, tetapi daftar artikel belum ada. Upload daftar artikel dulu.';bad=true}return render()}
+  const rows=match(inv.rows,t.lists);
+  t.res={file:f.file,date:f.date,loc:inv.loc,at:now(),total:inv.rows.length,rows:rows.slice(0,3000),done:{}};
+  save(t);msg='';bad=false;render();
+  if(!silent)toast(rows.length?nf(rows.reduce((s,r)=>s+r[6],0))+' pcs harus di take out':'Tidak ada barang dari daftar di inventory ini');
+ }
+ function recalc(keepDone){
+  const t=T();let inv=null;try{inv=JSON.parse(localStorage.getItem(INV)||'null')}catch(e){}
+  if(!inv||!inv.rows){if(t.res&&t.lists.length){const ids=new Set(t.lists.map(l=>l.id));t.res.rows=t.res.rows.filter(r=>String(r[7]).split(',').some(i=>ids.has(i)));save(t)}return false}
+  const old=t.res&&t.res.date===inv.date?t.res.done||{}:{};
+  if(!t.lists.length){delete t.res;save(t);return}
+  t.res={file:inv.file,date:inv.date,loc:inv.loc,at:now(),total:inv.rows.length,rows:match(inv.rows,t.lists).slice(0,3000),done:keepDone?old:{}};save(t);return true;
+ }
+ async function addInv(f){
+  if(busy)return;busy=true;msg='Membaca '+f.name+'…';bad=false;render();
+  try{
+   const rows=await readRows(f),hi=rows.findIndex(r=>r.some(v=>norm(v)==='bincode'));
+   if(hi<0)throw new Error('ini bukan file inventory by bin (kolom Bin Code tidak ada)');
+   busy=false;apply(parseInv(rows,hi),{file:String(f.name).slice(0,120),date:fileDate(f)});
+  }catch(e){busy=false;msg='Gagal membaca inventory: '+(e.message||e);bad=true;render()}
+ }
+ // dipanggil juga dari upload inventory by bin di kartu Kepatuhan Display
+ window.ofaTkBin=(rows,hi,f)=>{try{apply(parseInv(rows,hi),{file:String(f.name).slice(0,120),date:fileDate(f)},true)}catch(e){}};
+
+ /* ---------- tampilan ---------- */
+ function data(){
+  const t=T(),r=t.res,L={};t.lists.forEach(l=>{L[l.id]=l});
+  if(!r)return {t,L,rows:[]};
+  const desc={};t.lists.forEach(l=>l.items.forEach(it=>{if(!desc[it[0]])desc[it[0]]=it}));
+  const rows=r.rows.map((x,i)=>{const lid=String(x[7]).split(',').filter(id=>L[id]),info=desc[x[0]]||desc[x[0].slice(0,9)]||desc[x[2]]||[];
+   return {i,key:x[0]+'|'+x[3],sku:x[0],nm:x[1],g:x[2]||x[0].slice(0,9),bin:x[3],z:x[4],cat:x[5],q:x[6],lists:lid.map(id=>L[id]),desc:info[1]||'',tipe:info[2]||'',done:!!(r.done&&r.done[x[0]+'|'+x[3]])}}).filter(x=>x.lists.length);
+  return {t,L,r,rows};
+ }
+ let multi=false;
+ const tags=x=>!multi?'':x.lists.map(l=>`<span class="tk-tag ${/recall/i.test(l.alasan)?'rc':/sni/i.test(l.alasan)?'sni':''}">${E(l.alasan||l.nama)}</span>`).join('');
+ function item(x,showBin){
+  return `<li class="${x.done?'done':''}"><label class="tk-ck"><input type="checkbox" data-tkck="${E(x.key)}" ${x.done?'checked':''} aria-label="Sudah diambil"><span></span></label>
+   <div class="tk-it"><b>${E(x.nm||x.desc||x.sku)}</b><small>${showBin?`<span class="tk-bin">${E(x.bin)}</span> ${E(zona(x.z)[0])} · `:''}SKU ${E(x.sku)}${x.tipe?' · '+E(x.tipe):''}${/damage/i.test(x.cat)?' · barang rusak':''}</small>${tags(x)}</div>
+   <div class="tk-q">${nf(x.q)}<small>pcs</small></div></li>`;
+ }
+ function render(){
+  const D=data(),t=D.t,all=D.rows;multi=new Set(t.lists.map(l=>l.alasan||l.nama)).size>1;const act=busy||msg?`<div class="iv-status${bad?' err':''}">${E(msg||'Memproses…')}</div>`:'';
+  const nArt=t.lists.reduce((s,l)=>s+l.items.length,0);
+  if(sub)sub.textContent=t.lists.length?nf(nArt)+' artikel di '+t.lists.length+' daftar'+(D.r?' · inventory '+tgl(D.r.date):''):'Barang wajib SNI / recall yang tidak boleh dijual';
+  if(!t.lists.length){body.innerHTML=`<div class="dp-empty tk-empty"><b>Upload daftar artikel dulu</b><p>File Excel berisi artikel yang harus ditarik (wajib SNI, recall). Setelah itu cukup upload inventory by bin, dan daftar barang beserta lokasinya langsung muncul.</p><button class="btn" type="button" data-tk="list">⇪ Upload daftar artikel</button></div>${act}`;return}
+  if(!D.r){body.innerHTML=`<div class="dp-empty tk-empty"><b>Upload inventory by bin</b><p>Pakai file export inventory by bin dari sistem. Barang dari daftar akan dicari di setiap lokasi bin, area jual maupun gudang.</p><button class="btn" type="button" data-tk="inv">⇪ Upload inventory by bin</button></div>${act}${foot()}`;return}
+  const qs=view.q.trim().toLowerCase(),sum=a=>a.reduce((s,x)=>s+x.q,0);
+  const byZ={all:all,jual:all.filter(x=>grp(x.z)==='jual'),gdg:all.filter(x=>grp(x.z)==='gdg'),lain:all.filter(x=>grp(x.z)==='lain')};
+  if(!byZ[view.z])view.z='all';
+  let rows=byZ[view.z];if(qs)rows=rows.filter(x=>(x.nm+' '+x.sku+' '+x.bin+' '+x.desc+' '+x.tipe).toLowerCase().includes(qs));
+  const tot=sum(all),done=sum(all.filter(x=>x.done)),bins=new Set(all.map(x=>x.bin)).size,arts=new Set(all.map(x=>x.g)).size;
+  const age=Math.floor((Date.now()-new Date(String(D.r.date).replace(' ','T')).getTime())/864e5);
+  let list='';
+  if(!all.length)list=`<div class="dp-empty tk-ok"><b>✓ Tidak ada barang dari daftar di toko</b><p>Inventory ${E(tgl(D.r.date))} (${nf(D.r.total)} baris) sudah dicek terhadap ${nf(nArt)} artikel.</p></div>`;
+  else if(!rows.length)list='<div class="dp-empty">Tidak ada yang cocok dengan pencarian.</div>';
+  else if(view.by==='bin'){
+   const G={};rows.forEach(x=>{(G[x.bin]||(G[x.bin]={bin:x.bin,z:x.z,cat:x.cat,a:[]})).a.push(x)});
+   list=Object.values(G).sort((a,b)=>zona(a.z)[1]-zona(b.z)[1]||a.bin.localeCompare(b.bin)).map(g=>{const left=sum(g.a.filter(x=>!x.done));
+    return `<div class="tk-g${left?'':' alldone'}"><div class="tk-gh"><span class="tk-bin big">${E(g.bin)}</span><span class="tk-z z${zona(g.z)[1]}">${E(zona(g.z)[0])}</span><em>${left?nf(left)+' pcs':'✓ selesai'}</em></div><ul>${g.a.sort((a,b)=>a.nm.localeCompare(b.nm)).map(x=>item(x,false)).join('')}</ul></div>`}).join('');
+  }else{
+   const G={};rows.forEach(x=>{(G[x.g]||(G[x.g]={g:x.g,nm:x.desc||x.nm.split(',')[0],tipe:x.tipe,a:[]})).a.push(x)});
+   list=Object.values(G).sort((a,b)=>sum(b.a)-sum(a.a)||a.nm.localeCompare(b.nm)).map(g=>{const left=sum(g.a.filter(x=>!x.done));
+    return `<div class="tk-g${left?'':' alldone'}"><div class="tk-gh"><b>${E(g.nm)}</b><small>${E(g.g)}${g.tipe?' · '+E(g.tipe):''}</small><em>${left?nf(left)+' pcs':'✓ selesai'}</em></div><ul>${g.a.sort((a,b)=>zona(a.z)[1]-zona(b.z)[1]||a.bin.localeCompare(b.bin)).map(x=>item(x,true)).join('')}</ul></div>`}).join('');
+  }
+  const seg=(k,l)=>`<button type="button" data-tkz="${k}" class="${view.z===k?'on':''}">${l}<small>${nf(sum(byZ[k]))} pcs</small></button>`;
+  body.innerHTML=`${all.length?`<div class="tk-kpi"><div class="${tot-done?'bad':'ok'}"><small>Harus di take out</small><b>${nf(tot-done)} pcs</b><span>dari ${nf(tot)} pcs · ${nf(arts)} artikel</span></div><div><small>Lokasi bin</small><b>${nf(bins)}</b><span>${nf(all.length)} baris SKU</span></div><div class="${done?'ok':''}"><small>Sudah diambil</small><b>${nf(done)} pcs</b><span>${tot?Math.round(done/tot*100):0}% selesai</span></div></div>`:''}
+   ${age>7?`<p class="tk-warn">Data inventory sudah ${age} hari. Upload inventory by bin terbaru agar daftar sesuai stok sekarang.</p>`:''}
+   ${all.length?`<div class="bc-seg tk-seg">${seg('all','Semua')}${seg('jual','Area jual')}${seg('gdg','Gudang')}${byZ.lain.length?seg('lain','Lainnya'):''}</div>
+   <div class="tk-flt"><input class="in" id="tkQ" type="search" placeholder="Cari nama, SKU atau bin" value="${E(view.q)}"><div class="tk-by" role="group" aria-label="Kelompokkan"><button type="button" data-tkby="bin" class="${view.by==='bin'?'on':''}">Per lokasi</button><button type="button" data-tkby="art" class="${view.by==='art'?'on':''}">Per artikel</button></div></div>`:''}
+   <div class="tk-list">${list}</div>${act}${foot(D)}`;
+ }
+ function foot(D){
+  const r=D&&D.r;
+  return `<div class="ks-act tk-act"><button class="btn" type="button" data-tk="inv">⇪ Upload inventory by bin</button>${r&&D.rows.length?'<button class="btn ghost" type="button" data-tk="xlsx">⤓ Excel</button>':''}${r&&D.rows.some(x=>x.done)?'<button class="btn ghost" type="button" data-tk="reset">Ulangi centang</button>':''}<button class="btn ghost" type="button" data-tk="manage">Kelola daftar</button></div>
+   ${r?`<p class="tk-src">Inventory: ${E(r.file)} · ${E(tgl(r.date))}${r.loc?' · '+E(r.loc):''} · dicek ${E(tgl(r.at))}</p>`:''}`;
+ }
+ function excel(){
+  const D=data();if(!D.r||!window.xlsxSimple)return;
+  const rows=D.rows.slice().sort((a,b)=>zona(a.z)[1]-zona(b.z)[1]||a.bin.localeCompare(b.bin)||a.nm.localeCompare(b.nm));
+  const A=[['No','Lokasi Bin','Zona','Kategori Bin','SKU Code','Nama Artikel','Generic','Tipe','Qty','Daftar','Sudah Diambil']].concat(rows.map((x,i)=>[i+1,x.bin,zona(x.z)[0],x.cat,x.sku,x.nm,x.g,x.tipe,x.q,x.lists.map(l=>l.alasan||l.nama).join(', '),x.done?'Ya':'']));
+  const G={};rows.forEach(x=>{const g=G[x.g]||(G[x.g]={g:x.g,nm:x.desc||x.nm.split(',')[0],tipe:x.tipe,j:0,w:0,o:0,b:{}});const k=grp(x.z);g[k==='jual'?'j':k==='gdg'?'w':'o']+=x.q;g.b[x.bin]=(g.b[x.bin]||0)+x.q});
+  const B=[['Generic','Artikel','Tipe','Area Jual','Gudang','Lainnya','Total','Lokasi']].concat(Object.values(G).sort((a,b)=>(b.j+b.w+b.o)-(a.j+a.w+a.o)).map(g=>[g.g,g.nm,g.tipe,g.j,g.w,g.o,g.j+g.w+g.o,Object.keys(g.b).map(k=>k+' ('+g.b[k]+')').join(', ')]));
+  const blob=xlsxSimple([{name:'Per Lokasi',head:1,widths:[5,16,13,15,15,38,12,14,6,14,13],rows:A},{name:'Per Artikel',head:1,widths:[12,34,14,10,9,9,8,50],rows:B}],'Take Out Artikel');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Take Out Artikel 7014 '+String(D.r.date).slice(0,10)+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel take out diunduh');
+ }
+
+ /* ---------- event ---------- */
+ const listIn=document.createElement('input');listIn.type='file';listIn.accept='.xlsx,.xls,.csv';listIn.hidden=true;box.appendChild(listIn);
+ const invIn=document.createElement('input');invIn.type='file';invIn.accept='.xlsx,.xls,.csv';invIn.hidden=true;box.appendChild(invIn);
+ listIn.onchange=()=>{const f=listIn.files[0];listIn.value='';if(f)addList(f)};
+ invIn.onchange=()=>{const f=invIn.files[0];invIn.value='';if(f)addInv(f)};
+ box.addEventListener('click',e=>{
+  const z=e.target.closest('[data-tkz]');if(z){view.z=z.dataset.tkz;return render()}
+  const by=e.target.closest('[data-tkby]');if(by){view.by=by.dataset.tkby;try{localStorage.setItem('ofa_tk_view',JSON.stringify({z:view.z,by:view.by}))}catch(x){}return render()}
+  const b=e.target.closest('[data-tk]');if(!b)return;const k=b.dataset.tk;
+  if(k==='inv'){msg='';return invIn.click()}
+  if(k==='list')return gate(()=>listIn.click());
+  if(k==='manage')return gate(manage);
+  if(k==='xlsx')return excel();
+  if(k==='reset'){if(!confirm('Hapus semua centang "sudah diambil"?'))return;const t=T();if(t.res){t.res.done={};save(t)}return render()}
+ });
+ box.addEventListener('change',e=>{
+  const c=e.target.closest('[data-tkck]');if(!c)return;const t=T();if(!t.res)return;t.res.done=t.res.done||{};
+  if(c.checked)t.res.done[c.dataset.tkck]=now();else delete t.res.done[c.dataset.tkck];save(t);render();
+ });
+ box.addEventListener('input',e=>{if(e.target.id!=='tkQ')return;view.q=e.target.value;const p=e.target.selectionStart;render();const i=$id('tkQ');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(x){}}});
+ // data dari perangkat lain (sinkron Hub) ikut tampil
+ let sig='';setInterval(()=>{const t=T(),s=JSON.stringify([t.lists.map(l=>l.id),t.res&&t.res.at,t.res&&Object.keys(t.res.done||{}).length]);if(s!==sig){sig=s;if(!document.activeElement||document.activeElement.id!=='tkQ')render()}},3000);
+ window.ofaTkRender=render;
+ render();
 })();
 </script>
 </body>
