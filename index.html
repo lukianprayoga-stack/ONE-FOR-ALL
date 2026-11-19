@@ -1923,6 +1923,73 @@ html.scrolled header{border-bottom-color:var(--line)}
 .tk-lb{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:8px 0 0}.tk-lb .in{margin-top:4px;width:100%}
 .tk-ml{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:8px}.tk-ml li{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:9px 11px}.tk-ml b{display:block;font-size:13.5px}.tk-ml small{display:block;color:var(--mut);font-size:12px;margin-top:2px}.tk-ml .btn{flex:none}
 @media (max-width:560px){#tko .tk-kpi{grid-template-columns:1fr 1fr}#tko .tk-kpi>div:first-child{grid-column:span 2}#tko .tk-kpi b{font-size:19px}}
+/* ====== BUKTI IKLAN & PAID PROMOTE ====== */
+#ikl .ik-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+#ikl .ik-top .btn{padding:9px 18px}
+.ik-mon{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px}
+.ik-mon b{font-size:14px;min-width:128px;text-align:center}
+.ik-mon button{border:0;background:transparent;color:var(--fg);width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer}
+.ik-mon button:hover:not(:disabled){background:var(--line)}.ik-mon button:disabled{opacity:.3;cursor:default}
+#ikl .ik-kpi{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;margin-top:10px}
+#ikl .ik-kpi>div{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg);min-width:0}
+#ikl .ik-kpi small{display:block;font-size:12px;color:var(--mut);font-weight:700}
+#ikl .ik-kpi b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}
+#ikl .ik-kpi span{display:block;font-size:12px;color:var(--mut)}
+#ikl .ik-kpi .ok b{color:var(--ok-fg)}
+#ikl .ik-kpi .warn{background:var(--warn-bg);border-color:transparent}#ikl .ik-kpi .warn b{color:var(--warn-fg)}
+#ikl .ik-kpi .bad{background:var(--bad-bg);border-color:transparent}#ikl .ik-kpi .bad b{color:var(--bad-fg)}
+.ik-bar{display:block;height:6px;border-radius:9px;background:color-mix(in srgb,var(--fg) 10%,transparent);margin-top:7px;overflow:hidden}
+.ik-bar>i{display:block;height:100%;border-radius:9px;background:var(--ok-fg)}
+.warn .ik-bar>i{background:var(--warn-fg)}.bad .ik-bar>i{background:var(--bad-fg)}
+.ik-lnk{border:0;background:none;padding:0;margin-top:2px;color:var(--blue,var(--acc));font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+#ikl .ik-list{display:grid;gap:8px;margin-top:12px}
+.ik-row{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:10px;border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg)}
+.ik-chip{font-size:11.5px;font-weight:800;padding:4px 8px;border-radius:8px;background:var(--line);color:var(--fg);min-width:52px;text-align:center}
+.ik-chip.c-meta{background:#e6efff;color:#1d4fb8}.ik-chip.c-tiktok{background:#111;color:#fff}.ik-chip.c-lokal{background:#e7f4ee;color:#1f6b4a}.ik-chip.c-google{background:#fff3df;color:#8a5a00}
+:root[data-theme=dark] .ik-chip.c-meta{background:#1d2c4a;color:#9cc0ff}:root[data-theme=dark] .ik-chip.c-tiktok{background:#f2f2f2;color:#111}:root[data-theme=dark] .ik-chip.c-lokal{background:#16352a;color:#8fd8b5}:root[data-theme=dark] .ik-chip.c-google{background:#3a2c10;color:#f0c46b}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .ik-chip.c-meta{background:#1d2c4a;color:#9cc0ff}:root:not([data-theme=light]) .ik-chip.c-tiktok{background:#f2f2f2;color:#111}:root:not([data-theme=light]) .ik-chip.c-lokal{background:#16352a;color:#8fd8b5}:root:not([data-theme=light]) .ik-chip.c-google{background:#3a2c10;color:#f0c46b}}
+.ik-main{min-width:0}.ik-main b{display:block;font-size:14px;overflow-wrap:anywhere}
+.ik-main small{display:block;font-size:12px;color:var(--mut);margin-top:1px}
+.ik-k{font-style:normal;color:var(--warn-fg);font-weight:700}.ik-ok{color:var(--ok-fg);font-weight:700}
+.ik-row>strong{font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ik-act{display:flex;gap:4px;align-items:center}
+.ik-act .btn{padding:7px 14px;font-size:12.5px}
+.ik-act button:not(.btn){border:0;background:transparent;color:var(--mut);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px}
+.ik-act button:not(.btn):hover{background:var(--line);color:var(--fg)}
+#ikl .ik-empty{padding:16px;border:1px dashed var(--line);border-radius:14px;margin-top:12px}
+#ikl .ik-empty b{display:block;font-size:15px;margin-bottom:4px}#ikl .ik-empty p{margin:0;color:var(--mut);font-size:13px;line-height:1.5;max-width:66ch}
+#ikl .ik-acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+#ikl .ik-acts .btn{padding:9px 16px;font-size:13px}
+#ikl .ik-note{margin:10px 0 0;font-size:12px;color:var(--mut)}
+@media(max-width:640px){
+ #ikl .ik-kpi{grid-template-columns:1fr 1fr}#ikl .ik-kpi>div:first-child{grid-column:1/-1}
+ .ik-row{grid-template-columns:auto 1fr auto;grid-template-areas:"c m s" "a a a"}
+ .ik-row>.ik-chip{grid-area:c;align-self:start}.ik-row>.ik-main{grid-area:m}.ik-row>strong{grid-area:s;align-self:start}
+ .ik-act{grid-area:a;justify-content:flex-end;border-top:1px solid var(--line);padding-top:6px}
+}
+/* form */
+.ik-seg{margin-bottom:12px}.ik-seg button{padding:8px 14px;font-size:13px}
+.ik-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ik-f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:700;color:var(--mut)}
+.ik-f .in{font-weight:500;color:var(--fg);font-size:14px}
+.ik-f.span2{grid-column:1/-1}.ik-hide{display:none}
+#ov .ik-f+.ik-f{margin-top:0}
+.ik-h{margin:16px 0 6px;font-weight:800;font-size:14px}.ik-h small{display:block;font-weight:500;font-size:12px;color:var(--mut);margin-top:2px}
+.ik-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ik-slot{position:relative;border:1.5px dashed var(--line);border-radius:12px;padding:8px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;text-align:center;cursor:pointer;background:var(--bg);overflow:hidden}
+.ik-slot:hover,.ik-slot:focus-visible{border-color:var(--acc);outline:none}
+.ik-slot.has{border-style:solid}
+.ik-slot img{position:absolute;inset:0 0 40px;width:100%;height:calc(100% - 40px);object-fit:contain;background:color-mix(in srgb,var(--fg) 4%,transparent)}
+.ik-slot b{font-size:12px;line-height:1.25;color:var(--fg);position:relative}
+.ik-slot small{font-size:11px;color:var(--mut);position:relative}
+.ik-plus{font-size:28px;color:var(--mut);margin:auto 0}.ik-sp{font-size:12px;color:var(--mut);margin:auto 0}
+.ik-x{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.62);color:#fff;font-size:12px;cursor:pointer;z-index:1}
+.ik-err{margin:10px 0 0;color:var(--bad-fg);font-size:13px;font-weight:600;min-height:1em}
+.ik-err:empty{display:none}
+.ik-fbtn{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}
+.ik-fbtn .btn{padding:10px 18px}
+.ik-del{background:var(--bad-fg)!important;color:#fff!important}
+@media(max-width:640px){.ik-grid{grid-template-columns:1fr}.ik-slots{grid-template-columns:1fr 1fr}.ik-fbtn .btn{flex:1}}
 
 /* ===== UX tahap 1 ===== */
 .hero .stats{display:none}
@@ -2287,6 +2354,10 @@ body[data-pg]:not([data-pg="0"]) .hero .hello,body[data-pg]:not([data-pg="0"]) .
         <section class="rs" id="bg" data-subg="uang" aria-label="Rekap budget">
           <div class="sh-head"><div><h3>Rekap Budget</h3><p id="bgSub">Pengajuan &amp; realisasi budget bulanan kas regional</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="bgCfg" aria-label="Pengaturan rekap budget">⚙</button></div></div>
           <div id="bgBody"></div>
+        </section>
+        <section class="rs span-all" id="ikl" data-subg="uang" aria-label="Bukti iklan dan paid promote">
+          <div class="sh-head"><div><h3>Bukti Iklan &amp; Paid Promote</h3><p id="iklSub">Realisasi budget / petty cash iklan ADS dan paid promote lokal</p></div></div>
+          <div id="iklBody"></div>
         </section>
         <section class="rs span-all" id="lb" data-subg="kry" aria-label="Kalkulator lembur">
           <div class="sh-head"><div><h3>Kalkulator Lembur</h3><p id="lbSub">Hitung upah lembur sesuai PP 35/2021</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" id="lbCfg" aria-label="Pengaturan kalkulator lembur">⚙</button></div></div>
@@ -11953,6 +12024,321 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  // data dari perangkat lain (sinkron Hub) ikut tampil
  let sig='';setInterval(()=>{const t=T(),s=JSON.stringify([t.lists.map(l=>l.id),t.res&&t.res.at,t.res&&Object.keys(t.res.done||{}).length]);if(s!==sig){sig=s;if(!document.activeElement||document.activeElement.id!=='tkQ')render()}},3000);
  window.ofaTkRender=render;
+ render();
+})();
+</script>
+<script>
+/* ====== BUKTI IKLAN & PAID PROMOTE: realisasi budget / petty cash iklan ADS (Meta/TikTok) & paid promote lokal ======
+   Data ringkas di localStorage (ofa_iklan), foto bukti di IndexedDB (ofa_iklan/img) — semuanya tetap di perangkat ini. */
+(function(){
+ const box=document.getElementById('ikl');if(!box)return;
+ const $id=i=>document.getElementById(i),body=$id('iklBody'),sub=$id('iklSub');
+ const K='ofa_iklan',BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const BLS=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const nf=v=>Math.round(Number(v)||0).toLocaleString('id-ID'),rp=v=>'Rp'+nf(v);
+ const num=v=>Number(String(v==null?'':v).replace(/[^\d]/g,''))||0;
+ const p2=n=>('0'+n).slice(-2),today=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+ const perL=k=>BULAN[+k.slice(5,7)-1]+' '+k.slice(0,4);
+ const tglL=s=>{const p=String(s||'').split('-').map(Number);return p[2]?p[2]+' '+BULAN[p[1]-1]+' '+p[0]:''};
+ const tglS=s=>{const p=String(s||'').split('-').map(Number);return p[2]?p[2]+' '+BLS[p[1]-1]+' '+p[0]:''};
+ function periode(a,b){
+  if(!a)return '';if(!b||b===a)return tglL(a);
+  const x=a.split('-').map(Number),y=b.split('-').map(Number);
+  if(x[0]===y[0]&&x[1]===y[1])return x[2]+'–'+y[2]+' '+BULAN[x[1]-1]+' '+x[0];
+  if(x[0]===y[0])return x[2]+' '+BLS[x[1]-1]+' – '+y[2]+' '+BLS[y[1]-1]+' '+x[0];
+  return tglS(a)+' – '+tglS(b);
+ }
+ function terbilang(n){
+  const s=['','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas'];
+  const f=x=>x<12?s[x]:x<20?f(x-10)+' belas':x<100?f(Math.floor(x/10))+' puluh '+f(x%10):x<200?'seratus '+f(x-100):x<1000?f(Math.floor(x/100))+' ratus '+f(x%100):
+   x<2000?'seribu '+f(x-1000):x<1e6?f(Math.floor(x/1000))+' ribu '+f(x%1000):x<1e9?f(Math.floor(x/1e6))+' juta '+f(x%1e6):x<1e12?f(Math.floor(x/1e9))+' miliar '+f(x%1e9):f(Math.floor(x/1e12))+' triliun '+f(x%1e12);
+  const t=(f(Math.floor(Math.abs(Number(n)||0))).replace(/\s+/g,' ').trim()||'nol')+' rupiah';
+  return t.replace(/\b\w/g,c=>c.toUpperCase());
+ }
+ const toast=t=>window.ofaToast&&window.ofaToast(t);
+ const gate=fn=>window.ofaHeadGate?window.ofaHeadGate(fn):fn();
+ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+ /* ---------- jenis, platform, slot foto ---------- */
+ const JENIS={ads:{l:'Iklan ADS',judul:'BUKTI PEMBAYARAN IKLAN',plat:['Facebook Ads Manager','Instagram Ads (Meta)','TikTok Promote','TikTok Ads Manager','Google Ads']},
+  lok:{l:'Paid promote lokal',judul:'BUKTI PEMBAYARAN PAID PROMOTE',plat:['Instagram','TikTok','Facebook','YouTube','WhatsApp grup','Radio / media lokal']}};
+ const SLOT={ads:[['iklan','Pratinjau iklan',1],['trf','Bukti transfer',1],['aktif','Bukti iklan aktif',0],['inv','Invoice pembayaran',1]],
+  lok:[['iklan','Postingan promo',1],['trf','Bukti transfer',1],['aktif','Bukti tayang / insight',0],['inv','Invoice / kuitansi',0]]};
+ const chip=x=>/tiktok/i.test(x.plat)?'TikTok':/facebook|instagram|meta/i.test(x.plat)&&x.jenis==='ads'?'Meta':/google/i.test(x.plat)?'Google':x.jenis==='lok'?'Lokal':'Iklan';
+ const kurang=x=>SLOT[x.jenis].filter(s=>s[2]&&!(x.img||{})[s[0]]).map(s=>s[1].toLowerCase());
+
+ /* ---------- data ---------- */
+ let db;try{db=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
+ if(!db||!Array.isArray(db.items))db={items:[],budget:{},cfg:{}};
+ db.budget=db.budget||{};db.cfg=db.cfg||{};
+ const save=()=>{try{localStorage.setItem(K,JSON.stringify(db))}catch(e){toast('Penyimpanan perangkat penuh')}};
+ const reg=()=>window.HUBST&&window.HUBST.reg||{};
+ const cfg=()=>({site:db.cfg.site||reg().site||'7014',toko:db.cfg.toko||reg().toko||'EIGER Store Soekarno Solo Baru',kota:db.cfg.kota||'Sukoharjo'});
+ let cur=today().slice(0,7);
+ const ym=x=>String(x.bayar||x.mulai||'').slice(0,7);
+ const bulanIni=()=>db.items.filter(x=>ym(x)===cur).sort((a,b)=>(a.bayar||'').localeCompare(b.bayar||'')||(a.at||0)-(b.at||0));
+
+ const IDB=(()=>{let p;
+  const open=()=>p||(p=new Promise((ok,no)=>{const r=indexedDB.open('ofa_iklan',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}));
+  const tx=(m,f)=>open().then(d=>new Promise((ok,no)=>{const t=d.transaction('img',m),q=f(t.objectStore('img'));t.oncomplete=()=>ok(q&&q.result);t.onerror=t.onabort=()=>no(t.error||new Error('Gagal menyimpan foto'))}));
+  return {get:k=>tx('readonly',s=>s.get(k)),put:(k,v)=>tx('readwrite',s=>s.put(v,k)),del:k=>tx('readwrite',s=>s.delete(k))};
+ })();
+
+ /* ---------- olah gambar: PDF halaman 1 / foto → potong tepi polos → JPEG ≤1600px ---------- */
+ function loadJs(src,ok){return ok()?Promise.resolve():new Promise((res,no)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>no(new Error('Pembaca PDF gagal dimuat. Periksa koneksi, atau kirim screenshot invoice.'));document.head.appendChild(s)})}
+ async function pdfCanvas(f){
+  const V='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/';
+  await loadJs(V+'pdf.min.js',()=>window.pdfjsLib);
+  pdfjsLib.GlobalWorkerOptions.workerSrc=V+'pdf.worker.min.js';
+  const doc=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,pg=await doc.getPage(1);
+  const v0=pg.getViewport({scale:1}),v=pg.getViewport({scale:1500/v0.width});
+  const c=document.createElement('canvas');c.width=Math.round(v.width);c.height=Math.round(v.height);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+  await pg.render({canvasContext:x,viewport:v}).promise;c._hal=doc.numPages;return c;
+ }
+ async function imgCanvas(f){
+  const u=URL.createObjectURL(f);
+  try{const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(new Error('File ini bukan gambar yang bisa dibaca'));i.src=u});
+   const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0);return c}
+  finally{URL.revokeObjectURL(u)}
+ }
+ function trim(c){
+  const s=Math.min(1,700/Math.max(c.width,c.height)),w=Math.max(1,Math.round(c.width*s)),h=Math.max(1,Math.round(c.height*s));
+  const t=document.createElement('canvas');t.width=w;t.height=h;const x=t.getContext('2d');x.drawImage(c,0,0,w,h);
+  const d=x.getImageData(0,0,w,h).data,bg=[d[0],d[1],d[2]];
+  const beda=(i,j)=>{const k=(j*w+i)*4;return Math.abs(d[k]-bg[0])+Math.abs(d[k+1]-bg[1])+Math.abs(d[k+2]-bg[2])>42};
+  const baris=j=>{let n=0;for(let i=0;i<w;i++)if(beda(i,j)&&++n>2)return true;return false};
+  let a=0,b=h-1;while(a<b&&!baris(a))a++;while(b>a&&!baris(b))b--;
+  const kol=i=>{let n=0;for(let j=a;j<=b;j++)if(beda(i,j)&&++n>2)return true;return false};
+  let l=0,r=w-1;while(l<r&&!kol(l))l++;while(r>l&&!kol(r))r--;
+  if((r-l)<w*.2||(b-a)<h*.15)return c;
+  const pd=6,X=Math.max(0,Math.floor((l-pd)/s)),Y=Math.max(0,Math.floor((a-pd)/s)),W=Math.min(c.width,Math.ceil((r+pd)/s))-X,H=Math.min(c.height,Math.ceil((b+pd)/s))-Y;
+  if(W>=c.width*.98&&H>=c.height*.98)return c;
+  const o=document.createElement('canvas');o.width=W;o.height=H;o.getContext('2d').drawImage(c,X,Y,W,H,0,0,W,H);return o;
+ }
+ async function olah(f){
+  const pdf=/pdf/i.test(f.type)||/\.pdf$/i.test(f.name||'');
+  let c=pdf?await pdfCanvas(f):await imgCanvas(f);const hal=c._hal||1;c=trim(c);
+  const s=Math.min(1,1600/Math.max(c.width,c.height));
+  if(s<1){const o=document.createElement('canvas');o.width=Math.round(c.width*s);o.height=Math.round(c.height*s);const x=o.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(c,0,0,o.width,o.height);c=o}
+  const blob=await new Promise(ok=>c.toBlob(ok,'image/jpeg',.86));
+  if(!blob)throw new Error('Gambar gagal diproses');
+  blob._hal=hal;return blob;
+ }
+
+ /* ---------- kartu ---------- */
+ function render(){
+  const it=bulanIni(),tot=it.reduce((a,x)=>a+(Number(x.nom)||0),0),bud=Number(db.budget[cur])||0;
+  const ads=it.filter(x=>x.jenis==='ads').reduce((a,x)=>a+(+x.nom||0),0),lok=tot-ads;
+  const c=cfg();sub.textContent='Realisasi budget iklan '+perL(cur)+' · site '+c.site;
+  const pct=bud?tot/bud:0,cls=!bud?'':pct>1?'bad':pct>=.9?'warn':'ok';
+  const now=today().slice(0,7);
+  const kpi=`<div class="ik-kpi">
+   <div class="${cls}"><small>Terpakai</small><b>${rp(tot)}</b><span>${it.length} bukti · ADS ${rp(ads)} · lokal ${rp(lok)}</span>${bud?`<i class="ik-bar"><i style="width:${Math.min(100,pct*100).toFixed(1)}%"></i></i>`:''}</div>
+   <div><small>Budget bulan ini</small><b>${bud?rp(bud):'–'}</b><button type="button" class="ik-lnk" data-ik="budget">${bud?'Ubah budget':'Isi budget'}</button></div>
+   <div class="${cls==='bad'?'bad':''}"><small>${bud&&tot>bud?'Lebih dari budget':'Sisa budget'}</small><b>${bud?rp(Math.abs(bud-tot)):'–'}</b><span>${bud?Math.round(pct*100)+'% terpakai':'Isi budget untuk melihat sisa'}</span></div></div>`;
+  const list=it.length?`<div class="ik-list">${it.map(x=>{const k=kurang(x);return `<div class="ik-row">
+    <span class="ik-chip c-${chip(x).toLowerCase()}">${chip(x)}</span>
+    <div class="ik-main"><b>${E(x.tema)}</b><small>${E(x.plat)}${x.akun?' · '+E(x.akun):''} · tayang ${E(periode(x.mulai,x.selesai))}</small>
+     <small>Dibayar ${E(tglS(x.bayar))}${x.pe?' · '+E(x.pe):''}${k.length?` · <em class="ik-k">Belum ada ${E(k.join(', '))}</em>`:' · <span class="ik-ok">Lengkap</span>'}</small></div>
+    <strong>${rp(x.nom)}</strong>
+    <span class="ik-act"><button type="button" class="btn ghost" data-ik="pdf:${x.id}">Cetak</button><button type="button" data-ik="ubah:${x.id}" aria-label="Ubah bukti ${E(x.tema)}">✎</button><button type="button" data-ik="hapus:${x.id}" aria-label="Hapus bukti ${E(x.tema)}">✕</button></span></div>`}).join('')}</div>`
+   :`<div class="ik-empty"><b>Belum ada bukti iklan di ${perL(cur)}</b><p>Tambahkan setiap pembayaran iklan Meta/TikTok atau paid promote lokal. Lampirkan screenshot iklan, bukti transfer, dan invoice. Hub menyusunnya jadi satu halaman A4 siap cetak untuk pertanggungjawaban petty cash.</p></div>`;
+  body.innerHTML=`<div class="ik-top"><div class="ik-mon"><button type="button" data-ik="prev" aria-label="Bulan sebelumnya">‹</button><b>${perL(cur)}</b><button type="button" data-ik="next" aria-label="Bulan berikutnya" ${cur>=now?'disabled':''}>›</button></div>
+   <button type="button" class="btn" data-ik="baru">+ Bukti baru</button></div>${kpi}${list}
+   ${it.length?`<div class="ik-acts"><button type="button" class="btn ghost" data-ik="semua">Cetak semua + rekap (PDF)</button><button type="button" class="btn ghost" data-ik="xlsx">Excel rekap</button><button type="button" class="ik-lnk" data-ik="cfg">Kop toko</button></div>`:`<div class="ik-acts"><button type="button" class="ik-lnk" data-ik="cfg">Kop toko</button></div>`}
+   <p class="ik-note">Foto bukti disimpan di perangkat ini saja.</p>`;
+ }
+ const geser=d=>{const [y,m]=cur.split('-').map(Number),t=new Date(y,m-1+d,1);cur=t.getFullYear()+'-'+p2(t.getMonth()+1);render()};
+
+ /* ---------- form bukti ---------- */
+ let F=null;
+ function urlOf(b){if(!b)return '';if(!b._u)b._u=URL.createObjectURL(b);return b._u}
+ function form(id){
+  const x0=id?db.items.find(x=>x.id===id):null;
+  F={id:id||null,x:Object.assign({jenis:'ads',plat:'',akun:'',penerima:'',tema:'',mulai:'',selesai:'',bayar:today(),nom:0,pe:'',cat:''},x0||{}),img:{},hapus:{},busy:{}};
+  if(!x0&&cur!==today().slice(0,7))F.x.bayar=cur+'-01';
+  openModal(id?'Ubah bukti iklan':'Bukti iklan baru','<div id="ikF"></div>');
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>{pn.classList.remove('wide');F=null}}
+  drawForm();
+  if(x0)Object.keys(x0.img||{}).forEach(k=>IDB.get(x0.id+':'+k).then(b=>{if(b&&F&&F.id===x0.id&&!F.img[k]){F.img[k]=b;drawSlots()}}).catch(()=>{}));
+ }
+ function baca(){
+  if(!F||!$id('ikTema'))return;const v=i=>($id(i)||{}).value||'';
+  Object.assign(F.x,{plat:v('ikPlat').trim(),akun:v('ikAkun').trim(),penerima:v('ikPen').trim(),tema:v('ikTema').trim(),mulai:v('ikMul'),selesai:v('ikSel'),bayar:v('ikBay'),nom:num(v('ikNom')),pe:v('ikPe').trim(),cat:v('ikCat').trim()});
+ }
+ function drawForm(){
+  const x=F.x,J=JENIS[x.jenis],lok=x.jenis==='lok',f=$id('ikF');if(!f)return;
+  f.innerHTML=`<div class="seg ik-seg" role="group" aria-label="Jenis pembayaran">${Object.keys(JENIS).map(k=>`<button type="button" data-ikj="${k}" class="${x.jenis===k?'on':''}">${JENIS[k].l}</button>`).join('')}</div>
+  <div class="ik-grid">
+   <label class="ik-f span2"><span>Tema / nama kampanye</span><input class="in" id="ikTema" value="${E(x.tema)}" placeholder="mis. PROMO BUY 1 DISC 5% BUY 2 DISC 10%" maxlength="120"></label>
+   <label class="ik-f"><span>Platform</span><input class="in" id="ikPlat" list="ikPlL" value="${E(x.plat)}" placeholder="${lok?'mis. Instagram':'mis. Facebook Ads Manager'}" maxlength="60"><datalist id="ikPlL">${J.plat.map(p=>`<option value="${E(p)}">`).join('')}</datalist></label>
+   <label class="ik-f"><span>${lok?'Akun / media promote':'Akun iklan (opsional)'}</span><input class="in" id="ikAkun" value="${E(x.akun)}" placeholder="${lok?'mis. @infosolobaru':'mis. Eiger Soekarno'}" maxlength="60"></label>
+   <label class="ik-f"><span>Mulai tayang</span><input class="in" type="date" id="ikMul" value="${E(x.mulai)}"></label>
+   <label class="ik-f"><span>Selesai tayang</span><input class="in" type="date" id="ikSel" value="${E(x.selesai)}"></label>
+   <label class="ik-f"><span>Tanggal bayar</span><input class="in" type="date" id="ikBay" value="${E(x.bayar)}"></label>
+   <label class="ik-f"><span>Total dibayar (termasuk PPN)</span><input class="in" id="ikNom" inputmode="numeric" value="${x.nom?nf(x.nom):''}" placeholder="mis. 100.000"></label>
+   <label class="ik-f"><span>No. PE / voucher (opsional)</span><input class="in" id="ikPe" value="${E(x.pe)}" placeholder="mis. PE-232" maxlength="30"></label>
+   <label class="ik-f ${lok?'':'ik-hide'}"><span>Nama penerima (untuk kuitansi)</span><input class="in" id="ikPen" value="${E(x.penerima)}" placeholder="nama pemilik akun / vendor" maxlength="60"></label>
+   <label class="ik-f span2"><span>Catatan (opsional)</span><input class="in" id="ikCat" value="${E(x.cat)}" maxlength="140" placeholder="mis. target area Solo Raya, 4 hari"></label>
+  </div>
+  <p class="ik-h">Lampiran <small>Ketuk kotak untuk memilih foto atau PDF. Di komputer, screenshot juga bisa langsung ditempel (Ctrl+V).</small></p>
+  <div class="ik-slots" id="ikSlots"></div>
+  <p class="ik-err" id="ikErr" role="alert"></p>
+  <div class="ik-fbtn"><button type="button" class="btn ghost" data-ikf="batal">Batal</button><button type="button" class="btn" data-ikf="simpan">Simpan</button><button type="button" class="btn ghost" data-ikf="simpanpdf">Simpan &amp; cetak</button></div>
+  <input type="file" id="ikFile" accept="image/*,application/pdf" hidden>`;
+  drawSlots();
+ }
+ function drawSlots(){
+  const el=$id('ikSlots');if(!el||!F)return;const lok=F.x.jenis==='lok';
+  el.innerHTML=SLOT[F.x.jenis].map(([k,l,w])=>{const b=F.img[k];return `<div class="ik-slot ${b?'has':''}" data-iks="${k}" tabindex="0" role="button" aria-label="${E(l)}${b?' (sudah ada, ketuk untuk ganti)':''}">
+   ${b?`<img src="${urlOf(b)}" alt="">`:F.busy[k]?'<span class="ik-sp">Memproses…</span>':`<span class="ik-plus">+</span>`}
+   <b>${E(l)}</b><small>${w?'Wajib':k==='inv'&&lok?'Kosong = kuitansi otomatis':'Opsional'}</small>
+   ${b?`<button type="button" class="ik-x" data-ikx="${k}" aria-label="Hapus ${E(l)}">✕</button>`:''}</div>`}).join('');
+ }
+ let slotAktif='';
+ async function pasang(k,f){
+  if(!F||!f)return;F.busy[k]=1;drawSlots();
+  try{const b=await olah(f);if(!F)return;if(F.img[k]&&F.img[k]._u)URL.revokeObjectURL(F.img[k]._u);F.img[k]=b;delete F.hapus[k];
+   if(b._hal>1)toast('PDF '+b._hal+' halaman: yang dipakai halaman pertama')}
+  catch(e){const er=$id('ikErr');if(er)er.textContent=e.message||'File gagal dibaca'}
+  finally{if(F){delete F.busy[k];drawSlots()}}
+ }
+ async function simpan(cetakJuga){
+  baca();const x=F.x,er=$id('ikErr');
+  const salah=!x.tema?'Isi tema / nama kampanye.':!x.plat?'Isi platform.':!x.bayar?'Isi tanggal bayar.':!(x.nom>0)?'Isi total yang dibayar.':x.mulai&&x.selesai&&x.selesai<x.mulai?'Tanggal selesai tayang lebih awal dari mulai.':x.jenis==='lok'&&!x.akun?'Isi akun / media promote.':'';
+  if(salah){er.textContent=salah;return}
+  if(Object.keys(F.busy).length){er.textContent='Tunggu lampiran selesai diproses.';return}
+  const id=F.id||uid(),it=Object.assign({},x,{id,at:x.at||Date.now(),img:{}});
+  try{
+   for(const [k] of SLOT.ads){
+    if(F.img[k]){if(!F.img[k]._disimpan){await IDB.put(id+':'+k,F.img[k]);F.img[k]._disimpan=1}it.img[k]=1}
+    else if(F.id)await IDB.del(id+':'+k).catch(()=>{});
+   }
+  }catch(e){er.textContent='Foto gagal disimpan di perangkat: '+(e.message||e);return}
+  const i=db.items.findIndex(z=>z.id===id);if(i>=0)db.items[i]=it;else db.items.push(it);
+  save();cur=ym(it)||cur;F=null;close();render();
+  const k=kurang(it);toast(k.length?'Tersimpan. Belum ada '+k.join(', '):'Bukti iklan tersimpan');
+  if(cetakJuga)cetak([it]);
+ }
+
+ /* ---------- cetak PDF ---------- */
+ async function blobs(items){const m={};for(const x of items)for(const k of Object.keys(x.img||{})){try{const b=await IDB.get(x.id+':'+k);if(b)m[x.id+':'+k]=URL.createObjectURL(b)}catch(e){}}return m}
+ const CSS=`@page{size:A4;margin:8mm}*{box-sizing:border-box}html,body{margin:0;font:10pt/1.35 Arial,Helvetica,sans-serif;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pg{height:280mm;display:flex;flex-direction:column;border:1.2px solid #2b2b2b;page-break-after:always;break-after:page;overflow:hidden}.pg:last-child{page-break-after:auto;break-after:auto}
+.ttl{background:#8fb5a7;text-align:center;font-weight:700;font-size:13pt;letter-spacing:.4px;padding:2.2mm 0;border-bottom:1.2px solid #2b2b2b}
+.hd{display:flex;border-bottom:1.2px solid #2b2b2b}.hd table{flex:1;border-collapse:collapse}.hd th,.hd td{border-bottom:.6px solid #9a9a9a;padding:1.2mm 2.5mm;text-align:left;font-size:9.5pt;vertical-align:top}
+.hd tr:last-child th,.hd tr:last-child td{border-bottom:0}.hd th{width:34mm;font-weight:700;border-right:.6px solid #9a9a9a;background:#f1f5f3}.hd td{font-weight:600}
+.pe{width:44mm;border-left:1.2px solid #2b2b2b;display:flex;flex-direction:column}.pe small{font-size:7.5pt;color:#555;padding:1.2mm 2mm 0}.pe b{font-size:12pt;padding:0 2mm 1.2mm;min-height:7mm;border-bottom:.6px solid #9a9a9a}.pe span{flex:1;font-size:7.5pt;color:#555;padding:1.2mm 2mm}
+.bar{background:#8fb5a7;text-align:center;font-weight:700;font-size:9.5pt;padding:1.2mm 0;border-bottom:1.2px solid #2b2b2b;border-top:1.2px solid #2b2b2b}
+.r2{display:flex;height:100mm}.r2>.c{flex:1;display:flex;flex-direction:column}.r2>.c+.c{border-left:1.2px solid #2b2b2b}.r2 .bar{border-top:0}
+.c{display:flex;flex-direction:column;min-height:0}.im{flex:1;display:flex;align-items:center;justify-content:center;padding:2mm;min-height:0;overflow:hidden}.im img{max-width:100%;max-height:100%;object-fit:contain}
+.ak{height:34mm}.inv{flex:1}.inv .im{align-items:flex-start}
+.kosong{color:#999;font-size:9pt;border:1px dashed #bbb;border-radius:2mm;padding:6mm 8mm;text-align:center}
+.ft{display:flex;justify-content:space-between;gap:4mm;border-top:1.2px solid #2b2b2b;padding:1.5mm 2.5mm;font-size:8pt;color:#444}.ft b{color:#111}
+.kw{width:100%;max-width:168mm;border:1px solid #444;padding:4mm 5mm;font-size:10pt;align-self:flex-start;margin:0 auto}.kw h4{margin:0 0 3mm;text-align:center;letter-spacing:3px;font-size:13pt}
+.kw table{width:100%;border-collapse:collapse}.kw td{padding:1.2mm 0;vertical-align:top}.kw td:first-child{width:38mm;color:#333}.kw td:nth-child(2){width:4mm}.kw .tb{font-style:italic;background:#f1f5f3;padding:1.2mm 2mm}
+.kw .bw{display:flex;justify-content:space-between;align-items:flex-end;margin-top:4mm}.kw .nom{font-size:13pt;font-weight:700;border:1.2px solid #222;padding:2mm 4mm}.kw .tt{text-align:center;min-width:58mm}.kw .tt .ln{height:20mm;position:relative}.kw .mat{position:absolute;left:4mm;top:3mm;width:18mm;height:14mm;border:1px dashed #999;font-size:7pt;color:#999;display:flex;align-items:center;justify-content:center}.kw .tt b{display:block;border-top:1px solid #222;padding-top:1mm;font-weight:600}
+.rk h2{margin:0 0 1mm;font-size:14pt;text-align:center}.rk .sb{text-align:center;color:#444;margin-bottom:5mm}.rk table.t{width:100%;border-collapse:collapse;font-size:9pt}.rk .t th,.rk .t td{border:.6px solid #555;padding:1.6mm 2mm;text-align:left;vertical-align:top}.rk .t th{background:#8fb5a7}.rk .t td.n,.rk .t th.n{text-align:right;white-space:nowrap}.rk .t tfoot td{font-weight:700;background:#f1f5f3}
+.rk{padding:8mm 8mm 6mm}.rk.pg{border:0}.rk .sg{display:flex;justify-content:space-around;margin-top:14mm;text-align:center}.rk .sg div{min-width:52mm}.rk .sg .ln{height:22mm}.rk .sg b{display:block;border-top:1px solid #222;padding-top:1mm;font-weight:600}`;
+ function halaman(x,U){
+  const c=cfg(),J=JENIS[x.jenis],S=SLOT[x.jenis],lok=x.jenis==='lok';
+  const img=k=>U[x.id+':'+k]?`<img src="${U[x.id+':'+k]}" alt="">`:`<div class="kosong">${E((S.find(s=>s[0]===k)||[])[1]||'')} belum dilampirkan</div>`;
+  const kuit=lok&&!U[x.id+':inv'];
+  const kw=`<div class="kw"><h4>KUITANSI</h4><table>
+   <tr><td>No.</td><td>:</td><td>${E(x.pe||'-')}</td></tr>
+   <tr><td>Sudah terima dari</td><td>:</td><td><b>${E(c.toko)} (${E(c.site)})</b></td></tr>
+   <tr><td>Uang sejumlah</td><td>:</td><td class="tb">${E(terbilang(x.nom))}</td></tr>
+   <tr><td>Untuk pembayaran</td><td>:</td><td>Jasa paid promote ${E(x.plat)}${x.akun?' '+E(x.akun):''} — ${E(x.tema)}${x.mulai?', tayang '+E(periode(x.mulai,x.selesai)):''}</td></tr></table>
+   <div class="bw"><div class="nom">${rp(x.nom)}</div><div class="tt">${E(c.kota)}, ${E(tglL(x.bayar))}<br>Penerima,<div class="ln">${x.nom>=5e6?'<span class="mat">Meterai</span>':''}</div><b>${E(x.penerima||'(.................................)')}</b></div></div></div>`;
+  const rows=[['SITE',c.site],['STORE NAME',c.toko],['TEMA',x.tema],['PLATFORM',x.plat+(x.akun?' · '+x.akun:'')],['PERIODE',periode(x.mulai,x.selesai)||'-'],['TOTAL DIBAYAR',rp(x.nom)+' · dibayar '+tglL(x.bayar)]];
+  return `<section class="pg"><div class="ttl">${J.judul}</div>
+  <div class="hd"><table>${rows.map(r=>`<tr><th>${r[0]}</th><td>${E(r[1])}</td></tr>`).join('')}</table><div class="pe"><small>No. PE / voucher</small><b>${E(x.pe)}</b><span>Paraf</span></div></div>
+  <div class="r2" style="${U[x.id+':aktif']?'':'height:116mm'}"><div class="c"><div class="bar">${lok?'POSTINGAN PROMO':'PRATINJAU IKLAN'}</div><div class="im">${img('iklan')}</div></div><div class="c"><div class="bar">BUKTI TRANSFER</div><div class="im">${img('trf')}</div></div></div>
+  ${U[x.id+':aktif']?`<div class="c ak"><div class="bar">${lok?'BUKTI TAYANG':'BUKTI IKLAN AKTIF'}</div><div class="im">${img('aktif')}</div></div>`:''}
+  <div class="c inv"><div class="bar">${kuit?'KUITANSI PEMBAYARAN':'INVOICE PEMBAYARAN'}</div><div class="im">${kuit?kw:img('inv')}</div></div>
+  <div class="ft"><span>${x.cat?E(x.cat):'Terbilang: '+E(terbilang(x.nom))}</span><span>Dicetak ${E(tglL(today()))}</span></div></section>`;
+ }
+ function rekap(items){
+  const c=cfg(),tot=items.reduce((a,x)=>a+(+x.nom||0),0),bud=Number(db.budget[cur])||0;
+  return `<section class="pg rk"><h2>REALISASI BUDGET IKLAN &amp; PAID PROMOTE</h2><div class="sb">${E(c.toko)} · site ${E(c.site)} · periode ${E(perL(cur))}</div>
+  <table class="t"><thead><tr><th>No</th><th>Tgl bayar</th><th>Jenis</th><th>Platform / akun</th><th>Tema</th><th>Periode tayang</th><th>No. PE</th><th class="n">Nominal</th></tr></thead>
+  <tbody>${items.map((x,i)=>`<tr><td>${i+1}</td><td>${E(tglS(x.bayar))}</td><td>${x.jenis==='ads'?'ADS':'Paid promote'}</td><td>${E(x.plat)}${x.akun?'<br>'+E(x.akun):''}</td><td>${E(x.tema)}</td><td>${E(periode(x.mulai,x.selesai)||'-')}</td><td>${E(x.pe||'-')}</td><td class="n">${rp(x.nom)}</td></tr>`).join('')}</tbody>
+  <tfoot><tr><td colspan="7">Total realisasi</td><td class="n">${rp(tot)}</td></tr>${bud?`<tr><td colspan="7">Budget ${E(perL(cur))}</td><td class="n">${rp(bud)}</td></tr><tr><td colspan="7">${tot>bud?'Lebih dari budget':'Sisa budget'}</td><td class="n">${rp(Math.abs(bud-tot))}</td></tr>`:''}</tfoot></table>
+  <p style="margin:3mm 0 0;font-size:9pt">Terbilang: <i>${E(terbilang(tot))}</i>. Bukti pembayaran terlampir (${items.length} halaman).</p>
+  <div class="sg"><div>Dibuat oleh,<div class="ln"></div><b>Store Head</b></div><div>Diperiksa oleh,<div class="ln"></div><b>&nbsp;</b></div><div>Disetujui oleh,<div class="ln"></div><b>&nbsp;</b></div></div></section>`;
+ }
+ async function cetak(items,denganRekap){
+  if(!items.length)return toast('Tidak ada bukti untuk dicetak');
+  toast('Menyiapkan PDF…');
+  const U=await blobs(items);
+  const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>${E(items.length>1?'Realisasi Iklan '+perL(cur)+' '+cfg().site:'Bukti Iklan '+items[0].tema)}</title><style>${CSS}</style></head><body>
+${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
+<script>window.onload=()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r}))).then(()=>setTimeout(()=>{window.focus();window.print()},250))<\/script></body></html>`;
+  const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';fr.setAttribute('aria-hidden','true');
+  document.body.appendChild(fr);fr.srcdoc=html;window.__ikPdf=html;
+  setTimeout(()=>{fr.remove();Object.values(U).forEach(u=>URL.revokeObjectURL(u))},180000);
+  toast('Pilih "Simpan sebagai PDF" atau printer di jendela cetak');
+ }
+ function excel(){
+  const it=bulanIni();if(!it.length||!window.xlsxSimple)return;const c=cfg(),tot=it.reduce((a,x)=>a+(+x.nom||0),0),bud=Number(db.budget[cur])||0;
+  const rows=[['Realisasi Budget Iklan & Paid Promote · '+c.toko+' ('+c.site+') · '+perL(cur)],['No','Tanggal bayar','Jenis','Platform','Akun / media','Tema','Mulai tayang','Selesai tayang','No. PE','Nominal (Rp)','Lampiran kurang','Catatan']];
+  it.forEach((x,i)=>rows.push([i+1,x.bayar,x.jenis==='ads'?'ADS':'Paid promote lokal',x.plat,x.akun||'',x.tema,x.mulai||'',x.selesai||'',x.pe||'',Number(x.nom)||0,kurang(x).join(', '),x.cat||'']));
+  rows.push(['','','','','','','','','Total',tot]);if(bud){rows.push(['','','','','','','','','Budget',bud]);rows.push(['','','','','','','','',tot>bud?'Lebih':'Sisa',Math.abs(bud-tot)])}
+  const blob=xlsxSimple([{name:'Realisasi Iklan',head:2,title:1,widths:[5,13,17,22,18,40,13,13,11,14,26,30],rows}],'Realisasi Iklan');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Realisasi Iklan '+c.site+' '+perL(cur)+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel rekap diunduh');
+ }
+ function aturBudget(){
+  openModal('Budget iklan '+perL(cur),`<label class="ik-f"><span>Budget iklan &amp; paid promote bulan ini</span><input class="in" id="ikBud" inputmode="numeric" value="${db.budget[cur]?nf(db.budget[cur]):''}" placeholder="mis. 500.000"></label>
+   <p class="hint">Dipakai untuk menghitung sisa budget. Kosongkan untuk menghapus.</p><div class="ik-fbtn"><button type="button" class="btn" id="ikBudOk">Simpan</button></div>`);
+  const i=$id('ikBud');i.focus();i.oninput=()=>{const n=num(i.value);i.value=n?nf(n):''};
+  $id('ikBudOk').onclick=()=>{const n=num(i.value);if(n)db.budget[cur]=n;else delete db.budget[cur];save();close();render()};
+ }
+ function aturKop(){
+  const c=cfg();
+  openModal('Kop toko di dokumen',`<label class="ik-f"><span>Site</span><input class="in" id="ikCs" value="${E(c.site)}" maxlength="10"></label>
+   <label class="ik-f"><span>Nama toko</span><input class="in" id="ikCt" value="${E(c.toko)}" maxlength="80"></label>
+   <label class="ik-f"><span>Kota (untuk tanggal kuitansi)</span><input class="in" id="ikCk" value="${E(c.kota)}" maxlength="40"></label>
+   <div class="ik-fbtn"><button type="button" class="btn" id="ikCOk">Simpan</button></div>`);
+  $id('ikCOk').onclick=()=>{db.cfg={site:$id('ikCs').value.trim(),toko:$id('ikCt').value.trim(),kota:$id('ikCk').value.trim()};save();close();render()};
+ }
+
+ /* ---------- event ---------- */
+ body.addEventListener('click',e=>{
+  const b=e.target.closest('[data-ik]');if(!b)return;const [k,id]=b.dataset.ik.split(':');
+  if(k==='prev')return geser(-1);if(k==='next')return geser(1);
+  if(k==='baru')return form();if(k==='ubah')return form(id);
+  if(k==='budget')return aturBudget();if(k==='cfg')return aturKop();
+  if(k==='pdf'){const x=db.items.find(z=>z.id===id);return x&&cetak([x])}
+  if(k==='semua')return cetak(bulanIni(),true);
+  if(k==='xlsx')return excel();
+  if(k==='hapus'){const x=db.items.find(z=>z.id===id);if(!x)return;
+   return gate(()=>{
+    openModal('Hapus bukti iklan?',`<p style="margin:0 0 6px"><b>${E(x.tema)}</b> · ${rp(x.nom)} · dibayar ${E(tglS(x.bayar))}</p><p class="hint">Data dan foto lampirannya dihapus dari perangkat ini dan tidak bisa dikembalikan.</p><div class="ik-fbtn"><button type="button" class="btn ghost" id="ikNo">Batal</button><button type="button" class="btn ik-del" id="ikYa">Hapus</button></div>`);
+    $id('ikNo').onclick=()=>close();
+    $id('ikYa').onclick=()=>{Object.keys(x.img||{}).forEach(s=>IDB.del(x.id+':'+s).catch(()=>{}));db.items=db.items.filter(z=>z.id!==x.id);save();close();render();toast('Bukti iklan dihapus')};
+   })}
+ });
+ const ov=document.getElementById('ov');
+ ov.addEventListener('click',e=>{
+  if(!F||!$id('ikF'))return;
+  const j=e.target.closest('[data-ikj]');if(j){baca();F.x.jenis=j.dataset.ikj;drawForm();return}
+  const x=e.target.closest('[data-ikx]');if(x){e.stopPropagation();const k=x.dataset.ikx;if(F.img[k]&&F.img[k]._u)URL.revokeObjectURL(F.img[k]._u);delete F.img[k];F.hapus[k]=1;drawSlots();return}
+  const s=e.target.closest('[data-iks]');if(s){slotAktif=s.dataset.iks;const fi=$id('ikFile');fi.value='';fi.click();return}
+  const f=e.target.closest('[data-ikf]');if(f){const a=f.dataset.ikf;if(a==='batal'){F=null;close();return}simpan(a==='simpanpdf')}
+ });
+ ov.addEventListener('keydown',e=>{const s=e.target.closest&&e.target.closest('[data-iks]');if(s&&(e.key==='Enter'||e.key===' ')){e.preventDefault();s.click()}});
+ ov.addEventListener('change',e=>{if(e.target.id==='ikFile'&&e.target.files[0]&&slotAktif)pasang(slotAktif,e.target.files[0])});
+ ov.addEventListener('input',e=>{if(e.target.id==='ikNom'){const n=num(e.target.value);e.target.value=n?nf(n):''}});
+ ov.addEventListener('dragover',e=>{if(e.target.closest&&e.target.closest('[data-iks]'))e.preventDefault()});
+ ov.addEventListener('drop',e=>{const s=e.target.closest&&e.target.closest('[data-iks]');if(!s||!F)return;e.preventDefault();const f=e.dataTransfer.files[0];if(f)pasang(s.dataset.iks,f)});
+ document.addEventListener('paste',e=>{
+  if(!F||!$id('ikF'))return;const f=[...(e.clipboardData&&e.clipboardData.files||[])].find(x=>/^image\//.test(x.type)||/pdf/.test(x.type));if(!f)return;
+  e.preventDefault();const ak=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('[data-iks]');
+  const k=ak?ak.dataset.iks:(SLOT[F.x.jenis].find(s=>!F.img[s[0]])||SLOT[F.x.jenis][3])[0];pasang(k,f);
+ });
+ window.ofaIklan={db:()=>db,render,cetak:id=>cetak(id?db.items.filter(x=>x.id===id):bulanIni(),!id)};
  render();
 })();
 </script>
