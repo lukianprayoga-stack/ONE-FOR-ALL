@@ -12249,9 +12249,9 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
 .hd tr:last-child th,.hd tr:last-child td{border-bottom:0}.hd th{width:34mm;font-weight:700;border-right:.6px solid #9a9a9a;background:#f1f5f3}.hd td{font-weight:600}
 .pe{width:44mm;border-left:1.2px solid #2b2b2b;display:flex;flex-direction:column}.pe small{font-size:7.5pt;color:#555;padding:1.2mm 2mm 0}.pe b{font-size:12pt;padding:0 2mm 1.2mm;min-height:7mm;border-bottom:.6px solid #9a9a9a}.pe span{flex:1;font-size:7.5pt;color:#555;padding:1.2mm 2mm}
 .bar{background:#8fb5a7;text-align:center;font-weight:700;font-size:9.5pt;padding:1.2mm 0;border-bottom:1.2px solid #2b2b2b;border-top:1.2px solid #2b2b2b}
-.r2{display:flex;height:100mm}.r2>.c{flex:1;display:flex;flex-direction:column}.r2>.c+.c{border-left:1.2px solid #2b2b2b}.r2 .bar{border-top:0}
+.r2{display:flex;flex:1 1 0;min-height:0}.r2.b>.c{border-top:1.2px solid #2b2b2b}.r2.b .bar{border-top:0}.r2>.c{flex:1;display:flex;flex-direction:column}.r2>.c+.c{border-left:1.2px solid #2b2b2b}.r2 .bar{border-top:0}
 .c{display:flex;flex-direction:column;min-height:0}.im{flex:1;display:flex;align-items:center;justify-content:center;padding:2mm;min-height:0;overflow:hidden}.im img{max-width:100%;max-height:100%;object-fit:contain}
-.ak{height:34mm}.inv{flex:1}.inv .im{align-items:flex-start}
+
 .kosong{color:#999;font-size:9pt;border:1px dashed #bbb;border-radius:2mm;padding:6mm 8mm;text-align:center}
 .ft{display:flex;justify-content:space-between;gap:4mm;border-top:1.2px solid #2b2b2b;padding:1.5mm 2.5mm;font-size:8pt;color:#444}.ft b{color:#111}
 .kw{width:100%;max-width:168mm;border:1px solid #444;padding:4mm 5mm;font-size:10pt;align-self:flex-start;margin:0 auto}.kw h4{margin:0 0 3mm;text-align:center;letter-spacing:3px;font-size:13pt}
@@ -12308,13 +12308,11 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
   if(x.jenis==='lok')return bast(x,U);
   const c=cfg(),J=JENIS[x.jenis],S=SLOT[x.jenis],lok=x.jenis==='lok';
   const img=k=>U[x.id+':'+k]?`<img src="${U[x.id+':'+k]}" alt="">`:`<div class="kosong">${E((S.find(s=>s[0]===k)||[])[1]||'')} belum dilampirkan</div>`;
-  const kuit=false,kw='';
   const rows=[['SITE',c.site],['STORE NAME',c.toko],['TEMA',x.tema],['PLATFORM',x.plat+(x.akun?' · '+x.akun:'')],['PERIODE',periode(x.mulai,x.selesai)||'-'],['TOTAL DIBAYAR',rp(x.nom)+' · dibayar '+tglL(x.bayar)]];
   return `<section class="pg"><div class="ttl">${J.judul}</div>
   <div class="hd"><table>${rows.map(r=>`<tr><th>${r[0]}</th><td>${E(r[1])}</td></tr>`).join('')}</table><div class="pe"><small>No. PE / voucher</small><b>${E(x.pe)}</b><span>Paraf</span></div></div>
-  <div class="r2" style="${U[x.id+':aktif']?'':'height:116mm'}"><div class="c"><div class="bar">${lok?'POSTINGAN PROMO':'PRATINJAU IKLAN'}</div><div class="im">${img('iklan')}</div></div><div class="c"><div class="bar">BUKTI TRANSFER</div><div class="im">${img('trf')}</div></div></div>
-  ${U[x.id+':aktif']?`<div class="c ak"><div class="bar">${lok?'BUKTI TAYANG':'BUKTI IKLAN AKTIF'}</div><div class="im">${img('aktif')}</div></div>`:''}
-  <div class="c inv"><div class="bar">${kuit?'KUITANSI PEMBAYARAN':'INVOICE PEMBAYARAN'}</div><div class="im">${kuit?kw:img('inv')}</div></div>
+  <div class="r2"><div class="c"><div class="bar">PRATINJAU IKLAN</div><div class="im">${img('iklan')}</div></div><div class="c"><div class="bar">BUKTI TRANSFER</div><div class="im">${img('trf')}</div></div></div>
+  <div class="r2 b">${U[x.id+':aktif']?`<div class="c"><div class="bar">BUKTI IKLAN AKTIF</div><div class="im">${img('aktif')}</div></div>`:''}<div class="c inv"><div class="bar">INVOICE PEMBAYARAN</div><div class="im">${img('inv')}</div></div></div>
   <div class="ft"><span>${x.cat?E(x.cat):'Terbilang: '+E(terbilang(x.nom))}</span><span>Dicetak ${E(tglL(today()))}</span></div></section>`;
  }
  function rekap(items){
