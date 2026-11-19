@@ -1990,6 +1990,13 @@ html.scrolled header{border-bottom-color:var(--line)}
 .ik-fbtn .btn{padding:10px 18px}
 .ik-del{background:var(--bad-fg)!important;color:#fff!important}
 @media(max-width:640px){.ik-grid{grid-template-columns:1fr}.ik-slots{grid-template-columns:1fr 1fr}.ik-fbtn .btn{flex:1}}
+.ik-sec{grid-column:1/-1;margin:6px 0 -2px;font-size:13px;font-weight:800;color:var(--fg);border-top:1px solid var(--line);padding-top:10px}
+.ik-f textarea.in{resize:vertical;min-height:58px;font:inherit;font-weight:500;font-size:14px;line-height:1.4}
+#ikl .ik-warn{margin:10px 0 0;padding:9px 12px;border-radius:12px;background:var(--warn-bg);color:var(--warn-fg);font-size:13px;font-weight:600}
+#ikl .ik-warn .ik-lnk{color:inherit;margin-left:4px}
+.ik-logo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:500;color:var(--mut)}
+.ik-logo img{height:44px;max-width:120px;object-fit:contain;border:1px solid var(--line);border-radius:8px;padding:3px;background:#fff}
+.ik-logo .btn{padding:7px 14px;font-size:12.5px}
 
 /* ===== UX tahap 1 ===== */
 .hero .stats{display:none}
@@ -12064,9 +12071,11 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  const JENIS={ads:{l:'Iklan ADS',judul:'BUKTI PEMBAYARAN IKLAN',plat:['Facebook Ads Manager','Instagram Ads (Meta)','TikTok Promote','TikTok Ads Manager','Google Ads']},
   lok:{l:'Paid promote lokal',judul:'BUKTI PEMBAYARAN PAID PROMOTE',plat:['Instagram','TikTok','Facebook','YouTube','WhatsApp grup','Radio / media lokal']}};
  const SLOT={ads:[['iklan','Pratinjau iklan',1],['trf','Bukti transfer',1],['aktif','Bukti iklan aktif',0],['inv','Invoice pembayaran',1]],
-  lok:[['iklan','Postingan promo',1],['trf','Bukti transfer',1],['aktif','Bukti tayang / insight',0],['inv','Invoice / kuitansi',0]]};
+  lok:[['iklan','Hasil pekerjaan (postingan)',1],['aktif','Hasil pekerjaan 2 / insight',0],['inv','Invoice / kuitansi',0],['ktp','KTP vendor',2],['npwp','NPWP vendor',2],['trf','Bukti transfer',1],['po','Purchase order',0]]};
+ const ALLK=[...new Set([...SLOT.ads,...SLOT.lok].map(s=>s[0]))];
+ const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
  const chip=x=>/tiktok/i.test(x.plat)?'TikTok':/facebook|instagram|meta/i.test(x.plat)&&x.jenis==='ads'?'Meta':/google/i.test(x.plat)?'Google':x.jenis==='lok'?'Lokal':'Iklan';
- const kurang=x=>SLOT[x.jenis].filter(s=>s[2]&&!(x.img||{})[s[0]]).map(s=>s[1].toLowerCase());
+ const kurang=x=>{const g=x.img||{},k=SLOT[x.jenis].filter(s=>s[2]===1&&!g[s[0]]).map(s=>s[1].toLowerCase());if(x.jenis==='lok'&&!g.ktp&&!g.npwp)k.push('KTP/NPWP vendor');return k};
 
  /* ---------- data ---------- */
  let db;try{db=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
@@ -12074,7 +12083,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  db.budget=db.budget||{};db.cfg=db.cfg||{};
  const save=()=>{try{localStorage.setItem(K,JSON.stringify(db))}catch(e){toast('Penyimpanan perangkat penuh')}};
  const reg=()=>window.HUBST&&window.HUBST.reg||{};
- const cfg=()=>({site:db.cfg.site||reg().site||'7014',toko:db.cfg.toko||reg().toko||'EIGER Store Soekarno Solo Baru',kota:db.cfg.kota||'Sukoharjo'});
+ const cfg=()=>{const k=db.cfg,toko=k.toko||reg().toko||'EIGER Store Soekarno Solo Baru';return {site:k.site||reg().site||'7014',toko,kota:k.kota||'Sukoharjo',nama:k.nama||'',jab:k.jab||'Store Leader',nik:k.nik||'',lokasi:k.lokasi||toko.toUpperCase(),form:k.form||'GPU-FRM-12',rev:k.rev==null||k.rev===''?'0':k.rev}};
  let cur=today().slice(0,7);
  const ym=x=>String(x.bayar||x.mulai||'').slice(0,7);
  const bulanIni=()=>db.items.filter(x=>ym(x)===cur).sort((a,b)=>(a.bayar||'').localeCompare(b.bayar||'')||(a.at||0)-(b.at||0));
@@ -12147,8 +12156,9 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
    :`<div class="ik-empty"><b>Belum ada bukti iklan di ${perL(cur)}</b><p>Tambahkan setiap pembayaran iklan Meta/TikTok atau paid promote lokal. Lampirkan screenshot iklan, bukti transfer, dan invoice. Hub menyusunnya jadi satu halaman A4 siap cetak untuk pertanggungjawaban petty cash.</p></div>`;
   body.innerHTML=`<div class="ik-top"><div class="ik-mon"><button type="button" data-ik="prev" aria-label="Bulan sebelumnya">‹</button><b>${perL(cur)}</b><button type="button" data-ik="next" aria-label="Bulan berikutnya" ${cur>=now?'disabled':''}>›</button></div>
    <button type="button" class="btn" data-ik="baru">+ Bukti baru</button></div>${kpi}${list}
-   ${it.length?`<div class="ik-acts"><button type="button" class="btn ghost" data-ik="semua">Cetak semua + rekap (PDF)</button><button type="button" class="btn ghost" data-ik="xlsx">Excel rekap</button><button type="button" class="ik-lnk" data-ik="cfg">Kop toko</button></div>`:`<div class="ik-acts"><button type="button" class="ik-lnk" data-ik="cfg">Kop toko</button></div>`}
-   <p class="ik-note">Foto bukti disimpan di perangkat ini saja.</p>`;
+   ${it.length?`<div class="ik-acts"><button type="button" class="btn ghost" data-ik="semua">Cetak semua + rekap (PDF)</button><button type="button" class="btn ghost" data-ik="xlsx">Excel rekap</button><button type="button" class="ik-lnk" data-ik="cfg">Kop &amp; data BAST</button></div>`:`<div class="ik-acts"><button type="button" class="ik-lnk" data-ik="cfg">Kop &amp; data BAST</button></div>`}
+   ${it.some(x=>x.jenis==='lok')&&!db.cfg.nama?`<p class="ik-warn">Data Pihak Pertama untuk BAST paid promote belum diisi. <button type="button" class="ik-lnk" data-ik="cfg">Isi sekarang</button></p>`:''}
+   <p class="ik-note">Foto bukti, KTP, dan NPWP vendor disimpan di perangkat ini saja.</p>`;
  }
  const geser=d=>{const [y,m]=cur.split('-').map(Number),t=new Date(y,m-1+d,1);cur=t.getFullYear()+'-'+p2(t.getMonth()+1);render()};
 
@@ -12157,7 +12167,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  function urlOf(b){if(!b)return '';if(!b._u)b._u=URL.createObjectURL(b);return b._u}
  function form(id){
   const x0=id?db.items.find(x=>x.id===id):null;
-  F={id:id||null,x:Object.assign({jenis:'ads',plat:'',akun:'',penerima:'',tema:'',mulai:'',selesai:'',bayar:today(),nom:0,pe:'',cat:''},x0||{}),img:{},hapus:{},busy:{}};
+  F={id:id||null,x:Object.assign({jenis:'ads',plat:'',akun:'',penerima:'',vjab:'',valamat:'',rinci:'',tglbast:'',tema:'',mulai:'',selesai:'',bayar:today(),nom:0,pe:'',cat:''},x0||{}),img:{},hapus:{},busy:{}};
   if(!x0&&cur!==today().slice(0,7))F.x.bayar=cur+'-01';
   openModal(id?'Ubah bukti iklan':'Bukti iklan baru','<div id="ikF"></div>');
   const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>{pn.classList.remove('wide');F=null}}
@@ -12166,7 +12176,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  }
  function baca(){
   if(!F||!$id('ikTema'))return;const v=i=>($id(i)||{}).value||'';
-  Object.assign(F.x,{plat:v('ikPlat').trim(),akun:v('ikAkun').trim(),penerima:v('ikPen').trim(),tema:v('ikTema').trim(),mulai:v('ikMul'),selesai:v('ikSel'),bayar:v('ikBay'),nom:num(v('ikNom')),pe:v('ikPe').trim(),cat:v('ikCat').trim()});
+  Object.assign(F.x,{plat:v('ikPlat').trim(),akun:v('ikAkun').trim(),penerima:v('ikPen').trim(),vjab:v('ikVj').trim(),valamat:v('ikVa').trim(),rinci:v('ikRc').trim(),tglbast:($id('ikTb')&&$id('ikTb').dataset.auto)?'':v('ikTb'),tema:v('ikTema').trim(),mulai:v('ikMul'),selesai:v('ikSel'),bayar:v('ikBay'),nom:num(v('ikNom')),pe:v('ikPe').trim(),cat:v('ikCat').trim()});
  }
  function drawForm(){
   const x=F.x,J=JENIS[x.jenis],lok=x.jenis==='lok',f=$id('ikF');if(!f)return;
@@ -12180,7 +12190,12 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
    <label class="ik-f"><span>Tanggal bayar</span><input class="in" type="date" id="ikBay" value="${E(x.bayar)}"></label>
    <label class="ik-f"><span>Total dibayar (termasuk PPN)</span><input class="in" id="ikNom" inputmode="numeric" value="${x.nom?nf(x.nom):''}" placeholder="mis. 100.000"></label>
    <label class="ik-f"><span>No. PE / voucher (opsional)</span><input class="in" id="ikPe" value="${E(x.pe)}" placeholder="mis. PE-232" maxlength="30"></label>
-   <label class="ik-f ${lok?'':'ik-hide'}"><span>Nama penerima (untuk kuitansi)</span><input class="in" id="ikPen" value="${E(x.penerima)}" placeholder="nama pemilik akun / vendor" maxlength="60"></label>
+   <p class="ik-sec span2 ${lok?'':'ik-hide'}">Data BAST · Pihak Kedua (vendor)</p>
+   <label class="ik-f ${lok?'':'ik-hide'}"><span>Nama vendor</span><input class="in" id="ikPen" value="${E(x.penerima)}" placeholder="nama sesuai KTP" maxlength="60"></label>
+   <label class="ik-f ${lok?'':'ik-hide'}"><span>Jabatan / vendor</span><input class="in" id="ikVj" value="${E(x.vjab)}" placeholder="mis. Founder / pemilik akun" maxlength="60"></label>
+   <label class="ik-f ${lok?'':'ik-hide'}"><span>Alamat vendor</span><input class="in" id="ikVa" value="${E(x.valamat)}" placeholder="mis. Nguter, Sukoharjo" maxlength="100"></label>
+   <label class="ik-f ${lok?'':'ik-hide'}"><span>Tanggal BAST</span><input class="in" type="date" id="ikTb" value="${E(x.tglbast||x.bayar)}" ${!x.tglbast||x.tglbast===x.bayar?'data-auto="1"':''}></label>
+   <label class="ik-f span2 ${lok?'':'ik-hide'}"><span>Rincian pekerjaan (satu baris satu pekerjaan)</span><textarea class="in" id="ikRc" rows="2" maxlength="400" placeholder="mis. Paid promote story akun lokal @infocegatansukoharjo">${E(x.rinci)}</textarea></label>
    <label class="ik-f span2"><span>Catatan (opsional)</span><input class="in" id="ikCat" value="${E(x.cat)}" maxlength="140" placeholder="mis. target area Solo Raya, 4 hari"></label>
   </div>
   <p class="ik-h">Lampiran <small>Ketuk kotak untuk memilih foto atau PDF. Di komputer, screenshot juga bisa langsung ditempel (Ctrl+V).</small></p>
@@ -12194,7 +12209,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
   const el=$id('ikSlots');if(!el||!F)return;const lok=F.x.jenis==='lok';
   el.innerHTML=SLOT[F.x.jenis].map(([k,l,w])=>{const b=F.img[k];return `<div class="ik-slot ${b?'has':''}" data-iks="${k}" tabindex="0" role="button" aria-label="${E(l)}${b?' (sudah ada, ketuk untuk ganti)':''}">
    ${b?`<img src="${urlOf(b)}" alt="">`:F.busy[k]?'<span class="ik-sp">Memproses…</span>':`<span class="ik-plus">+</span>`}
-   <b>${E(l)}</b><small>${w?'Wajib':k==='inv'&&lok?'Kosong = kuitansi otomatis':'Opsional'}</small>
+   <b>${E(l)}</b><small>${w===1?'Wajib':w===2?'Wajib salah satu':k==='inv'&&lok?'Kosong = kuitansi otomatis':'Opsional'}</small>
    ${b?`<button type="button" class="ik-x" data-ikx="${k}" aria-label="Hapus ${E(l)}">✕</button>`:''}</div>`}).join('');
  }
  let slotAktif='';
@@ -12207,12 +12222,13 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
  }
  async function simpan(cetakJuga){
   baca();const x=F.x,er=$id('ikErr');
-  const salah=!x.tema?'Isi tema / nama kampanye.':!x.plat?'Isi platform.':!x.bayar?'Isi tanggal bayar.':!(x.nom>0)?'Isi total yang dibayar.':x.mulai&&x.selesai&&x.selesai<x.mulai?'Tanggal selesai tayang lebih awal dari mulai.':x.jenis==='lok'&&!x.akun?'Isi akun / media promote.':'';
+  const salah=!x.tema?'Isi tema / nama kampanye.':!x.plat?'Isi platform.':!x.bayar?'Isi tanggal bayar.':!(x.nom>0)?'Isi total yang dibayar.':x.mulai&&x.selesai&&x.selesai<x.mulai?'Tanggal selesai tayang lebih awal dari mulai.':x.jenis==='lok'&&!x.akun?'Isi akun / media promote.':x.jenis==='lok'&&!x.penerima?'Isi nama vendor untuk BAST.':'';
   if(salah){er.textContent=salah;return}
   if(Object.keys(F.busy).length){er.textContent='Tunggu lampiran selesai diproses.';return}
+  if(x.jenis==='lok'){if(!x.tglbast)x.tglbast=x.bayar;if(!x.rinci)x.rinci=rinciAuto(x)}
   const id=F.id||uid(),it=Object.assign({},x,{id,at:x.at||Date.now(),img:{}});
   try{
-   for(const [k] of SLOT.ads){
+   for(const k of ALLK){
     if(F.img[k]){if(!F.img[k]._disimpan){await IDB.put(id+':'+k,F.img[k]);F.img[k]._disimpan=1}it.img[k]=1}
     else if(F.id)await IDB.del(id+':'+k).catch(()=>{});
    }
@@ -12223,8 +12239,9 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
   if(cetakJuga)cetak([it]);
  }
 
+ const rinciAuto=x=>'Paid promote '+(x.plat?x.plat+' ':'')+'akun lokal '+(x.akun||'');
  /* ---------- cetak PDF ---------- */
- async function blobs(items){const m={};for(const x of items)for(const k of Object.keys(x.img||{})){try{const b=await IDB.get(x.id+':'+k);if(b)m[x.id+':'+k]=URL.createObjectURL(b)}catch(e){}}return m}
+ async function blobs(items){const m={};if(items.some(x=>x.jenis==='lok')){try{const b=await IDB.get('cfg:logo');if(b)m['cfg:logo']=URL.createObjectURL(b)}catch(e){}}for(const x of items)for(const k of Object.keys(x.img||{})){try{const b=await IDB.get(x.id+':'+k);if(b)m[x.id+':'+k]=URL.createObjectURL(b)}catch(e){}}return m}
  const CSS=`@page{size:A4;margin:8mm}*{box-sizing:border-box}html,body{margin:0;font:10pt/1.35 Arial,Helvetica,sans-serif;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .pg{height:280mm;display:flex;flex-direction:column;border:1.2px solid #2b2b2b;page-break-after:always;break-after:page;overflow:hidden}.pg:last-child{page-break-after:auto;break-after:auto}
 .ttl{background:#8fb5a7;text-align:center;font-weight:700;font-size:13pt;letter-spacing:.4px;padding:2.2mm 0;border-bottom:1.2px solid #2b2b2b}
@@ -12241,17 +12258,57 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
 .kw table{width:100%;border-collapse:collapse}.kw td{padding:1.2mm 0;vertical-align:top}.kw td:first-child{width:38mm;color:#333}.kw td:nth-child(2){width:4mm}.kw .tb{font-style:italic;background:#f1f5f3;padding:1.2mm 2mm}
 .kw .bw{display:flex;justify-content:space-between;align-items:flex-end;margin-top:4mm}.kw .nom{font-size:13pt;font-weight:700;border:1.2px solid #222;padding:2mm 4mm}.kw .tt{text-align:center;min-width:58mm}.kw .tt .ln{height:20mm;position:relative}.kw .mat{position:absolute;left:4mm;top:3mm;width:18mm;height:14mm;border:1px dashed #999;font-size:7pt;color:#999;display:flex;align-items:center;justify-content:center}.kw .tt b{display:block;border-top:1px solid #222;padding-top:1mm;font-weight:600}
 .rk h2{margin:0 0 1mm;font-size:14pt;text-align:center}.rk .sb{text-align:center;color:#444;margin-bottom:5mm}.rk table.t{width:100%;border-collapse:collapse;font-size:9pt}.rk .t th,.rk .t td{border:.6px solid #555;padding:1.6mm 2mm;text-align:left;vertical-align:top}.rk .t th{background:#8fb5a7}.rk .t td.n,.rk .t th.n{text-align:right;white-space:nowrap}.rk .t tfoot td{font-weight:700;background:#f1f5f3}
+.bs.pg,.dk.pg{border:0}.bs{padding:4mm 9mm 2mm;font-size:10.5pt;line-height:1.42}
+.bs .kop{display:flex;border:1px solid #222;margin-bottom:4mm}.bs .kop .lg{width:25mm;border-right:1px solid #222;display:flex;align-items:center;justify-content:center;padding:1.5mm}.bs .kop .lg img{max-width:100%;max-height:19mm}
+.bs .kop h1{flex:1;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12pt;line-height:1.3;padding:2mm}
+.bs .kop table{border-collapse:collapse;width:64mm;border-left:1px solid #222;font-size:8.5pt}.bs .kop td{border-bottom:1px solid #222;padding:.9mm 1.6mm;vertical-align:middle}.bs .kop td:first-child{font-weight:700;border-right:1px solid #222;width:27mm}.bs .kop tr:last-child td{border-bottom:0}
+.bs p{margin:2.6mm 0}.bs .id{margin:2mm 0 1mm 8mm;border-collapse:collapse}.bs .id td{padding:.2mm 0;vertical-align:top}.bs .id td:first-child{width:31mm}.bs .id td:nth-child(2){width:4mm}
+.bs ol,.bs ul{margin:1mm 0;padding-left:6mm}.bs ol.rc{padding-left:13mm}.bs ul{list-style:none;padding-left:5mm}.bs ul li:before{content:'−';display:inline-block;width:5mm;margin-left:-5mm}.bs .in1{text-indent:10mm}
+.bs .ttd{display:flex;justify-content:space-around;text-align:center;margin-top:3mm}.bs .ttd>div{width:72mm}.bs .ttd .ln{height:21mm}.bs .ttd table{margin:0 auto;text-align:left;font-weight:700;font-size:9.5pt;border-top:1px solid #222;padding-top:1mm;min-width:56mm}.bs .ttd td{padding:0 1mm 0 0;vertical-align:top}
+.bs .nt{margin-top:auto;font-size:8.5pt;font-style:italic;line-height:1.35}.bs .nt b{text-decoration:underline}
+.dk{padding:4mm 9mm}.dk .dt{font-size:9.5pt;margin:0 0 3mm}.dk .g{display:grid;grid-template-columns:1fr 1fr;border:1px solid #222}.dk .g>div{border:.5px solid #222;height:128mm;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.dk .g .im{padding:1.5mm}.dk .g small{text-align:center;font-size:7.5pt;color:#666;padding:0 0 1mm}.dk .kq{padding-top:2mm}
 .rk{padding:8mm 8mm 6mm}.rk.pg{border:0}.rk .sg{display:flex;justify-content:space-around;margin-top:14mm;text-align:center}.rk .sg div{min-width:52mm}.rk .sg .ln{height:22mm}.rk .sg b{display:block;border-top:1px solid #222;padding-top:1mm;font-weight:600}`;
- function halaman(x,U){
-  const c=cfg(),J=JENIS[x.jenis],S=SLOT[x.jenis],lok=x.jenis==='lok';
-  const img=k=>U[x.id+':'+k]?`<img src="${U[x.id+':'+k]}" alt="">`:`<div class="kosong">${E((S.find(s=>s[0]===k)||[])[1]||'')} belum dilampirkan</div>`;
-  const kuit=lok&&!U[x.id+':inv'];
-  const kw=`<div class="kw"><h4>KUITANSI</h4><table>
+ function kuitansi(x,c){
+  return `<div class="kw"><h4>KUITANSI</h4><table>
    <tr><td>No.</td><td>:</td><td>${E(x.pe||'-')}</td></tr>
    <tr><td>Sudah terima dari</td><td>:</td><td><b>${E(c.toko)} (${E(c.site)})</b></td></tr>
    <tr><td>Uang sejumlah</td><td>:</td><td class="tb">${E(terbilang(x.nom))}</td></tr>
-   <tr><td>Untuk pembayaran</td><td>:</td><td>Jasa paid promote ${E(x.plat)}${x.akun?' '+E(x.akun):''} — ${E(x.tema)}${x.mulai?', tayang '+E(periode(x.mulai,x.selesai)):''}</td></tr></table>
-   <div class="bw"><div class="nom">${rp(x.nom)}</div><div class="tt">${E(c.kota)}, ${E(tglL(x.bayar))}<br>Penerima,<div class="ln">${x.nom>=5e6?'<span class="mat">Meterai</span>':''}</div><b>${E(x.penerima||'(.................................)')}</b></div></div></div>`;
+   <tr><td>Untuk pembayaran</td><td>:</td><td>${E((x.rinci||rinciAuto(x)).split(/\n+/).join('; '))} — ${E(x.tema)}${x.mulai?', tayang '+E(periode(x.mulai,x.selesai)):''}</td></tr></table>
+   <div class="bw"><div class="nom">${rp(x.nom)}</div><div class="tt">${E(c.kota)}, ${E(tglL(x.tglbast||x.bayar))}<br>Penerima,<div class="ln">${x.nom>=5e6?'<span class="mat">Meterai</span>':''}</div><b>${E(x.penerima||'(.................................)')}</b></div></div></div>`;
+ }
+ function bast(x,U){
+  const c=cfg(),tb=x.tglbast||x.bayar,d=String(tb).split('-').map(Number),hari=d[2]?HARI[new Date(d[0],d[1]-1,d[2]).getDay()]:'';
+  const dot='..............................',rc=(x.rinci||rinciAuto(x)).split(/\n+/).map(t=>t.trim()).filter(Boolean);
+  const pg1=`<section class="pg bs"><div class="kop">${U['cfg:logo']?`<div class="lg"><img src="${U['cfg:logo']}" alt=""></div>`:''}<h1>BERITA ACARA SERAH TERIMA (BAST)<br>HASIL PEKERJAAN</h1>
+   <table><tr><td>Form No.</td><td>${E(c.form)}</td></tr><tr><td>Revision No.</td><td>${E(c.rev)}</td></tr><tr><td>Effective Date</td><td>${E(tglL(tb).toUpperCase())}</td></tr></table></div>
+   <p>Pada hari ini ${E(hari)}, tanggal ${E(tglL(tb))} telah dilakukan serah terima hasil pekerjaan oleh :</p>
+   <table class="id"><tr><td>Nama</td><td>:</td><td>${E(c.nama||dot)}</td></tr><tr><td>Jabatan &amp; NIK</td><td>:</td><td>${E(c.jab)}${c.nik?' ('+E(c.nik)+')':''}</td></tr><tr><td>Lokasi</td><td>:</td><td>${E(c.lokasi)}</td></tr></table>
+   <div>Sebagai pemberi pekerjaan, selanjutnya disebut <b>PIHAK PERTAMA</b></div>
+   <table class="id"><tr><td>Nama</td><td>:</td><td>${E(x.penerima||dot)}</td></tr><tr><td>Jabatan/vendor</td><td>:</td><td>${E(x.vjab||dot)}</td></tr><tr><td>Alamat</td><td>:</td><td>${E(x.valamat||dot)}</td></tr></table>
+   <div>Sebagai pelaksana pekerjaan, selanjutnya disebut <b>PIHAK KEDUA</b></div>
+   <p><b>PIHAK PERTAMA</b> memberi pekerjaan kepada <b>PIHAK KEDUA</b> dengan rincian sbb :</p>
+   <ol class="rc">${rc.map(t=>`<li>${E(t)}</li>`).join('')}</ol>
+   <p class="in1">Menyatakan bahwa <b>PIHAK KEDUA</b> telah menyelesaikan seluruh pekerjaan <b>SESUAI</b> dengan kesepakatan dan telah diterima oleh <b>PIHAK PERTAMA</b>.</p>
+   <div>Terlampir bukti hasil pekerjaan dan dokumen untuk melengkapi pembayaran berupa :</div>
+   <ol><li>Foto hasil pekerjaan (sebelum &amp; sesudah)</li><li>Faktur penjualan dengan mencantumkan nama &amp; nomor rekening, pada :<ul><li><i>Invoice</i> asli bertandatangan basah, atau</li><li>Kuitansi asli bertandatangan basah (diatas Rp5.000.000,- bermaterai)</li></ul></li>
+   <li>Jika pekerjaan berupa jasa, maka nilai yang tercantum pada faktur penjualan adalah nilai yang belum dipotong PPh</li><li><i>Copy</i> NPWP atau KTP</li><li><i>Purchase Order</i> bertanda tangan <i>vendor</i> (<i>digital</i> atau basah), jika ada.</li></ol>
+   <p class="in1">Demikian berita acara serah terima hasil pekerjaan ini dibuat dengan sebenarnya untuk digunakan sebagaimana mestinya.</p>
+   <div class="ttd"><div><b>PIHAK PERTAMA</b><div class="ln"></div><table><tr><td>Nama</td><td>:</td><td>${E(c.nama||dot)}</td></tr><tr><td>Tgl</td><td>:</td><td>${E(tglL(tb))}</td></tr></table></div>
+    <div><b>PIHAK KEDUA</b><div class="ln"></div><table><tr><td>Nama</td><td>:</td><td>${E(x.penerima||dot)}</td></tr><tr><td>Tgl</td><td>:</td><td>${E(tglL(tb))}</td></tr></table></div></div>
+   <p class="nt"><b>Notes</b> : BAST hasil pekerjaan harus ditandatangan basah kedua belah pihak dan dicap toko (khusus penerima di toko), kecuali untuk jasa entertainment ditandatangani oleh Manager/GM sesuai batas kewenangan.</p></section>`;
+  const URUT=['ktp','inv','iklan','npwp','trf','aktif','po'],lab=k=>(SLOT.lok.find(s=>s[0]===k)||[])[1]||'';
+  const sel=URUT.filter(k=>U[x.id+':'+k]),pages=[];
+  for(let i=0;i<sel.length;i+=4)pages.push(sel.slice(i,i+4));
+  const dok=pages.map((g,i)=>`<section class="pg dk">${i?'':'<p class="dt">DOKUMENTASI</p>'}<div class="g">${g.map(k=>`<div><div class="im"><img src="${U[x.id+':'+k]}" alt=""></div><small>${E(lab(k))}</small></div>`).join('')}${g.length%2?'<div></div>':''}</div></section>`).join('');
+  const kq=U[x.id+':inv']?'':`<section class="pg dk"><p class="dt">KUITANSI${sel.length?'':' &amp; DOKUMENTASI'}</p><div class="kq">${kuitansi(x,c)}</div></section>`;
+  return pg1+(dok||'')+kq;
+ }
+ function halaman(x,U){
+  if(x.jenis==='lok')return bast(x,U);
+  const c=cfg(),J=JENIS[x.jenis],S=SLOT[x.jenis],lok=x.jenis==='lok';
+  const img=k=>U[x.id+':'+k]?`<img src="${U[x.id+':'+k]}" alt="">`:`<div class="kosong">${E((S.find(s=>s[0]===k)||[])[1]||'')} belum dilampirkan</div>`;
+  const kuit=false,kw='';
   const rows=[['SITE',c.site],['STORE NAME',c.toko],['TEMA',x.tema],['PLATFORM',x.plat+(x.akun?' · '+x.akun:'')],['PERIODE',periode(x.mulai,x.selesai)||'-'],['TOTAL DIBAYAR',rp(x.nom)+' · dibayar '+tglL(x.bayar)]];
   return `<section class="pg"><div class="ttl">${J.judul}</div>
   <div class="hd"><table>${rows.map(r=>`<tr><th>${r[0]}</th><td>${E(r[1])}</td></tr>`).join('')}</table><div class="pe"><small>No. PE / voucher</small><b>${E(x.pe)}</b><span>Paraf</span></div></div>
@@ -12266,7 +12323,7 @@ thead{display:table-header-group}tr{page-break-inside:avoid}tr.gh{page-break-aft
   <table class="t"><thead><tr><th>No</th><th>Tgl bayar</th><th>Jenis</th><th>Platform / akun</th><th>Tema</th><th>Periode tayang</th><th>No. PE</th><th class="n">Nominal</th></tr></thead>
   <tbody>${items.map((x,i)=>`<tr><td>${i+1}</td><td>${E(tglS(x.bayar))}</td><td>${x.jenis==='ads'?'ADS':'Paid promote'}</td><td>${E(x.plat)}${x.akun?'<br>'+E(x.akun):''}</td><td>${E(x.tema)}</td><td>${E(periode(x.mulai,x.selesai)||'-')}</td><td>${E(x.pe||'-')}</td><td class="n">${rp(x.nom)}</td></tr>`).join('')}</tbody>
   <tfoot><tr><td colspan="7">Total realisasi</td><td class="n">${rp(tot)}</td></tr>${bud?`<tr><td colspan="7">Budget ${E(perL(cur))}</td><td class="n">${rp(bud)}</td></tr><tr><td colspan="7">${tot>bud?'Lebih dari budget':'Sisa budget'}</td><td class="n">${rp(Math.abs(bud-tot))}</td></tr>`:''}</tfoot></table>
-  <p style="margin:3mm 0 0;font-size:9pt">Terbilang: <i>${E(terbilang(tot))}</i>. Bukti pembayaran terlampir (${items.length} halaman).</p>
+  <p style="margin:3mm 0 0;font-size:9pt">Terbilang: <i>${E(terbilang(tot))}</i>. Bukti pembayaran, BAST, dan dokumentasi terlampir.</p>
   <div class="sg"><div>Dibuat oleh,<div class="ln"></div><b>Store Head</b></div><div>Diperiksa oleh,<div class="ln"></div><b>&nbsp;</b></div><div>Disetujui oleh,<div class="ln"></div><b>&nbsp;</b></div></div></section>`;
  }
  async function cetak(items,denganRekap){
@@ -12283,10 +12340,10 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
  }
  function excel(){
   const it=bulanIni();if(!it.length||!window.xlsxSimple)return;const c=cfg(),tot=it.reduce((a,x)=>a+(+x.nom||0),0),bud=Number(db.budget[cur])||0;
-  const rows=[['Realisasi Budget Iklan & Paid Promote · '+c.toko+' ('+c.site+') · '+perL(cur)],['No','Tanggal bayar','Jenis','Platform','Akun / media','Tema','Mulai tayang','Selesai tayang','No. PE','Nominal (Rp)','Lampiran kurang','Catatan']];
-  it.forEach((x,i)=>rows.push([i+1,x.bayar,x.jenis==='ads'?'ADS':'Paid promote lokal',x.plat,x.akun||'',x.tema,x.mulai||'',x.selesai||'',x.pe||'',Number(x.nom)||0,kurang(x).join(', '),x.cat||'']));
-  rows.push(['','','','','','','','','Total',tot]);if(bud){rows.push(['','','','','','','','','Budget',bud]);rows.push(['','','','','','','','',tot>bud?'Lebih':'Sisa',Math.abs(bud-tot)])}
-  const blob=xlsxSimple([{name:'Realisasi Iklan',head:2,title:1,widths:[5,13,17,22,18,40,13,13,11,14,26,30],rows}],'Realisasi Iklan');
+  const rows=[['Realisasi Budget Iklan & Paid Promote · '+c.toko+' ('+c.site+') · '+perL(cur)],['No','Tanggal bayar','Jenis','Platform','Akun / media','Vendor','Tema','Mulai tayang','Selesai tayang','No. PE','Nominal (Rp)','Lampiran kurang','Catatan']];
+  it.forEach((x,i)=>rows.push([i+1,x.bayar,x.jenis==='ads'?'ADS':'Paid promote lokal',x.plat,x.akun||'',x.jenis==='lok'?x.penerima||'':'',x.tema,x.mulai||'',x.selesai||'',x.pe||'',Number(x.nom)||0,kurang(x).join(', '),x.cat||'']));
+  const P=['','','','','','','','',''];rows.push([...P,'Total',tot]);if(bud){rows.push([...P,'Budget',bud]);rows.push([...P,tot>bud?'Lebih':'Sisa',Math.abs(bud-tot)])}
+  const blob=xlsxSimple([{name:'Realisasi Iklan',head:2,title:1,widths:[5,13,17,22,18,20,40,13,13,11,14,26,30],rows}],'Realisasi Iklan');
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Realisasi Iklan '+c.site+' '+perL(cur)+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Excel rekap diunduh');
  }
  function aturBudget(){
@@ -12296,14 +12353,31 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
   $id('ikBudOk').onclick=()=>{const n=num(i.value);if(n)db.budget[cur]=n;else delete db.budget[cur];save();close();render()};
  }
  function aturKop(){
-  const c=cfg();
-  openModal('Kop toko di dokumen',`<label class="ik-f"><span>Site</span><input class="in" id="ikCs" value="${E(c.site)}" maxlength="10"></label>
-   <label class="ik-f"><span>Nama toko</span><input class="in" id="ikCt" value="${E(c.toko)}" maxlength="80"></label>
-   <label class="ik-f"><span>Kota (untuk tanggal kuitansi)</span><input class="in" id="ikCk" value="${E(c.kota)}" maxlength="40"></label>
-   <div class="ik-fbtn"><button type="button" class="btn" id="ikCOk">Simpan</button></div>`);
-  $id('ikCOk').onclick=()=>{db.cfg={site:$id('ikCs').value.trim(),toko:$id('ikCt').value.trim(),kota:$id('ikCk').value.trim()};save();close();render()};
+  const c=cfg();let logo=null,hapusLogo=false;
+  openModal('Kop & data BAST',`<div class="ik-grid">
+   <label class="ik-f"><span>Site</span><input class="in" id="ikCs" value="${E(c.site)}" maxlength="10"></label>
+   <label class="ik-f"><span>Kota (tanggal kuitansi)</span><input class="in" id="ikCk" value="${E(c.kota)}" maxlength="40"></label>
+   <label class="ik-f span2"><span>Nama toko</span><input class="in" id="ikCt" value="${E(c.toko)}" maxlength="80"></label>
+   <p class="ik-sec span2">Pihak Pertama di BAST paid promote</p>
+   <label class="ik-f"><span>Nama</span><input class="in" id="ikCn" value="${E(db.cfg.nama||'')}" maxlength="60" placeholder="nama Store Leader"></label>
+   <label class="ik-f"><span>Jabatan</span><input class="in" id="ikCj" value="${E(c.jab)}" maxlength="40"></label>
+   <label class="ik-f"><span>NIK karyawan</span><input class="in" id="ikCi" value="${E(c.nik)}" maxlength="20" inputmode="numeric"></label>
+   <label class="ik-f"><span>Lokasi</span><input class="in" id="ikCl" value="${E(c.lokasi)}" maxlength="80"></label>
+   <label class="ik-f"><span>Form No.</span><input class="in" id="ikCf" value="${E(c.form)}" maxlength="20"></label>
+   <label class="ik-f"><span>Revision No.</span><input class="in" id="ikCr" value="${E(c.rev)}" maxlength="6"></label>
+   <div class="ik-f span2"><span>Logo di kop BAST (opsional, pakai file logo resmi toko)</span><div class="ik-logo"><span id="ikLg">Memuat…</span><button type="button" class="btn ghost" id="ikLgP">Pilih logo</button><button type="button" class="ik-lnk" id="ikLgX" hidden>Hapus logo</button><input type="file" id="ikLgF" accept="image/*" hidden></div></div>
+  </div><p class="hint">Data ini hanya tersimpan di perangkat ini.</p><div class="ik-fbtn"><button type="button" class="btn" id="ikCOk">Simpan</button></div>`);
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>pn.classList.remove('wide')}
+  const show=b=>{const el=$id('ikLg');if(!el)return;el.innerHTML=b?`<img src="${urlOf(b)}" alt="Logo kop">`:'Belum ada logo';$id('ikLgX').hidden=!b};
+  IDB.get('cfg:logo').then(b=>show(b||null)).catch(()=>show(null));
+  $id('ikLgP').onclick=()=>$id('ikLgF').click();
+  $id('ikLgF').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{logo=await olah(f);hapusLogo=false;show(logo)}catch(er){toast(er.message||'Logo gagal dibaca')}};
+  $id('ikLgX').onclick=()=>{logo=null;hapusLogo=true;show(null)};
+  $id('ikCOk').onclick=async()=>{const v=i=>$id(i).value.trim();
+   db.cfg={site:v('ikCs'),toko:v('ikCt'),kota:v('ikCk'),nama:v('ikCn'),jab:v('ikCj'),nik:v('ikCi'),lokasi:v('ikCl'),form:v('ikCf'),rev:v('ikCr')};save();
+   try{if(logo)await IDB.put('cfg:logo',logo);else if(hapusLogo)await IDB.del('cfg:logo')}catch(e){toast('Logo gagal disimpan')}
+   close();render()};
  }
-
  /* ---------- event ---------- */
  body.addEventListener('click',e=>{
   const b=e.target.closest('[data-ik]');if(!b)return;const [k,id]=b.dataset.ik.split(':');
@@ -12330,7 +12404,10 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
  });
  ov.addEventListener('keydown',e=>{const s=e.target.closest&&e.target.closest('[data-iks]');if(s&&(e.key==='Enter'||e.key===' ')){e.preventDefault();s.click()}});
  ov.addEventListener('change',e=>{if(e.target.id==='ikFile'&&e.target.files[0]&&slotAktif)pasang(slotAktif,e.target.files[0])});
- ov.addEventListener('input',e=>{if(e.target.id==='ikNom'){const n=num(e.target.value);e.target.value=n?nf(n):''}});
+ ov.addEventListener('input',e=>{const t=e.target;if(t.id==='ikNom'){const n=num(t.value);t.value=n?nf(n):''}
+  if(t.id==='ikTb')delete t.dataset.auto;
+  if(t.id==='ikBay'){const b=$id('ikTb');if(b&&b.dataset.auto)b.value=t.value}});
+ ov.addEventListener('change',e=>{if(e.target.id==='ikBay'){const b=$id('ikTb');if(b&&b.dataset.auto)b.value=e.target.value}});
  ov.addEventListener('dragover',e=>{if(e.target.closest&&e.target.closest('[data-iks]'))e.preventDefault()});
  ov.addEventListener('drop',e=>{const s=e.target.closest&&e.target.closest('[data-iks]');if(!s||!F)return;e.preventDefault();const f=e.dataTransfer.files[0];if(f)pasang(s.dataset.iks,f)});
  document.addEventListener('paste',e=>{
