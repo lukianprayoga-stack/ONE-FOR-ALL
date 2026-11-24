@@ -3376,6 +3376,7 @@ appStart();
  const hari=w=>{const d=new Date(w),n=new Date(),k=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),t=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
   return t===k?'Hari ini':t===k-864e5?'Kemarin':d.getDate()+' '+BL[d.getMonth()]+(d.getFullYear()!==n.getFullYear()?' '+d.getFullYear():'')};
  const singkat=w=>{const h=hari(w);return h==='Hari ini'?jam(w):h};
+ const own=()=>{const i=info();return !!(i&&i.saya&&i.saya.pembuat)},dotOf=on=>on?true:own()?false:null;
  const lalu=w=>{if(!w)return 'belum pernah aktif';const m=Math.floor((Date.now()-w)/6e4);if(m<2)return 'baru saja';if(m<60)return m+' menit lalu';const h=Math.floor(m/60);if(h<24)return h+' jam lalu';const d=Math.floor(h/24);return d===1?'kemarin':d<30?d+' hari lalu':hari(w)};
  const kontak=id=>info().kontak.find(k=>k.id===id);
  function lawan(room){
@@ -3435,7 +3436,7 @@ appStart();
  function rowRuang(room,last){
   const L=lawan(room),n=belum(room),m=last;
   const pre=m?(m.saya?'Anda: ':room==='grup'?m.nm.split(' ')[0]+': ':'')+m.t.replace(/\s+/g,' '):room==='grup'?'Obrolan bersama semua Store Head':'';
-  return `<button type="button" class="kom-row${n?' nw':''}" data-kroom="${E(room)}">${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,L.pembuat?null:!!L.on)}<span><b>${E(L.nm)}</b><small>${E(pre||L.sub)}</small></span><span class="kom-r">${m?E(singkat(m.w)):''}${n?`<br><i>${n}</i>`:''}</span></button>`;
+  return `<button type="button" class="kom-row${n?' nw':''}" data-kroom="${E(room)}">${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,L.pembuat?null:dotOf(!!L.on))}<span><b>${E(L.nm)}</b><small>${E(pre||L.sub)}</small></span><span class="kom-r">${m?E(singkat(m.w)):''}${n?`<br><i>${n}</i>`:''}</span></button>`;
  }
  function paintList(){
   const I=info(),R=ruangList(),nDm=R.dm.reduce((s,r)=>s+belum(r),0)+belum('grup');
@@ -3444,12 +3445,12 @@ appStart();
    bd=rowRuang('grup',R.last.grup)+(R.dm.length?'<p class="kom-h">Pribadi</p>'+R.dm.map(r=>rowRuang(r,R.last[r])).join(''):`<div class="kom-empty"><b>Belum ada obrolan pribadi</b>Buka tab Pengguna lalu pilih Store Head toko lain untuk mulai chat.</div>`);
   }else{
    const q=view.q.trim().toLowerCase();
-   const K=I.kontak.filter(k=>!q||(k.nama+' '+k.toko+' '+k.site).toLowerCase().includes(q)).sort((a,b)=>(b.on-a.on)||(b.last-a.last));
+   const K=I.kontak.filter(k=>!q||(k.nama+' '+k.toko+' '+k.site).toLowerCase().includes(q)).sort((a,b)=>(b.on-a.on)||(own()?(b.last-a.last):String(a.nama).localeCompare(String(b.nama),'id')));
    const on=K.filter(k=>k.on),off=K.filter(k=>!k.on);
-   const row=k=>`<button type="button" class="kom-row" data-kroom="dm:${E(k.id)}">${av(k.id,k.nama,k.on)}<span><b>${E(k.nama)}</b><small>${E(k.toko)} · site ${E(k.site)}</small></span><span class="kom-r">${k.on?'<span class="kom-on">Online</span>':(k.last?'Aktif ':'')+E(lalu(k.last))}</span></button>`;
+   const row=k=>`<button type="button" class="kom-row" data-kroom="dm:${E(k.id)}">${av(k.id,k.nama,dotOf(k.on))}<span><b>${E(k.nama)}</b><small>${E(k.toko)} · site ${E(k.site)}</small></span><span class="kom-r">${k.on?'<span class="kom-on">Online</span>':own()?(k.last?'Aktif ':'')+E(lalu(k.last)):''}</span></button>`;
    bd=`<input class="kom-q" id="komQ" type="search" placeholder="Cari nama, toko atau site" value="${E(view.q)}" aria-label="Cari pengguna">
     <p class="kom-note">${I.saya&&I.saya.pembuat?'Akun Anda (pembuat aplikasi) tidak terlihat oleh pengguna lain. ':''}Status online terlihat oleh semua pengguna Store Head Kit.</p>
-    ${on.length?'<p class="kom-h">Online · '+on.length+'</p>'+on.map(row).join(''):''}${off.length?'<p class="kom-h">Offline · '+off.length+'</p>'+off.map(row).join(''):''}
+    ${on.length?'<p class="kom-h">Online · '+on.length+'</p>'+on.map(row).join(''):''}${off.length?'<p class="kom-h">'+(own()?'Offline':'Pengguna lain')+' · '+off.length+'</p>'+off.map(row).join(''):''}
     ${!K.length?`<div class="kom-empty">${q?'Tidak ada yang cocok.':'Belum ada pengguna lain.'}</div>`:''}`;
   }
   $('komPn').innerHTML=`<div class="kom-hd"><div><h2>Komunitas</h2><p><i class="kom-dot${I.online?'':' off'}"></i>${I.total} toko pengguna · ${I.online} online</p></div><button type="button" class="kom-x" data-kom="close" aria-label="Tutup">${IC.x}</button></div>
@@ -3467,8 +3468,8 @@ appStart();
  }
  function paintRoom(first){
   const room=view.room,L=lawan(room),ms=$('komMsgs');
-  const st=L.grp?`${info().online} online`:L.pembuat?'Store Head Kit':L.on?'<i class="kom-dot"></i>Online':'<i class="kom-dot off"></i>Aktif '+E(lalu(L.last));
-  const head=`<button type="button" class="kom-x" data-kom="back" aria-label="Kembali">${IC.back}</button>${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,null)}<div><h2>${E(L.nm)}</h2><p>${L.grp?E(L.sub)+' · '+st:E(L.sub)+(L.pembuat?'':' · '+st)}</p></div><button type="button" class="kom-x" data-kom="close" aria-label="Tutup">${IC.x}</button>`;
+  const st=L.grp?`${info().online} online`:L.pembuat?'Store Head Kit':L.on?'<i class="kom-dot"></i>Online':own()?'<i class="kom-dot off"></i>Aktif '+E(lalu(L.last)):'';
+  const head=`<button type="button" class="kom-x" data-kom="back" aria-label="Kembali">${IC.back}</button>${L.grp?`<span class="kom-av grp">${IC.grp}</span>`:av(L.id,L.nm,null)}<div><h2>${E(L.nm)}</h2><p>${L.grp?E(L.sub)+' · '+st:E(L.sub)+(L.pembuat||!st?'':' · '+st)}</p></div><button type="button" class="kom-x" data-kom="close" aria-label="Tutup">${IC.x}</button>`;
   if(!first&&ms){
    const bawah=ms.scrollHeight-ms.scrollTop-ms.clientHeight<80;$('komHd').innerHTML=head;ms.innerHTML=msgsHtml(room);if(bawah)ms.scrollTop=ms.scrollHeight;const e=$('komE');if(e)e.textContent=err;return}
   $('komPn').innerHTML=`<div class="kom-hd" id="komHd">${head}</div><div class="kom-msgs" id="komMsgs" aria-live="polite">${msgsHtml(room)}</div>
