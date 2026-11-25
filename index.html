@@ -2104,6 +2104,63 @@ body[data-pg]:not([data-pg="0"]) .hero .hello,body[data-pg]:not([data-pg="0"]) .
 /* angka di kepala halaman */
 .stats>div{border:1px solid var(--card-bd)}.stats b{color:var(--num)}.stats span{color:var(--mut)}
 .side-copy{margin-top:6px;opacity:.75}
+/* ====== REQUEST TOKO LAIN ====== */
+#rqt .rq-kpi{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;margin-top:10px}
+#rqt .rq-kpi>div{border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:10px 12px;background:var(--bg);min-width:0}
+#rqt .rq-kpi small{display:block;font-size:12px;color:var(--mut);font-weight:700}
+#rqt .rq-kpi b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}
+#rqt .rq-kpi span{display:block;font-size:12px;color:var(--mut);overflow-wrap:anywhere}
+#rqt .rq-kpi .warn{background:var(--warn-bg);border-color:transparent}#rqt .rq-kpi .warn b{color:var(--warn-fg)}
+#rqt .rq-kpi .bad{background:var(--bad-bg);border-color:transparent}#rqt .rq-kpi .bad b{color:var(--bad-fg)}
+#rqt .rq-tabs{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+#rqt .rq-fil{display:grid;grid-template-columns:1fr 160px 160px;gap:8px;margin-top:10px}
+#rqt .rq-fil .in{min-height:0;padding:9px 12px;font-size:13.5px}
+#rqt .rq-list{display:grid;gap:8px;margin-top:10px;max-height:660px;overflow-y:auto;padding-right:2px}
+#rqt .rq-row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;justify-content:space-between;border:1px solid var(--card-bd,var(--line));border-radius:14px;padding:11px 13px;background:var(--bg)}
+#rqt .rq-row.lw{border-color:var(--bad-fg)}
+#rqt .rq-main{flex:1 1 320px;min-width:0}
+#rqt .rq-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+#rqt .rq-top b{font-size:14px;overflow-wrap:anywhere}
+#rqt .rq-qty{font-size:12.5px;font-weight:700;color:var(--mut)}
+#rqt .rq-main small{display:block;font-size:12.5px;color:var(--mut);margin-top:3px;overflow-wrap:anywhere}
+#rqt .rq-main small b{color:var(--fg);font-weight:700}
+#rqt .rq-main em{font-style:normal}#rqt .rq-old{color:var(--bad-fg);font-weight:700}
+#rqt .rq-note{margin:6px 0 0;font-size:13px;line-height:1.45;padding:6px 10px;border-radius:10px;background:var(--card)}
+#rqt .rq-tag{font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:3px 8px;border-radius:999px;white-space:nowrap}
+#rqt .rq-tag.ea{background:#efe7fb;color:#5b2ea6}#rqt .rq-tag.rt{background:var(--blue-bg,#eaf1ff);color:var(--blue,#1d4ed8)}
+:root[data-theme=dark] #rqt .rq-tag.ea{background:#2c2142;color:#c9b2f5}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) #rqt .rq-tag.ea{background:#2c2142;color:#c9b2f5}}
+#rqt .rq-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#rqt .rq-act .btn{flex:none;padding:8px 12px;font-size:12.5px}
+#rqt .rq-st{font:inherit;font-size:12px;font-weight:800;padding:7px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;max-width:170px}
+#rqt .rq-st.ok{background:var(--ok-bg,#e7f6ee);color:var(--ok-fg);border-color:transparent}
+#rqt .rq-st.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:transparent}
+#rqt .rq-st.mut{color:var(--mut)}
+#rqt .rq-ic{border:0;background:transparent;color:var(--mut);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px}
+#rqt .rq-ic:hover{background:var(--line);color:var(--fg)}
+#rqt .rq-empty{padding:16px;border:1px dashed var(--line);border-radius:14px;margin-top:12px;color:var(--mut);font-size:13.5px;line-height:1.5}
+#rqt .rq-empty b{display:block;color:var(--fg);font-size:14.5px;margin-bottom:3px}#rqt .rq-empty p{margin:0}
+#rqt .rq-more{margin-top:10px;width:100%}
+#rqt .rq-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:10px;font-size:12px;color:var(--mut)}
+#rqt .rq-foot>span:last-child{display:flex;gap:14px;flex-wrap:wrap}
+.rq-lnk{border:0;background:none;padding:0;color:var(--blue,var(--acc));font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.rq-err{color:var(--bad-fg);font-weight:600}
+.rq-form .rq-jn{margin-bottom:12px}.rq-form .rq-jn button{padding:8px 14px;font-size:13px}
+.rq-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rq-f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:700;color:var(--mut)}
+.rq-f .in{font-weight:500;color:var(--fg);font-size:14px}.rq-f textarea.in{resize:vertical;font:inherit;font-weight:500;font-size:14px}
+.rq-f.s2{grid-column:span 2}.rq-f.s3{grid-column:1/-1}
+.rq-f textarea.in{height:auto;min-height:64px;flex:none}
+p.rq-err{margin:10px 0 0;font-size:13px}p.rq-err:empty{display:none}
+.rq-fb{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}.rq-fb .btn{padding:10px 18px}
+.rq-kt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:16px;font-weight:700;margin-bottom:10px;overflow-wrap:anywhere}
+.rq-wa{display:block;text-align:center;background:#1f8a4c!important;color:#fff!important;text-decoration:none;padding:12px}
+@media(max-width:720px){
+ #rqt .rq-kpi{grid-template-columns:1fr 1fr}#rqt .rq-kpi>div:first-child{grid-column:1/-1}
+ #rqt .rq-fil{grid-template-columns:1fr 1fr}#rqt .rq-fil #rqQ{grid-column:1/-1}
+ #rqt .rq-act{width:100%;justify-content:flex-end;border-top:1px dashed var(--line);padding-top:8px}
+ .rq-g{grid-template-columns:1fr 1fr}.rq-f.s2,.rq-f.s3{grid-column:1/-1}.rq-fb .btn{flex:1}
+}
 </style>
 </head>
 <body>
@@ -2338,6 +2395,10 @@ body[data-pg]:not([data-pg="0"]) .hero .hello,body[data-pg]:not([data-pg="0"]) .
         <section class="rs span-all" id="mt" aria-label="Permintaan dan mutasi barang">
           <div class="sh-head"><div><h3>Permintaan &amp; Mutasi Barang</h3><p id="mtSub">EA / retur dari toko lain, barang masuk &amp; keluar</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" data-mth="share" title="Link form untuk toko peminta">🔗 Link toko</button><button class="btn ghost" type="button" data-mth="form" title="Catat barang masuk / keluar">＋ Catat</button></div></div>
           <div id="mtBody"></div>
+        </section>
+        <section class="rs span-all" id="rqt" aria-label="Request toko lain">
+          <div class="sh-head"><div><h3>Request Toko Lain</h3><p id="rqtSub">Pesanan customer &amp; retur dari toko lain</p></div><div class="ks-hbtn"><button class="btn ghost" type="button" data-rqh="baru">＋ Request</button></div></div>
+          <div id="rqtBody"></div>
         </section>
       </div>
       <div class="deck-pg" role="tabpanel" aria-label="SH Kit">
@@ -12444,6 +12505,184 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
   if(e.key==='Escape'&&!sh.hidden){tutup();return}
   if(/^[1-8\/]$/.test(e.key)&&!/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||''))document.body.classList.add('kbd-on')});
  addEventListener('pointerdown',()=>document.body.classList.remove('kbd-on'));
+})();
+</script>
+<script>
+/* ====== REQUEST TOKO LAIN: pesanan customer (EA DELIV) & retur, database spreadsheet Request ====== */
+(function(){
+ const box=document.getElementById('rqt');if(!box)return;
+ const $id=i=>document.getElementById(i),body=$id('rqtBody'),sub=$id('rqtSub'),CK='ofa_rqt',TTL=3*60e3;
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],HR=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+ const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const p2=n=>String(n).padStart(2,'0'),hari=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+ const tgl=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return String(s||'');const d=new Date(+m[1],m[2]-1,+m[3]);return HR[d.getDay()]+', '+(+m[3])+' '+BLN[m[2]-1]+(+m[1]!==new Date().getFullYear()?' '+m[1]:'')};
+ const umur=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return 0;return Math.floor((new Date(hari()+'T00:00:00')-new Date(+m[1],m[2]-1,+m[3]))/864e5)};
+ const toast=t=>window.ofaToast&&window.ofaToast(t),gate=fn=>window.ofaHeadGate?window.ofaHeadGate(fn):fn();
+ const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL)&&!!localStorage.getItem('salesTrackingPin');
+ const DONE=s=>/^(SELESAI|BATAL)$/i.test(String(s||'').trim());
+ const stCls=s=>/^SELESAI$/i.test(s)?'ok':/^BATAL$/i.test(s)?'mut':'warn';
+ const jnCls=s=>/RETUR/i.test(s)?'rt':'ea';
+ let data=null,busy=false,err='',tab='aktif',q='',jn='',adm='',lim=60,stok=null,F=null;
+ try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
+ try{tab=localStorage.getItem('ofa_rqt_tab')||'aktif'}catch(e){}
+ const simpanCache=()=>{try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}};
+
+ async function load(force){
+  if(busy||!configured())return render();
+  if(!force&&data&&Date.now()-(data.at||0)<TTL)return render();
+  busy=true;render();
+  try{const r=await window.hubApi('rtList',{});data=Object.assign(r,{at:Date.now()});err='';simpanCache()}
+  catch(e){err=/tidak dikenal/i.test(e.message||'')?'missing':e.net?'net':(e.message||'Gagal memuat')}
+  finally{busy=false;render()}
+ }
+ window.ofaRqtReload=()=>load(true);
+ function stokIdx(){
+  if(stok||!window.hubStok)return;
+  window.hubStok(false).then(s=>{const m={};(s&&s.items||[]).forEach(a=>(a[8]||[]).forEach(z=>{
+   m[String(z[1])]=[a[2],a[1],z[0]&&z[0]!=='-'?z[0]:''].filter(Boolean).join(', ').toUpperCase()}));stok=m}).catch(()=>{});
+ }
+
+ /* ---------- tampilan ---------- */
+ function saring(){
+  const R=(data&&data.rows)||[],t=q.trim().toLowerCase();
+  return R.filter(x=>(tab==='semua'||(tab==='aktif'?!DONE(x.status):DONE(x.status)))&&(!jn||x.jenis===jn)&&(!adm||x.admin===adm)&&
+   (!t||[x.artikel,x.sku,x.site,x.nsite,x.notes,x.admin,x.status].join(' ').toLowerCase().includes(t)));
+ }
+ function render(){
+  const R=(data&&data.rows)||[],O=(data&&data.options)||{admin:[],jenis:[],status:[]};
+  const aktif=R.filter(x=>!DONE(x.status)),sel=R.filter(x=>/^SELESAI$/i.test(x.status));
+  sub.textContent=data?'Pesanan customer & retur dari toko lain · '+aktif.length+' perlu ditangani':'Pesanan customer & retur dari toko lain';
+  if(!configured()){body.innerHTML='<div class="rq-empty">Masuk ke Hub dulu untuk melihat request toko lain.</div>';return}
+  if(err==='missing'&&!data){body.innerHTML=`<div class="rq-empty"><b>Fitur belum aktif di Apps Script</b><p>Pemilik perlu menambahkan file <code>RequestToko.gs</code> ke proyek Apps Script Hub, menjalankan <code>rtSetup</code> sekali, lalu Deploy versi baru.</p></div>`;return}
+  if(!data){body.innerHTML=`<div class="rq-empty">${busy?'Memuat request dari spreadsheet…':err?E(err==='net'?'Tidak tersambung ke server. Coba lagi sebentar lagi.':err)+' <button type="button" class="rq-lnk" data-rq="reload">Coba lagi</button>':'Belum dimuat.'}</div>`;return}
+  const byStat={};aktif.forEach(x=>{const k=x.status||'(kosong)';byStat[k]=(byStat[k]||0)+1});
+  const lama=aktif.filter(x=>umur(x.tgl)>=7).length;
+  const kpi=`<div class="rq-kpi"><div class="${aktif.length?'warn':''}"><small>Perlu ditangani</small><b>${aktif.length}</b><span>${Object.keys(byStat).map(k=>E(k.toLowerCase())+' '+byStat[k]).join(' · ')||'semua beres'}</span></div>
+   <div class="${lama?'bad':''}"><small>Lebih dari 7 hari</small><b>${lama}</b><span>${lama?'segera follow up':'tidak ada yang tertahan'}</span></div>
+   <div><small>Selesai</small><b>${sel.length}</b><span>dari ${R.length} request terakhir</span></div></div>`;
+  const L=saring(),opt=(a,v,all)=>`<option value="">${all}</option>`+a.map(o=>`<option${o===v?' selected':''}>${E(o)}</option>`).join('');
+  const tabs=`<div class="bc-seg bc-seg3 rq-tabs" role="tablist">${[['aktif','Perlu ditangani',aktif.length],['selesai','Selesai / batal',R.length-aktif.length],['semua','Semua',R.length]].map(([k,l,n])=>`<button type="button" role="tab" data-rqt="${k}" class="${tab===k?'on':''}">${l}<small>${n} request</small></button>`).join('')}</div>`;
+  const fil=`<div class="rq-fil"><input class="in" id="rqQ" type="search" placeholder="Cari artikel, SKU, site, catatan" value="${E(q)}" aria-label="Cari request">
+   <select class="in" id="rqJn" aria-label="Retur / EA">${opt(O.jenis,jn,'Semua jenis')}</select><select class="in" id="rqAdm" aria-label="Admin">${opt(O.admin,adm,'Semua admin')}</select></div>`;
+  const row=x=>{const u=umur(x.tgl),warn=!DONE(x.status)&&u>=7;
+   return `<div class="rq-row${warn?' lw':''}"><div class="rq-main">
+    <div class="rq-top"><span class="rq-tag ${jnCls(x.jenis)}">${E(x.jenis||'-')}</span><b>${E(x.artikel||'(tanpa nama artikel)')}</b>${x.qty!==''?`<span class="rq-qty">×${E(x.qty)}</span>`:''}</div>
+    <small>SKU ${E(x.sku||'-')} · ${x.site?E(x.site)+' ':''}${E(x.nsite||'')}</small>
+    <small>${E(tgl(x.tgl))}${!DONE(x.status)&&u>0?` <em class="${warn?'rq-old':''}">(${u} hari)</em>`:''} · Admin <b>${E(x.admin||'-')}</b>${x.wab?' · Customer '+E(x.wab):''}</small>
+    ${x.notes?`<p class="rq-note">${E(x.notes)}</p>`:''}</div>
+    <div class="rq-act"><select class="rq-st ${stCls(x.status)}" data-rqs="${x.row}" aria-label="Status ${E(x.artikel)}">${(O.status.includes(x.status)||!x.status?O.status:[x.status].concat(O.status)).map(o=>`<option${o===x.status?' selected':''}>${E(o)}</option>`).join('')}</select>
+     ${x.wa?`<button type="button" class="btn ghost" data-rq="kontak:${x.row}">WhatsApp</button>`:x.wab?`<button type="button" class="btn ghost" data-rq="kontak:${x.row}">Kontak</button>`:''}
+     <button type="button" class="rq-ic" data-rq="ubah:${x.row}" aria-label="Ubah request ${E(x.artikel)}">✎</button></div></div>`};
+  body.innerHTML=kpi+tabs+fil+(L.length?`<div class="rq-list">${L.slice(0,lim).map(row).join('')}</div>${L.length>lim?`<button type="button" class="btn ghost rq-more" data-rq="more">Tampilkan ${Math.min(60,L.length-lim)} lagi (${L.length-lim} tersisa)</button>`:''}`
+   :`<div class="rq-empty">${q||jn||adm?'Tidak ada request yang cocok dengan filter.':tab==='aktif'?'Semua request sudah ditangani.':'Belum ada request.'}</div>`)+
+   `<div class="rq-foot"><span>${busy?'Menyegarkan…':'Data spreadsheet '+(data.at?new Date(data.at).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'')}${err&&data?' · <span class="rq-err">'+E(err==='net'?'tidak tersambung':err==='missing'?'fungsi belum terpasang':err)+'</span>':''}</span>
+   <span><button type="button" class="rq-lnk" data-rq="reload">Muat ulang</button>${L.length?'<button type="button" class="rq-lnk" data-rq="xlsx">Excel</button>':''}${data.url?`<a class="rq-lnk" href="${E(data.url)}" target="_blank" rel="noopener">Buka spreadsheet</a>`:''}</span></div>`;
+ }
+
+ /* ---------- simpan ---------- */
+ const rowOf=r=>((data&&data.rows)||[]).find(x=>String(x.row)===String(r));
+ async function simpan(row,d,ok){
+  const x=row?rowOf(row):null;
+  const res=await window.hubApi('rtSimpan',{row:row||0,sig:x?x.sig:'',data:d});
+  const y=res.row,i=data.rows.findIndex(z=>z.row===y.row);
+  if(i>=0)data.rows[i]=y;else data.rows.unshift(y);
+  if(y.site&&y.nsite)data.sites[y.site]=y.nsite;
+  simpanCache();render();toast(ok||'Tersimpan ke spreadsheet');
+  return y;
+ }
+ async function ubahStatus(row,st,el){
+  const x=rowOf(row);if(!x||x.status===st)return;
+  el.disabled=true;
+  try{await simpan(row,{status:st},'Status: '+st)}
+  catch(e){toast(e.net?'Tidak tersambung, status belum tersimpan':e.message);el.value=x.status;el.disabled=false;if(/berubah|diubah/.test(e.message||''))load(true)}
+ }
+ function kontak(row){
+  const x=rowOf(row);if(!x)return;
+  gate(async()=>{
+   openModal('Kontak customer','<p class="hint">Mengambil kontak dari spreadsheet…</p>');
+   try{const k=await window.hubApi('rtKontak',{row:x.row,sig:x.sig});
+    $id('pb').innerHTML=`<p style="margin:0 0 4px"><b>${E(x.artikel)}</b></p><p class="hint" style="margin:0 0 12px">${E(x.jenis)} · ${E(x.nsite||x.site)}</p>
+     <div class="rq-kt"><span>${E(k.wab)}</span><button type="button" class="btn ghost" id="rqCopy">Salin</button></div>
+     ${k.wa?`<a class="btn rq-wa" href="https://wa.me/${E(k.wa)}" target="_blank" rel="noopener">Buka chat WhatsApp</a>`:'<p class="hint">Kontak ini bukan nomor WhatsApp.</p>'}
+     <p class="hint" style="margin-top:12px">Kontak customer hanya ditampilkan di sini dan tidak disimpan di perangkat.</p>`;
+    $id('rqCopy').onclick=()=>{try{navigator.clipboard.writeText(k.wab);toast('Kontak disalin')}catch(e){}};
+   }catch(e){$id('pb').innerHTML=`<p class="rq-err">${E(e.net?'Tidak tersambung ke server.':e.message)}</p>`;if(/berubah/.test(e.message||''))load(true)}
+  });
+ }
+
+ /* ---------- form ---------- */
+ function form(row){
+  const x=row?rowOf(row):null,O=data.options;
+  if(row&&!x)return;
+  stokIdx();
+  const defSt=O.status.find(s=>/MENUNGGU|PROSES|BARU|OPEN/i.test(s))||O.status.find(s=>!DONE(s))||O.status[0]||'';
+  let lastAdm='';try{lastAdm=localStorage.getItem('ofa_rqt_adm')||''}catch(e){}
+  F=Object.assign({tgl:hari(),admin:O.admin.includes(lastAdm)?lastAdm:'',jenis:O.jenis[0]||'',status:defSt,notes:'',qty:1,sku:'',artikel:'',site:'',nsite:''},x||{});
+  const sel=(id,a,v)=>`<select class="in" id="${id}">${(a.includes(v)||!v?a:[v].concat(a)).map(o=>`<option${o===v?' selected':''}>${E(o)}</option>`).join('')}</select>`;
+  openModal(x?'Ubah request':'Request baru',`<div class="rq-form">
+   <div class="seg rq-jn" role="group" aria-label="Retur / EA">${O.jenis.map(o=>`<button type="button" data-rqj="${E(o)}" class="${F.jenis===o?'on':''}">${E(o)}</button>`).join('')}</div>
+   <div class="rq-g">
+    <label class="rq-f"><span>Tanggal request</span><input class="in" type="date" id="rqTg" value="${E(F.tgl)}"></label>
+    <label class="rq-f"><span>Admin (pemegang)</span><select class="in" id="rqAd"><option value="">Pilih admin</option>${(O.admin.includes(F.admin)||!F.admin?O.admin:[F.admin].concat(O.admin)).map(o=>`<option${o===F.admin?' selected':''}>${E(o)}</option>`).join('')}</select></label>
+    <label class="rq-f"><span>Status</span>${sel('rqSt',O.status,F.status)}</label>
+    <label class="rq-f"><span>No. WA customer</span><input class="in" id="rqWa" type="tel" inputmode="tel" maxlength="40" value="" placeholder="${x&&x.wab?'Tidak diubah ('+E(x.wab)+')':'mis. 0812xxxxxxx'}"></label>
+    <label class="rq-f"><span>SKU</span><input class="in" id="rqSku" inputmode="numeric" maxlength="20" value="${E(F.sku)}" placeholder="mis. 910007270021"></label>
+    <label class="rq-f"><span>Qty</span><input class="in" id="rqQty" type="number" min="0" max="999" value="${E(F.qty)}"></label>
+    <label class="rq-f s2"><span>Artikel</span><input class="in" id="rqArt" maxlength="100" value="${E(F.artikel)}" placeholder="terisi otomatis dari SKU bila ada di stok"></label>
+    <label class="rq-f"><span>Site toko</span><input class="in" id="rqSite" maxlength="10" value="${E(F.site)}" placeholder="mis. 2039" list="rqSiteL"><datalist id="rqSiteL">${Object.keys(data.sites||{}).slice(0,400).map(s=>`<option value="${E(s)}">${E(data.sites[s])}</option>`).join('')}</datalist></label>
+    <label class="rq-f"><span>Nama site</span><input class="in" id="rqNs" maxlength="80" value="${E(F.nsite)}" placeholder="terisi otomatis dari site"></label>
+    <label class="rq-f s3"><span>Notes / alasan</span><textarea class="in" id="rqNt" rows="2" maxlength="200" placeholder="mis. cust mau coba dulu, kurang kirim resi">${E(F.notes)}</textarea></label>
+   </div>
+   <p class="rq-err" id="rqErr" role="alert"></p>
+   <div class="rq-fb"><button type="button" class="btn ghost" data-rqf="batal">Batal</button><button type="button" class="btn" data-rqf="simpan">${x?'Simpan perubahan':'Simpan request'}</button></div></div>`);
+  const pn=document.querySelector('#ov .panel');if(pn){pn.classList.add('wide');cleanup=()=>{pn.classList.remove('wide');F=null}}
+  F._row=row||0;F._autoArt=!F.artikel;F._autoNs=!F.nsite;
+  setTimeout(()=>{const f=$id(x?'rqSt':'rqSku');f&&f.focus()},50);
+ }
+ async function kirimForm(btn){
+  const v=i=>($id(i)||{}).value||'',er=$id('rqErr');
+  const d={tgl:v('rqTg'),admin:v('rqAd'),jenis:F.jenis,status:v('rqSt'),notes:v('rqNt').trim(),qty:v('rqQty')===''?'':Number(v('rqQty')),
+   sku:v('rqSku').replace(/\D/g,''),artikel:v('rqArt').trim(),site:v('rqSite').trim(),nsite:v('rqNs').trim()};
+  const wa=v('rqWa').trim();if(wa)d.wab=wa;
+  const salah=!d.tgl?'Isi tanggal request.':!d.admin?'Pilih admin yang memegang request ini.':!d.sku&&!d.artikel?'Isi SKU atau nama artikel.':!F._row&&!wa?'Isi nomor WA customer (atau kontak lain).':'';
+  if(salah){er.textContent=salah;return}
+  btn.disabled=true;btn.textContent='Menyimpan…';er.textContent='';
+  try{const row=F._row;await simpan(row,d,row?'Request diperbarui':'Request baru tersimpan ke spreadsheet');try{localStorage.setItem('ofa_rqt_adm',d.admin)}catch(e){}F=null;close()}
+  catch(e){er.textContent=e.net?'Tidak tersambung. Request belum tersimpan, coba lagi.':e.message;btn.disabled=false;btn.textContent='Coba simpan lagi'}
+ }
+ function excel(){
+  const L=saring();if(!L.length||!window.xlsxSimple)return;
+  const rows=[['Request Toko Lain · '+(tab==='aktif'?'perlu ditangani':tab==='selesai'?'selesai / batal':'semua')+' · '+tgl(hari())],
+   ['Tanggal','Admin','Retur / EA','Status','Notes','Qty','SKU','Artikel','Site','Nama site']];
+  L.forEach(x=>rows.push([x.tgl,x.admin,x.jenis,x.status,x.notes,x.qty===''?'':Number(x.qty),x.sku,x.artikel,x.site,x.nsite]));
+  const blob=xlsxSimple([{name:'Request toko lain',head:2,title:1,widths:[12,12,12,16,34,6,15,40,8,34],rows}],'Request toko lain');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Request toko lain '+hari()+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+  toast('Excel diunduh (tanpa kontak customer)');
+ }
+
+ /* ---------- event ---------- */
+ box.addEventListener('click',e=>{
+  const t=e.target.closest('[data-rqt]');if(t){tab=t.dataset.rqt;lim=60;try{localStorage.setItem('ofa_rqt_tab',tab)}catch(x){}return render()}
+  const b=e.target.closest('[data-rq]');if(!b)return;const [k,r]=b.dataset.rq.split(':');
+  if(k==='reload')return load(true);if(k==='more'){lim+=60;return render()}if(k==='xlsx')return excel();
+  if(k==='kontak')return kontak(r);if(k==='ubah')return form(r);if(k==='baru')return data?form(0):toast('Tunggu data request selesai dimuat');
+ });
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-rqh]');if(!b)return;if(b.dataset.rqh==='baru')data?form(0):(load(true),toast('Memuat data request, coba lagi sebentar'))});
+ box.addEventListener('change',e=>{const s=e.target.closest('[data-rqs]');if(s)return ubahStatus(s.dataset.rqs,s.value,s);
+  if(e.target.id==='rqJn'){jn=e.target.value;lim=60;render()}if(e.target.id==='rqAdm'){adm=e.target.value;lim=60;render()}});
+ box.addEventListener('input',e=>{if(e.target.id==='rqQ'){q=e.target.value;lim=60;clearTimeout(box._t);box._t=setTimeout(()=>{render();const i=$id('rqQ');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
+ const ov=$id('ov');
+ ov.addEventListener('click',e=>{if(!F||!$id('rqTg'))return;
+  const j=e.target.closest('[data-rqj]');if(j){F.jenis=j.dataset.rqj;ov.querySelectorAll('[data-rqj]').forEach(b=>b.classList.toggle('on',b===j));return}
+  const f=e.target.closest('[data-rqf]');if(f){if(f.dataset.rqf==='batal'){F=null;close()}else kirimForm(f)}});
+ ov.addEventListener('input',e=>{if(!F)return;const t=e.target;
+  if(t.id==='rqSku'){const s=t.value.replace(/\D/g,''),a=$id('rqArt');if(stok&&stok[s]&&a&&(F._autoArt||!a.value)){a.value=stok[s];F._autoArt=true}}
+  if(t.id==='rqArt')F._autoArt=false;
+  if(t.id==='rqSite'){const n=$id('rqNs'),m=data&&data.sites&&data.sites[t.value.trim()];if(m&&n&&(F._autoNs||!n.value)){n.value=m;F._autoNs=true}}
+  if(t.id==='rqNs')F._autoNs=false});
+ render();setTimeout(()=>load(false),3000);
+ setInterval(()=>{if(document.visibilityState==='visible')load(false)},TTL+5e3);
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load(false)});
 })();
 </script>
 </body>
