@@ -2186,6 +2186,8 @@ p.rq-err{margin:10px 0 0;font-size:13px}p.rq-err:empty{display:none}
 #rqt .rq-tb .rq-st.mut{background:#e6e6e6;color:#555}
 #rqt .rq-wab{border:0;background:none;padding:0;font:inherit;font-size:13px;color:var(--blue,var(--acc));cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;white-space:nowrap}
 #rqt .rq-tb .rq-ic{width:30px;height:30px}
+#rqt .rq-tb td.wb a.rq-wab{text-decoration:none;font-weight:600;border-bottom:1px dotted currentColor}
+#rqt .rq-wtx{font-size:12.5px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -12554,7 +12556,9 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
  let data=null,busy=false,err='',tab='aktif',q='',jn='',adm='',lim=60,stok=null,F=null;
  try{data=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){data=null}
  try{tab=localStorage.getItem('ofa_rqt_tab')||'aktif'}catch(e){}
- const simpanCache=()=>{try{localStorage.setItem(CK,JSON.stringify(data))}catch(e){}};
+ // cache di perangkat tanpa nomor lengkap customer (hanya versi tersamar)
+ const simpanCache=()=>{try{localStorage.setItem(CK,JSON.stringify(Object.assign({},data,{rows:(data.rows||[]).map(x=>Object.assign({},x,{wab:x.wam||x.wab,wa:x.wam?'':x.wa,_m:1}))})))}catch(e){}};
+ const lengkap=x=>!!x.wam&&!x._m;   // nomor lengkap tersedia (server baru & data segar)
 
  async function load(force){
   if(busy||!configured())return render();
@@ -12592,7 +12596,7 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
    return `<tr class="${old?'lw':''}"><td class="rn">${x.row}</td>
     <td class="tg">${E(tglP(x.tgl))}${!DONE(x.status)&&u>0?`<small class="${old?'rq-old':''}">${u} hari</small>`:''}</td>
     <td class="c">${x.admin?`<span class="rq-adm" style="--a:${admC(x.admin)}">${E(x.admin)}</span>`:''}</td>
-    <td class="c">${x.wab?`<button type="button" class="rq-wab" data-rq="kontak:${x.row}" title="Lihat kontak (PIN Store Head)">${E(x.wab)}</button>`:''}</td>
+    <td class="c wb">${!x.wab?'':lengkap(x)?(x.wa?`<a class="rq-wab" href="https://wa.me/${E(x.wa)}" target="_blank" rel="noopener" title="Chat WhatsApp">${E(x.wab)}</a>`:`<span class="rq-wtx">${E(x.wab)}</span>`):`<button type="button" class="rq-wab" data-rq="kontak:${x.row}" title="Lihat kontak">${E(x.wab)}</button>`}</td>
     <td class="c">${x.jenis?`<span class="rq-tag ${jnCls(x.jenis)}">${E(x.jenis)}</span>`:''}</td>
     <td class="c"><select class="rq-st ${stCls(x.status)}" data-rqs="${x.row}" aria-label="Status baris ${x.row}">${(O.status.includes(x.status)||!x.status?O.status:[x.status].concat(O.status)).map(o=>`<option${o===x.status?' selected':''}>${E(o)}</option>`).join('')}</select></td>
     <td class="nt">${E(x.notes)}</td><td class="c">${E(x.qty)}</td><td class="c mono">${E(x.sku)}</td>
@@ -12625,16 +12629,16 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
  }
  function kontak(row){
   const x=rowOf(row);if(!x)return;
-  gate(async()=>{
+  (async()=>{
    openModal('Kontak customer','<p class="hint">Mengambil kontak dari spreadsheet…</p>');
    try{const k=await window.hubApi('rtKontak',{row:x.row,sig:x.sig});
     $id('pb').innerHTML=`<p style="margin:0 0 4px"><b>${E(x.artikel)}</b></p><p class="hint" style="margin:0 0 12px">${E(x.jenis)} · ${E(x.nsite||x.site)}</p>
      <div class="rq-kt"><span>${E(k.wab)}</span><button type="button" class="btn ghost" id="rqCopy">Salin</button></div>
      ${k.wa?`<a class="btn rq-wa" href="https://wa.me/${E(k.wa)}" target="_blank" rel="noopener">Buka chat WhatsApp</a>`:'<p class="hint">Kontak ini bukan nomor WhatsApp.</p>'}
-     <p class="hint" style="margin-top:12px">Kontak customer hanya ditampilkan di sini dan tidak disimpan di perangkat.</p>`;
+     `;
     $id('rqCopy').onclick=()=>{try{navigator.clipboard.writeText(k.wab);toast('Kontak disalin')}catch(e){}};
    }catch(e){$id('pb').innerHTML=`<p class="rq-err">${E(e.net?'Tidak tersambung ke server.':e.message)}</p>`;if(/berubah/.test(e.message||''))load(true)}
-  });
+  })();
  }
 
  /* ---------- form ---------- */
@@ -12652,7 +12656,7 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
     <label class="rq-f"><span>Tanggal request</span><input class="in" type="date" id="rqTg" value="${E(F.tgl)}"></label>
     <label class="rq-f"><span>Admin (pemegang)</span><select class="in" id="rqAd"><option value="">Pilih admin</option>${(O.admin.includes(F.admin)||!F.admin?O.admin:[F.admin].concat(O.admin)).map(o=>`<option${o===F.admin?' selected':''}>${E(o)}</option>`).join('')}</select></label>
     <label class="rq-f"><span>Status</span>${sel('rqSt',O.status,F.status)}</label>
-    <label class="rq-f"><span>No. WA customer</span><input class="in" id="rqWa" type="tel" inputmode="tel" maxlength="40" value="" placeholder="${x&&x.wab?'Tidak diubah ('+E(x.wab)+')':'mis. 0812xxxxxxx'}"></label>
+    <label class="rq-f"><span>No. WA customer</span><input class="in" id="rqWa" type="tel" inputmode="tel" maxlength="40" value="${x&&lengkap(x)?E(x.wab):''}" placeholder="${x&&x.wab&&!lengkap(x)?'Tidak diubah ('+E(x.wab)+')':'mis. 0812xxxxxxx'}"></label>
     <label class="rq-f"><span>SKU</span><input class="in" id="rqSku" inputmode="numeric" maxlength="20" value="${E(F.sku)}" placeholder="mis. 910007270021"></label>
     <label class="rq-f"><span>Qty</span><input class="in" id="rqQty" type="number" min="0" max="999" value="${E(F.qty)}"></label>
     <label class="rq-f s2"><span>Artikel</span><input class="in" id="rqArt" maxlength="100" value="${E(F.artikel)}" placeholder="terisi otomatis dari SKU bila ada di stok"></label>
@@ -12670,7 +12674,7 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
   const v=i=>($id(i)||{}).value||'',er=$id('rqErr');
   const d={tgl:v('rqTg'),admin:v('rqAd'),jenis:F.jenis,status:v('rqSt'),notes:v('rqNt').trim(),qty:v('rqQty')===''?'':Number(v('rqQty')),
    sku:v('rqSku').replace(/\D/g,''),artikel:v('rqArt').trim(),site:v('rqSite').trim(),nsite:v('rqNs').trim()};
-  const wa=v('rqWa').trim();if(wa)d.wab=wa;
+  const wa=v('rqWa').trim(),xo=F._row?rowOf(F._row):null;if(wa&&!(xo&&lengkap(xo)&&wa===xo.wab))d.wab=wa;
   const salah=!d.tgl?'Isi tanggal request.':!d.admin?'Pilih admin yang memegang request ini.':!d.sku&&!d.artikel?'Isi SKU atau nama artikel.':!F._row&&!wa?'Isi nomor WA customer (atau kontak lain).':'';
   if(salah){er.textContent=salah;return}
   btn.disabled=true;btn.textContent='Menyimpan…';er.textContent='';
