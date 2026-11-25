@@ -2161,6 +2161,31 @@ p.rq-err{margin:10px 0 0;font-size:13px}p.rq-err:empty{display:none}
  #rqt .rq-act{width:100%;justify-content:flex-end;border-top:1px dashed var(--line);padding-top:8px}
  .rq-g{grid-template-columns:1fr 1fr}.rq-f.s2,.rq-f.s3{grid-column:1/-1}.rq-fb .btn{flex:1}
 }
+/* tampilan tabel seperti spreadsheet */
+#rqt .rq-wrap{margin-top:10px;max-height:680px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+#rqt .rq-tb{border-collapse:separate;border-spacing:0;width:100%;min-width:1240px;font-size:13px}
+#rqt .rq-tb th{position:sticky;top:0;z-index:2;background:#2f6b1f;color:#fff;font-weight:800;font-size:12px;letter-spacing:.2px;text-align:center;padding:10px 8px;white-space:nowrap;border-right:1px solid #3f8a2b}
+#rqt .rq-tb td{padding:7px 8px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:middle;line-height:1.35}
+#rqt .rq-tb tr:hover td{background:color-mix(in srgb,var(--fg) 4%,transparent)}
+#rqt .rq-tb td.c{text-align:center;white-space:nowrap}
+#rqt .rq-tb td.rn{text-align:center;color:var(--mut);font-size:11.5px;background:var(--card);position:sticky;left:0;z-index:1;width:36px}
+#rqt .rq-tb th:first-child{left:0;z-index:3}
+#rqt .rq-tb td.tg{white-space:nowrap;background:color-mix(in srgb,#93c47d 22%,var(--bg))}
+#rqt .rq-tb td.tg small{display:block;font-size:11px;color:var(--mut)}
+#rqt .rq-tb td.tg small.rq-old{color:var(--bad-fg);font-weight:700}
+#rqt .rq-tb td.ar,#rqt .rq-tb td.ns{background:color-mix(in srgb,#93c47d 22%,var(--bg));min-width:200px}
+#rqt .rq-tb td.nt{min-width:170px;max-width:240px}
+#rqt .rq-tb td.mono{font-variant-numeric:tabular-nums}
+#rqt .rq-tb tr.lw td.tg{box-shadow:inset 3px 0 0 var(--bad-fg)}
+#rqt .rq-adm{display:inline-block;min-width:64px;padding:3px 10px;border-radius:6px;background:var(--a);color:#fff;font-weight:700;font-size:12.5px}
+#rqt .rq-tb .rq-tag{display:inline-block;min-width:78px;font-size:11.5px;padding:3px 10px}
+#rqt .rq-tb .rq-tag.ea{background:#5b3fa0;color:#fff}#rqt .rq-tb .rq-tag.rt{background:#1d6fd6;color:#fff}
+#rqt .rq-tb .rq-st{border-radius:6px;min-width:130px;text-align:center}
+#rqt .rq-tb .rq-st.ok{background:#1e7b4f;color:#fff}
+#rqt .rq-tb .rq-st.warn{background:#cfe2f3;color:#1c4f80}
+#rqt .rq-tb .rq-st.mut{background:#e6e6e6;color:#555}
+#rqt .rq-wab{border:0;background:none;padding:0;font:inherit;font-size:13px;color:var(--blue,var(--acc));cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;white-space:nowrap}
+#rqt .rq-tb .rq-ic{width:30px;height:30px}
 </style>
 </head>
 <body>
@@ -12516,6 +12541,10 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
  const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const p2=n=>String(n).padStart(2,'0'),hari=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
  const tgl=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return String(s||'');const d=new Date(+m[1],m[2]-1,+m[3]);return HR[d.getDay()]+', '+(+m[3])+' '+BLN[m[2]-1]+(+m[1]!==new Date().getFullYear()?' '+m[1]:'')};
+ const HRL=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],BLL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+ const tglP=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return String(s||'');const d=new Date(+m[1],m[2]-1,+m[3]);return HRL[d.getDay()]+', '+m[3]+' '+BLL[m[2]-1]+' '+m[1]};
+ const ADMC=['#1f5fbf','#2e7d32','#8d4a12','#c2185b','#6a3fb5','#00838f','#b26a00','#455a64'];
+ const admC=n=>{let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))>>>0;return ADMC[h%ADMC.length]};
  const umur=s=>{const m=String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return 0;return Math.floor((new Date(hari()+'T00:00:00')-new Date(+m[1],m[2]-1,+m[3]))/864e5)};
  const toast=t=>window.ofaToast&&window.ofaToast(t),gate=fn=>window.ofaHeadGate?window.ofaHeadGate(fn):fn();
  const configured=()=>typeof HUB_API_URL==='string'&&/^https:\/\/script\.google\.com\//.test(HUB_API_URL)&&!!localStorage.getItem('salesTrackingPin');
@@ -12555,26 +12584,24 @@ ${denganRekap?rekap(items):''}${items.map(x=>halaman(x,U)).join('')}
   if(!configured()){body.innerHTML='<div class="rq-empty">Masuk ke Hub dulu untuk melihat request toko lain.</div>';return}
   if(err==='missing'&&!data){body.innerHTML=`<div class="rq-empty"><b>Fitur belum aktif di Apps Script</b><p>Pemilik perlu menambahkan file <code>RequestToko.gs</code> ke proyek Apps Script Hub, menjalankan <code>rtSetup</code> sekali, lalu Deploy versi baru.</p></div>`;return}
   if(!data){body.innerHTML=`<div class="rq-empty">${busy?'Memuat request dari spreadsheet…':err?E(err==='net'?'Tidak tersambung ke server. Coba lagi sebentar lagi.':err)+' <button type="button" class="rq-lnk" data-rq="reload">Coba lagi</button>':'Belum dimuat.'}</div>`;return}
-  const byStat={};aktif.forEach(x=>{const k=x.status||'(kosong)';byStat[k]=(byStat[k]||0)+1});
-  const lama=aktif.filter(x=>umur(x.tgl)>=7).length;
-  const kpi=`<div class="rq-kpi"><div class="${aktif.length?'warn':''}"><small>Perlu ditangani</small><b>${aktif.length}</b><span>${Object.keys(byStat).map(k=>E(k.toLowerCase())+' '+byStat[k]).join(' · ')||'semua beres'}</span></div>
-   <div class="${lama?'bad':''}"><small>Lebih dari 7 hari</small><b>${lama}</b><span>${lama?'segera follow up':'tidak ada yang tertahan'}</span></div>
-   <div><small>Selesai</small><b>${sel.length}</b><span>dari ${R.length} request terakhir</span></div></div>`;
   const L=saring(),opt=(a,v,all)=>`<option value="">${all}</option>`+a.map(o=>`<option${o===v?' selected':''}>${E(o)}</option>`).join('');
   const tabs=`<div class="bc-seg bc-seg3 rq-tabs" role="tablist">${[['aktif','Perlu ditangani',aktif.length],['selesai','Selesai / batal',R.length-aktif.length],['semua','Semua',R.length]].map(([k,l,n])=>`<button type="button" role="tab" data-rqt="${k}" class="${tab===k?'on':''}">${l}<small>${n} request</small></button>`).join('')}</div>`;
   const fil=`<div class="rq-fil"><input class="in" id="rqQ" type="search" placeholder="Cari artikel, SKU, site, catatan" value="${E(q)}" aria-label="Cari request">
    <select class="in" id="rqJn" aria-label="Retur / EA">${opt(O.jenis,jn,'Semua jenis')}</select><select class="in" id="rqAdm" aria-label="Admin">${opt(O.admin,adm,'Semua admin')}</select></div>`;
-  const row=x=>{const u=umur(x.tgl),warn=!DONE(x.status)&&u>=7;
-   return `<div class="rq-row${warn?' lw':''}"><div class="rq-main">
-    <div class="rq-top"><span class="rq-tag ${jnCls(x.jenis)}">${E(x.jenis||'-')}</span><b>${E(x.artikel||'(tanpa nama artikel)')}</b>${x.qty!==''?`<span class="rq-qty">×${E(x.qty)}</span>`:''}</div>
-    <small>SKU ${E(x.sku||'-')} · ${x.site?E(x.site)+' ':''}${E(x.nsite||'')}</small>
-    <small>${E(tgl(x.tgl))}${!DONE(x.status)&&u>0?` <em class="${warn?'rq-old':''}">(${u} hari)</em>`:''} · Admin <b>${E(x.admin||'-')}</b>${x.wab?' · Customer '+E(x.wab):''}</small>
-    ${x.notes?`<p class="rq-note">${E(x.notes)}</p>`:''}</div>
-    <div class="rq-act"><select class="rq-st ${stCls(x.status)}" data-rqs="${x.row}" aria-label="Status ${E(x.artikel)}">${(O.status.includes(x.status)||!x.status?O.status:[x.status].concat(O.status)).map(o=>`<option${o===x.status?' selected':''}>${E(o)}</option>`).join('')}</select>
-     ${x.wa?`<button type="button" class="btn ghost" data-rq="kontak:${x.row}">WhatsApp</button>`:x.wab?`<button type="button" class="btn ghost" data-rq="kontak:${x.row}">Kontak</button>`:''}
-     <button type="button" class="rq-ic" data-rq="ubah:${x.row}" aria-label="Ubah request ${E(x.artikel)}">✎</button></div></div>`};
-  body.innerHTML=kpi+tabs+fil+(L.length?`<div class="rq-list">${L.slice(0,lim).map(row).join('')}</div>${L.length>lim?`<button type="button" class="btn ghost rq-more" data-rq="more">Tampilkan ${Math.min(60,L.length-lim)} lagi (${L.length-lim} tersisa)</button>`:''}`
-   :`<div class="rq-empty">${q||jn||adm?'Tidak ada request yang cocok dengan filter.':tab==='aktif'?'Semua request sudah ditangani.':'Belum ada request.'}</div>`)+
+  const tr=x=>{const u=umur(x.tgl),old=!DONE(x.status)&&u>=7;
+   return `<tr class="${old?'lw':''}"><td class="rn">${x.row}</td>
+    <td class="tg">${E(tglP(x.tgl))}${!DONE(x.status)&&u>0?`<small class="${old?'rq-old':''}">${u} hari</small>`:''}</td>
+    <td class="c">${x.admin?`<span class="rq-adm" style="--a:${admC(x.admin)}">${E(x.admin)}</span>`:''}</td>
+    <td class="c">${x.wab?`<button type="button" class="rq-wab" data-rq="kontak:${x.row}" title="Lihat kontak (PIN Store Head)">${E(x.wab)}</button>`:''}</td>
+    <td class="c">${x.jenis?`<span class="rq-tag ${jnCls(x.jenis)}">${E(x.jenis)}</span>`:''}</td>
+    <td class="c"><select class="rq-st ${stCls(x.status)}" data-rqs="${x.row}" aria-label="Status baris ${x.row}">${(O.status.includes(x.status)||!x.status?O.status:[x.status].concat(O.status)).map(o=>`<option${o===x.status?' selected':''}>${E(o)}</option>`).join('')}</select></td>
+    <td class="nt">${E(x.notes)}</td><td class="c">${E(x.qty)}</td><td class="c mono">${E(x.sku)}</td>
+    <td class="ar">${E(x.artikel)}</td><td class="c">${E(x.site)}</td><td class="ns">${E(x.nsite)}</td>
+    <td class="c"><button type="button" class="rq-ic" data-rq="ubah:${x.row}" aria-label="Ubah baris ${x.row}">✎</button></td></tr>`};
+  const head=['#','TANGGAL REQUEST','ADMIN','WAB','RETUR / EA','STATUS','NOTES','QTY','SKU','ARTIKEL','SITE','NAMA SITE',''];
+  const tbl=L.length?`<div class="rq-wrap"><table class="rq-tb"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${L.slice(0,lim).map(tr).join('')}</tbody></table></div>${L.length>lim?`<button type="button" class="btn ghost rq-more" data-rq="more">Tampilkan ${Math.min(60,L.length-lim)} lagi (${L.length-lim} tersisa)</button>`:''}`
+   :`<div class="rq-empty">${q||jn||adm?'Tidak ada request yang cocok dengan filter.':tab==='aktif'?'Semua request sudah ditangani.':'Belum ada request.'}</div>`;
+  body.innerHTML=tabs+fil+tbl+
    `<div class="rq-foot"><span>${busy?'Menyegarkan…':'Data spreadsheet '+(data.at?new Date(data.at).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'')}${err&&data?' · <span class="rq-err">'+E(err==='net'?'tidak tersambung':err==='missing'?'fungsi belum terpasang':err)+'</span>':''}</span>
    <span><button type="button" class="rq-lnk" data-rq="reload">Muat ulang</button>${L.length?'<button type="button" class="rq-lnk" data-rq="xlsx">Excel</button>':''}${data.url?`<a class="rq-lnk" href="${E(data.url)}" target="_blank" rel="noopener">Buka spreadsheet</a>`:''}</span></div>`;
  }
