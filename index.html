@@ -2188,6 +2188,30 @@ p.rq-err{margin:10px 0 0;font-size:13px}p.rq-err:empty{display:none}
 #rqt .rq-tb .rq-ic{width:30px;height:30px}
 #rqt .rq-tb td.wb a.rq-wab{text-decoration:none;font-weight:600;border-bottom:1px dotted currentColor}
 #rqt .rq-wtx{font-size:12.5px;white-space:nowrap}
+/* tugas bulanan Store Head */
+.mo{margin-top:14px}
+.mo:empty{display:none}
+.mo>div.mo-h,.mo>.mo-bar,.mo>ul,.mo>.mo-ok,.mo>.mo-f{margin-left:0}
+#dlMon:not(:empty){border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--bg)}
+.mo-h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.mo-h b{display:block;font-size:14.5px}
+.mo-h small{display:block;font-size:12.5px;color:var(--mut);margin-top:1px}
+.mo-c{font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--line);font-variant-numeric:tabular-nums}
+.mo-c.warn{background:var(--warn-bg);color:var(--warn-fg)}.mo-c.bad{background:var(--bad-bg);color:var(--bad-fg)}.mo-c.ok{background:var(--ok-bg,#e7f6ee);color:var(--ok-fg)}
+.mo-bar{height:5px;border-radius:9px;background:var(--line);margin:9px 0 4px;overflow:hidden}
+.mo-bar i{display:block;height:100%;background:var(--ok-fg,#22a559);border-radius:9px;transition:width .4s}
+.mo-l{margin-top:6px}
+.mo-i.late>span,.mo-i.urg>span{color:var(--fg)}
+.mo-i.late .dl-chk,.mo-i.urg .dl-chk{border-color:var(--bad-fg)}
+.mo-late{display:inline-block;margin-left:8px;font-style:normal;font-size:11px;font-weight:800;color:var(--bad-fg);background:var(--bad-bg);padding:2px 7px;border-radius:999px;vertical-align:1px}
+.mo-ok{margin:8px 0 2px;font-size:13px;color:var(--ok-fg);font-weight:600}
+.mo-f{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px}
+.mo-f .dl-toggle{margin:0}
+.mo-setup{display:block;width:100%;text-align:left;border:1.5px dashed var(--line);border-radius:14px;background:transparent;color:var(--fg);font:inherit;font-weight:700;font-size:13.5px;padding:11px 14px;cursor:pointer}
+.mo-setup small{display:block;font-weight:500;font-size:12px;color:var(--mut);margin-top:2px}
+.mo-setup:hover{border-color:var(--acc)}
+.mo-sk.pA{background:#2f80ed}.mo-sk.pT{background:#8b5cf6}.mo-sk.pK{background:#ff4f1f}.mo-sk.pS{background:#6b6b76}
+.mo-form .seg{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -2304,6 +2328,7 @@ p.rq-err{margin:10px 0 0;font-size:13px}p.rq-err:empty{display:none}
             <div class="dl-txt"><h3>Tugas Hari Ini</h3><p id="dlSum">Belum ada tugas</p></div>
           </div>
           <div class="dl-mini" id="dlMini"></div>
+          <div class="mo" id="dlMon" aria-label="Tugas bulanan Store Head"></div>
           <div class="seg dl-seg" id="dlSeg" role="group" aria-label="Shift untuk tugas baru"><button type="button" data-ds="U" class="on">Umum</button><button type="button" data-ds="P">Pagi</button><button type="button" data-ds="M">Middle</button><button type="button" data-ds="S">Sore</button></div>
           <form class="dl-add" id="dlForm" autocomplete="off"><input type="hidden" id="dlShift" value="U"><input class="in" id="dlIn" maxlength="140" placeholder="Tambah tugas hari ini…" aria-label="Tugas baru"><button class="btn" type="submit">Tambah</button></form>
           <div id="dlCarry"></div>
@@ -3030,7 +3055,7 @@ renderTeam();
   const tg=$('#dlToggle'),dl=$('#dlDone');
   tg.hidden=!fin.length;tg.textContent=(showDone?'Sembunyikan':'Lihat')+' tugas selesai ('+fin.length+')';
   dl.hidden=!showDone||!fin.length;dl.innerHTML=showDone?fin.map(x=>row(x,1,ty)).join(''):'';
-  const ad=$('#dlAdmin');ad.style.display=window.ofaRole==='staf'?'none':'';ad.classList.toggle('on',isHead());ad.textContent=isHead()?'⚙ Atur tugas rutin · mode Store Head aktif':'⚙ Masuk mode Store Head untuk mengatur tugas';
+  const ad=$('#dlAdmin');ad.style.display=window.ofaRole==='staf'?'none':'';ad.classList.toggle('on',isHead());ad.textContent=isHead()?'⚙ Atur tugas rutin harian & bulanan · mode Store Head aktif':'⚙ Masuk mode Store Head untuk mengatur tugas';
  };
  window.ofaTodayTasks=function(){
   const {ty,groups}=shiftInfo(),open=items().filter(x=>!x.done);
@@ -3117,7 +3142,7 @@ renderTeam();
     <div class="row"><button class="btn" id="rtSave" type="button">${cur?'Simpan perubahan':'+ Tambah tugas rutin'}</button>${cur?'<button class="btn ghost" id="rtCancel" type="button">Batal</button>':''}</div>
    </div>
    <div class="rt-list">${groupsHtml||`<p class="dl-empty">Belum ada tugas rutin.</p><button class="btn ghost" id="rtStd" type="button" style="width:100%">Pakai checklist standar toko (${STD.length} tugas)</button>`}</div>
-   <div class="row" style="margin-top:16px"><button class="btn ghost" id="rtPin" type="button">Ganti PIN</button><button class="btn ghost" id="rtLock" type="button">Kunci mode Store Head</button><button class="btn" id="rtDone" type="button">Selesai</button></div>`);
+   <div class="row" style="margin-top:16px"><button class="btn ghost" id="rtMon" type="button">Tugas bulanan</button><button class="btn ghost" id="rtPin" type="button">Ganti PIN</button><button class="btn ghost" id="rtLock" type="button">Kunci mode Store Head</button><button class="btn" id="rtDone" type="button">Selesai</button></div>`);
  }
  $('#pb').addEventListener('click',e=>{
   if(!document.querySelector('#pb .rt-form'))return;
@@ -3134,6 +3159,7 @@ renderTeam();
   }
   if(b.id==='rtCancel'){editRid=null;formDays=[];return routineEditor()}
   if(b.id==='rtStd'){saveRoutines(STD.map(([k,t],i)=>({id:'rt'+Date.now().toString(36)+i,t,s:k,d:[]})));return routineEditor()}
+  if(b.id==='rtMon'){moEdit=null;moForm='A';return monthlyEditor()}
   if(b.id==='rtPin')return pinForm(true,routineEditor,'Ganti PIN Store Head');
   if(b.id==='rtLock'){lock();return close()}
   if(b.id==='rtDone'){editRid=null;return close()}
@@ -3142,6 +3168,110 @@ renderTeam();
   if(b.dataset.ract==='del'){const i=rs.indexOf(r);rs.splice(i,1);if(editRid===rid)editRid=null;saveRoutines(rs);routineEditor();
    toast('Tugas rutin dihapus',()=>{const l=routines().slice();l.splice(i,0,r);saveRoutines(l);if(document.querySelector('#pb .rt-form'))routineEditor()})}
  });
+
+ /* --- TUGAS BULANAN STORE HEAD: awal (1–10), tengah (11–20), akhir (21–akhir bulan) --- */
+ const MK='__bulan',PER=['A','T','K'],PNM={A:'Awal bulan',T:'Tengah bulan',K:'Akhir bulan','*':'Setiap periode'};
+ const BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+ const MSTD=[['A','Buat dan bagikan jadwal shift bulan ini'],['A','Bagi target bulanan ke target harian & per RA'],['A','Rekap dan kirim laporan petty cash bulan lalu'],['A','Briefing target & promo bulan ini'],
+  ['T','Review pencapaian sales vs target tengah bulan'],['T','Blind counting zona prioritas'],['T','Cek kondisi APAR, P3K, dan CCTV'],
+  ['K','Rekap absensi, lembur, dan cuti tim'],['K','Ajukan budget & kebutuhan bulan depan'],['K','Evaluasi kinerja tim dan catat coaching'],['K','Persiapan stock count akhir bulan']];
+ let moShowDone=false,moEdit=null,moForm='A';
+ const monthly=()=>Array.isArray(meta.__monthly)?meta.__monthly.filter(r=>r&&r.id&&r.t):[];
+ const ymOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1);
+ const lastDay=(y,m)=>new Date(y,m+1,0).getDate();
+ function periodOf(d){const x=d.getDate();return x<=10?'A':x<=20?'T':'K'}
+ function range(p,y,m){return p==='A'?[1,10]:p==='T'?[11,20]:[21,lastDay(y,m)]}
+ const rangeTxt=(p,y,m)=>{const r=range(p,y,m);return r[0]+'–'+r[1]+' '+BLN[m]};
+ const mAll=()=>{const v=meta[MK];return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+ const mList=ym=>(mAll()[ym]||[]).filter(x=>x&&x.id);
+ function mSet(ym,id,patch){
+  const a=mAll(),list=(a[ym]||[]).slice(),i=list.findIndex(x=>x.id===id),now=Date.now();
+  if(i>=0)list[i]=Object.assign({},list[i],patch,{u:now});else list.push(Object.assign({id},patch,{u:now}));
+  a[ym]=list;Object.keys(a).sort().slice(0,-13).forEach(k=>delete a[k]);meta[MK]=a;ls.set('ofa_meta',meta);
+ }
+ // daftar tugas yang perlu dikejar: periode berjalan + periode bulan ini yang terlewat + sisa akhir bulan lalu (sampai tgl 10)
+ function moItems(){
+  const now=new Date(),y=now.getFullYear(),m=now.getMonth(),ym=ymOf(now),cp=periodOf(now),ms=monthly(),out=[];
+  const st={};mList(ym).forEach(x=>st[x.id]=x);
+  const inst=(r,p)=>p===r.p||r.p==='*';
+  PER.forEach(p=>{
+   if(PER.indexOf(p)>PER.indexOf(cp))return;
+   ms.filter(r=>inst(r,p)).forEach(r=>{const id=p+':'+r.id,s=st[id]||{};
+    out.push({id,ym,p,mid:r.id,t:r.t,done:s.done?1:0,doneAt:s.doneAt||0,late:p!==cp,cur:p===cp})});
+  });
+  if(now.getDate()<=10){
+   const pd=new Date(y,m-1,1),pym=ymOf(pd),ps={};mList(pym).forEach(x=>ps[x.id]=x);
+   ['K'].forEach(p=>ms.filter(r=>inst(r,p)).forEach(r=>{const id=p+':'+r.id;if(ps[id]&&ps[id].done)return;   // hanya sisa akhir bulan lalu
+    const since=r.at||0;if(since&&since>new Date(pd.getFullYear(),pd.getMonth()+1,0,23,59).getTime())return;   // tugas baru dibuat bulan ini
+    out.push({id,ym:pym,p,mid:r.id,t:r.t,done:0,late:1,prev:1,pm:pd.getMonth()})}));
+  }
+  return out;
+ }
+ function renderMonthly(){
+  const box=$('#dlMon');if(!box)return;
+  if(window.ofaRole==='staf'){box.innerHTML='';return}
+  const ms=monthly(),now=new Date(),y=now.getFullYear(),m=now.getMonth(),cp=periodOf(now);
+  if(!ms.length){box.innerHTML=window.ofaRole==='pemilik'||!window.ofaRole?`<button type="button" class="mo-setup" data-mo="atur">＋ Atur tugas bulanan Store Head <small>awal (1–10), tengah (11–20), akhir bulan (21–${lastDay(y,m)})</small></button>`:'';return}
+  const it=moItems(),cur=it.filter(x=>x.cur),late=it.filter(x=>x.late&&!x.done),open=cur.filter(x=>!x.done),fin=cur.filter(x=>x.done);
+  const left=range(cp,y,m)[1]-now.getDate(),urgent=left<=1;
+  const tag=x=>x.prev?`Terlewat · ${PNM[x.p].toLowerCase()} ${BLN[x.pm]}`:`Terlewat · ${PNM[x.p].toLowerCase()}`;
+  const li=(x,cls)=>`<li class="dl-item mo-i ${cls||''}" data-mid="${esc(x.ym+'|'+x.id)}"><button class="dl-chk" type="button" data-mo="${x.done?'undo':'cek'}" aria-label="${x.done?'Batalkan selesai':'Tandai selesai'}">✓</button><span>${esc(x.t)}${x.late&&!x.done?`<i class="mo-late">${esc(tag(x))}</i>`:''}</span></li>`;
+  const pct=cur.length?Math.round(fin.length/cur.length*100):0;
+  box.innerHTML=`<div class="mo-h"><div><b>Tugas bulanan · ${PNM[cp]}</b><small>${rangeTxt(cp,y,m)} · ${left===0?'hari terakhir':'sisa '+left+' hari'}</small></div>
+   <span class="mo-c ${open.length?(urgent?'bad':'warn'):'ok'}">${fin.length}/${cur.length}</span></div>
+   <div class="mo-bar"><i style="width:${pct}%"></i></div>
+   ${late.length?`<ul class="dl-list mo-l">${late.map(x=>li(x,'late')).join('')}</ul>`:''}
+   ${open.length?`<ul class="dl-list mo-l">${open.map(x=>li(x,urgent?'urg':'')).join('')}</ul>`:`<p class="mo-ok">${cur.length?'Semua tugas '+PNM[cp].toLowerCase()+' selesai.':'Tidak ada tugas bulanan di periode ini.'}</p>`}
+   <div class="mo-f">${fin.length?`<button type="button" class="dl-toggle" data-mo="lihat">${moShowDone?'Sembunyikan':'Lihat'} yang selesai (${fin.length})</button>`:'<span></span>'}<button type="button" class="dl-toggle" data-mo="atur">Atur tugas bulanan</button></div>
+   ${moShowDone&&fin.length?`<ul class="dl-list done mo-l">${fin.map(x=>li(x)).join('')}</ul>`:''}`;
+ }
+ $('#daily').addEventListener('click',e=>{
+  const b=e.target.closest('[data-mo]');if(!b)return;e.stopPropagation();const a=b.dataset.mo;
+  if(a==='atur'){moEdit=null;moForm='A';return headGate(monthlyEditor)}
+  if(a==='lihat'){moShowDone=!moShowDone;return renderMonthly()}
+  const li=b.closest('.mo-i');if(!li)return;const [ym,id]=li.dataset.mid.split('|');
+  const go=()=>{
+   if(a==='cek'){li.classList.add('leaving');setTimeout(()=>{mSet(ym,id,{done:1,doneAt:Date.now(),p:id[0],mid:id.slice(2)});renderMonthly();toast('Tugas bulanan selesai ✓',()=>{mSet(ym,id,{done:0,doneAt:0});renderMonthly()})},380)}
+   else{mSet(ym,id,{done:0,doneAt:0});renderMonthly()}
+  };
+  canManage()?go():headGate(go);
+ },true);
+ function saveMonthly(list){meta.__monthly=list;ls.set('ofa_meta',meta);renderMonthly()}
+ function monthlyEditor(){
+  const ms=monthly(),cur=moEdit?ms.find(r=>r.id===moEdit):null,now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  const grp=['A','T','K','*'].map(p=>{const g=ms.filter(r=>r.p===p);if(!g.length)return'';
+   return `<div class="rt-g"><div class="dl-gh"><span class="dl-sk mo-sk p${p==='*'?'S':p}">${PNM[p]}</span><small>${p==='*'?'muncul di 3 periode':rangeTxt(p,y,m)} · ${g.length} tugas</small></div>${g.map(r=>`<div class="rt-i${moEdit===r.id?' on':''}" data-moid="${esc(r.id)}"><button type="button" class="rt-t" data-moact="edit">${esc(r.t)}</button><button type="button" class="dl-del" data-moact="del" aria-label="Hapus tugas bulanan">✕</button></div>`).join('')}</div>`}).join('');
+  openModal('Tugas Bulanan Store Head',`
+   <p class="hint" style="margin:0 0 10px">Tugas bulanan muncul di kartu Tugas Hari Ini selama periodenya: awal (1–10), tengah (11–20), dan akhir bulan (21 sampai tanggal terakhir, otomatis 28–31). Yang belum selesai saat periode lewat akan ditandai <b>Terlewat</b>.</p>
+   <div class="mo-form">
+    <input class="in" id="moT" maxlength="140" placeholder="Contoh: Ajukan budget bulan depan" value="${cur?esc(cur.t):''}">
+    <div class="rt-row"><span>Periode</span><div class="seg" id="moP">${['A','T','K','*'].map(p=>`<button type="button" data-mp="${p}" class="${moForm===p?'on':''}">${p==='*'?'Setiap periode':PNM[p].replace(' bulan','')+' · '+(p==='K'?'21–'+lastDay(y,m):range(p,y,m).join('–'))}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn" id="moSave" type="button">${cur?'Simpan perubahan':'+ Tambah tugas bulanan'}</button>${cur?'<button class="btn ghost" id="moCancel" type="button">Batal</button>':''}</div>
+   </div>
+   <div class="rt-list">${grp||`<p class="dl-empty">Belum ada tugas bulanan.</p><button class="btn ghost" id="moStd" type="button" style="width:100%">Pakai contoh tugas bulanan (${MSTD.length} tugas, bisa diubah)</button>`}</div>
+   <div class="row" style="margin-top:16px"><button class="btn ghost" id="moDaily" type="button">Tugas rutin harian</button><button class="btn" id="moDone" type="button">Selesai</button></div>`);
+  setTimeout(()=>{const t=$('#moT');t&&t.focus()},50);
+ }
+ $('#pb').addEventListener('click',e=>{
+  if(!document.querySelector('#pb .mo-form'))return;
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.mp){moForm=b.dataset.mp;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));return}
+  const ms=monthly().slice();
+  if(b.id==='moSave'){const t=$('#moT').value.trim();if(!t){$('#moT').focus();return}
+   if(moEdit){const i=ms.findIndex(r=>r.id===moEdit);if(i>=0)ms[i]=Object.assign({},ms[i],{t,p:moForm})}
+   else ms.push({id:uid('mo'),t,p:moForm,at:Date.now()});
+   moEdit=null;saveMonthly(ms);return monthlyEditor()}
+  if(b.id==='moCancel'){moEdit=null;return monthlyEditor()}
+  if(b.id==='moStd'){const now=Date.now();saveMonthly(MSTD.map(([p,t],i)=>({id:'mo'+now.toString(36)+i,t,p,at:0})));return monthlyEditor()}
+  if(b.id==='moDaily'){editRid=null;formShift='P';formDays=[];return routineEditor()}
+  if(b.id==='moDone'){moEdit=null;return close()}
+  const it=b.closest('[data-moid]');if(!it)return;const id=it.dataset.moid,r=ms.find(x=>x.id===id);if(!r)return;
+  if(b.dataset.moact==='edit'){moEdit=id;moForm=r.p||'A';return monthlyEditor()}
+  if(b.dataset.moact==='del'){const i=ms.indexOf(r);ms.splice(i,1);if(moEdit===id)moEdit=null;saveMonthly(ms);monthlyEditor();
+   toast('Tugas bulanan dihapus',()=>{const l=monthly().slice();l.splice(i,0,r);saveMonthly(l);if(document.querySelector('#pb .mo-form'))monthlyEditor()})}
+ });
+ { const _rd=window.renderDaily;window.renderDaily=function(){_rd();try{renderMonthly()}catch(e){}}; }
+ window.ofaMonthlyTasks=()=>moItems().filter(x=>!x.done);
 
  /* --- gabung data dari perangkat lain (dipakai sinkronisasi) --- */
  const stamp=x=>Number(x&&(x.u||x.doneAt||x.at))||0;
@@ -3154,7 +3284,16 @@ renderTeam();
    D[day]=Object.values(map);
   });
   Object.keys(D).sort().slice(0,-31).forEach(k=>delete D[k]);
-  out[KEY]=D;return out;
+  out[KEY]=D;
+  const LB=(local&&local[MK])||{},SB=(server&&server[MK])||{},B={};
+  new Set([...Object.keys(LB),...Object.keys(SB)]).forEach(ym=>{
+   const map={};
+   (SB[ym]||[]).forEach(x=>{if(x&&x.id)map[x.id]=x});
+   (LB[ym]||[]).forEach(x=>{if(!x||!x.id)return;const o=map[x.id];if(!o||stamp(x)>=stamp(o))map[x.id]=x});
+   B[ym]=Object.values(map);
+  });
+  Object.keys(B).sort().slice(0,-13).forEach(k=>delete B[k]);
+  out[MK]=B;return out;
  };
 
  const baseRender=render;
